@@ -1,0 +1,46 @@
+@import "../../../../../assets/styles/variables";
+
+.page-template {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "header header"
+    "first second";
+
+  @media (max-width: 799px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "first"
+      "second";
+  }
+
+  > * {
+    margin: 0.1em;
+  }
+
+  header {
+    @include indent();
+    background: $background-dark;
+    grid-area: header;
+
+    div {
+      font-style: italic;
+      margin-bottom: 0.5em;
+    }
+  }
+
+  section {
+    background-color: $background-light;
+    padding: 0.25em 0.5em;
+
+    &.first {
+      grid-area: first;
+    }
+
+    &.second {
+      grid-area: second;
+    }
+  }
+}

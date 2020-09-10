@@ -1,0 +1,9 @@
+$background-black: #111111;
+$background-dark: #292929;
+$background-light: #333333;
+$header-orange: #dd7700;
+$text-white: #cccccc;
+
+@mixin indent() {
+  padding-left: 2em;
+}
