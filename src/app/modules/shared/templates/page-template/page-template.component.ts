@@ -20,11 +20,17 @@ export class PageTemplateComponent implements OnInit {
 
   /** Read-only accessor for whether or not the subtext container in the header should render. */
   get shouldDisplayHeaderSubtext(): boolean {
-    return this.displayHeaderSubtext;
+    return this._shouldDisplayHeaderSubtext;
+  }
+  /** Read-only accessor for the style classes to be applied to the page template */
+  get wrapperClasses(): string[] {
+    return this._wrapperClasses;
   }
 
   /** Private flag controlling whether or not to render the subtext container */
-  private displayHeaderSubtext: boolean;
+  private _shouldDisplayHeaderSubtext: boolean;
+  /** Private container for style class to be applied to the page template wrapper */
+  private _wrapperClasses: string[];
 
   /**
    * Initializer Method.
@@ -32,6 +38,7 @@ export class PageTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.initializeHeaderText();
     this.setDisplayHeaderSubtext();
+    this.setWrapperClasses();
   }
 
   /**
@@ -49,6 +56,12 @@ export class PageTemplateComponent implements OnInit {
    * * If subtext is provided, sets to TRUE, showing the element.
    */
   private setDisplayHeaderSubtext(): void {
-    this.displayHeaderSubtext = !this.headerSubtext;
+    this._shouldDisplayHeaderSubtext = !this.headerSubtext;
+  }
+
+  private setWrapperClasses(): void {
+    this._wrapperClasses = this.isSingleColumn
+      ? ['page-template--single']
+      : ['page-template--double'];
   }
 }
