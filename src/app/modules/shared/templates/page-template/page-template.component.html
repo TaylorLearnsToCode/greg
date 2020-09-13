@@ -1,4 +1,4 @@
-<div class="page-template">
+<div [ngClass]="wrapperClasses">
   <header>
     <h1>{{ headerText }}</h1>
     <div *ngIf="shouldDisplayHeaderSubtext">{{ headerSubtext }}</div>
