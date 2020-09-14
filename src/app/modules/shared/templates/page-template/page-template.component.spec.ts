@@ -28,4 +28,16 @@ describe('PageTemplateComponent', () => {
     expect(component).toBeTruthy();
     expect(component.headerText).toEqual(HEADER_TEXT);
   });
+
+  it('should assign single-column class designation', () => {
+    component.isSingleColumn = true;
+    component.ngOnInit();
+    expect(component.wrapperClasses).toContain('page-template--single');
+  });
+
+  it('should assign double-column class designation', () => {
+    component.isSingleColumn = false;
+    component.ngOnInit();
+    expect(component.wrapperClasses).toContain('page-template--double');
+  });
 });

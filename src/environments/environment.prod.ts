@@ -1,3 +1,5 @@
+/** Environment Variable Object */
 export const environment = {
-  production: true
+  /** Flag indicating production compile */
+  production: true,
 };

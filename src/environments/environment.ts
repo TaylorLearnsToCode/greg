@@ -2,8 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+/** Environment Variable Object */
 export const environment = {
-  production: false
+  /** Flag indicating development compile */
+  production: false,
 };
 
 /*
