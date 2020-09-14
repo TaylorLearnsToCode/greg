@@ -14,7 +14,8 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "@shared/*": ["src/app/modules/shared/*"]
+      "@shared/*": ["src/app/modules/shared/*"],
+      "@test/*": ["src/assets/test-data/*"]
     }
   }
 }

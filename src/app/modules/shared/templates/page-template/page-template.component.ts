@@ -1,10 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-/**
- * Template component for a standard one-column or adaptive two-column layout.
- * @input {string} headerText: The text displayed in an H1 at the top of the page. Defaults to site title.
- * @input {string} headerSubtext: The text displayed in italics beneath the main header.
- */
+/** Template component for a standard one-column or adaptive two-column layout. */
 @Component({
   selector: 'greg-page-template',
   templateUrl: './page-template.component.html',
@@ -32,18 +28,14 @@ export class PageTemplateComponent implements OnInit {
   /** Private container for style class to be applied to the page template wrapper */
   private _wrapperClasses: string[];
 
-  /**
-   * Initializer Method.
-   */
+  /** Initializer Method. */
   ngOnInit(): void {
     this.initializeHeaderText();
     this.setDisplayHeaderSubtext();
     this.setWrapperClasses();
   }
 
-  /**
-   * If no header text has been provided in the Input, defaults to application name.
-   */
+  /** If no header text has been provided in the Input, defaults to application name. */
   private initializeHeaderText(): void {
     if (!this.headerText) {
       this.headerText = 'GREG - Guided Random Encounter Generator';
@@ -59,6 +51,7 @@ export class PageTemplateComponent implements OnInit {
     this._shouldDisplayHeaderSubtext = !this.headerSubtext;
   }
 
+  /** Sets parent wrapper class to single or double based on isSingleColumn input */
   private setWrapperClasses(): void {
     this._wrapperClasses = this.isSingleColumn
       ? ['page-template--single']
