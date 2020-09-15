@@ -1,12 +1,14 @@
-import { Route } from '@angular/router';
+import { LoadChildren, Route } from '@angular/router';
 import { WelcomeComponent } from '../../components/welcome/welcome.component';
+
+/** LoadChildren function to load the Monster module */
+const monsterChildren: LoadChildren = () =>
+  import('@monster/monster.module').then((m) => m.MonsterModule);
 
 /** Human-readable labels for configured route paths */
 export enum RouteLabels {
+  monster = 'Monster',
   welcome = 'Home',
-  test = 'Test',
-  test1 = 'Test1',
-  test2 = 'Test2',
 }
 
 /** Returns an array of Route objects configured for GREG. */
@@ -17,15 +19,8 @@ export function readRoutes(): Route[] {
     component: WelcomeComponent,
   });
   routes.push({
-    path: 'test',
-    component: WelcomeComponent,
-    children: [
-      {
-        path: 'test1',
-        component: WelcomeComponent,
-      },
-      { path: 'test2', component: WelcomeComponent },
-    ],
+    path: 'monster',
+    loadChildren: monsterChildren,
   });
   return routes;
 }

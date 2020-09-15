@@ -6,12 +6,10 @@
   <section class="menu-bar">
     <greg-menu-bar></greg-menu-bar>
   </section>
-  <main>
-    <section class="first">
-      <ng-content select="first-content"></ng-content>
-    </section>
-    <section *ngIf="!isSingleColumn" class="second">
-      <ng-content select="second-content"></ng-content>
-    </section>
-  </main>
+  <section class="first">
+    <ng-content select="first-content"></ng-content>
+  </section>
+  <section *ngIf="!isSingleColumn" class="second">
+    <ng-content select="second-content"></ng-content>
+  </section>
 </div>
