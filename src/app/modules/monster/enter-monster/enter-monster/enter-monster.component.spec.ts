@@ -1,5 +1,5 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { EnterMonsterComponent } from './enter-monster.component';
 
 describe('EnterMonsterComponent', () => {
@@ -8,9 +8,9 @@ describe('EnterMonsterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnterMonsterComponent ]
-    })
-    .compileComponents();
+      declarations: [EnterMonsterComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

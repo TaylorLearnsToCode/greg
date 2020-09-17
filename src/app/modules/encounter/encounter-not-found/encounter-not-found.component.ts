@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 
-/** 404 page for the Monster Module */
+/** 404 page for the Encounter Module */
 @Component({
-  selector: 'greg-monster-not-found',
-  templateUrl: './monster-not-found.component.html',
-  styleUrls: ['./monster-not-found.component.scss'],
+  selector: 'greg-encounter-not-found',
+  templateUrl: './encounter-not-found.component.html',
+  styleUrls: ['./encounter-not-found.component.scss'],
 })
-export class MonsterNotFoundComponent {
+export class EncounterNotFoundComponent {
   /** 404 message for page header */
   readonly headerText = 'Page Not Found!';
   /** 404 sub-message for page header */
   readonly headerSubtext =
     'The requested page does not exist or otherwise has not yet been implemented.';
 
-  /** MonsterNotFoundComponent Constructor */
+  /** EncounterNotFoundComponent Constructor */
   constructor() {}
 }
