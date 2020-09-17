@@ -1,6 +1,16 @@
 import { LoadChildren, Route } from '@angular/router';
 import { WelcomeComponent } from '../../components/welcome/welcome.component';
 
+/** LoadChildren function to load the Create Encounter Table module */
+const createEncounterTable: LoadChildren = () =>
+  import(
+    '@encounter/create-encounter-table/create-encounter-table.module'
+  ).then((m) => m.CreateEncounterTableModule);
+
+/** LoadChildren function to load the Encounter module */
+const encounter: LoadChildren = () =>
+  import('@encounter/encounter.module').then((m) => m.EncounterModule);
+
 /** LoadChildren function to load the Enter Monster module */
 const enterMonster: LoadChildren = () =>
   import('@monster/enter-monster/enter-monster.module').then(
@@ -13,6 +23,8 @@ const monster: LoadChildren = () =>
 
 /** Human-readable labels for configured route paths */
 export enum RouteLabels {
+  'create-encounter-table' = 'Create Encounter Table',
+  encounter = 'Encounter',
   'enter-monster' = 'Enter Monster',
   monster = 'Monster',
   welcome = 'Home',
@@ -26,10 +38,28 @@ export function readRoutes(): Route[] {
     component: WelcomeComponent,
   });
   routes.push(buildMonsterRoute());
+  routes.push(buildEncounterRoute());
   return routes;
 }
 
-/** "Private" function to return exclusively routes pertaining to the Monster module */
+/** "Private" function to return exclusively routes pertaining to the Encounter module. */
+function buildEncounterRoute(): Route {
+  const encounterRoutes: Route[] = [];
+  encounterRoutes.push({
+    path: 'create-encounter-table',
+    loadChildren: createEncounterTable,
+  });
+  encounterRoutes.push({
+    path: '**',
+    loadChildren: encounter,
+  });
+  return {
+    path: 'encounter',
+    children: [...encounterRoutes],
+  } as Route;
+}
+
+/** "Private" function to return exclusively routes pertaining to the Monster module. */
 function buildMonsterRoute(): Route {
   const monsterRoutes: Route[] = [];
   monsterRoutes.push({

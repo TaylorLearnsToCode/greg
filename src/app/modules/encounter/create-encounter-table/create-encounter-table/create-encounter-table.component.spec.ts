@@ -1,20 +1,20 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MonsterNotFoundComponent } from './monster-not-found.component';
+import { CreateEncounterTableComponent } from './create-encounter-table.component';
 
-describe('WelcomeMonsterComponent', () => {
-  let component: MonsterNotFoundComponent;
-  let fixture: ComponentFixture<MonsterNotFoundComponent>;
+describe('CreateEncounterTableComponent', () => {
+  let component: CreateEncounterTableComponent;
+  let fixture: ComponentFixture<CreateEncounterTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MonsterNotFoundComponent],
+      declarations: [CreateEncounterTableComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MonsterNotFoundComponent);
+    fixture = TestBed.createComponent(CreateEncounterTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
