@@ -15,10 +15,16 @@ describe('CommonUtil', () => {
   });
 
   describe('isEmpty', () => {
+    it('should return true for an empty array', () =>
+      expect(isEmpty([])).toBe(true));
+    it('should return false for a non-empty array', () =>
+      expect(isEmpty(['not', 'empty'])).toBe(false));
+
     it('should return true for an empty string', () =>
       expect(isEmpty('')).toBe(true));
     it('should return false for a non-empty string', () =>
-      expect(isEmpty('not')).toBe(false));
+      expect(isEmpty('not empty')).toBe(false));
+
     it('should return false for NULL', () => expect(isEmpty(null)).toBe(false));
     it('should return false for UNDEFNIED', () =>
       expect(isEmpty(undefined)).toBe(false));

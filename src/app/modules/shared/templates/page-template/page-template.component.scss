@@ -22,6 +22,10 @@ section {
   &.second {
     grid-area: second;
   }
+
+  &.menu-bar {
+    grid-area: menu;
+  }
 }
 
 %page-template {
@@ -38,6 +42,7 @@ section {
   grid-template-columns: auto;
   grid-template-areas:
     "header"
+    "menu"
     "first";
 }
 
@@ -46,12 +51,14 @@ section {
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "header header"
+    "menu menu"
     "first second";
 
   @media (max-width: 799px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       "header"
+      "menu"
       "first"
       "second";
   }

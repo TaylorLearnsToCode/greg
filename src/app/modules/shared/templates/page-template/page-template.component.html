@@ -3,6 +3,9 @@
     <h1>{{ headerText }}</h1>
     <div *ngIf="shouldDisplayHeaderSubtext">{{ headerSubtext }}</div>
   </header>
+  <section class="menu-bar">
+    <greg-menu-bar></greg-menu-bar>
+  </section>
   <section class="first">
     <ng-content select="first-content"></ng-content>
   </section>
