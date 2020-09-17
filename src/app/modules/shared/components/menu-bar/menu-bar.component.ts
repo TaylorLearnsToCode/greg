@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { MenuItem } from '@shared/model/menu-item.model';
-import { doesExist } from '@shared/utilities/common-util/common.util';
+import { doesExist, isEmpty } from '@shared/utilities/common-util/common.util';
 import { routeToMenuItem } from '@shared/utilities/conversion-util/conversion.util';
 import { readRoutes } from '@shared/utilities/navigation-config/navigation-config.util';
 
@@ -49,7 +49,15 @@ export class MenuBarComponent {
 
   /** Returns a parsed array of MenuItem objects based on the routes configured for the app */
   private getMenuItems(): MenuItem[] {
-    return readRoutes().map((route) => routeToMenuItem(route));
+    const returnArray: Route[] = readRoutes();
+    returnArray.forEach((route) => {
+      if (doesExist(route.children) && !isEmpty(route.children)) {
+        route.children = route.children.filter(
+          (childRoute) => !isEmpty(childRoute.path) && childRoute.path !== '**'
+        );
+      }
+    });
+    return returnArray.map((route) => routeToMenuItem(route));
   }
 
   /**

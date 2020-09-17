@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 
 /** Template component for a standard one-column or adaptive two-column layout. */
 @Component({
@@ -48,7 +49,7 @@ export class PageTemplateComponent implements OnInit {
    * * If subtext is provided, sets to TRUE, showing the element.
    */
   private setDisplayHeaderSubtext(): void {
-    this._shouldDisplayHeaderSubtext = !this.headerSubtext;
+    this._shouldDisplayHeaderSubtext = doesExist(this.headerSubtext);
   }
 
   /** Sets parent wrapper class to single or double based on isSingleColumn input */

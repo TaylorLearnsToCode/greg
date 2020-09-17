@@ -4,10 +4,12 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { PageTemplateComponent } from './templates/page-template/page-template.component';
 
+const components = [PageTemplateComponent, WelcomeComponent, MenuBarComponent];
+
 @NgModule({
-  declarations: [PageTemplateComponent, WelcomeComponent, MenuBarComponent],
+  declarations: [...components],
   imports: [CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [PageTemplateComponent],
+  exports: [...components],
 })
 export class SharedModule {}

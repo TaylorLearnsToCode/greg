@@ -1,18 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
-import { WelcomeMonsterComponent } from './components/welcome-monster/welcome-monster.component';
-import { MonsterRoutingModule } from './modules/monster-routing.module';
-import { MonsterServiceModule } from './modules/monster-service.module';
+import { MonsterNotFoundComponent } from './monster-not-found/monster-not-found.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: MonsterNotFoundComponent,
+  },
+];
 
 @NgModule({
-  declarations: [WelcomeMonsterComponent],
-  imports: [
-    CommonModule,
-    MonsterRoutingModule,
-    MonsterServiceModule,
-    SharedModule,
-  ],
+  declarations: [MonsterNotFoundComponent],
+  imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [RouterModule],
 })
 export class MonsterModule {}
