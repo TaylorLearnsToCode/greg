@@ -12,8 +12,8 @@ describe('ConversionUtil', () => {
 
     beforeEach(() => {
       constantMenuItem = new MenuItem('', '');
-      parentRoute = getTestRoute('parent-path', [route]);
       route = getTestRoute();
+      parentRoute = getTestRoute('parent-path', [route]);
       variableMenuItem = undefined;
     });
 
