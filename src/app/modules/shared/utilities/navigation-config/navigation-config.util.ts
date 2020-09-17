@@ -29,6 +29,7 @@ export function readRoutes(): Route[] {
   return routes;
 }
 
+/** "Private" function to return exclusively routes pertaining to the Monster module */
 function buildMonsterRoute(): Route {
   const monsterRoutes: Route[] = [];
   monsterRoutes.push({
