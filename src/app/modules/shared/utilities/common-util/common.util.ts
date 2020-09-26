@@ -1,19 +1,56 @@
 /**
- * Returns TRUE if an array a is neither NULL nor UNDEFINED and contains
- * 0 entries within it.
- * @param  {any[]} a
+ * For any two objects, returns TRUE if all properties and sub-properties, recursively, match.
+ * @param  {any} first
+ * @param  {any} second
  */
-function isArrayEmpty(a: any[]): boolean {
-  return doesExist(a) && a.length === 0;
+export function areEqual(first: any, second: any): boolean {
+  if (
+    (!doesExist(first) && doesExist(second)) ||
+    (doesExist(first) && !doesExist(second))
+  ) {
+    return false;
+  } else if (!doesExist(first) && !doesExist(second)) {
+    return true;
+  } else if (Array.isArray(first) && Array.isArray(second)) {
+    return areArraysEqual(first, second);
+  } else if (first instanceof Date && second instanceof Date) {
+    return first.valueOf() === second.valueOf();
+  } else if (typeof first === 'object' && typeof second === typeof first) {
+    return areObjectsEqual(first, second);
+  } else {
+    return first === second;
+  }
 }
 
 /**
- * Returns TRUE if a string s is neither NULL nor UNDEFINED but does
- * have a length of 0.
- * @param  {string} s
+ * Verifies that two objects have the same number of properties on their prototype
+ * and then iterates through properties, verifying that the values assigned to each
+ * property are likewise equivalent.
+ * @param  {any} first
+ * @param  {any} second
  */
-function isStringEmpty(s: string): boolean {
-  return doesExist(s) && s.length === 0;
+function areObjectsEqual(first: any, second: any): boolean {
+  const firstKeys = Object.keys(first);
+  let equal = firstKeys.length === Object.keys(second).length;
+  if (equal) {
+    equal = !firstKeys.some((key) => !areEqual(first[key], second[key]));
+  }
+  return equal;
+}
+
+/**
+ * Verifies that two provided arrays both have the same number of elements and
+ * that each element is equivalent to a corresponding element at the same index
+ * in its provided sister array.
+ * @param  {any[]} first
+ * @param  {any[]} second
+ */
+function areArraysEqual(first: any[], second: any[]): boolean {
+  let equal = first.length === second.length;
+  if (equal) {
+    equal = !first.some((val, idx) => !areEqual(val, second[idx]));
+  }
+  return equal;
 }
 
 /**
@@ -36,4 +73,22 @@ export function isEmpty(obj: string | any[]): boolean {
   } else {
     return isStringEmpty(obj);
   }
+}
+
+/**
+ * Returns TRUE if an array a is neither NULL nor UNDEFINED and contains
+ * 0 entries within it.
+ * @param  {any[]} a
+ */
+function isArrayEmpty(a: any[]): boolean {
+  return doesExist(a) && a.length === 0;
+}
+
+/**
+ * Returns TRUE if a string s is neither NULL nor UNDEFINED but does
+ * have a length of 0.
+ * @param  {string} s
+ */
+function isStringEmpty(s: string): boolean {
+  return doesExist(s) && s.length === 0;
 }

@@ -1,1 +1,30 @@
-<p>encounter-table-form works!</p>
+<form [formGroup]="encounterTableForm">
+  <!-- Roll Dice -->
+  <h3>Define Dice Pool</h3>
+  <div class="add-remove">
+    <a (click)="addDieRolled()">Add</a>
+    |
+    <a (click)="removeDieRolled()">Remove</a>
+  </div>
+  <ng-container *ngIf="formDiceRolled.length !== 0; else noDice">
+    <div class="dice-rolled-form" formArrayName="diceRolled">
+      <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
+        <div [formGroupName]="i">
+          {{ i + 1 }}.
+          <input type="text" formControlName="no" />
+          D
+          <input type="text" formControlName="pips" />
+          +/-
+          <input type="text" formControlName="modifier" />
+          x
+          <input type="text" formControlName="multiplier" />
+          <a (click)="removeDieRolled(i)">(Delete)</a>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-template #noDice>
+    <div class="no-dice">No dice have yet been added.</div>
+  </ng-template>
+</form>
+<p>{{ encounterTable | json }}</p>
