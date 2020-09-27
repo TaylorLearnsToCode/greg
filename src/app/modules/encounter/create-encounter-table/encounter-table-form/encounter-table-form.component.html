@@ -4,7 +4,9 @@
   <div class="add-remove">
     <a (click)="addDieRolled()">Add</a>
     |
-    <a (click)="removeDieRolled()">Remove</a>
+    <a (click)="clearDiceRolled()">Clear</a>
+    |
+    <a (click)="updateTable()">Update Table</a>
   </div>
   <ng-container *ngIf="formDiceRolled.length !== 0; else noDice">
     <div class="dice-rolled-form" formArrayName="diceRolled">
@@ -26,5 +28,33 @@
   <ng-template #noDice>
     <div class="no-dice">No dice have yet been added.</div>
   </ng-template>
+  <h3>Define Result Table</h3>
+  <div formArrayName="encounters">
+    <table>
+      <tr>
+        <th>Die Roll</th>
+        <th>Wandering Monster</th>
+        <th>No.</th>
+        <th>AC</th>
+        <th>HD</th>
+        <th>Attack &amp; Damage</th>
+        <th>Move</th>
+        <th>Save As</th>
+        <th>Morale</th>
+      </tr>
+      <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
+        <tr *ngFor="let encounter of formEncounters.controls; index as i">
+          {{
+            i
+          }}
+        </tr>
+      </ng-container>
+      <ng-template #noMonsters>
+        <tr style="font-style: italic">
+          <td colspan="9">No Monsters Yet</td>
+        </tr>
+      </ng-template>
+    </table>
+  </div>
 </form>
 <p>{{ encounterTable | json }}</p>

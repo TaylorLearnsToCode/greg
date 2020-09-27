@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ICreateEncounterViewState } from '../model/create-encounter-view-state.interface';
+import { IEncounterTableAction } from '../model/encounter-table.model';
 import { CreateEncounterFacadeService } from '../services/create-encounter-facade/create-encounter-facade.service';
 
 @Component({
@@ -20,5 +21,9 @@ export class CreateEncounterTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.facade.destroy();
+  }
+
+  onEncounterTableAction(action: IEncounterTableAction): void {
+    this.facade.handleEncounterTableAction(action);
   }
 }

@@ -12,9 +12,9 @@ export class DiceRolled {
   pips: number;
 
   /**
-   * DiceRolled Constructor. Arguments arranged such that it can be read:
+   * DiceRolled Constructor. Arguments arranged such that it can be read traditionally:
    *
-   * <i>{no} die {pips} plus/minus {modifier} times {multiplier}</i>
+   * <i>{no}-d-{pips} plus/minus {modifier} times {multiplier}</i>
    * @param  {number} no
    * @param  {number} pips
    * @param  {number} modifier?

@@ -23,6 +23,62 @@ export function areEqual(first: any, second: any): boolean {
 }
 
 /**
+ * Performs a deep-clone of a provided object: such that the object is new (not
+ * a reference) and all of its properties are likewise new.
+ * @param  {any} obj
+ */
+export function cloneObject(obj: any): any {
+  let retObj: any;
+  if (Array.isArray(obj)) {
+    retObj = [];
+    obj.forEach((element) => retObj.push(cloneObject(element)));
+  } else if (typeof obj === 'object' && !(obj instanceof Date)) {
+    retObj = {};
+    Object.keys(obj).forEach((key) => (retObj[key] = cloneObject(obj[key])));
+  } else {
+    retObj = obj;
+  }
+  return retObj;
+}
+
+/**
+ * For any object, iterate through properties and Object.freeze each.
+ * @param  {any} obj
+ */
+export function deepFreeze(obj: any): void {
+  if (!doesExist(obj)) {
+    return;
+  } else if (Array.isArray(obj)) {
+    obj.forEach((element) => deepFreeze(element));
+  } else if (typeof obj === 'object' && !(obj instanceof Date)) {
+    Object.keys(obj).forEach((key) => deepFreeze(obj[key]));
+  }
+  Object.freeze(obj);
+}
+
+/**
+ * Returns TRUE if the provided object is neither NULL nor UNDEFINED.
+ * @param  {any} obj
+ */
+export function doesExist(obj: any): boolean {
+  return obj !== null && obj !== undefined;
+}
+
+/**
+ * Returns whether or not the provided object is defined, but empty.
+ * * An empty array is defined as an array with no entries
+ * * An empty string is defined as a string with no characters
+ * @param  {string|any[]} obj
+ */
+export function isEmpty(obj: string | any[]): boolean {
+  if (Array.isArray(obj)) {
+    return isArrayEmpty(obj);
+  } else {
+    return isStringEmpty(obj);
+  }
+}
+
+/**
  * Verifies that two objects have the same number of properties on their prototype
  * and then iterates through properties, verifying that the values assigned to each
  * property are likewise equivalent.
@@ -54,29 +110,7 @@ function areArraysEqual(first: any[], second: any[]): boolean {
 }
 
 /**
- * Returns TRUE if the provided object is neither NULL nor UNDEFINED.
- * @param  {any} obj
- */
-export function doesExist(obj: any): boolean {
-  return obj !== null && obj !== undefined;
-}
-
-/**
- * Returns whether or not the provided object is defined, but empty.
- * * An empty array is defined as an array with no entries
- * * An empty string is defined as a string with no characters
- * @param  {string|any[]} obj
- */
-export function isEmpty(obj: string | any[]): boolean {
-  if (Array.isArray(obj)) {
-    return isArrayEmpty(obj);
-  } else {
-    return isStringEmpty(obj);
-  }
-}
-
-/**
- * Returns TRUE if an array a is neither NULL nor UNDEFINED and contains
+ * Returns TRUE if an array a is neither NULL nor UNDEFINED but contains
  * 0 entries within it.
  * @param  {any[]} a
  */
