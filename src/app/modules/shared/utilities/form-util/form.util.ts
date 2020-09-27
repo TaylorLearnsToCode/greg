@@ -5,6 +5,13 @@ import {
   FormGroup,
 } from '@angular/forms';
 
+/**
+ * For a provided object, returns an AbstractControl based on the object type:
+ * * Arrays will return FormArray
+ * * Object not of Array or Date type will return FormGroup
+ * * Any other input will return FormControl
+ * @param  {any} obj
+ */
 export function buildFormFromObject(obj: any): AbstractControl {
   if (Array.isArray(obj)) {
     return buildFormArrayFromArray(obj);

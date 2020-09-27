@@ -6,20 +6,20 @@
     |
     <a (click)="clearDiceRolled()">Clear</a>
     |
-    <a (click)="updateTable()">Update Table</a>
+    <a (click)="updateDiceRolled()">Update Table</a>
   </div>
   <ng-container *ngIf="formDiceRolled.length !== 0; else noDice">
     <div class="dice-rolled-form" formArrayName="diceRolled">
       <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
         <div [formGroupName]="i">
           {{ i + 1 }}.
-          <input type="text" formControlName="no" />
+          <input formControlName="no" type="text" />
           D
-          <input type="text" formControlName="pips" />
+          <input formControlName="pips" type="text" />
           +/-
-          <input type="text" formControlName="modifier" />
+          <input formControlName="modifier" type="text" />
           x
-          <input type="text" formControlName="multiplier" />
+          <input formControlName="multiplier" type="text" />
           <a (click)="removeDieRolled(i)">(Delete)</a>
         </div>
       </ng-container>
@@ -29,6 +29,11 @@
     <div class="no-dice">No dice have yet been added.</div>
   </ng-template>
   <h3>Define Result Table</h3>
+  <div class="table-form">
+    <a (click)="clearTableForm()">Clear</a>
+    |
+    <a (click)="updateEncounters()">Publish</a>
+  </div>
   <div formArrayName="encounters">
     <table>
       <tr>
@@ -43,15 +48,37 @@
         <th>Morale</th>
       </tr>
       <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
-        <tr *ngFor="let encounter of formEncounters.controls; index as i">
-          {{
-            i
-          }}
-        </tr>
+        <ng-container
+          *ngFor="let encounter of formEncounters.controls; index as i"
+        >
+          <tr [formGroupName]="i">
+            <td>
+              <input
+                formControlName="lowRoll"
+                style="width: 1.5em"
+                type="text"
+              />
+              -
+              <input
+                formControlName="highRoll"
+                style="width: 1.5em"
+                type="text"
+              />
+            </td>
+            <td>Wandering Monster</td>
+            <td>No.</td>
+            <td>AC</td>
+            <td>HD</td>
+            <td>Attack &amp; Damage</td>
+            <td>Move</td>
+            <td>Save As</td>
+            <td>Morale</td>
+          </tr>
+        </ng-container>
       </ng-container>
       <ng-template #noMonsters>
         <tr style="font-style: italic">
-          <td colspan="9">No Monsters Yet</td>
+          <td colspan="9">No Encounters Yet</td>
         </tr>
       </ng-template>
     </table>
