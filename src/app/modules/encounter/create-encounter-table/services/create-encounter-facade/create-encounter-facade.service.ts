@@ -72,6 +72,8 @@ export class CreateEncounterFacadeService {
   }
 
   private updateEncounters(encounters: Encounter[]): void {
-    console.log(encounters);
+    const nextEncounterTable = this.encounterTable;
+    nextEncounterTable.encounters = encounters;
+    this.encounterTable = nextEncounterTable;
   }
 }

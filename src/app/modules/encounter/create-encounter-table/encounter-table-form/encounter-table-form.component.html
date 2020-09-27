@@ -13,13 +13,13 @@
       <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
         <div [formGroupName]="i">
           {{ i + 1 }}.
-          <input formControlName="no" type="text" />
+          <input formControlName="no" type="number" />
           D
-          <input formControlName="pips" type="text" />
+          <input formControlName="pips" type="number" />
           +/-
-          <input formControlName="modifier" type="text" />
+          <input formControlName="modifier" type="number" />
           x
-          <input formControlName="multiplier" type="text" />
+          <input formControlName="multiplier" type="number" />
           <a (click)="removeDieRolled(i)">(Delete)</a>
         </div>
       </ng-container>
@@ -56,13 +56,13 @@
               <input
                 formControlName="lowRoll"
                 style="width: 1.5em"
-                type="text"
+                type="number"
               />
               -
               <input
                 formControlName="highRoll"
                 style="width: 1.5em"
-                type="text"
+                type="number"
               />
             </td>
             <td>Wandering Monster</td>
