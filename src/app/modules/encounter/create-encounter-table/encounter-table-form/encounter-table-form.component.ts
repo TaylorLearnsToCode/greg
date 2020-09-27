@@ -55,8 +55,8 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
         )
       ) {
         this.encounterTableForm.patchValue(changes.encounterTable.currentValue);
-        this.updateTableForm(changes.encounterTable.currentValue);
       }
+      this.updateTableForm(changes.encounterTable.currentValue);
     }
     console.log(this.encounterTableForm);
   }
@@ -72,8 +72,10 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   }
 
   clearTableForm(): void {
-    let resultTable: FormArray = this.formEncounters;
-    resultTable = new FormArray([]);
+    const resultTable: FormArray = this.formEncounters;
+    while (resultTable.controls.length > 0) {
+      resultTable.removeAt(0);
+    }
   }
 
   removeDieRolled(idx: number): void {
