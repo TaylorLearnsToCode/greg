@@ -1,10 +1,25 @@
-.add-remove {
-  text-align: center;
+@import "../../../../../assets/styles/variables";
+
+div {
+  padding: 0.5em;
 }
 
-.no-dice {
-  font-style: italic;
-  padding: 1em;
+table {
+  border-collapse: collapse;
+
+  td {
+    text-align: center;
+  }
+
+  tr,
+  th {
+    border: solid 1px $text-white;
+  }
+}
+
+.add-remove {
+  text-align: center;
+  padding-bottom: 0.5em;
 }
 
 .dice-rolled-form {
@@ -13,7 +28,11 @@
   }
 
   input {
-    width: 2em;
+    width: 1.5em;
     margin: 0 0.25em;
   }
+}
+
+.no-dice {
+  font-style: italic;
 }

@@ -3,6 +3,7 @@
     <first-content>
       <greg-encounter-table-form
         [encounterTable]="vs.encounterTable"
+        (encounterTableAction)="onEncounterTableAction($event)"
       ></greg-encounter-table-form>
     </first-content>
     <second-content>

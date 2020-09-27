@@ -1,5 +1,19 @@
 @import "assets/styles/variables";
 
+a {
+  color: $anchor-orange-light;
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+    font-style: italic;
+  }
+
+  &:visited {
+    color: $anchor-orange-dark;
+  }
+}
+
 body {
   background-color: $background-black;
   color: $text-white;
