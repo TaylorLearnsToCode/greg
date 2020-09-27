@@ -8,6 +8,7 @@ export class EncounterTable {
 
 export enum EncounterTableActions {
   UPDATE_DICE_ROLLED,
+  UPDATE_ENCOUNTERS,
 }
 
 export interface IEncounterTableAction {

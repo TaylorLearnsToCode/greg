@@ -4,6 +4,7 @@ import {
   EncounterTableActions,
   IEncounterTableAction,
 } from '@encounter/create-encounter-table/model/encounter-table.model';
+import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import {
   cloneObject,
@@ -43,6 +44,10 @@ export class CreateEncounterFacadeService {
         this.updateDiceRolled(action.payload);
         break;
       }
+      case EncounterTableActions.UPDATE_ENCOUNTERS: {
+        this.updateEncounters(action.payload);
+        break;
+      }
       default: {
         throw new Error(`Unsupported action: ${action.action}`);
       }
@@ -64,5 +69,9 @@ export class CreateEncounterFacadeService {
     const nextEncounterTable = this.encounterTable;
     nextEncounterTable.diceRolled = diceRolled;
     this.encounterTable = nextEncounterTable;
+  }
+
+  private updateEncounters(encounters: Encounter[]): void {
+    console.log(encounters);
   }
 }

@@ -9,13 +9,19 @@ import {
 } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
-import { areEqual, doesExist } from '@shared/utilities/common-util/common.util';
+import {
+  areEqual,
+  doesExist,
+  isEmpty,
+} from '@shared/utilities/common-util/common.util';
+import { getRollRange } from '@shared/utilities/dice-roller/dice-roller.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import {
   EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
 } from '../model/encounter-table.model';
+import { Encounter } from '../model/encounter.model';
 
 @Component({
   selector: 'greg-encounter-table-form',
@@ -41,7 +47,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.encounterTableForm);
     if (changes.encounterTable) {
       if (
         !areEqual(
@@ -50,8 +55,10 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
         )
       ) {
         this.encounterTableForm.patchValue(changes.encounterTable.currentValue);
+        this.updateTableForm(changes.encounterTable.currentValue);
       }
     }
+    console.log(this.encounterTableForm);
   }
 
   addDieRolled(): void {
@@ -64,17 +71,39 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     }
   }
 
+  clearTableForm(): void {
+    let resultTable: FormArray = this.formEncounters;
+    resultTable = new FormArray([]);
+  }
+
   removeDieRolled(idx: number): void {
     if (this.validateDieRemove(idx)) {
       this.formDiceRolled.removeAt(idx);
     }
   }
 
-  updateTable(): void {
+  updateDiceRolled(): void {
     this.encounterTableAction.emit({
       action: EncounterTableActions.UPDATE_DICE_ROLLED,
       payload: this.formDiceRolled.value,
     } as IEncounterTableAction);
+  }
+
+  updateEncounters(): void {
+    this.encounterTableAction.emit({
+      action: EncounterTableActions.UPDATE_ENCOUNTERS,
+      payload: this.formEncounters.value,
+    } as IEncounterTableAction);
+  }
+
+  private updateTableForm(table: EncounterTable): void {
+    const currentEncounters: FormArray = this.formEncounters;
+    if (isEmpty(currentEncounters.controls) && !isEmpty(table.diceRolled)) {
+      const resultRange: number[] = getRollRange(table.diceRolled);
+      resultRange.forEach((roll: number) =>
+        currentEncounters.push(buildFormFromObject(new Encounter(roll)))
+      );
+    }
   }
 
   private validateDieRemove(idx: number): boolean {

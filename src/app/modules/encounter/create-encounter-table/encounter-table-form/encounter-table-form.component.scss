@@ -6,13 +6,16 @@ div {
 
 table {
   border-collapse: collapse;
+  width: 100%;
 
-  td {
+  td,
+  th {
     text-align: center;
+    padding: 0.2em;
   }
 
-  tr,
-  th {
+  th,
+  tr {
     border: solid 1px $text-white;
   }
 }
@@ -35,4 +38,8 @@ table {
 
 .no-dice {
   font-style: italic;
+}
+
+.table-form {
+  text-align: center;
 }
