@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
 } from '@angular/forms';
+import { doesExist } from '../common-util/common.util';
 
 /**
  * For a provided object, returns an AbstractControl based on the object type:
@@ -13,6 +14,7 @@ import {
  * @param  {any} obj
  */
 export function buildFormFromObject(obj: any): AbstractControl {
+  obj = doesExist(obj) ? obj : '';
   if (Array.isArray(obj)) {
     return buildFormArrayFromArray(obj);
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
@@ -22,12 +24,22 @@ export function buildFormFromObject(obj: any): AbstractControl {
   }
 }
 
+/**
+ * For a provided array, returns a FormArray populated by AbstractControls according
+ * to the array's contents.
+ * @param  {any[]} array
+ */
 function buildFormArrayFromArray(array: any[]): FormArray {
   const formArray = new FormArray([]);
   array.forEach((element) => formArray.push(buildFormFromObject(element)));
   return formArray;
 }
 
+/**
+ * For a provided object, returns a FormGroup populated by AbstractControls according
+ * to the object's properties and their values.
+ * @param  {any} obj
+ */
 function buildFormGroupFromObject(obj: any): FormGroup {
   const formGroup = new FormGroup({});
   Object.keys(obj).forEach((key) =>

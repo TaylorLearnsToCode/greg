@@ -54,7 +54,7 @@ section {
     "menu menu"
     "first second";
 
-  @media (max-width: 799px) {
+  @media (max-width: 999px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       "header"
