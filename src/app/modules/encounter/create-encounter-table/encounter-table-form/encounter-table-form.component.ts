@@ -5,10 +5,12 @@ import {
   OnChanges,
   OnInit,
   Output,
+  SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { Monster } from '@shared/model/monster.model';
 import {
   areEqual,
   doesExist,
@@ -41,28 +43,42 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   get formEncounters(): FormArray {
     return this.encounterTableForm.get('encounters') as FormArray;
   }
+  isDungeonEncounter: boolean;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isDungeonEncounter = false;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.encounterTable) {
-      if (
-        !areEqual(
-          changes.encounterTable.currentValue,
-          changes.encounterTable.previousValue
-        )
-      ) {
-        this.encounterTableForm.patchValue(changes.encounterTable.currentValue);
-      }
-      this.updateTableForm(changes.encounterTable.currentValue);
+      this.updateEncounterFormValues(changes.encounterTable);
+      this.rebuildEncounterTable(changes.encounterTable.currentValue);
     }
     console.log(this.encounterTableForm);
   }
 
   addDieRolled(): void {
     this.formDiceRolled.push(buildFormFromObject(new DiceRolled(1, 6)));
+  }
+
+  addEncounter(idx?: number): void {
+    idx = doesExist(idx) ? idx : -1;
+    const newEncounter: AbstractControl = buildFormFromObject(
+      new Encounter(0, 0, [new Monster()])
+    );
+    if (idx >= 0) {
+      this.formEncounters.insert(idx + 1, newEncounter);
+    } else {
+      this.formEncounters.push(newEncounter);
+    }
+  }
+
+  addMonster(encounterIndex: number, monsterIndex: number): void {
+    (this.formEncounters.controls[encounterIndex].get(
+      'monsters'
+    ) as FormArray).insert(monsterIndex, buildFormFromObject(new Monster()));
   }
 
   clearDiceRolled(): void {
@@ -84,6 +100,18 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     }
   }
 
+  removeEncounter(idx: number): void {
+    if (this.validateEncounterRemove(idx)) {
+      this.formEncounters.removeAt(idx);
+    }
+  }
+
+  removeMonster(encounterIndex: number, monsterIndex: number): void {
+    (this.formEncounters.controls[encounterIndex].get(
+      'monsters'
+    ) as FormArray).removeAt(monsterIndex);
+  }
+
   updateDiceRolled(): void {
     this.encounterTableAction.emit({
       action: EncounterTableActions.UPDATE_DICE_ROLLED,
@@ -92,19 +120,29 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   }
 
   updateEncounters(): void {
-    this.encounterTableAction.emit({
-      action: EncounterTableActions.UPDATE_ENCOUNTERS,
-      payload: this.formEncounters.value,
-    } as IEncounterTableAction);
+    if (this.formEncounters.length > 0) {
+      this.encounterTableAction.emit({
+        action: EncounterTableActions.UPDATE_ENCOUNTERS,
+        payload: this.formEncounters.value,
+      } as IEncounterTableAction);
+    }
   }
 
-  private updateTableForm(table: EncounterTable): void {
+  private rebuildEncounterTable(table: EncounterTable): void {
     const currentEncounters: FormArray = this.formEncounters;
     if (isEmpty(currentEncounters.controls) && !isEmpty(table.diceRolled)) {
       const resultRange: number[] = getRollRange(table.diceRolled);
       resultRange.forEach((roll: number) =>
-        currentEncounters.push(buildFormFromObject(new Encounter(roll)))
+        currentEncounters.push(
+          buildFormFromObject(new Encounter(roll, null, [new Monster()]))
+        )
       );
+    }
+  }
+
+  private updateEncounterFormValues(tableDelta: SimpleChange): void {
+    if (!areEqual(tableDelta.currentValue, tableDelta.previousValue)) {
+      this.encounterTableForm.patchValue(tableDelta.currentValue);
     }
   }
 
@@ -112,6 +150,13 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     if (!doesExist(idx)) {
       throw new Error('Index Number is Required');
     }
-    return this.formDiceRolled.length > 0;
+    return this.formDiceRolled.length > 0 && idx < this.formDiceRolled.length;
+  }
+
+  private validateEncounterRemove(idx: number): boolean {
+    if (!doesExist(idx)) {
+      throw new Error('Index Number is Required');
+    }
+    return this.formEncounters.length > 0 && idx < this.formEncounters.length;
   }
 }

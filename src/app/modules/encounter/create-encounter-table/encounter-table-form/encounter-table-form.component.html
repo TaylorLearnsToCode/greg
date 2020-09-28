@@ -28,6 +28,7 @@
   <ng-template #noDice>
     <div class="no-dice">No dice have yet been added.</div>
   </ng-template>
+  <!-- Define Encounters -->
   <h3>Define Result Table</h3>
   <div class="table-form">
     <a (click)="clearTableForm()">Clear</a>
@@ -36,43 +37,124 @@
   </div>
   <div formArrayName="encounters">
     <table>
+      <colgroup>
+        <col span="1" style="width: 5em" />
+        <col span="1" />
+      </colgroup>
       <tr>
         <th>Die Roll</th>
-        <th>Wandering Monster</th>
-        <th>No.</th>
-        <th>AC</th>
-        <th>HD</th>
-        <th>Attack &amp; Damage</th>
-        <th>Move</th>
-        <th>Save As</th>
-        <th>Morale</th>
+        <th>Encounter</th>
       </tr>
       <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
         <ng-container
-          *ngFor="let encounter of formEncounters.controls; index as i"
+          *ngFor="let encounter of formEncounters.controls; index as e"
         >
-          <tr [formGroupName]="i">
+          <tr [formGroupName]="e">
             <td>
-              <input
-                formControlName="lowRoll"
-                style="width: 1.5em"
-                type="number"
-              />
+              <input formControlName="lowRoll" type="number" />
               -
-              <input
-                formControlName="highRoll"
-                style="width: 1.5em"
-                type="number"
-              />
+              <input formControlName="highRoll" type="number" />
+              <br />
+              <a (click)="addEncounter(e)">+</a>
+              /
+              <a (click)="removeEncounter(e)">-</a>
             </td>
-            <td>Wandering Monster</td>
-            <td>No.</td>
-            <td>AC</td>
-            <td>HD</td>
-            <td>Attack &amp; Damage</td>
-            <td>Move</td>
-            <td>Save As</td>
-            <td>Morale</td>
+            <td style="padding: 0">
+              <table>
+                <tr>
+                  <th>Monster</th>
+                  <th>No.</th>
+                  <th>AC</th>
+                  <th>HD</th>
+                  <th>Attack &amp; Damage</th>
+                  <th>Move</th>
+                  <th>Save As</th>
+                  <th>Morale</th>
+                </tr>
+                <ng-container formArrayName="monsters">
+                  <ng-container
+                    *ngFor="
+                      let monster of encounter.get('monsters').controls;
+                      index as m
+                    "
+                  >
+                    <tr [formGroupName]="m">
+                      <td>
+                        <input formControlName="name" type="text" />
+                        (
+                        <a (click)="addMonster(e, m)">+</a>
+                        /
+                        <a (click)="removeMonster(e, m)">-</a>
+                        )
+                      </td>
+                      <td>
+                        <ng-container
+                          *ngIf="isDungeonEncounter; else wilderness"
+                        >
+                          <ng-container formGroupName="noDungeon">
+                            <input formControlName="no" type="number" />
+                            D
+                            <input formControlName="pips" type="number" />
+                            +/-
+                            <input formControlName="modifier" type="number" />
+                            x
+                            <input formControlName="multiplier" type="number" />
+                          </ng-container>
+                        </ng-container>
+                        <ng-template #wilderness>
+                          <ng-container formGroupName="noWilderness">
+                            <input formControlName="no" type="number" />
+                            D
+                            <input formControlName="pips" type="number" />
+                            +/-
+                            <input formControlName="modifier" type="number" />
+                            x
+                            <input formControlName="multiplier" type="number" />
+                          </ng-container>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <input formControlName="armorClass" type="number" />
+                      </td>
+                      <td>
+                        <input formControlName="hitDice" type="number" />
+                      </td>
+                      <td>
+                        <input formControlName="attacks" type="text" />
+                        (
+                        <ng-container formGroupName="damage">
+                          <input formControlName="no" type="number" />
+                          D
+                          <input formControlName="pips" type="number" />
+                          +/-
+                          <input formControlName="modifier" type="number" />
+                          x
+                          <input formControlName="multiplier" type="number" />
+                        </ng-container>
+                        )
+                      </td>
+                      <td>
+                        <input
+                          formControlName="movementExploration"
+                          type="number"
+                        />' ({{
+                          monster.get("movementExploration").value / 3
+                        }}')
+                      </td>
+                      <td>
+                        <ng-container formGroupName="saveAs">
+                          <input formControlName="asClass" type="text" />
+                          <input formControlName="level" type="number" />
+                        </ng-container>
+                      </td>
+                      <td>
+                        <input formControlName="morale" type="number" />
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </table>
+            </td>
           </tr>
         </ng-container>
       </ng-container>
@@ -84,4 +166,3 @@
     </table>
   </div>
 </form>
-<p>{{ encounterTable | json }}</p>
