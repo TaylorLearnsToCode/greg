@@ -1,5 +1,5 @@
 import { DiceRolled } from './dice-rolled.model';
-import { SaveAs } from './save-as.model';
+import { SaveAs, SaveAsClass } from './save-as.model';
 
 /**
  * A non-player entity, intelligent or otherwise, that the party might encounter
@@ -22,7 +22,7 @@ export class Monster {
   notes = '';
   noWilderness: DiceRolled = new DiceRolled(0, 0);
   pctInLair = 0;
-  saveAs: SaveAs = new SaveAs('Fighter', 0);
+  saveAs: SaveAs = new SaveAs(SaveAsClass.FTR, 0);
   treasureTypeCarried = '';
   treasureTypeLair = '';
 }

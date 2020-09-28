@@ -55,7 +55,7 @@
             </td>
             <td style="padding: 0">
               <table>
-                <tr>
+                <!--<tr>
                   <th>Monster</th>
                   <th>No.</th>
                   <th>AC</th>
@@ -64,7 +64,7 @@
                   <th>Move</th>
                   <th>Save As</th>
                   <th>Morale</th>
-                </tr>
+                </tr>-->
                 <ng-container formArrayName="monsters">
                   <ng-container
                     *ngFor="
@@ -73,59 +73,99 @@
                     "
                   >
                     <tr [formGroupName]="m">
-                      <td>
+                      <td style="text-align: left">
+                        <span style="font-weight: bold; margin: 0 1em">
+                          Monster:
+                        </span>
+                        <input formControlName="name" type="text" />
+                        <span style="float: right; margin-right: 1em"
+                          >(
+                          <a (click)="addMonster(e, m)">+</a>
+                          /
+                          <a (click)="removeMonster(e, m)">-</a>
+                          )</span
+                        >
+                        <table>
+                          <tr>
+                            <th>No.</th>
+                            <th>AC</th>
+                            <th>HD</th>
+                            <th>Attack &amp; Damage</th>
+                            <th>Move</th>
+                            <th>Save As</th>
+                            <th>Morale</th>
+                          </tr>
+                          <tr>
+                            <td>
+                              <ng-container
+                                *ngIf="isDungeonEncounter; else wilderness"
+                              >
+                                <greg-dice-roller-form
+                                  [parentForm]="monster.get('noDungeon')"
+                                  [splitLines]="true"
+                                ></greg-dice-roller-form>
+                              </ng-container>
+                              <ng-template #wilderness>
+                                <greg-dice-roller-form
+                                  [parentForm]="monster.get('noWilderness')"
+                                  [splitLines]="true"
+                                ></greg-dice-roller-form>
+                              </ng-template>
+                            </td>
+                            <td>
+                              <input
+                                formControlName="armorClass"
+                                type="number"
+                              />
+                            </td>
+                            <td>
+                              <input formControlName="hitDice" type="number" />
+                            </td>
+                            <td>
+                              <input formControlName="attacks" type="text" />
+                              <br />
+                              (
+                              <greg-dice-roller-form
+                                [parentForm]="monster.get('damage')"
+                              ></greg-dice-roller-form>
+                              )
+                            </td>
+                            <td>
+                              <input
+                                formControlName="movementExploration"
+                                type="number"
+                              />' ({{
+                                monster.get("movementExploration").value
+                                  | monsterTacticalMovement
+                              }}')
+                            </td>
+                            <td>
+                              <ng-container formGroupName="saveAs">
+                                <select formControlName="asClass">
+                                  <option
+                                    *ngFor="let option of saveAsClassOptions"
+                                    [ngValue]="option"
+                                  >
+                                    {{ option }}
+                                  </option>
+                                </select>
+                                <input formControlName="level" type="number" />
+                              </ng-container>
+                            </td>
+                            <td>
+                              <input formControlName="morale" type="number" />
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <!--<td>
                         <input formControlName="name" type="text" />
                         (
                         <a (click)="addMonster(e, m)">+</a>
                         /
                         <a (click)="removeMonster(e, m)">-</a>
                         )
-                      </td>
-                      <td>
-                        <ng-container
-                          *ngIf="isDungeonEncounter; else wilderness"
-                        >
-                          <greg-dice-roller-form
-                            [parentForm]="monster.get('noDungeon')"
-                          ></greg-dice-roller-form>
-                        </ng-container>
-                        <ng-template #wilderness>
-                          <greg-dice-roller-form
-                            [parentForm]="monster.get('noWilderness')"
-                          ></greg-dice-roller-form>
-                        </ng-template>
-                      </td>
-                      <td>
-                        <input formControlName="armorClass" type="number" />
-                      </td>
-                      <td>
-                        <input formControlName="hitDice" type="number" />
-                      </td>
-                      <td>
-                        <input formControlName="attacks" type="text" />
-                        (
-                        <greg-dice-roller-form
-                          [parentForm]="monster.get('damage')"
-                        ></greg-dice-roller-form>
-                        )
-                      </td>
-                      <td>
-                        <input
-                          formControlName="movementExploration"
-                          type="number"
-                        />' ({{
-                          monster.get("movementExploration").value / 3
-                        }}')
-                      </td>
-                      <td>
-                        <ng-container formGroupName="saveAs">
-                          <input formControlName="asClass" type="text" />
-                          <input formControlName="level" type="number" />
-                        </ng-container>
-                      </td>
-                      <td>
-                        <input formControlName="morale" type="number" />
-                      </td>
+                      </td>-->
                     </tr>
                   </ng-container>
                 </ng-container>

@@ -11,6 +11,7 @@ import {
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
+import { SaveAsClass } from '@shared/model/save-as.model';
 import {
   areEqual,
   doesExist,
@@ -44,6 +45,7 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     return this.encounterTableForm.get('encounters') as FormArray;
   }
   isDungeonEncounter: boolean;
+  saveAsClassOptions = Object.keys(SaveAsClass);
 
   constructor() {}
 

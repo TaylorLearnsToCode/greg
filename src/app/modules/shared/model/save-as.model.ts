@@ -1,11 +1,16 @@
 import { doesExist } from '@shared/utilities/common-util/common.util';
 
 export class SaveAs {
-  asClass: string;
+  asClass: SaveAsClass;
   level: number;
 
-  constructor(asClass?: string, level?: number) {
-    this.asClass = doesExist(asClass) ? asClass : 'Normal Man';
+  constructor(asClass?: SaveAsClass, level?: number) {
+    this.asClass = doesExist(asClass) ? asClass : SaveAsClass.FTR;
     this.level = doesExist(level) ? level : 0;
   }
+}
+
+export enum SaveAsClass {
+  FTR = 'FTR',
+  MU = 'MU',
 }
