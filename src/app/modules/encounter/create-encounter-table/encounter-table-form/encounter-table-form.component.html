@@ -13,13 +13,7 @@
       <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
         <div [formGroupName]="i">
           {{ i + 1 }}.
-          <input formControlName="no" type="number" />
-          D
-          <input formControlName="pips" type="number" />
-          +/-
-          <input formControlName="modifier" type="number" />
-          x
-          <input formControlName="multiplier" type="number" />
+          <greg-dice-roller-form [parentForm]="die"></greg-dice-roller-form>
           <a (click)="removeDieRolled(i)">(Delete)</a>
         </div>
       </ng-container>
@@ -91,26 +85,14 @@
                         <ng-container
                           *ngIf="isDungeonEncounter; else wilderness"
                         >
-                          <ng-container formGroupName="noDungeon">
-                            <input formControlName="no" type="number" />
-                            D
-                            <input formControlName="pips" type="number" />
-                            +/-
-                            <input formControlName="modifier" type="number" />
-                            x
-                            <input formControlName="multiplier" type="number" />
-                          </ng-container>
+                          <greg-dice-roller-form
+                            [parentForm]="monster.get('noDungeon')"
+                          ></greg-dice-roller-form>
                         </ng-container>
                         <ng-template #wilderness>
-                          <ng-container formGroupName="noWilderness">
-                            <input formControlName="no" type="number" />
-                            D
-                            <input formControlName="pips" type="number" />
-                            +/-
-                            <input formControlName="modifier" type="number" />
-                            x
-                            <input formControlName="multiplier" type="number" />
-                          </ng-container>
+                          <greg-dice-roller-form
+                            [parentForm]="monster.get('noWilderness')"
+                          ></greg-dice-roller-form>
                         </ng-template>
                       </td>
                       <td>
@@ -122,15 +104,9 @@
                       <td>
                         <input formControlName="attacks" type="text" />
                         (
-                        <ng-container formGroupName="damage">
-                          <input formControlName="no" type="number" />
-                          D
-                          <input formControlName="pips" type="number" />
-                          +/-
-                          <input formControlName="modifier" type="number" />
-                          x
-                          <input formControlName="multiplier" type="number" />
-                        </ng-container>
+                        <greg-dice-roller-form
+                          [parentForm]="monster.get('damage')"
+                        ></greg-dice-roller-form>
                         )
                       </td>
                       <td>
@@ -166,3 +142,4 @@
     </table>
   </div>
 </form>
+<p>{{ encounterTable | json }}</p>
