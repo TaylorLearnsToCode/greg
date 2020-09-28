@@ -12,6 +12,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class DiceRollerFormComponent implements OnInit {
   @Input() parentForm: FormGroup;
+  @Input() splitLines: boolean;
 
   constructor() {}
 
