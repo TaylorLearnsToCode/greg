@@ -35,6 +35,8 @@ export function cloneObject(obj: any): any {
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
     retObj = {};
     Object.keys(obj).forEach((key) => (retObj[key] = cloneObject(obj[key])));
+  } else if (obj instanceof Date) {
+    retObj = new Date(obj.valueOf());
   } else {
     retObj = obj;
   }

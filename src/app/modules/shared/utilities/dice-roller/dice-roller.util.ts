@@ -60,11 +60,11 @@ export function rollDice(dice: DiceRolled | DiceRolled[]): number;
  */
 export function rollDice(...dice: any[]): number {
   let result = 0;
-  if (dice[0] instanceof DiceRolled) {
+  if (dice[0] instanceof DiceRolled || Array.isArray(dice[0])) {
     dice.forEach((die) => {
       if (Array.isArray(die)) {
         die.forEach((subDie) => (result += rollDice(subDie)));
-      } else if (die instanceof DiceRolled) {
+      } else {
         for (let i = 0; i < die.no; i++) {
           result += die.multiplier * (rollOneDie(die) + die.modifier);
         }
@@ -78,12 +78,10 @@ export function rollDice(...dice: any[]): number {
 }
 
 /**
- * For a provided DiceRolled, or a provided number of pips (faces), generates a random
- * number bounded by 1 and the nuber of pips specified, with even probability between
- * each possible result.
- * @param  {number|DiceRolled} die
+ * For a provided DiceRolled, generates a random number bounded by 1 and the
+ * number of pips specified, with even probability between each possible result.
+ * @param  {DiceRolled} die
  */
-function rollOneDie(die: number | DiceRolled): number {
-  const pips = die instanceof DiceRolled ? die.pips : die;
-  return Math.floor(Math.random() * pips) + 1;
+function rollOneDie(die: DiceRolled): number {
+  return Math.floor(Math.random() * die.pips) + 1;
 }
