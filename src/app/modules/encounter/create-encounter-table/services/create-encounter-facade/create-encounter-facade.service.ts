@@ -21,9 +21,7 @@ export class CreateEncounterFacadeService {
   createEncounterViewState$: Observable<ICreateEncounterViewState>;
 
   private destroySource = new Subject<void>();
-  private encounterTableSource = new BehaviorSubject<EncounterTable>(
-    new EncounterTable()
-  );
+  private encounterTableSource = new BehaviorSubject<EncounterTable>(null);
   private get encounterTable(): EncounterTable {
     return cloneObject(this.encounterTableSource.value);
   }
@@ -55,6 +53,7 @@ export class CreateEncounterFacadeService {
   }
 
   initialize(): void {
+    this.encounterTable = new EncounterTable();
     this.createEncounterViewState$ = combineLatest([
       this.encounterTableSource.asObservable(),
     ]).pipe(
