@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 /**
@@ -10,11 +10,9 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './dice-roller-form.component.html',
   styleUrls: ['./dice-roller-form.component.scss'],
 })
-export class DiceRollerFormComponent implements OnInit {
+export class DiceRollerFormComponent {
+  /** The form in which the dice are being defined. */
   @Input() parentForm: FormGroup;
+  /** If TRUE, breaks the UI such that the no. and pips appear on one line and modifier and multiplier on a second. */
   @Input() splitLines: boolean;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

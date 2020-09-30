@@ -14,28 +14,44 @@ import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ICreateEncounterViewState } from '../../model/create-encounter-view-state.interface';
 
+/** Controller/Delegator service for encounter creation logic */
 @Injectable({
   providedIn: 'root',
 })
 export class CreateEncounterFacadeService {
+  /** Stream containing current encounter view state. */
   createEncounterViewState$: Observable<ICreateEncounterViewState>;
 
+  /** Destruction subject to signal termination of observables when the using component is destroyed. */
   private destroySource = new Subject<void>();
+  /** Private source subject for encounter table view state property. */
   private encounterTableSource = new BehaviorSubject<EncounterTable>(null);
+  /**
+   * Private accessor for current encounter table.
+   * <i>On read</i> - returns a new instance of the same value.
+   */
   private get encounterTable(): EncounterTable {
     return cloneObject(this.encounterTableSource.value);
   }
+  /**
+   * Private accessor for current encounter table.
+   * <i>On write</i> - writes an immutable object matching the value assigned.
+   */
   private set encounterTable(encounterTable: EncounterTable) {
     deepFreeze(encounterTable);
     this.encounterTableSource.next(encounterTable);
   }
 
-  constructor() {}
-
+  /** Destruction method: terminates active processes in the service. */
   destroy(): void {
     this.destroySource.next();
   }
 
+  /**
+   * Delegator method for IEncounterTableActions, supporting all action options
+   * defined in the EncounterTableActions enum.
+   * @param  {IEncounterTableAction} action
+   */
   handleEncounterTableAction(action: IEncounterTableAction): void {
     switch (action.action) {
       case EncounterTableActions.UPDATE_DICE_ROLLED: {
@@ -52,6 +68,10 @@ export class CreateEncounterFacadeService {
     }
   }
 
+  /**
+   * Initializer method: defines initial view and service state.
+   * <i>This method must be called before subscribing to createEncounterViewState$!</i>
+   */
   initialize(): void {
     this.encounterTable = new EncounterTable();
     this.createEncounterViewState$ = combineLatest([
@@ -64,12 +84,22 @@ export class CreateEncounterFacadeService {
     );
   }
 
+  /**
+   * Clones the current encounter table, replaces the diceRolled property with a provided
+   * DiceRolled array, and publishes the result to state.
+   * @param  {DiceRolled[]} diceRolled
+   */
   private updateDiceRolled(diceRolled: DiceRolled[]): void {
     const nextEncounterTable = this.encounterTable;
     nextEncounterTable.diceRolled = diceRolled;
     this.encounterTable = nextEncounterTable;
   }
 
+  /**
+   * Clones the current encounter table, replaces the encounters property with a provided
+   * Encounter array, and publishes the result to state.
+   * @param  {Encounter[]} encounters
+   */
   private updateEncounters(encounters: Encounter[]): void {
     const nextEncounterTable = this.encounterTable;
     nextEncounterTable.encounters = encounters;
