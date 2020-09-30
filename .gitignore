@@ -43,6 +43,7 @@ testem.log
 /coverage/*
 /documentation
 /documentation/*
+StaticRoutesForCompodoc.txt
 
 # System Files
 .DS_Store

@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
+import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
 import {
   EncounterTable,
   EncounterTableActions,
@@ -159,10 +160,12 @@ describe('EncounterTableFormComponent', () => {
   });
 
   it('should be able to remove a target monster', () => {
+    const saveAsMU = new SaveAs(SaveAsClass.MU, 2);
     const firstMonster = new Monster();
     firstMonster.name = 'First';
     const secondMonster = new Monster();
     secondMonster.name = 'Second';
+    secondMonster.saveAs = saveAsMU;
     const encounter = new Encounter(2);
     addControls(2, true);
     component.addMonster(1, 0);
@@ -178,6 +181,10 @@ describe('EncounterTableFormComponent', () => {
     expect(monstersFormArray.controls[0].value.name).toEqual(
       secondMonster.name
     );
+    expect(monstersFormArray.controls[0].value.saveAs.asClass).toEqual(
+      SaveAsClass.MU
+    );
+    expect(monstersFormArray.controls[0].value.saveAs.level).toEqual(2);
   });
 
   it('should delegate updates to the dice pool', () => {
