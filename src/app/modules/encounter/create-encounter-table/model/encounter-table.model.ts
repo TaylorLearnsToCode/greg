@@ -25,6 +25,8 @@ export class EncounterTable {
 
 /** Supported actions emittable to the Create Encounter Facade service. */
 export enum EncounterTableActions {
+  /** Export the table in payload to the client in JSON format. */
+  EXPORT_JSON,
   /** Update the diceRolled pool. */
   UPDATE_DICE_ROLLED,
   /** Update the encounters list. */

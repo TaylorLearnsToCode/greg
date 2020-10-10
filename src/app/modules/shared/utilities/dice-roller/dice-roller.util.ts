@@ -1,4 +1,30 @@
 import { DiceRolled } from '../../model/dice-rolled.model';
+import { doesExist } from '../common-util/common.util';
+
+/**
+ * For a provided dice pool, provides the minimum and maximum possible results in
+ * the form of a two-element array.
+ * @param  {DiceRolled|DiceRolled[]} dice
+ */
+export function getBoundedRange(dice: DiceRolled | DiceRolled[]): number[] {
+  const boundedRange: number[] = [];
+  if (Array.isArray(dice)) {
+    let nextRange: number[];
+    dice.forEach((die) => {
+      nextRange = getBoundedRange(die);
+      if (!doesExist(boundedRange[0]) || boundedRange[0] > nextRange[0]) {
+        boundedRange[0] = nextRange[0];
+      }
+      if (!doesExist(boundedRange[1]) || boundedRange[1] < nextRange[1]) {
+        boundedRange[1] = nextRange[1];
+      }
+    });
+  } else {
+    boundedRange.push((1 + dice.modifier) * dice.multiplier * dice.no);
+    boundedRange.push((dice.pips + dice.modifier) * dice.multiplier * dice.no);
+  }
+  return boundedRange;
+}
 
 /**
  * Returns an array containing all possible result values for a given DiceRolled,

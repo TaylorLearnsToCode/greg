@@ -1,5 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { EncounterTable } from '../model/encounter-table.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  EncounterTable,
+  EncounterTableActions,
+  IEncounterTableAction,
+} from '../model/encounter-table.model';
 
 @Component({
   selector: 'greg-encounter-table-display',
@@ -8,8 +12,16 @@ import { EncounterTable } from '../model/encounter-table.model';
 })
 export class EncounterTableDisplayComponent implements OnInit {
   @Input() encounterTable: EncounterTable;
+  @Output() encounterTableAction = new EventEmitter<IEncounterTableAction>();
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  exportToJson(): void {
+    this.encounterTableAction.emit({
+      action: EncounterTableActions.EXPORT_JSON,
+      payload: this.encounterTable,
+    } as IEncounterTableAction);
+  }
 }
