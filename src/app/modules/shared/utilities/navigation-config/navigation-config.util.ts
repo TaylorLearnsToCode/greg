@@ -2,22 +2,26 @@ import { LoadChildren, Route } from '@angular/router';
 import { WelcomeComponent } from '../../components/welcome/welcome.component';
 
 /** LoadChildren function to load the Create Encounter Table module */
+/* istanbul ignore next */
 const createEncounterTable: LoadChildren = () =>
   import(
     '@encounter/create-encounter-table/create-encounter-table.module'
   ).then((m) => m.CreateEncounterTableModule);
 
 /** LoadChildren function to load the Encounter module */
+/* istanbul ignore next */
 const encounter: LoadChildren = () =>
   import('@encounter/encounter.module').then((m) => m.EncounterModule);
 
 /** LoadChildren function to load the Enter Monster module */
+/* istanbul ignore next */
 const enterMonster: LoadChildren = () =>
   import('@monster/enter-monster/enter-monster.module').then(
     (m) => m.EnterMonsterModule
   );
 
 /** LoadChildren function to load the Monster module */
+/* istanbul ignore next */
 const monster: LoadChildren = () =>
   import('@monster/monster.module').then((m) => m.MonsterModule);
 

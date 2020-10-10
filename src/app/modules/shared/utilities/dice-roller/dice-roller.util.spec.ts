@@ -1,22 +1,49 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
-import { getRollRange, rollDice } from './dice-roller.util';
+import { getBoundedRange, getRollRange, rollDice } from './dice-roller.util';
 
 describe('DiceRoller', () => {
   let d6: DiceRolled;
   let d8: DiceRolled;
+  let variableRange: number[];
 
   beforeEach(() => {
     d6 = new DiceRolled(1, 6);
     d8 = new DiceRolled(1, 8);
+    variableRange = null;
+  });
+
+  describe('getBoundedRange', () => {
+    it('should return 1-6', () => {
+      variableRange = getBoundedRange(d6);
+      runBoundedRangeExpectation(1, 6);
+    });
+
+    it('should return 2-7', () => {
+      d6.modifier = 1;
+      variableRange = getBoundedRange(d6);
+      runBoundedRangeExpectation(2, 7);
+    });
+
+    it('should return 10-60', () => {
+      d6.multiplier = 10;
+      variableRange = getBoundedRange(d6);
+      runBoundedRangeExpectation(10, 60);
+    });
+
+    it('should return 20-70', () => {
+      d6.modifier = 1;
+      d6.multiplier = 10;
+      variableRange = getBoundedRange(d6);
+      runBoundedRangeExpectation(20, 70);
+    });
+
+    it('should return 2-14', () => {
+      variableRange = getBoundedRange(d6, d8);
+      runBoundedRangeExpectation(2, 14);
+    });
   });
 
   describe('getRollRange', () => {
-    let variableRange: number[];
-
-    beforeEach(() => {
-      variableRange = null;
-    });
-
     it('should return 1-6', () => {
       variableRange = getRollRange(d6);
       expect(variableRange.length).toBe(6);
@@ -33,7 +60,7 @@ describe('DiceRoller', () => {
     });
 
     it('should return 2-14', () => {
-      variableRange = getRollRange([d6, d8]);
+      variableRange = getRollRange(d6, d8);
       expect(variableRange.length).toBe(13);
       expect(variableRange[0]).toBe(2);
       expect(variableRange[12]).toBe(14);
@@ -70,4 +97,11 @@ describe('DiceRoller', () => {
       }
     });
   });
+
+  /* Utility Functions */
+  function runBoundedRangeExpectation(low: number, high: number): void {
+    expect(variableRange.length).toBe(2);
+    expect(variableRange[0]).toBe(low);
+    expect(variableRange[1]).toBe(high);
+  }
 });
