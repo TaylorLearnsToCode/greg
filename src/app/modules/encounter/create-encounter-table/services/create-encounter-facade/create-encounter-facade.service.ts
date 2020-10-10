@@ -11,6 +11,7 @@ import {
   cloneObject,
   deepFreeze,
 } from '@shared/utilities/common-util/common.util';
+import { formValueToMonster } from '@shared/utilities/conversion-util/conversion.util';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ICreateEncounterViewState } from '../../model/create-encounter-view-state.interface';
@@ -114,6 +115,12 @@ export class CreateEncounterFacadeService {
    */
   private updateEncounters(encounters: Encounter[]): void {
     const nextEncounterTable = this.encounterTable;
+    encounters.forEach(
+      (encounter) =>
+        (encounter.monsters = encounter.monsters.map((monster) =>
+          formValueToMonster(monster)
+        ))
+    );
     nextEncounterTable.encounters = encounters;
     this.encounterTable = nextEncounterTable;
   }
