@@ -6,6 +6,7 @@ import {
 } from '@encounter/create-encounter-table/model/encounter-table.model';
 import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { ExportService } from '@shared/services/export/export.service';
 import {
   cloneObject,
   deepFreeze,
@@ -42,6 +43,12 @@ export class CreateEncounterFacadeService {
     this.encounterTableSource.next(encounterTable);
   }
 
+  /**
+   * Create Encounter Facade Service Constructor
+   * @param  {ExportService} privateexporService
+   */
+  constructor(private exportService: ExportService) {}
+
   /** Destruction method: terminates active processes in the service. */
   destroy(): void {
     this.destroySource.next();
@@ -54,6 +61,11 @@ export class CreateEncounterFacadeService {
    */
   handleEncounterTableAction(action: IEncounterTableAction): void {
     switch (action.action) {
+      case EncounterTableActions.EXPORT_JSON: {
+        const title: string = action.payload.title;
+        this.exportService.exportAsJson(action.payload, title);
+        break;
+      }
       case EncounterTableActions.UPDATE_DICE_ROLLED: {
         this.updateDiceRolled(action.payload);
         break;

@@ -156,9 +156,12 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
    * @param  {number} monsterIndex
    */
   removeMonster(encounterIndex: number, monsterIndex: number): void {
-    (this.formEncounters.controls[encounterIndex].get(
+    const targetEncounter = this.formEncounters.controls[encounterIndex].get(
       'monsters'
-    ) as FormArray).removeAt(monsterIndex);
+    ) as FormArray;
+    if (targetEncounter.length > 1) {
+      targetEncounter.removeAt(monsterIndex);
+    }
   }
 
   /** Handler for update action to Dice Rolled for this table. Emits new dice value. */

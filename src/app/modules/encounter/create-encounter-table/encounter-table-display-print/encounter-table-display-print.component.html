@@ -1,0 +1,38 @@
+<h2>Encounter Table for Print</h2>
+<table *ngIf="encounters && encounters.length; else noEncounters">
+  <tr>
+    <th>Roll</th>
+    <th>Monster</th>
+    <th>No.</th>
+    <th>AC</th>
+    <th>HD</th>
+    <th>Attacks &amp; Damage</th>
+    <th>Move</th>
+    <th>Save As</th>
+    <th>Morale</th>
+  </tr>
+  <ng-container *ngFor="let encounter of encounters">
+    <tr *ngFor="let monster of encounter.monsters; first as isFirst">
+      <td
+        class="centered"
+        *ngIf="isFirst"
+        [attr.rowspan]="encounter.monsters.length"
+      >
+        {{ encounter | encounterRoll }}
+      </td>
+      <td>{{ monster.name }}</td>
+      <td class="centered">{{ monster | noAppearingRange: isDungeon }}</td>
+      <td class="centered">{{ monster.armorClass }}</td>
+      <td class="centered">{{ monster.hitDice }}</td>
+      <td>{{ monster | attacksAndDamage }}</td>
+      <td class="centered">
+        {{ monster | combinedMovement }}
+      </td>
+      <td>{{ monster?.saveAs?.asClass }} {{ monster?.saveAs?.level }}</td>
+      <td class="centered">{{ monster.morale }}</td>
+    </tr>
+  </ng-container>
+</table>
+<ng-template #noEncounters>
+  <div>No encounters yet provided.</div>
+</ng-template>
