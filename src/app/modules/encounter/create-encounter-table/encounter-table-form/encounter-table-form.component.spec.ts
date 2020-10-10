@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
@@ -44,6 +44,7 @@ describe('EncounterTableFormComponent', () => {
         MonsterTacticalMovementPipe,
       ],
       imports: [FormsModule, ReactiveFormsModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -185,6 +186,18 @@ describe('EncounterTableFormComponent', () => {
       SaveAsClass.MU
     );
     expect(monstersFormArray.controls[0].value.saveAs.level).toEqual(2);
+  });
+
+  it('should not remove the LAST monster', () => {
+    addControls(1, true);
+    component.formEncounters.controls[0].patchValue(new Encounter(1));
+    console.warn(component.formEncounters);
+    const monstersFormArray = component.formEncounters.controls[0].get(
+      'monsters'
+    ) as FormArray;
+    expect(monstersFormArray.controls.length).toBe(1);
+    component.removeMonster(0, 0);
+    expect(monstersFormArray.controls.length).toBe(1);
   });
 
   it('should delegate updates to the dice pool', () => {

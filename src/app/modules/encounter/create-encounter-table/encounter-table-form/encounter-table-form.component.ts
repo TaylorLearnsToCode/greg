@@ -191,7 +191,7 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     if (doesExist(table)) {
       const currentEncounters: FormArray = this.formEncounters;
       if (isEmpty(currentEncounters.controls) && !isEmpty(table.diceRolled)) {
-        const resultRange: number[] = getRollRange(table.diceRolled);
+        const resultRange: number[] = getRollRange(...table.diceRolled);
         resultRange.forEach((roll: number) =>
           currentEncounters.push(
             buildFormFromObject(new Encounter(roll, null, [new Monster()]))

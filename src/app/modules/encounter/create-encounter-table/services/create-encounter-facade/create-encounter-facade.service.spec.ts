@@ -6,6 +6,8 @@ import {
 } from '@encounter/create-encounter-table/model/encounter-table.model';
 import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { ExportService } from '@shared/services/export/export.service';
+import { getExportServiceSpy } from '@test/export.service.spy';
 import { Subscription } from 'rxjs';
 import { CreateEncounterFacadeService } from './create-encounter-facade.service';
 
@@ -18,9 +20,17 @@ describe('CreateEncounterFacadeService', () => {
   const d6 = new DiceRolled(null, null);
   const d8 = new DiceRolled(1, 8);
   const encounter = new Encounter(1);
+  const exportServiceSpy = getExportServiceSpy();
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: ExportService,
+          useValue: exportServiceSpy,
+        },
+      ],
+    });
     action = {} as IEncounterTableAction;
     service = TestBed.inject(CreateEncounterFacadeService);
     service.initialize();
@@ -30,6 +40,11 @@ describe('CreateEncounterFacadeService', () => {
   });
 
   afterEach(() => {
+    Object.keys(exportServiceSpy).forEach((key) => {
+      if (exportServiceSpy[key].calls) {
+        exportServiceSpy[key].calls.reset();
+      }
+    });
     state = null;
     subscription.unsubscribe();
     service.destroy();
@@ -37,6 +52,16 @@ describe('CreateEncounterFacadeService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should delegate a JSON Export', () => {
+    const title = 'File Title';
+    const payload = { object: 'to export', title };
+    action.action = EncounterTableActions.EXPORT_JSON;
+    action.payload = payload;
+    expect(exportServiceSpy.exportAsJson).not.toHaveBeenCalled();
+    service.handleEncounterTableAction(action);
+    expect(exportServiceSpy.exportAsJson).toHaveBeenCalledWith(payload, title);
   });
 
   it('should handle a dice roll update', fakeAsync(() => {

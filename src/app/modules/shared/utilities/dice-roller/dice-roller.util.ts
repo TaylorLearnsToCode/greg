@@ -1,52 +1,29 @@
 import { DiceRolled } from '../../model/dice-rolled.model';
-import { doesExist } from '../common-util/common.util';
 
 /**
- * For a provided dice pool, provides the minimum and maximum possible results in
- * the form of a two-element array.
- * @param  {DiceRolled|DiceRolled[]} dice
+ * For a collection of provided dice pools, provides the minimum and maximum possible
+ * results in the form of a two-element array.
+ * @param  {DiceRolled[]} ...dice
  */
-export function getBoundedRange(dice: DiceRolled | DiceRolled[]): number[] {
+export function getBoundedRange(...dicePools: DiceRolled[]): number[] {
   const boundedRange: number[] = [];
-  if (Array.isArray(dice)) {
-    let nextRange: number[];
-    dice.forEach((die) => {
-      nextRange = getBoundedRange(die);
-      if (!doesExist(boundedRange[0]) || boundedRange[0] > nextRange[0]) {
-        boundedRange[0] = nextRange[0];
-      }
-      if (!doesExist(boundedRange[1]) || boundedRange[1] < nextRange[1]) {
-        boundedRange[1] = nextRange[1];
-      }
-    });
-  } else {
-    boundedRange.push((1 + dice.modifier) * dice.multiplier * dice.no);
-    boundedRange.push((dice.pips + dice.modifier) * dice.multiplier * dice.no);
-  }
-  return boundedRange;
+  let min = 0;
+  let max = 0;
+  dicePools.forEach((pool) => {
+    min += (pool.modifier + pool.no) * pool.multiplier;
+    max += (pool.modifier + pool.pips * pool.no) * pool.multiplier;
+  });
+  return [min, max];
 }
 
 /**
- * Returns an array containing all possible result values for a given DiceRolled,
- * arranged lowest to highest.
- * @param  {DiceRolled} dice
+ * For a collection of provided dice pools, provides the full range of possible
+ * results of those dice pools in an ascending numeric array.
+ * @param  {DiceRolled[]} ...dice
  */
-export function getRollRange(dice: DiceRolled | DiceRolled[]): number[] {
+export function getRollRange(...dicePools: DiceRolled[]): number[] {
   const result: number[] = [];
-  let min: number;
-  let max: number;
-
-  if (Array.isArray(dice)) {
-    min = 0;
-    max = 0;
-    dice.forEach((die) => {
-      min += (1 + die.modifier) * die.multiplier * die.no;
-      max += (die.pips + die.modifier) * die.multiplier * die.no;
-    });
-  } else {
-    min = (1 + dice.modifier) * dice.multiplier * dice.no;
-    max = (dice.pips + dice.modifier) * dice.multiplier * dice.no;
-  }
+  const [min, max] = getBoundedRange(...dicePools);
   for (let i = min; i <= max; i++) {
     result.push(i);
   }

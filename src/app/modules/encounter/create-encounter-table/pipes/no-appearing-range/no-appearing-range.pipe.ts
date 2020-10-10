@@ -1,12 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Monster } from '@shared/model/monster.model';
-import { getBoundedRange } from '@shared/utilities/dice-roller/dice-roller.util';
+import { BoundedRangePipe } from '@shared/pipes/bounded-range/bounded-range.pipe';
 
 /** Renders the Number Appearing for a given monster. */
 @Pipe({
   name: 'noAppearingRange',
 })
-export class NoAppearingRangePipe implements PipeTransform {
+export class NoAppearingRangePipe
+  extends BoundedRangePipe
+  implements PipeTransform {
   /**
    * For a given Monster, returns the bounded range of said monster's No. Appearing.
    * If {isDungeon} is specified, will use the number appering in a dungeon level.
@@ -15,11 +17,8 @@ export class NoAppearingRangePipe implements PipeTransform {
    * @param  {boolean} isDungeon?
    */
   transform(monster: Monster, isDungeon?: boolean): string {
-    const boundedRange: number[] = isDungeon
-      ? getBoundedRange(monster.noDungeon)
-      : getBoundedRange(monster.noWilderness);
-    return boundedRange.length === 2
-      ? `${boundedRange[0]}-${boundedRange[1]}`
-      : '';
+    return isDungeon
+      ? super.transform(monster.noDungeon)
+      : super.transform(monster.noWilderness);
   }
 }

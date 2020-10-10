@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 
 /** Handler service for moving data out of the session. */
 @Injectable({
@@ -18,6 +19,7 @@ export class ExportService {
    * @param  {string} fileName
    */
   exportAsJson(obj: any, fileName: string): void {
+    fileName = doesExist(fileName) ? fileName.replace(' ', '') : 'export';
     const payload: Blob = new Blob([JSON.stringify(obj)], {
       type: 'text/plain',
     });
