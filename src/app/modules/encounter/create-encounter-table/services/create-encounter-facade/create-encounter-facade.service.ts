@@ -75,6 +75,11 @@ export class CreateEncounterFacadeService {
         this.updateEncounters(action.payload);
         break;
       }
+      case EncounterTableActions.UPDATE_TABLE: {
+        this.updateDiceRolled(action.payload.diceRolled);
+        this.updateEncounters(action.payload.encounters);
+        break;
+      }
       default: {
         throw new Error(`Unsupported action: ${action.action}`);
       }
