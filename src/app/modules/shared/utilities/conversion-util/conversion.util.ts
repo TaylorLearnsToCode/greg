@@ -29,7 +29,7 @@ export function routeToMenuItem(route: Route): MenuItem {
  * @param  {any} formValue
  */
 export function formValueToDiceRolled(formValue: any): DiceRolled {
-  const diceRolled = new DiceRolled(0, 0);
+  const diceRolled = new DiceRolled(null, null);
   diceRolled.no = doesExist(formValue.no) ? formValue.no : diceRolled.no;
   diceRolled.pips = doesExist(formValue.pips)
     ? formValue.pips
@@ -50,8 +50,8 @@ export function formValueToDiceRolled(formValue: any): DiceRolled {
  */
 export function formValueToSaveAs(formValue: any): SaveAs {
   const saveAs = new SaveAs();
-  saveAs.asClass = doesExist(formValue.saveAs)
-    ? formValue.saveAs
+  saveAs.asClass = doesExist(formValue.asClass)
+    ? formValue.asClass
     : saveAs.asClass;
   saveAs.level = doesExist(formValue.level) ? formValue.level : saveAs.level;
   return saveAs;
