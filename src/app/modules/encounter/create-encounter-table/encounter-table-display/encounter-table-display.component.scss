@@ -1,3 +1,11 @@
+@import "../../../../../assets/styles/variables";
+
 div {
   text-align: center;
+}
+
+label {
+  color: $anchor-orange-light;
+  font-weight: bold;
+  padding-right: 0.5em;
 }

@@ -1,6 +1,22 @@
 <h2>Actions</h2>
 <div>
   <a (click)="exportToJson()">Export to JSON</a>
+  |
+  <ng-container *ngIf="importedRawFile; else noImportFile">
+    <a (click)="importFromJson()">Import {{ importedRawFile.name }}</a>
+    |
+    <a (click)="clearImportFile()">Clear Import File</a>
+  </ng-container>
+  <ng-template #noImportFile>
+    <label for="importInput">Select JSON for Import:</label>
+    <input
+      name="importInput"
+      type="file"
+      accept=".json"
+      multiple="false"
+      (change)="onFileInput($event.target)"
+    />
+  </ng-template>
 </div>
 <br />
 <greg-encounter-table-display-print

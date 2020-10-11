@@ -31,6 +31,8 @@ export enum EncounterTableActions {
   UPDATE_DICE_ROLLED,
   /** Update the encounters list. */
   UPDATE_ENCOUNTERS,
+  /** Update the entire table. */
+  UPDATE_TABLE,
 }
 
 /** Interface contract for emitted EncounterTableActions events. */
