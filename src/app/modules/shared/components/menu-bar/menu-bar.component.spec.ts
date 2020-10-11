@@ -23,7 +23,7 @@ describe('MenuBarComponent', () => {
   beforeEach(() => {
     mockItemRef = getTestMenuItem();
     mockParentItem = getTestMenuItem('parent');
-    mockParentItem.children = [mockItemRef];
+    mockParentItem.children = [mockItemRef, getTestMenuItem('2')];
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate').and.callFake(
       () => new Promise((resolve) => resolve(true))
@@ -43,6 +43,14 @@ describe('MenuBarComponent', () => {
   });
 
   describe('clickMenuItem', () => {
+    let lastComponentMenuItem: MenuItem;
+
+    beforeEach(
+      () =>
+        (lastComponentMenuItem =
+          component.menuItems[component.menuItems.length - 1])
+    );
+
     it('should route to an item', () => {
       mockItemRef.routerLink = mockItemRef.id;
       component.clickMenuItem(mockItemRef);
@@ -55,14 +63,14 @@ describe('MenuBarComponent', () => {
     });
 
     it('should expand a route option family', () => {
-      component.clickMenuItem(mockParentItem);
-      expect(mockParentItem.isExpanded).toBe(true);
+      component.clickMenuItem(lastComponentMenuItem);
+      expect(lastComponentMenuItem.isExpanded).toBe(true);
     });
 
     it('should contract a route option family', () => {
-      mockParentItem.isExpanded = true;
-      component.clickMenuItem(mockParentItem);
-      expect(mockParentItem.isExpanded).toBe(false);
+      lastComponentMenuItem.isExpanded = true;
+      component.clickMenuItem(lastComponentMenuItem);
+      expect(lastComponentMenuItem.isExpanded).toBe(false);
     });
   });
 });

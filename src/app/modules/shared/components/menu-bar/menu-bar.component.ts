@@ -82,6 +82,10 @@ export class MenuBarComponent {
    * @param  {MenuItem} itemRef
    */
   private toggleExpansionStatus(itemRef: MenuItem): void {
-    itemRef.isExpanded = !itemRef.isExpanded;
+    this.menuItems.forEach((item) =>
+      item.id !== itemRef.id
+        ? (item.isExpanded = false)
+        : (item.isExpanded = !item.isExpanded)
+    );
   }
 }

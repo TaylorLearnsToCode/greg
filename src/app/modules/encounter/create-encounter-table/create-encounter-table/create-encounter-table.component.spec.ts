@@ -52,7 +52,7 @@ describe('CreateEncounterTableComponent', () => {
   it('should delegate encounter table actions', () => {
     const action = {
       action: EncounterTableActions.UPDATE_ENCOUNTERS,
-      payload: [new Encounter(1)],
+      payload: [new Encounter(1, 1, [], 'Test Encounter Table')],
     } as IEncounterTableAction;
     component.onEncounterTableAction(action);
     expect(facadeSpy.handleEncounterTableAction).toHaveBeenCalledWith(action);
