@@ -1,12 +1,18 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ICreateEncounterViewState } from '@encounter/create-encounter-table/model/create-encounter-view-state.interface';
 import {
+  EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
 } from '@encounter/create-encounter-table/model/encounter-table.model';
 import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { Monster } from '@shared/model/monster.model';
 import { ExportService } from '@shared/services/export/export.service';
+import {
+  areEqual,
+  cloneObject,
+} from '@shared/utilities/common-util/common.util';
 import { getExportServiceSpy } from '@test/export.service.spy';
 import { Subscription } from 'rxjs';
 import { CreateEncounterFacadeService } from './create-encounter-facade.service';
@@ -54,6 +60,20 @@ describe('CreateEncounterFacadeService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should destroy', fakeAsync(() => {
+    expect(state.encounterTable.diceRolled).toEqual([]);
+    action.action = EncounterTableActions.UPDATE_DICE_ROLLED;
+    action.payload = [d6];
+    service.handleEncounterTableAction(action);
+    tick();
+    expect(state.encounterTable.diceRolled).toEqual([d6]);
+    service.destroy();
+    action.payload = [d6, d8];
+    service.handleEncounterTableAction(action);
+    tick();
+    expect(state.encounterTable.diceRolled).toEqual([d6]);
+  }));
+
   it('should delegate a JSON Export', () => {
     const title = 'File Title';
     const payload = { object: 'to export', title };
@@ -79,7 +99,25 @@ describe('CreateEncounterFacadeService', () => {
     expect(state.encounterTable.encounters).toEqual([]);
     service.handleEncounterTableAction(action);
     tick();
-    expect(state.encounterTable.encounters).toEqual([encounter]);
+    expect(areEqual(state.encounterTable.encounters, [encounter])).toBeTrue();
+  }));
+
+  it('should handle an update to the encounter table', fakeAsync(() => {
+    const thisEncounter: Encounter = cloneObject(encounter);
+    thisEncounter.monsters.push(new Monster());
+    action.action = EncounterTableActions.UPDATE_TABLE;
+    action.payload = {
+      diceRolled: [d6, d8],
+      encounters: [thisEncounter],
+    } as EncounterTable;
+    expect(state.encounterTable.diceRolled).toEqual([]);
+    expect(state.encounterTable.encounters).toEqual([]);
+    service.handleEncounterTableAction(action);
+    tick();
+    expect(areEqual(state.encounterTable.diceRolled, [d6, d8])).toBeTrue();
+    expect(
+      areEqual(state.encounterTable.encounters, [thisEncounter])
+    ).toBeTrue();
   }));
 
   it('should not handle unsupported actions', () => {
@@ -88,20 +126,6 @@ describe('CreateEncounterFacadeService', () => {
       `Unsupported action: TACO_SALAD`
     );
   });
-
-  it('should destroy', fakeAsync(() => {
-    expect(state.encounterTable.diceRolled).toEqual([]);
-    action.action = EncounterTableActions.UPDATE_DICE_ROLLED;
-    action.payload = [d6];
-    service.handleEncounterTableAction(action);
-    tick();
-    expect(state.encounterTable.diceRolled).toEqual([d6]);
-    service.destroy();
-    action.payload = [d6, d8];
-    service.handleEncounterTableAction(action);
-    tick();
-    expect(state.encounterTable.diceRolled).toEqual([d6]);
-  }));
 
   it('should produce an immutable state', () => {
     expect(() => (state.encounterTable.diceRolled = [d6])).toThrowError();

@@ -120,13 +120,14 @@ export class CreateEncounterFacadeService {
    */
   private updateEncounters(encounters: Encounter[]): void {
     const nextEncounterTable = this.encounterTable;
-    encounters.forEach(
+    const newEncounters = cloneObject(encounters);
+    newEncounters.forEach(
       (encounter) =>
         (encounter.monsters = encounter.monsters.map((monster) =>
           formValueToMonster(monster)
         ))
     );
-    nextEncounterTable.encounters = encounters;
+    nextEncounterTable.encounters = newEncounters;
     this.encounterTable = nextEncounterTable;
   }
 }
