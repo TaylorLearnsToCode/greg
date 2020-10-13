@@ -11,15 +11,23 @@ export class EncounterTable {
   diceRolled: DiceRolled[];
   /** The collection of encounters potentially encounterable on this table. */
   encounters: Encounter[];
+  /** The title or name uniquely identifying this encounter table. */
+  title: string;
 
   /**
    * Encounter Table Constructor
    * @param  {DiceRolled[]} diceRolled? Defaults to []
    * @param  {Encounter[]} encounters? Defaults to []
+   * @param  {string} title? Defaults to 'Encounter Table'
    */
-  constructor(diceRolled?: DiceRolled[], encounters?: Encounter[]) {
+  constructor(
+    diceRolled?: DiceRolled[],
+    encounters?: Encounter[],
+    title?: string
+  ) {
     this.diceRolled = doesExist(diceRolled) ? diceRolled : [];
     this.encounters = doesExist(encounters) ? encounters : [];
+    this.title = doesExist(title) ? title : 'Encounter Table';
   }
 }
 

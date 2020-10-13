@@ -10,8 +10,8 @@ import { ExportService } from '@shared/services/export/export.service';
 import {
   cloneObject,
   deepFreeze,
+  doesExist,
 } from '@shared/utilities/common-util/common.util';
-import { formValueToMonster } from '@shared/utilities/conversion-util/conversion.util';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ICreateEncounterViewState } from '../../model/create-encounter-view-state.interface';
@@ -78,6 +78,7 @@ export class CreateEncounterFacadeService {
       case EncounterTableActions.UPDATE_TABLE: {
         this.updateDiceRolled(action.payload.diceRolled);
         this.updateEncounters(action.payload.encounters);
+        this.updateTitle(action.payload.title);
         break;
       }
       default: {
@@ -114,19 +115,26 @@ export class CreateEncounterFacadeService {
   }
 
   /**
+   * Clones the current encounter table, replaces the title property with a provided title,
+   * if found, and publishes the result to state.
+   * @param  {string} title
+   */
+  private updateTitle(title: string): void {
+    if (doesExist(title)) {
+      const nextEncounterTable = this.encounterTable;
+      nextEncounterTable.title = title;
+      this.encounterTable = nextEncounterTable;
+    }
+  }
+
+  /**
    * Clones the current encounter table, replaces the encounters property with a provided
    * Encounter array, and publishes the result to state.
    * @param  {Encounter[]} encounters
    */
   private updateEncounters(encounters: Encounter[]): void {
     const nextEncounterTable = this.encounterTable;
-    const newEncounters = cloneObject(encounters);
-    newEncounters.forEach(
-      (encounter) =>
-        (encounter.monsters = encounter.monsters.map((monster) =>
-          formValueToMonster(monster)
-        ))
-    );
+    const newEncounters: Encounter[] = cloneObject(encounters);
     nextEncounterTable.encounters = newEncounters;
     this.encounterTable = nextEncounterTable;
   }

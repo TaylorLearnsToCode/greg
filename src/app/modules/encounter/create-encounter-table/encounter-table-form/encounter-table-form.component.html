@@ -22,6 +22,12 @@
   <ng-template #noDice>
     <div class="no-dice">No dice have yet been added.</div>
   </ng-template>
+  <!-- Table Name -->
+  <div style="float: right">
+    <br />
+    <label for="table-title">Table Name:</label>
+    <input formControlName="title" name="table-title" type="text" />
+  </div>
   <!-- Define Encounters -->
   <h2>Define Result Table</h2>
   <div class="table-form">
@@ -32,11 +38,11 @@
   <div formArrayName="encounters">
     <table>
       <colgroup>
-        <col span="1" style="width: 5em" />
+        <col span="1" style="width: 2.5em" />
         <col span="1" />
       </colgroup>
       <tr>
-        <th>Die Roll</th>
+        <th>Roll</th>
         <th>Encounter</th>
       </tr>
       <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
@@ -46,7 +52,9 @@
           <tr [formGroupName]="e">
             <td>
               <input formControlName="lowRoll" type="number" />
+              <br />
               -
+              <br />
               <input formControlName="highRoll" type="number" />
               <br />
               <a (click)="addEncounter(e)">+</a>
@@ -124,7 +132,9 @@
                               <input
                                 formControlName="movementExploration"
                                 type="number"
-                              />' ({{
+                              />'
+                              <br />
+                              ({{
                                 monster.get("movementExploration").value
                                   | monsterTacticalMovement
                               }}')

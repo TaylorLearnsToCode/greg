@@ -9,8 +9,6 @@ export class Encounter {
   highRoll: number;
   /** A collection of Monster entities that make up the encounter. */
   monsters: Monster[];
-  /** The title or name uniquely identifying this encounter table. */
-  title: string;
 
   /**
    * Encounter constructor.
@@ -28,6 +26,5 @@ export class Encounter {
     this.lowRoll = lowRoll;
     this.highRoll = doesExist(highRoll) ? highRoll : lowRoll;
     this.monsters = doesExist(monsters) ? monsters : [];
-    this.title = doesExist(title) ? title : 'Encounter Table';
   }
 }

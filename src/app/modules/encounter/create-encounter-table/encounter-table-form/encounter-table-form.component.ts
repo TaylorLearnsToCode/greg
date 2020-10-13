@@ -74,9 +74,15 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     this.updateEncounterFormValues(changes.encounterTable);
   }
 
-  /** Adds a new set of dice to be rolled when determining an encounter on this table. */
-  addDieRolled(): void {
-    this.formDiceRolled.push(buildFormFromObject(new DiceRolled(1, 6)));
+  /**
+   * Adds a new set of dice to be rolled when determining an encounter on this table.
+   * @param  {DiceRolled} dieRolled? Defaults to 1D6
+   */
+  addDieRolled(dieRolled?: DiceRolled): void {
+    const dieRolledControl = buildFormFromObject(
+      doesExist(dieRolled) ? dieRolled : new DiceRolled(1, 6)
+    );
+    this.formDiceRolled.push(dieRolledControl);
   }
 
   /**
@@ -176,8 +182,8 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   updateEncounters(): void {
     if (this.formEncounters.length > 0) {
       this.encounterTableAction.emit({
-        action: EncounterTableActions.UPDATE_ENCOUNTERS,
-        payload: this.formEncounters.value,
+        action: EncounterTableActions.UPDATE_TABLE,
+        payload: this.encounterTableForm.value,
       } as IEncounterTableAction);
     }
   }
@@ -190,13 +196,17 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   private rebuildEncounterTable(table: EncounterTable): void {
     if (doesExist(table)) {
       const currentEncounters: FormArray = this.formEncounters;
-      if (isEmpty(currentEncounters.controls) && !isEmpty(table.diceRolled)) {
-        const resultRange: number[] = getRollRange(...table.diceRolled);
-        resultRange.forEach((roll: number) =>
-          currentEncounters.push(
-            buildFormFromObject(new Encounter(roll, null, [new Monster()]))
-          )
-        );
+      if (doesExist(table.encounters) && !isEmpty(table.encounters)) {
+        this.encounterTableForm = buildFormFromObject(table) as FormGroup;
+      } else {
+        if (isEmpty(currentEncounters.controls) && !isEmpty(table.diceRolled)) {
+          const resultRange: number[] = getRollRange(...table.diceRolled);
+          resultRange.forEach((roll: number) =>
+            currentEncounters.push(
+              buildFormFromObject(new Encounter(roll, null, [new Monster()]))
+            )
+          );
+        }
       }
     }
   }

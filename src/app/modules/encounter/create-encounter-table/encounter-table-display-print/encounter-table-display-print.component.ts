@@ -12,6 +12,8 @@ export class EncounterTableDisplayPrintComponent implements OnInit {
   @Input() encounters: Encounter[];
   /** Whether this encounter table is rolled in a dungeon (TRUE) or in the wilderness (FALSE) */
   @Input() isDungeon: boolean;
+  /** The title  of this encounter table. */
+  @Input() title: string;
 
   constructor() {}
 

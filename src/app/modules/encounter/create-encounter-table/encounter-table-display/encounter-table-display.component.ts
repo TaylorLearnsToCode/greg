@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+} from '@angular/core';
+import { cloneObject } from '@shared/utilities/common-util/common.util';
+import { formValueToMonster } from '@shared/utilities/conversion-util/conversion.util';
 import {
   EncounterTable,
   EncounterTableActions,
@@ -11,7 +19,7 @@ import {
   templateUrl: './encounter-table-display.component.html',
   styleUrls: ['./encounter-table-display.component.scss'],
 })
-export class EncounterTableDisplayComponent {
+export class EncounterTableDisplayComponent implements OnChanges {
   /** The current encounter tablee under scrutiny. */
   @Input() encounterTable: EncounterTable;
   /** Event Emitter to propagate IEncounterTableActions to parent components. */
@@ -19,6 +27,15 @@ export class EncounterTableDisplayComponent {
 
   /** The current file specified for import by the user. */
   importedRawFile: File;
+
+  ngOnChanges(): void {
+    this.encounterTable = cloneObject(this.encounterTable);
+    this.encounterTable.encounters.forEach((encounter) => {
+      encounter.monsters = encounter.monsters.map((monster) =>
+        formValueToMonster(monster)
+      );
+    });
+  }
 
   /** Removes the currently specified upload file. */
   clearImportFile(): void {
