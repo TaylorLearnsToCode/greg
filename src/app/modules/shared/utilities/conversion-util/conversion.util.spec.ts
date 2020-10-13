@@ -3,11 +3,13 @@ import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { MenuItem } from '@shared/model/menu-item.model';
 import { Monster } from '@shared/model/monster.model';
 import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
+import { Weapon } from '@shared/model/weapon.model';
 import { getTestRoute } from '@test/route.mock';
 import {
   formValueToDiceRolled,
   formValueToMonster,
   formValueToSaveAs,
+  formValueToWeapon,
   routeToMenuItem,
 } from './conversion.util';
 
@@ -122,8 +124,15 @@ describe('ConversionUtil', () => {
       formValue = {
         alignment: 'L',
         armorClass: 6,
-        attacks: 'Eat',
-        damage: new DiceRolled(2, 10),
+        attacks: [
+          {
+            name: 'Eat',
+            damage: {
+              no: 2,
+              pips: 10,
+            },
+          },
+        ],
         frequency: 'Rare',
         hitDice: 4,
         hitPointModifier: 4,
@@ -141,8 +150,7 @@ describe('ConversionUtil', () => {
       constantMonster = new Monster();
       constantMonster.alignment = 'L';
       constantMonster.armorClass = 6;
-      constantMonster.attacks = 'Eat';
-      constantMonster.damage = new DiceRolled(2, 10);
+      constantMonster.attacks = [new Weapon('Eat', new DiceRolled(2, 10))];
       constantMonster.frequency = 'Rare';
       constantMonster.hitDice = 4;
       constantMonster.hitPointModifier = 4;
@@ -167,6 +175,40 @@ describe('ConversionUtil', () => {
       variableMonster = formValueToMonster(formValue);
       expect(variableMonster).not.toBe(constantMonster);
       expect(variableMonster).toEqual(constantMonster);
+    });
+  });
+
+  describe('formValueToWeapon', () => {
+    let constantWeapon: Weapon;
+    let formValue: {};
+    let variableWeapon: Weapon;
+
+    beforeEach(() => {
+      constantWeapon = null;
+      formValue = null;
+      variableWeapon = null;
+    });
+
+    it('should convert a form value to a weapon', () => {
+      formValue = {
+        name: 'Sword',
+        damage: {
+          no: 1,
+          pips: 6,
+        },
+      };
+      constantWeapon = new Weapon('Sword', new DiceRolled(1, 6));
+      variableWeapon = formValueToWeapon(formValue);
+      expect(variableWeapon).not.toBe(constantWeapon);
+      expect(variableWeapon).toEqual(constantWeapon);
+    });
+
+    it('should be missing-property safe', () => {
+      formValue = {};
+      constantWeapon = new Weapon();
+      variableWeapon = formValueToWeapon(formValue);
+      expect(variableWeapon).not.toBe(constantWeapon);
+      expect(variableWeapon).toEqual(constantWeapon);
     });
   });
 });

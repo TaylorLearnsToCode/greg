@@ -1,0 +1,18 @@
+<ng-container [formGroup]="monsterFormGroup">
+  <ng-container formArrayName="attacks">
+    <ng-container *ngFor="let attack of monsterAttacks.controls; index as i">
+      <div [formGroupName]="i">
+        <input formControlName="name" type="text" />
+        (
+        <a (click)="addMonsterAttack(i)">+</a>
+        /
+        <a (click)="removeMonsterAttack(i)">-</a>
+        )
+        <br />
+        <greg-dice-roller-form
+          [parentForm]="attack.get('damage')"
+        ></greg-dice-roller-form>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

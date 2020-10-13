@@ -76,13 +76,13 @@
                           Monster:
                         </span>
                         <input formControlName="name" type="text" />
-                        <span style="float: right; margin-right: 1em"
-                          >(
+                        <span style="float: right; margin-right: 1em">
+                          (
                           <a (click)="addMonster(e, m)">+</a>
                           /
                           <a (click)="removeMonster(e, m)">-</a>
-                          )</span
-                        >
+                          )
+                        </span>
                         <table>
                           <tr>
                             <th>No.</th>
@@ -126,13 +126,9 @@
                               />
                             </td>
                             <td>
-                              <input formControlName="attacks" type="text" />
-                              <br />
-                              (
-                              <greg-dice-roller-form
-                                [parentForm]="monster.get('damage')"
-                              ></greg-dice-roller-form>
-                              )
+                              <greg-monster-attacks-form
+                                [monsterFormGroup]="monster"
+                              ></greg-monster-attacks-form>
                             </td>
                             <td>
                               <input
