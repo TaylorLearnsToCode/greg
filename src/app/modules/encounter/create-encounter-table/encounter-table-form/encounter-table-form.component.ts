@@ -178,7 +178,7 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     } as IEncounterTableAction);
   }
 
-  /** Handler for update action to encounter array for this table. Emits new encounter array. */
+  /** Handler for update action to entire encounter table. Emits current EncounterTable value. */
   updateEncounters(): void {
     if (this.formEncounters.length > 0) {
       this.encounterTableAction.emit({

@@ -24,7 +24,7 @@
       <td>{{ monster.name }}</td>
       <td class="centered">{{ monster | noAppearingRange: isDungeon }}</td>
       <td class="centered">{{ monster.armorClass }}</td>
-      <td class="centered">{{ monster.hitDice }}</td>
+      <td class="centered">{{ monster | combinedHitDice }}</td>
       <td>{{ monster | attacksAndDamage }}</td>
       <td class="centered">
         {{ monster | combinedMovement }}

@@ -26,7 +26,7 @@
       &lt;td&gt;{{ monster.name }}&lt;/td&gt;
       &lt;td style="text-align: center;"&gt;{{ monster | noAppearingRange: isDungeon }}&lt;/td&gt;
       &lt;td style="text-align: center;"&gt;{{ monster.armorClass }}&lt;/td&gt;
-      &lt;td style="text-align: center;"&gt;{{ monster.hitDice }}&lt;/td&gt;
+      &lt;td style="text-align: center;"&gt;{{ monster | combinedHitDice }}&lt;/td&gt;
       &lt;td&gt;{{ monster | attacksAndDamage }}&lt;/td&gt;
       &lt;td style="text-align: center;"&gt;{{ monster | combinedMovement }}&lt;/td&gt;
       &lt;td&gt;{{ monster?.saveAs?.asClass }} {{ monster?.saveAs?.level }}&lt;/td&gt;

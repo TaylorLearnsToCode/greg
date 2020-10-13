@@ -82,6 +82,9 @@ export function formValueToMonster(formValue: any): Monster {
   monster.hitDice = doesExist(formValue.hitDice)
     ? formValue.hitDice
     : monster.hitDice;
+  monster.hitPointModifier = doesExist(formValue.hitPointModifier)
+    ? formValue.hitPointModifier
+    : monster.hitPointModifier;
   monster.morale = doesExist(formValue.morale)
     ? formValue.morale
     : monster.morale;

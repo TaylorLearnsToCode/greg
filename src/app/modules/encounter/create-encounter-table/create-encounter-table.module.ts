@@ -12,6 +12,7 @@ import { CombinedMovementPipe } from './pipes/combined-movement/combined-movemen
 import { EncounterRollPipe } from './pipes/encounter-roll/encounter-roll.pipe';
 import { MonsterTacticalMovementPipe } from './pipes/monster-tactical-movement/monster-tactical-movement.pipe';
 import { NoAppearingRangePipe } from './pipes/no-appearing-range/no-appearing-range.pipe';
+import { CombinedHitDicePipe } from './pipes/combined-hit-dice/combined-hit-dice.pipe';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
     CombinedMovementPipe,
     EncounterTableDisplayWebComponent,
     AttacksAndDamagePipe,
+    CombinedHitDicePipe,
   ],
   imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
   exports: [RouterModule],

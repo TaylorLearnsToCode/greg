@@ -126,6 +126,7 @@ describe('ConversionUtil', () => {
         damage: new DiceRolled(2, 10),
         frequency: 'Rare',
         hitDice: 4,
+        hitPointModifier: 4,
         morale: 8,
         movementExploration: 90,
         name: 'Grue',
@@ -144,6 +145,7 @@ describe('ConversionUtil', () => {
       constantMonster.damage = new DiceRolled(2, 10);
       constantMonster.frequency = 'Rare';
       constantMonster.hitDice = 4;
+      constantMonster.hitPointModifier = 4;
       constantMonster.morale = 8;
       constantMonster.movementExploration = 90;
       constantMonster.name = 'Grue';
