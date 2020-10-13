@@ -12,6 +12,12 @@ input[type="text"] {
   width: 8em;
 }
 
+label {
+  color: $anchor-orange-light;
+  font-weight: bold;
+  padding-right: 0.5em;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;

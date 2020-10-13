@@ -1,6 +1,9 @@
 <h2>Encounter Table for Web</h2>
 <!-- &lt;&gt; -->
 <pre *ngIf="encounters && encounters.length; else noEncounters">
+  &lt;span style="font-weight: bold; padding-left: 1em;"&gt;
+    {{ title ? title : 'Encounter Table' }}
+  &lt;/span&gt;
   &lt;table&gt;
     &lt;tr&gt;
       &lt;th&gt;Roll&lt;/th&gt;
