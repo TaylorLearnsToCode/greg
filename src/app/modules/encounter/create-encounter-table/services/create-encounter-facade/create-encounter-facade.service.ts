@@ -71,10 +71,6 @@ export class CreateEncounterFacadeService {
         this.updateDiceRolled(action.payload);
         break;
       }
-      case EncounterTableActions.UPDATE_ENCOUNTERS: {
-        this.updateEncounters(action.payload);
-        break;
-      }
       case EncounterTableActions.UPDATE_TABLE: {
         this.updateDiceRolled(action.payload.diceRolled);
         this.updateEncounters(action.payload.encounters);

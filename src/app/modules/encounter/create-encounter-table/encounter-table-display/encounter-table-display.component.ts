@@ -28,6 +28,7 @@ export class EncounterTableDisplayComponent implements OnChanges {
   /** The current file specified for import by the user. */
   importedRawFile: File;
 
+  /** OnChanges lifecycle method. */
   ngOnChanges(): void {
     this.encounterTable = cloneObject(this.encounterTable);
     this.encounterTable.encounters.forEach((encounter) => {

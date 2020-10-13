@@ -35,10 +35,8 @@ export class EncounterTable {
 export enum EncounterTableActions {
   /** Export the table in payload to the client in JSON format. */
   EXPORT_JSON,
-  /** Update the diceRolled pool. */
+  /** Update the diceRolled pool only. */
   UPDATE_DICE_ROLLED,
-  /** Update the encounters list. */
-  UPDATE_ENCOUNTERS,
   /** Update the entire table. */
   UPDATE_TABLE,
 }

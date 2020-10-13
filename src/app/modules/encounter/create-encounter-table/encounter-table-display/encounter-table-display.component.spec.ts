@@ -6,6 +6,7 @@ import {
   TestBed,
 } from '@angular/core/testing';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { Monster } from '@shared/model/monster.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
@@ -15,7 +16,7 @@ import {
 import { Encounter } from '../model/encounter.model';
 import { EncounterTableDisplayComponent } from './encounter-table-display.component';
 
-/** Utility class to work  around inputs not wanting me to mock the file list */
+/** Utility class to work around inputs not wanting me to mock the file list */
 class MockFilesElement {
   itemList: File[];
   constructor(itemList?: File[]) {
@@ -49,6 +50,19 @@ describe('EncounterTableDisplayComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should, on changes, ensure monsters are instantiated as classes', () => {
+    const malformedMonster: Monster = { name: 'Malformed Monster' } as Monster;
+    const encounters = [new Encounter(1, 1, [malformedMonster])];
+    const encounterTable = new EncounterTable(null, encounters, 'Test Table');
+    const formedMonster = new Monster();
+    formedMonster.name = 'Malformed Monster';
+    component.encounterTable = encounterTable;
+    component.ngOnChanges();
+    const componentMonster = component.encounterTable.encounters[0].monsters[0];
+    expect(componentMonster instanceof Monster).toBeTrue();
+    expect(componentMonster).toEqual(formedMonster);
   });
 
   describe('should allow import/export of JSON', () => {
