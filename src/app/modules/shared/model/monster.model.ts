@@ -1,5 +1,6 @@
 import { DiceRolled } from './dice-rolled.model';
 import { SaveAs } from './save-as.model';
+import { Weapon } from './weapon.model';
 
 /**
  * A non-player entity, intelligent or otherwise, that the party might encounter
@@ -10,13 +11,11 @@ export class Monster {
   alignment = '';
   /** Numerical armor class of the monster. Default 9 */
   armorClass = 9;
-  /** String description of the monster's attack. @todo: support multiple attacks */
-  attacks = '';
-  /** Dice pool for the damage dealt by the monster's attack on a hit. Default 0d0. */
-  damage: DiceRolled = new DiceRolled(0, 0);
+  /** The attack or attacks which the monster is able to make. */
+  attacks: Weapon[] = [new Weapon()];
   /** String description of how frequently a given monster appears. */
   frequency = '';
-  /** The number of hit dice the the monster possesses. Default 0. @todo: add plusses */
+  /** The number of hit dice the the monster possesses. Default 0. */
   hitDice = 0;
   /** A number, plus or minus, applied to a monster's hit die roll: e.g - a Troll is 6<b>+3</b> hit dice. */
   hitPointModifier = 0;

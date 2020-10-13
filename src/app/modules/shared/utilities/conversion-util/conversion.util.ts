@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
 import { SaveAs } from '@shared/model/save-as.model';
+import { Weapon } from '@shared/model/weapon.model';
 import { MenuItem } from '../../model/menu-item.model';
 import { RouteLabels } from '../../utilities/navigation-config/navigation-config.util';
 import { doesExist } from '../common-util/common.util';
@@ -71,11 +72,8 @@ export function formValueToMonster(formValue: any): Monster {
     ? formValue.armorClass
     : monster.armorClass;
   monster.attacks = doesExist(formValue.attacks)
-    ? formValue.attacks
+    ? formValue.attacks.map((attack: any) => formValueToWeapon(attack))
     : monster.attacks;
-  monster.damage = doesExist(formValue.damage)
-    ? formValueToDiceRolled(formValue.damage)
-    : monster.damage;
   monster.frequency = doesExist(formValue.frequency)
     ? formValue.frequency
     : monster.frequency;
@@ -112,4 +110,18 @@ export function formValueToMonster(formValue: any): Monster {
     ? formValue.treasureTypeLair
     : monster.treasureTypeLair;
   return monster;
+}
+
+/**
+ * Converts the value of a FormGroup created from a Weapon object into
+ * a proper Weapon instance.
+ * @param  {any} formValue
+ */
+export function formValueToWeapon(formValue: any): Weapon {
+  const weapon = new Weapon();
+  weapon.name = doesExist(formValue.name) ? formValue.name : weapon.name;
+  weapon.damage = doesExist(formValue.damage)
+    ? formValueToDiceRolled(formValue.damage)
+    : weapon.damage;
+  return weapon;
 }
