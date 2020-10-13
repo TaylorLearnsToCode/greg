@@ -18,6 +18,8 @@ export class Monster {
   frequency = '';
   /** The number of hit dice the the monster possesses. Default 0. @todo: add plusses */
   hitDice = 0;
+  /** A number, plus or minus, applied to a monster's hit die roll: e.g - a Troll is 6<b>+3</b> hit dice. */
+  hitPointModifier = 0;
   /** Monster morale. Default 7. */
   morale = 7;
   /** Numeric movement rate in feet. Default 120 feet. */

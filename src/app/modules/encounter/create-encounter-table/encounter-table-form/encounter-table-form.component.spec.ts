@@ -209,7 +209,6 @@ describe('EncounterTableFormComponent', () => {
   it('should not remove the LAST monster', () => {
     addControls(1, true);
     component.formEncounters.controls[0].patchValue(new Encounter(1));
-    console.warn(component.formEncounters);
     const monstersFormArray = component.formEncounters.controls[0].get(
       'monsters'
     ) as FormArray;
