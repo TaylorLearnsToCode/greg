@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
 } from '../model/encounter-table.model';
@@ -50,9 +51,11 @@ describe('CreateEncounterTableComponent', () => {
   });
 
   it('should delegate encounter table actions', () => {
+    const payload = new EncounterTable();
+    payload.encounters = [new Encounter(1, 1, [])];
     const action = {
-      action: EncounterTableActions.UPDATE_ENCOUNTERS,
-      payload: [new Encounter(1, 1, [], 'Test Encounter Table')],
+      action: EncounterTableActions.UPDATE_TABLE,
+      payload,
     } as IEncounterTableAction;
     component.onEncounterTableAction(action);
     expect(facadeSpy.handleEncounterTableAction).toHaveBeenCalledWith(action);

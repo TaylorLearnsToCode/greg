@@ -93,15 +93,6 @@ describe('CreateEncounterFacadeService', () => {
     expect(state.encounterTable.diceRolled).toEqual([d6, d8]);
   }));
 
-  it('should handle an encounter update', fakeAsync(() => {
-    action.action = EncounterTableActions.UPDATE_ENCOUNTERS;
-    action.payload = [encounter];
-    expect(state.encounterTable.encounters).toEqual([]);
-    service.handleEncounterTableAction(action);
-    tick();
-    expect(areEqual(state.encounterTable.encounters, [encounter])).toBeTrue();
-  }));
-
   it('should handle an update to the encounter table', fakeAsync(() => {
     const thisEncounter: Encounter = cloneObject(encounter);
     thisEncounter.monsters.push(new Monster());
@@ -109,6 +100,7 @@ describe('CreateEncounterFacadeService', () => {
     action.payload = {
       diceRolled: [d6, d8],
       encounters: [thisEncounter],
+      title: 'Test Encounter Table',
     } as EncounterTable;
     expect(state.encounterTable.diceRolled).toEqual([]);
     expect(state.encounterTable.encounters).toEqual([]);
@@ -118,6 +110,20 @@ describe('CreateEncounterFacadeService', () => {
     expect(
       areEqual(state.encounterTable.encounters, [thisEncounter])
     ).toBeTrue();
+  }));
+
+  it('should not attempt to update the encounter table title if no title is provided', fakeAsync(() => {
+    const testTableTitle = 'Test Table';
+    const encounterTable = new EncounterTable([], [], testTableTitle);
+    action.action = EncounterTableActions.UPDATE_TABLE;
+    action.payload = encounterTable;
+    service.handleEncounterTableAction(action);
+    tick();
+    expect(state.encounterTable.title).toEqual(testTableTitle);
+    encounterTable.title = null;
+    service.handleEncounterTableAction(action);
+    tick();
+    expect(state.encounterTable.title).toEqual(testTableTitle);
   }));
 
   it('should not handle unsupported actions', () => {

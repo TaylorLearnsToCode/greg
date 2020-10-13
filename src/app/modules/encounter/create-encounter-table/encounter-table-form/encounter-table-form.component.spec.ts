@@ -4,6 +4,7 @@ import { FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
 import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
+import { areEqual } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
   EncounterTableActions,
@@ -79,6 +80,23 @@ describe('EncounterTableFormComponent', () => {
     container.e = new EncounterTable(d6);
     containerFixture.detectChanges();
     expect(container.comp.encounterTable.diceRolled).toEqual(d6);
+  });
+
+  it('should set the form according to a provided table on changes', () => {
+    const diceRolled = [new DiceRolled(1, 3)];
+    const orc = new Monster();
+    orc.name = 'Orc';
+    const goblin = new Monster();
+    goblin.name = 'Goblin';
+    const encounters = [
+      new Encounter(1, 2, [goblin]),
+      new Encounter(3, 3, [orc]),
+    ];
+    const title = 'Orcs and Goblins';
+    const encounterTable = new EncounterTable(diceRolled, encounters, title);
+    container.e = encounterTable;
+    containerFixture.detectChanges();
+    expect(areEqual(container.comp.encounterTable, encounterTable)).toBeTrue();
   });
 
   it('should be able to add a dice pool', () => {
@@ -202,6 +220,17 @@ describe('EncounterTableFormComponent', () => {
 
   it('should delegate updates to the dice pool', () => {
     const spyObj = spyOn(component.encounterTableAction, 'emit');
+    component.addDieRolled(new DiceRolled(1, 8));
+    const payload = component.formDiceRolled.value;
+    component.updateDiceRolled();
+    expect(spyObj).toHaveBeenCalledWith({
+      action: EncounterTableActions.UPDATE_DICE_ROLLED,
+      payload,
+    });
+  });
+
+  it('should be null-safe when updating the die pool', () => {
+    const spyObj = spyOn(component.encounterTableAction, 'emit');
     component.addDieRolled();
     const payload = component.formDiceRolled.value;
     component.updateDiceRolled();
@@ -214,10 +243,10 @@ describe('EncounterTableFormComponent', () => {
   it('should delegate updates to the encounter form', () => {
     const spyObj = spyOn(component.encounterTableAction, 'emit');
     component.addEncounter();
-    const payload = component.formEncounters.value;
+    const payload = component.encounterTableForm.value;
     component.updateEncounters();
     expect(spyObj).toHaveBeenCalledWith({
-      action: EncounterTableActions.UPDATE_ENCOUNTERS,
+      action: EncounterTableActions.UPDATE_TABLE,
       payload,
     });
   });
