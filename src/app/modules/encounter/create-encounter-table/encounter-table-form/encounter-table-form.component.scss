@@ -18,22 +18,6 @@ label {
   padding-right: 0.5em;
 }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-
-  td,
-  th {
-    text-align: center;
-    padding: 0.2em;
-  }
-
-  th,
-  tr {
-    border: solid 1px $text-white;
-  }
-}
-
 .add-remove {
   text-align: center;
   padding-bottom: 0.5em;
@@ -55,4 +39,22 @@ table {
 
 .table-form {
   text-align: center;
+}
+
+:host::ng-deep {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    td,
+    th {
+      text-align: center;
+      padding: 0.2em;
+    }
+
+    th,
+    tr {
+      border: solid 1px $text-white;
+    }
+  }
 }

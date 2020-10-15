@@ -1,16 +1,14 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
-import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
 import { areEqual } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
   EncounterTableActions,
 } from '../model/encounter-table.model';
 import { Encounter } from '../model/encounter.model';
-import { MonsterTacticalMovementPipe } from '../pipes/monster-tactical-movement/monster-tactical-movement.pipe';
 import { EncounterTableFormComponent } from './encounter-table-form.component';
 
 @Component({
@@ -39,11 +37,7 @@ describe('EncounterTableFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        EncounterTableFormComponent,
-        TestContainerComponent,
-        MonsterTacticalMovementPipe,
-      ],
+      declarations: [EncounterTableFormComponent, TestContainerComponent],
       imports: [FormsModule, ReactiveFormsModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
@@ -118,24 +112,6 @@ describe('EncounterTableFormComponent', () => {
     );
   });
 
-  it('should be able to add a monster', () => {
-    addControls(2, true);
-    let monsters: FormArray;
-    for (let i = 0; i < 2; i++) {
-      monsters = component.formEncounters.controls[i].get(
-        'monsters'
-      ) as FormArray;
-      expect(monsters.length).toBe(1);
-    }
-    component.addMonster(1, 0);
-    for (let i = 0; i < 2; i++) {
-      monsters = component.formEncounters.controls[i].get(
-        'monsters'
-      ) as FormArray;
-      expect(monsters.length).toBe(i === 0 ? 1 : 2);
-    }
-  });
-
   it('should clear the dice rolled form', () => {
     addControls(3, false);
     expect(component.formDiceRolled.length).toBe(3);
@@ -176,45 +152,6 @@ describe('EncounterTableFormComponent', () => {
     addControls(3, true);
     expect(() => component.removeEncounter(null)).toThrowError(IDX_ERROR);
     expect(() => component.removeEncounter(999)).not.toThrowError();
-  });
-
-  it('should be able to remove a target monster', () => {
-    const saveAsMU = new SaveAs(SaveAsClass.MU, 2);
-    const firstMonster = new Monster();
-    firstMonster.name = 'First';
-    const secondMonster = new Monster();
-    secondMonster.name = 'Second';
-    secondMonster.saveAs = saveAsMU;
-    const encounter = new Encounter(2);
-    addControls(2, true);
-    component.addMonster(1, 0);
-    component.formEncounters.controls[1].patchValue(encounter);
-    const monstersFormArray = component.formEncounters.controls[1].get(
-      'monsters'
-    ) as FormArray;
-    monstersFormArray.patchValue([firstMonster, secondMonster]);
-    expect(component.formEncounters.length).toBe(2);
-    expect(monstersFormArray.controls.length).toBe(2);
-    component.removeMonster(1, 0);
-    expect(monstersFormArray.controls.length).toBe(1);
-    expect(monstersFormArray.controls[0].value.name).toEqual(
-      secondMonster.name
-    );
-    expect(monstersFormArray.controls[0].value.saveAs.asClass).toEqual(
-      SaveAsClass.MU
-    );
-    expect(monstersFormArray.controls[0].value.saveAs.level).toEqual(2);
-  });
-
-  it('should not remove the LAST monster', () => {
-    addControls(1, true);
-    component.formEncounters.controls[0].patchValue(new Encounter(1));
-    const monstersFormArray = component.formEncounters.controls[0].get(
-      'monsters'
-    ) as FormArray;
-    expect(monstersFormArray.controls.length).toBe(1);
-    component.removeMonster(0, 0);
-    expect(monstersFormArray.controls.length).toBe(1);
   });
 
   it('should delegate updates to the dice pool', () => {

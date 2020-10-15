@@ -102,21 +102,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     }
   }
 
-  /**
-   * Adds a new monster to a monster grouping. The encounter to which the monster will be
-   * added is at index {encounterIndex}; the monster after {monsterIndex}.
-   * @param  {number} encounterIndex
-   * @param  {number} monsterIndex
-   */
-  addMonster(encounterIndex: number, monsterIndex: number): void {
-    (this.formEncounters.controls[encounterIndex].get(
-      'monsters'
-    ) as FormArray).insert(
-      monsterIndex + 1,
-      buildFormFromObject(new Monster())
-    );
-  }
-
   /** Removes all dice to be rolled for this encounter table. */
   clearDiceRolled(): void {
     while (this.formDiceRolled.length > 0) {
@@ -153,20 +138,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   removeEncounter(idx: number): void {
     if (this.validateEncounterRemove(idx)) {
       this.formEncounters.removeAt(idx);
-    }
-  }
-
-  /**
-   * Removes a monster at index {monster} from the encounter at index {encounterIndex}.
-   * @param  {number} encounterIndex
-   * @param  {number} monsterIndex
-   */
-  removeMonster(encounterIndex: number, monsterIndex: number): void {
-    const targetEncounter = this.formEncounters.controls[encounterIndex].get(
-      'monsters'
-    ) as FormArray;
-    if (targetEncounter.length > 1) {
-      targetEncounter.removeAt(monsterIndex);
     }
   }
 
