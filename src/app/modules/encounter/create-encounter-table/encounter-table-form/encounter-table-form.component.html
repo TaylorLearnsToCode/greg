@@ -1,80 +1,54 @@
 <form [formGroup]="encounterTableForm">
-  <!-- Nested / Standard Table -->
   <!-- Roll Dice -->
-  <h2>Define Dice Pool</h2>
-  <div class="add-remove">
-    <a (click)="addDieRolled()">Add</a>
-    |
-    <a (click)="clearDiceRolled()">Clear</a>
-    |
-    <a (click)="updateDiceRolled()">Update Table</a>
-  </div>
-  <ng-container *ngIf="formDiceRolled.length !== 0; else noDice">
-    <div class="dice-rolled-form" formArrayName="diceRolled">
-      <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
-        <div [formGroupName]="i">
-          {{ i + 1 }}.
-          <greg-dice-roller-form [parentForm]="die"></greg-dice-roller-form>
-          <a (click)="removeDieRolled(i)">(Delete)</a>
-        </div>
-      </ng-container>
+  <section class="dice-pool">
+    <h2>Define Dice Pool</h2>
+    <div class="add-remove">
+      <a (click)="addDieRolled()">Add</a>
+      |
+      <a (click)="clearDiceRolled()">Clear</a>
+      |
+      <a (click)="updateDiceRolled()">Update Table</a>
     </div>
-  </ng-container>
-  <ng-template #noDice>
-    <div class="no-dice">No dice have yet been added.</div>
-  </ng-template>
-  <!-- Table Name -->
-  <div style="float: right">
-    <br />
+    <ng-container *ngIf="formDiceRolled.length !== 0; else noDice">
+      <div class="dice-rolled-form" formArrayName="diceRolled">
+        <ng-container *ngFor="let die of formDiceRolled.controls; index as i">
+          <div [formGroupName]="i">
+            {{ i + 1 }}.
+            <greg-dice-roller-form [parentForm]="die"></greg-dice-roller-form>
+            <a (click)="removeDieRolled(i)">(Delete)</a>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-template #noDice>
+      <div class="no-dice">No dice have yet been added.</div>
+    </ng-template>
+  </section>
+
+  <!-- Configuration Elements -->
+  <section class="config">
+    <h2>Define Table Configuration</h2>
     <label for="table-title">Table Name:</label>
     <input formControlName="title" name="table-title" type="text" />
-  </div>
-  <!-- Define Encounters -->
-  <h2>Define Result Table</h2>
-  <div class="table-form">
-    <a (click)="clearTableForm()">Clear</a>
-    |
-    <a (click)="updateEncounters()">Publish</a>
-  </div>
-  <div formArrayName="encounters">
-    <table>
-      <colgroup>
-        <col span="1" style="width: 2.5em" />
-        <col span="1" />
-      </colgroup>
-      <tr>
-        <th>Roll</th>
-        <th>Encounter</th>
-      </tr>
-      <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
-        <ng-container
-          *ngFor="let encounter of formEncounters.controls; index as e"
-        >
-          <tr [formGroupName]="e">
-            <td>
-              <input formControlName="lowRoll" type="number" />
-              <br />
-              -
-              <br />
-              <input formControlName="highRoll" type="number" />
-              <br />
-              <a (click)="addEncounter(e)">+</a>
-              /
-              <a (click)="removeEncounter(e)">-</a>
-            </td>
-            <td style="padding: 0">
-              <greg-encounter-monster-form
-                [encounterFormGroup]="encounter"
-              ></greg-encounter-monster-form>
-            </td>
-          </tr>
-        </ng-container>
-      </ng-container>
-      <ng-template #noMonsters>
-        <tr style="font-style: italic">
-          <td colspan="9">No Encounters Yet</td>
-        </tr>
-      </ng-template>
-    </table>
-  </div>
+    <br />
+    <br />
+    <small>
+      All dice in the dice pools will be assumed to roll together when producing
+      a result on this table.
+    </small>
+  </section>
+
+  <!-- Editable Encounter Table -->
+  <section class="enc-table">
+    <!-- Define Encounters -->
+    <h2>Define Result Table</h2>
+    <div class="table-form">
+      <a (click)="clearTableForm()">Clear</a>
+      |
+      <a (click)="updateEncounters()">Publish</a>
+    </div>
+    <greg-standard-encounter-form
+      [parentForm]="encounterTableForm"
+    ></greg-standard-encounter-form>
+  </section>
 </form>

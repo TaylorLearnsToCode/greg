@@ -38,6 +38,9 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   /** Event delegator: EncounterTableActions to parent. */
   @Output() encounterTableAction = new EventEmitter<IEncounterTableAction>();
 
+  /** Iterable element for monster and NPC Saves-As options */
+  readonly saveAsClassOptions = Object.keys(SaveAsClass);
+
   /** Mutable form element created fresh or from input {encounterTable}. */
   encounterTableForm: FormGroup = buildFormFromObject(
     new EncounterTable()
@@ -52,11 +55,9 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   }
   /** Whether this table is intended to be rolled in a Dungeon (TRUE) or in the Wilderness (FALSE) */
   isDungeonEncounter: boolean;
-  /** Iterable element for monster and NPC Saves-As options */
-  saveAsClassOptions = Object.keys(SaveAsClass);
 
   /** Exception message for missing index */
-  private INDEX_NUMBER_REQUIRED = 'Index Number is Required';
+  private readonly INDEX_NUMBER_REQUIRED = 'Index Number is Required';
 
   /** Initialization method. */
   ngOnInit(): void {

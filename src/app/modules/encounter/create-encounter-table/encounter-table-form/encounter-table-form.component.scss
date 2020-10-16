@@ -4,6 +4,26 @@ div {
   padding: 0.5em;
 }
 
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "dice config"
+    "enc-table enc-table";
+
+  .dice-pool {
+    grid-area: dice;
+  }
+
+  .config {
+    grid-area: config;
+  }
+
+  .enc-table {
+    grid-area: enc-table;
+  }
+}
+
 input[type="number"] {
   width: 1.5em;
 }
