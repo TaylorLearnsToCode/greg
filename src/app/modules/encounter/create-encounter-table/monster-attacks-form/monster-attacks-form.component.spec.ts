@@ -1,7 +1,9 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { Monster } from '@shared/model/monster.model';
 import { Weapon } from '@shared/model/weapon.model';
+import { SharedModule } from '@shared/shared.module';
 import { areEqual } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { MonsterAttacksFormComponent } from './monster-attacks-form.component';
@@ -13,6 +15,8 @@ describe('MonsterAttacksFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [MonsterAttacksFormComponent],
+      imports: [SharedModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 

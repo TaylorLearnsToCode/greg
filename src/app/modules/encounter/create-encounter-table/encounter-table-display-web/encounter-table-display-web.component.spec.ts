@@ -1,5 +1,6 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { SharedModule } from '@shared/shared.module';
 import { EncounterTableDisplayWebComponent } from './encounter-table-display-web.component';
 
 describe('EncounterTableDisplayWebComponent', () => {
@@ -8,9 +9,10 @@ describe('EncounterTableDisplayWebComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EncounterTableDisplayWebComponent ]
-    })
-    .compileComponents();
+      declarations: [EncounterTableDisplayWebComponent],
+      imports: [SharedModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

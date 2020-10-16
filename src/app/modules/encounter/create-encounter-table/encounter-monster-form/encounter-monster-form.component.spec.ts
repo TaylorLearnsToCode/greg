@@ -1,7 +1,9 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Monster } from '@shared/model/monster.model';
 import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
+import { SharedModule } from '@shared/shared.module';
 import { areEqual } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { Encounter } from '../model/encounter.model';
@@ -19,7 +21,8 @@ describe('EncounterMonsterFormComponent', () => {
         EncounterMonsterFormComponent,
         MonsterTacticalMovementPipe,
       ],
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [SharedModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 

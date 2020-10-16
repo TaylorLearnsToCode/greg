@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -7,6 +8,7 @@ import {
 } from '@angular/core/testing';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
+import { SharedModule } from '@shared/shared.module';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
@@ -39,6 +41,8 @@ describe('EncounterTableDisplayComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EncounterTableDisplayComponent],
+      imports: [SharedModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -60,7 +64,8 @@ describe('EncounterTableDisplayComponent', () => {
     formedMonster.name = 'Malformed Monster';
     component.encounterTable = encounterTable;
     component.ngOnChanges();
-    const componentMonster = component.encounterTable.encounters[0].monsters[0];
+    const componentMonster = (component.encounterTable
+      .encounters[0] as Encounter).monsters[0];
     expect(componentMonster instanceof Monster).toBeTrue();
     expect(componentMonster).toEqual(formedMonster);
   });

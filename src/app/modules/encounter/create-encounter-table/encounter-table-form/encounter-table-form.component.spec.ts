@@ -1,8 +1,8 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
+import { SharedModule } from '@shared/shared.module';
 import { areEqual } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
@@ -38,7 +38,7 @@ describe('EncounterTableFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EncounterTableFormComponent, TestContainerComponent],
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [SharedModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
