@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 import { CreateEncounterTableComponent } from './create-encounter-table/create-encounter-table.component';
+import { EncounterMonsterFormComponent } from './encounter-monster-form/encounter-monster-form.component';
 import { EncounterTableDisplayPrintComponent } from './encounter-table-display-print/encounter-table-display-print.component';
 import { EncounterTableDisplayWebComponent } from './encounter-table-display-web/encounter-table-display-web.component';
 import { EncounterTableDisplayComponent } from './encounter-table-display/encounter-table-display.component';
@@ -14,7 +15,7 @@ import { CombinedMovementPipe } from './pipes/combined-movement/combined-movemen
 import { EncounterRollPipe } from './pipes/encounter-roll/encounter-roll.pipe';
 import { MonsterTacticalMovementPipe } from './pipes/monster-tactical-movement/monster-tactical-movement.pipe';
 import { NoAppearingRangePipe } from './pipes/no-appearing-range/no-appearing-range.pipe';
-import { EncounterMonsterFormComponent } from './encounter-monster-form/encounter-monster-form.component';
+import { StandardEncounterFormComponent } from './standard-encounter-form/standard-encounter-form.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,7 @@ const routes: Routes = [
     CombinedHitDicePipe,
     MonsterAttacksFormComponent,
     EncounterMonsterFormComponent,
+    StandardEncounterFormComponent,
   ],
   imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
   exports: [RouterModule],

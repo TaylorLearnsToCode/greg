@@ -9,25 +9,30 @@ import { Encounter } from './encounter.model';
 export class EncounterTable {
   /** The pool of dice to be rolled to determine an encounter on this table. */
   diceRolled: DiceRolled[];
-  /** The collection of encounters potentially encounterable on this table. */
-  encounters: Encounter[];
+  /** The collection of encounters (or nested encounter tables) potentially encounterable on this table. */
+  encounters: Encounter[] | EncounterTable[];
   /** The title or name uniquely identifying this encounter table. */
   title: string;
+  /** Whether this table is Nested or Traditional */
+  type: EncounterTableTypes;
 
   /**
    * Encounter Table Constructor
    * @param  {DiceRolled[]} diceRolled? Defaults to []
-   * @param  {Encounter[]} encounters? Defaults to []
+   * @param  {Encounter[]|EncounterTable[]} encounters? Defaults to []
    * @param  {string} title? Defaults to 'Encounter Table'
+   * @param  {EncounterTableTypes} type? Defaults to 'STANDARD'
    */
   constructor(
     diceRolled?: DiceRolled[],
-    encounters?: Encounter[],
-    title?: string
+    encounters?: Encounter[] | EncounterTable[],
+    title?: string,
+    type?: EncounterTableTypes
   ) {
     this.diceRolled = doesExist(diceRolled) ? diceRolled : [];
     this.encounters = doesExist(encounters) ? encounters : [];
     this.title = doesExist(title) ? title : 'Encounter Table';
+    this.type = doesExist(type) ? type : EncounterTableTypes.STANDARD;
   }
 }
 
@@ -39,6 +44,14 @@ export enum EncounterTableActions {
   UPDATE_DICE_ROLLED,
   /** Update the entire table. */
   UPDATE_TABLE,
+}
+
+/** Supported types of encounter tables. */
+export enum EncounterTableTypes {
+  /** A table the results of which are subsequent tables: dX/Y */
+  NESTED,
+  /** A table the results of which are individual encounters: XdY */
+  STANDARD,
 }
 
 /** Interface contract for emitted EncounterTableActions events. */

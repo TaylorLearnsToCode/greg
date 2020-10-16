@@ -1,0 +1,41 @@
+<ng-container [formGroup]="parentForm">
+  <table formArrayName="encounters">
+    <colgroup>
+      <col span="1" style="width: 2.5em" />
+      <col span="1" />
+    </colgroup>
+    <tr>
+      <th>Roll</th>
+      <th>Encounter</th>
+    </tr>
+    <ng-container *ngIf="formEncounters.length !== 0; else noMonsters">
+      <ng-container
+        *ngFor="let encounter of formEncounters.controls; index as e"
+      >
+        <tr [formGroupName]="e">
+          <td>
+            <input formControlName="lowRoll" type="number" />
+            <br />
+            -
+            <br />
+            <input formControlName="highRoll" type="number" />
+            <br />
+            <a (click)="addEncounter(e)">+</a>
+            /
+            <a (click)="removeEncounter(e)">-</a>
+          </td>
+          <td style="padding: 0">
+            <greg-encounter-monster-form
+              [encounterFormGroup]="encounter"
+            ></greg-encounter-monster-form>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    <ng-template #noMonsters>
+      <tr style="font-style: italic">
+        <td colspan="9">No Encounters Yet</td>
+      </tr>
+    </ng-template>
+  </table>
+</ng-container>
