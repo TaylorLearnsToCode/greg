@@ -8,7 +8,7 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { Monster } from '@shared/model/monster.model';
 import { SaveAsClass } from '@shared/model/save-as.model';
@@ -22,6 +22,7 @@ import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import {
   EncounterTable,
   EncounterTableActions,
+  EncounterTableTypes,
   IEncounterTableAction,
 } from '../model/encounter-table.model';
 import { Encounter } from '../model/encounter.model';
@@ -40,6 +41,8 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
 
   /** Iterable element for monster and NPC Saves-As options */
   readonly saveAsClassOptions = Object.keys(SaveAsClass);
+  /** Supported types of encounter tables */
+  readonly tableTypeOptions = EncounterTableTypes;
 
   /** Mutable form element created fresh or from input {encounterTable}. */
   encounterTableForm: FormGroup = buildFormFromObject(
@@ -86,23 +89,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
     this.formDiceRolled.push(dieRolledControl);
   }
 
-  /**
-   * Adds a new encounter to the encounter table after a specified index, {idx}. If no index
-   * is specified, inserts the new encounter at the end of the list.
-   * @param  {number} idx?
-   */
-  addEncounter(idx?: number): void {
-    idx = doesExist(idx) ? idx : -1;
-    const newEncounter: AbstractControl = buildFormFromObject(
-      new Encounter(0, 0, [new Monster()])
-    );
-    if (idx >= 0) {
-      this.formEncounters.insert(idx + 1, newEncounter);
-    } else {
-      this.formEncounters.push(newEncounter);
-    }
-  }
-
   /** Removes all dice to be rolled for this encounter table. */
   clearDiceRolled(): void {
     while (this.formDiceRolled.length > 0) {
@@ -127,18 +113,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   removeDieRolled(idx: number): void {
     if (this.validateDieRemove(idx)) {
       this.formDiceRolled.removeAt(idx);
-    }
-  }
-
-  /**
-   * Removes the encounter at the target index {idx} from the encounter table,
-   * provided {idx} is a valid target. If no index is provided, throws an error.
-   * @param  {number} idx
-   * @throws INDEX_NUMBER_REQUIRED
-   */
-  removeEncounter(idx: number): void {
-    if (this.validateEncounterRemove(idx)) {
-      this.formEncounters.removeAt(idx);
     }
   }
 
@@ -205,19 +179,5 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
       throw new Error(this.INDEX_NUMBER_REQUIRED);
     }
     return this.formDiceRolled.length > 0 && idx < this.formDiceRolled.length;
-  }
-
-  /**
-   * Returns TRUE if there are encounters to remove from the encounter form and the
-   * provided index is a valid entry to be removed. If no index is provided, throws
-   * an error.
-   * @param  {number} idx
-   * @throws INDEX_NUMBER_REQUIRED
-   */
-  private validateEncounterRemove(idx: number): boolean {
-    if (!doesExist(idx)) {
-      throw new Error(this.INDEX_NUMBER_REQUIRED);
-    }
-    return this.formEncounters.length > 0 && idx < this.formEncounters.length;
   }
 }
