@@ -1,5 +1,5 @@
-import { MenuItem } from '../../app/modules/shared/model/menu-item.model';
-import { doesExist } from '../../app/modules/shared/utilities/common-util/common.util';
+import { MenuItem } from '../../app/shared/model/menu-item.model';
+import { doesExist } from '../../app/shared/utilities/common-util/common.util';
 
 /**
  * Returns a MenuItem instance with test ID and label only.

@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { doesExist } from '../../app/modules/shared/utilities/common-util/common.util';
+import { doesExist } from '../../app/shared/utilities/common-util/common.util';
 
 /** Default test path string */
 export const TEST_PATH = 'test-path';
