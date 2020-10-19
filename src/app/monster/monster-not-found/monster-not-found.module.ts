@@ -17,4 +17,4 @@ const routes: Routes = [
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [RouterModule],
 })
-export class MonsterModule {}
+export class MonsterNotFoundModule {}

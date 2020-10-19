@@ -8,10 +8,12 @@ const createEncounterTable: LoadChildren = () =>
     '@encounter/create-encounter-table/create-encounter-table.module'
   ).then((m) => m.CreateEncounterTableModule);
 
-/** LoadChildren function to load the Encounter module */
+/** LoadChildren function to load the Encounter Not Found module */
 /* istanbul ignore next */
-const encounter: LoadChildren = () =>
-  import('@encounter/encounter.module').then((m) => m.EncounterModule);
+const encounterNotFound: LoadChildren = () =>
+  import('@encounter/encounter-not-found/encounter-not-found.module').then(
+    (m) => m.EncounterNotFoundModule
+  );
 
 /** LoadChildren function to load the Enter Monster module */
 /* istanbul ignore next */
@@ -20,11 +22,11 @@ const enterMonster: LoadChildren = () =>
     (m) => m.EnterMonsterModule
   );
 
-/** LoadChildren function to load the Monster module */
+/** LoadChildren function to load the Monster Not Found module */
 /* istanbul ignore next */
 const monsterNotFound: LoadChildren = () =>
   import('@monster/monster-not-found/monster-not-found.module').then(
-    (m) => m.MonsterModule
+    (m) => m.MonsterNotFoundModule
   );
 
 /** Human-readable labels for configured route paths */
@@ -57,7 +59,7 @@ function buildEncounterRoute(): Route {
   });
   encounterRoutes.push({
     path: '**',
-    loadChildren: encounter,
+    loadChildren: encounterNotFound,
   });
   return {
     path: 'encounter',
