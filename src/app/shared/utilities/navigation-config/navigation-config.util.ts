@@ -22,8 +22,10 @@ const enterMonster: LoadChildren = () =>
 
 /** LoadChildren function to load the Monster module */
 /* istanbul ignore next */
-const monster: LoadChildren = () =>
-  import('@monster/monster.module').then((m) => m.MonsterModule);
+const monsterNotFound: LoadChildren = () =>
+  import('@monster/monster-not-found/monster-not-found.module').then(
+    (m) => m.MonsterModule
+  );
 
 /** Human-readable labels for configured route paths */
 export enum RouteLabels {
@@ -72,7 +74,7 @@ function buildMonsterRoute(): Route {
   });
   monsterRoutes.push({
     path: '**',
-    loadChildren: monster,
+    loadChildren: monsterNotFound,
   });
   return {
     path: 'monster',
