@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { EnterMonsterComponent } from './enter-monster/enter-monster.component';
-import { MonsterDisplayComponent } from './monster-display/monster-display.component';
-import { MonsterFormComponent } from './monster-form/monster-form.component';
+import { EnterMonsterComponent } from './components/enter-monster/enter-monster.component';
+import { MonsterDisplayComponent } from './components/monster-display/monster-display.component';
+import { MonsterFormComponent } from './components/monster-form/monster-form.component';
 
 const routes: Routes = [
   {
