@@ -6,8 +6,8 @@ import { SaveAs, SaveAsClass } from '@shared/model/save-as.model';
 import { SharedModule } from '@shared/shared.module';
 import { areEqual } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { Encounter } from '../model/encounter.model';
-import { MonsterTacticalMovementPipe } from '../pipes/monster-tactical-movement/monster-tactical-movement.pipe';
+import { Encounter } from '../../model/encounter.model';
+import { MonsterTacticalMovementPipe } from '../../pipes/monster-tactical-movement/monster-tactical-movement.pipe';
 import { EncounterMonsterFormComponent } from './encounter-monster-form.component';
 
 describe('EncounterMonsterFormComponent', () => {

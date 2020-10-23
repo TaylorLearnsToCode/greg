@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ICreateEncounterViewState } from '../model/create-encounter-view-state.interface';
-import { IEncounterTableAction } from '../model/encounter-table.model';
-import { CreateEncounterFacadeService } from '../services/create-encounter-facade/create-encounter-facade.service';
+import { ICreateEncounterViewState } from '../../model/create-encounter-view-state.interface';
+import { IEncounterTableAction } from '../../model/encounter-table.model';
+import { CreateEncounterFacadeService } from '../../services/create-encounter-facade/create-encounter-facade.service';
 
 /** UI template supporting the creation of encounter tables by the end user. */
 @Component({

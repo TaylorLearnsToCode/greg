@@ -7,8 +7,8 @@ import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import {
   EncounterTable,
   EncounterTableTypes,
-} from '../model/encounter-table.model';
-import { Encounter } from '../model/encounter.model';
+} from '../../model/encounter-table.model';
+import { Encounter } from '../../model/encounter.model';
 import { StandardEncounterFormComponent } from './standard-encounter-form.component';
 
 describe('StandardEncounterFormComponent', () => {

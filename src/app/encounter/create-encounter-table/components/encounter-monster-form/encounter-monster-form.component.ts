@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Monster } from '@shared/model/monster.model';
+import { SaveAsClass } from '@shared/model/save-as.model';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 
 /** UI element to house form element for users to enter monster data into for use with encounter tables. */
@@ -14,6 +15,8 @@ export class EncounterMonsterFormComponent {
   @Input() encounterFormGroup: FormGroup;
   /** Whether this encounter takes place in a dungeon (TRUE) or the wilderness (FALSE, undefined) */
   @Input() isDungeonEncounter: boolean;
+
+  readonly saveAsClassOptions = Object.keys(SaveAsClass);
 
   /** Accessor for the FormArray of monsters in the provided encounterFormGroup. */
   get monstersForm(): FormArray {

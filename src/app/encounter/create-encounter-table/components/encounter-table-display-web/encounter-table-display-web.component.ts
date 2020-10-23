@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Encounter } from '../model/encounter.model';
+import { Encounter } from '../../model/encounter.model';
 
 /** Presenter component for Encounters intended to be copy/pasteable as a table into HTML for a web site or blog. */
 @Component({

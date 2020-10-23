@@ -7,8 +7,8 @@ import { areEqual } from '@shared/utilities/common-util/common.util';
 import {
   EncounterTable,
   EncounterTableActions,
-} from '../model/encounter-table.model';
-import { Encounter } from '../model/encounter.model';
+} from '../../model/encounter-table.model';
+import { Encounter } from '../../model/encounter.model';
 import { EncounterTableFormComponent } from './encounter-table-form.component';
 
 @Component({

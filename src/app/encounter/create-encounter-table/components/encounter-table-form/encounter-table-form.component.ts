@@ -24,8 +24,8 @@ import {
   EncounterTableActions,
   EncounterTableTypes,
   IEncounterTableAction,
-} from '../model/encounter-table.model';
-import { Encounter } from '../model/encounter.model';
+} from '../../model/encounter-table.model';
+import { Encounter } from '../../model/encounter.model';
 
 /** UI element for user to define and populate a wandering monster / random encounter table. */
 @Component({

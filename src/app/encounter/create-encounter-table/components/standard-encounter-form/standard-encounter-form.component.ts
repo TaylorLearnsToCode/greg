@@ -3,7 +3,7 @@ import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { Monster } from '@shared/model/monster.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { Encounter } from '../model/encounter.model';
+import { Encounter } from '../../model/encounter.model';
 
 @Component({
   selector: 'greg-standard-encounter-form',

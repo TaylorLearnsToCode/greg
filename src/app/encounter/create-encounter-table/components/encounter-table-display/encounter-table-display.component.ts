@@ -11,7 +11,7 @@ import {
   EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
-} from '../model/encounter-table.model';
+} from '../../model/encounter-table.model';
 
 /** Render component housing display elements for a given encounter table. */
 @Component({
