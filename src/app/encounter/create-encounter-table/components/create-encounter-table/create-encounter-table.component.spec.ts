@@ -5,9 +5,9 @@ import {
   EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
-} from '../model/encounter-table.model';
-import { Encounter } from '../model/encounter.model';
-import { CreateEncounterFacadeService } from '../services/create-encounter-facade/create-encounter-facade.service';
+} from '../../model/encounter-table.model';
+import { Encounter } from '../../model/encounter.model';
+import { CreateEncounterFacadeService } from '../../services/create-encounter-facade/create-encounter-facade.service';
 import { CreateEncounterTableComponent } from './create-encounter-table.component';
 
 describe('CreateEncounterTableComponent', () => {

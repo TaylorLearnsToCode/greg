@@ -14,8 +14,8 @@ import {
   EncounterTable,
   EncounterTableActions,
   IEncounterTableAction,
-} from '../model/encounter-table.model';
-import { Encounter } from '../model/encounter.model';
+} from '../../model/encounter-table.model';
+import { Encounter } from '../../model/encounter.model';
 import { EncounterTableDisplayComponent } from './encounter-table-display.component';
 
 /** Utility class to work around inputs not wanting me to mock the file list */
