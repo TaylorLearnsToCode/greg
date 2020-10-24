@@ -5,6 +5,7 @@ import {
   IEncounterTableAction,
 } from '@encounter/create-encounter-table/model/encounter-table.model';
 import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
+import { formValueToEncounterTable } from '@encounter/create-encounter-table/utilities/encounter-conversion/encounter-conversion.util';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { ExportService } from '@shared/services/export/export.service';
 import {
@@ -40,7 +41,7 @@ export class CreateEncounterFacadeService {
    * <i>On write</i> - writes an immutable object matching the value assigned.
    */
   private set encounterTable(encounterTable: EncounterTable) {
-    deepFreeze(encounterTable);
+    deepFreeze(formValueToEncounterTable(encounterTable));
     this.encounterTableSource.next(encounterTable);
   }
 
@@ -131,7 +132,7 @@ export class CreateEncounterFacadeService {
   private updateEncounters(encounters: Encounter[]): void {
     const nextEncounterTable = this.encounterTable;
     const newEncounters: Encounter[] = cloneObject(encounters);
-    nextEncounterTable.encounters = newEncounters;
+    nextEncounterTable.encounters = encounters;
     this.encounterTable = nextEncounterTable;
   }
 }

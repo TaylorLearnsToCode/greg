@@ -180,7 +180,7 @@ describe('EncounterTableFormComponent', () => {
     const spyObj = spyOn(component.encounterTableAction, 'emit');
     component.addEncounter();
     const payload = component.encounterTableForm.value;
-    component.updateEncounters();
+    component.updateEncounterTable();
     expect(spyObj).toHaveBeenCalledWith({
       action: EncounterTableActions.UPDATE_TABLE,
       payload,
@@ -189,7 +189,7 @@ describe('EncounterTableFormComponent', () => {
 
   it('should not emit an empty form', () => {
     const spyObj = spyOn(component.encounterTableAction, 'emit');
-    component.updateEncounters();
+    component.updateEncounterTable();
     expect(spyObj).not.toHaveBeenCalled();
   });
 

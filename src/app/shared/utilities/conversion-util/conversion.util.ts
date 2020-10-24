@@ -27,19 +27,17 @@ export function routeToMenuItem(route: Route): MenuItem {
 /**
  * Converts the value of a FormGroup created from a DiceRolled object
  * into a proper DiceRolled instance.
- * @param  {any} formValue
+ * @param  {any} value
  */
-export function formValueToDiceRolled(formValue: any): DiceRolled {
+export function formValueToDiceRolled(value: any): DiceRolled {
   const diceRolled = new DiceRolled(null, null);
-  diceRolled.no = doesExist(formValue.no) ? formValue.no : diceRolled.no;
-  diceRolled.pips = doesExist(formValue.pips)
-    ? formValue.pips
-    : diceRolled.pips;
-  diceRolled.modifier = doesExist(formValue.modifier)
-    ? formValue.modifier
+  diceRolled.no = doesExist(value.no) ? value.no : diceRolled.no;
+  diceRolled.pips = doesExist(value.pips) ? value.pips : diceRolled.pips;
+  diceRolled.modifier = doesExist(value.modifier)
+    ? value.modifier
     : diceRolled.modifier;
-  diceRolled.multiplier = doesExist(formValue.multiplier)
-    ? formValue.multiplier
+  diceRolled.multiplier = doesExist(value.multiplier)
+    ? value.multiplier
     : diceRolled.multiplier;
   return diceRolled;
 }
@@ -47,67 +45,61 @@ export function formValueToDiceRolled(formValue: any): DiceRolled {
 /**
  * Converts the value of a FormGroup created from a SaveAs object into
  * a proper SaveAs instance.
- * @param  {any} formValue
+ * @param  {any} value
  */
-export function formValueToSaveAs(formValue: any): SaveAs {
+export function formValueToSaveAs(value: any): SaveAs {
   const saveAs = new SaveAs();
-  saveAs.asClass = doesExist(formValue.asClass)
-    ? formValue.asClass
-    : saveAs.asClass;
-  saveAs.level = doesExist(formValue.level) ? formValue.level : saveAs.level;
+  saveAs.asClass = doesExist(value.asClass) ? value.asClass : saveAs.asClass;
+  saveAs.level = doesExist(value.level) ? value.level : saveAs.level;
   return saveAs;
 }
 
 /**
  * Converts the value of a FormGroup created from a Monster
  * into a proper Monster instance.
- * @param  {any} formValue
+ * @param  {any} value
  */
-export function formValueToMonster(formValue: any): Monster {
+export function formValueToMonster(value: any): Monster {
   const monster = new Monster();
-  monster.alignment = doesExist(formValue.alignment)
-    ? formValue.alignment
+  monster.alignment = doesExist(value.alignment)
+    ? value.alignment
     : monster.alignment;
-  monster.armorClass = doesExist(formValue.armorClass)
-    ? formValue.armorClass
+  monster.armorClass = doesExist(value.armorClass)
+    ? value.armorClass
     : monster.armorClass;
-  monster.attacks = doesExist(formValue.attacks)
-    ? formValue.attacks.map((attack: any) => formValueToWeapon(attack))
+  monster.attacks = doesExist(value.attacks)
+    ? value.attacks.map((attack: any) => formValueToWeapon(attack))
     : monster.attacks;
-  monster.frequency = doesExist(formValue.frequency)
-    ? formValue.frequency
+  monster.frequency = doesExist(value.frequency)
+    ? value.frequency
     : monster.frequency;
-  monster.hitDice = doesExist(formValue.hitDice)
-    ? formValue.hitDice
-    : monster.hitDice;
-  monster.hitPointModifier = doesExist(formValue.hitPointModifier)
-    ? formValue.hitPointModifier
+  monster.hitDice = doesExist(value.hitDice) ? value.hitDice : monster.hitDice;
+  monster.hitPointModifier = doesExist(value.hitPointModifier)
+    ? value.hitPointModifier
     : monster.hitPointModifier;
-  monster.morale = doesExist(formValue.morale)
-    ? formValue.morale
-    : monster.morale;
-  monster.movementExploration = doesExist(formValue.movementExploration)
-    ? formValue.movementExploration
+  monster.morale = doesExist(value.morale) ? value.morale : monster.morale;
+  monster.movementExploration = doesExist(value.movementExploration)
+    ? value.movementExploration
     : monster.movementExploration;
-  monster.name = doesExist(formValue.name) ? formValue.name : monster.name;
-  monster.noDungeon = doesExist(formValue.noDungeon)
-    ? formValueToDiceRolled(formValue.noDungeon)
+  monster.name = doesExist(value.name) ? value.name : monster.name;
+  monster.noDungeon = doesExist(value.noDungeon)
+    ? formValueToDiceRolled(value.noDungeon)
     : monster.noDungeon;
-  monster.notes = doesExist(formValue.notes) ? formValue.notes : monster.notes;
-  monster.noWilderness = doesExist(formValue.noWilderness)
-    ? formValueToDiceRolled(formValue.noWilderness)
+  monster.notes = doesExist(value.notes) ? value.notes : monster.notes;
+  monster.noWilderness = doesExist(value.noWilderness)
+    ? formValueToDiceRolled(value.noWilderness)
     : monster.noWilderness;
-  monster.pctInLair = doesExist(formValue.pctInLair)
-    ? formValue.pctInLair
+  monster.pctInLair = doesExist(value.pctInLair)
+    ? value.pctInLair
     : monster.pctInLair;
-  monster.saveAs = doesExist(formValue.saveAs)
-    ? formValueToSaveAs(formValue.saveAs)
+  monster.saveAs = doesExist(value.saveAs)
+    ? formValueToSaveAs(value.saveAs)
     : monster.saveAs;
-  monster.treasureTypeCarried = doesExist(formValue.treasureTypeCarried)
-    ? formValue.treasureTypeCarried
+  monster.treasureTypeCarried = doesExist(value.treasureTypeCarried)
+    ? value.treasureTypeCarried
     : monster.treasureTypeCarried;
-  monster.treasureTypeLair = doesExist(formValue.treasureTypeLair)
-    ? formValue.treasureTypeLair
+  monster.treasureTypeLair = doesExist(value.treasureTypeLair)
+    ? value.treasureTypeLair
     : monster.treasureTypeLair;
   return monster;
 }
@@ -115,13 +107,13 @@ export function formValueToMonster(formValue: any): Monster {
 /**
  * Converts the value of a FormGroup created from a Weapon object into
  * a proper Weapon instance.
- * @param  {any} formValue
+ * @param  {any} value
  */
-export function formValueToWeapon(formValue: any): Weapon {
+export function formValueToWeapon(value: any): Weapon {
   const weapon = new Weapon();
-  weapon.name = doesExist(formValue.name) ? formValue.name : weapon.name;
-  weapon.damage = doesExist(formValue.damage)
-    ? formValueToDiceRolled(formValue.damage)
+  weapon.name = doesExist(value.name) ? value.name : weapon.name;
+  weapon.damage = doesExist(value.damage)
+    ? formValueToDiceRolled(value.damage)
     : weapon.damage;
   return weapon;
 }

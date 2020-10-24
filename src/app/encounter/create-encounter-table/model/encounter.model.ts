@@ -12,12 +12,12 @@ export class Encounter {
 
   /**
    * Encounter constructor.
-   * @param  {number} lowRoll
+   * @param  {number} lowRoll? - defaults to 1
    * @param  {number} highRoll? - defaults to {lowRoll}
    * @param  {Monster[]} monsters? - defaults to empty array
    */
-  constructor(lowRoll: number, highRoll?: number, monsters?: Monster[]) {
-    this.lowRoll = lowRoll;
+  constructor(lowRoll?: number, highRoll?: number, monsters?: Monster[]) {
+    this.lowRoll = doesExist(lowRoll) ? lowRoll : 1;
     this.highRoll = doesExist(highRoll) ? highRoll : lowRoll;
     this.monsters = doesExist(monsters) ? monsters : [];
   }

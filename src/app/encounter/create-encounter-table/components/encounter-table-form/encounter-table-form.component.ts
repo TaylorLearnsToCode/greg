@@ -26,6 +26,7 @@ import {
   IEncounterTableAction,
 } from '../../model/encounter-table.model';
 import { Encounter } from '../../model/encounter.model';
+import { INDEX_NUMBER_REQUIRED } from '../../utilities/encounter-validation/encounter-validation.util';
 
 /** UI element for user to define and populate a wandering monster / random encounter table. */
 @Component({
@@ -58,9 +59,6 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   }
   /** Whether this table is intended to be rolled in a Dungeon (TRUE) or in the Wilderness (FALSE) */
   isDungeonEncounter: boolean;
-
-  /** Exception message for missing index */
-  private readonly INDEX_NUMBER_REQUIRED = 'Index Number is Required';
 
   /** Initialization method. */
   ngOnInit(): void {
@@ -125,7 +123,7 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
   }
 
   /** Handler for update action to entire encounter table. Emits current EncounterTable value. */
-  updateEncounters(): void {
+  updateEncounterTable(): void {
     if (this.formEncounters.length > 0) {
       this.encounterTableAction.emit({
         action: EncounterTableActions.UPDATE_TABLE,
@@ -176,7 +174,7 @@ export class EncounterTableFormComponent implements OnInit, OnChanges {
    */
   private validateDieRemove(idx: number): boolean {
     if (!doesExist(idx)) {
-      throw new Error(this.INDEX_NUMBER_REQUIRED);
+      throw new Error(INDEX_NUMBER_REQUIRED);
     }
     return this.formDiceRolled.length > 0 && idx < this.formDiceRolled.length;
   }

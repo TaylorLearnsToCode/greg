@@ -5,6 +5,7 @@ import {
   OnChanges,
   Output,
 } from '@angular/core';
+import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { cloneObject } from '@shared/utilities/common-util/common.util';
 import { formValueToMonster } from '@shared/utilities/conversion-util/conversion.util';
 import {
@@ -31,7 +32,7 @@ export class EncounterTableDisplayComponent implements OnChanges {
   /** OnChanges lifecycle method. */
   ngOnChanges(): void {
     this.encounterTable = cloneObject(this.encounterTable);
-    this.encounterTable.encounters.forEach((encounter) => {
+    (this.encounterTable.encounters as Encounter[]).forEach((encounter) => {
       encounter.monsters = encounter.monsters.map((monster) =>
         formValueToMonster(monster)
       );
