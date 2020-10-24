@@ -4,7 +4,6 @@ import {
   EncounterTableActions,
   IEncounterTableAction,
 } from '@encounter/create-encounter-table/model/encounter-table.model';
-import { Encounter } from '@encounter/create-encounter-table/model/encounter.model';
 import { formValueToEncounterTable } from '@encounter/create-encounter-table/utilities/encounter-conversion/encounter-conversion.util';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { ExportService } from '@shared/services/export/export.service';
@@ -13,9 +12,11 @@ import {
   deepFreeze,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { ICreateEncounterViewState } from '../../model/create-encounter-view-state.interface';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import {
+  buildCreateEncounterViewState$,
+  ICreateEncounterViewState,
+} from '../../model/create-encounter-view-state.interface';
 
 /** Controller/Delegator service for encounter creation logic */
 @Injectable({
@@ -73,9 +74,7 @@ export class CreateEncounterFacadeService {
         break;
       }
       case EncounterTableActions.UPDATE_TABLE: {
-        this.updateDiceRolled(action.payload.diceRolled);
-        this.updateEncounters(action.payload.encounters);
-        this.updateTitle(action.payload.title);
+        this.updateEnounterTable(action.payload);
         break;
       }
       default: {
@@ -90,13 +89,9 @@ export class CreateEncounterFacadeService {
    */
   initialize(): void {
     this.encounterTable = new EncounterTable();
-    this.createEncounterViewState$ = combineLatest([
+    this.createEncounterViewState$ = buildCreateEncounterViewState$(
       this.encounterTableSource.asObservable(),
-    ]).pipe(
-      map(([encounterTable]) => {
-        return { encounterTable } as ICreateEncounterViewState;
-      }),
-      takeUntil(this.destroySource)
+      this.destroySource
     );
   }
 
@@ -112,27 +107,24 @@ export class CreateEncounterFacadeService {
   }
 
   /**
-   * Clones the current encounter table, replaces the title property with a provided title,
-   * if found, and publishes the result to state.
-   * @param  {string} title
+   * Clones the current encounter table and replaces each property according to whether
+   * said property is provided in the payload.
+   * @param  {EncounterTable} table
    */
-  private updateTitle(title: string): void {
-    if (doesExist(title)) {
-      const nextEncounterTable = this.encounterTable;
-      nextEncounterTable.title = title;
-      this.encounterTable = nextEncounterTable;
-    }
-  }
-
-  /**
-   * Clones the current encounter table, replaces the encounters property with a provided
-   * Encounter array, and publishes the result to state.
-   * @param  {Encounter[]} encounters
-   */
-  private updateEncounters(encounters: Encounter[]): void {
+  private updateEnounterTable(table: EncounterTable): void {
     const nextEncounterTable = this.encounterTable;
-    const newEncounters: Encounter[] = cloneObject(encounters);
-    nextEncounterTable.encounters = encounters;
+    if (doesExist(table.diceRolled)) {
+      nextEncounterTable.diceRolled = table.diceRolled;
+    }
+    if (doesExist(table.encounters)) {
+      nextEncounterTable.encounters = table.encounters;
+    }
+    if (doesExist(table.title)) {
+      nextEncounterTable.title = table.title;
+    }
+    if (doesExist(table.type)) {
+      nextEncounterTable.type = table.type;
+    }
     this.encounterTable = nextEncounterTable;
   }
 }
