@@ -4,12 +4,6 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": ["jasmine"],
-    "paths": {
-      "@encounter/*": ["src/app/encounter/*"],
-      "@monster/*": ["src/app/monster/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@test/*": ["src/assets/test-data/*"]
-    }
   },
   "files": ["src/test.ts", "src/polyfills.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
