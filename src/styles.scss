@@ -39,3 +39,8 @@ input[type="number"] {
   text-align: center;
   -moz-appearance: textfield;
 }
+
+label {
+  color: $anchor-orange-light;
+  font-weight: bold;
+}

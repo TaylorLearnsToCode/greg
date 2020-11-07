@@ -19,10 +19,11 @@ export class DiceRolled {
    * @param  {number} pips
    * @param  {number} modifier?
    * @param  {number} multiplier?
+   * @todo - convert to a single object payload
    */
   constructor(
-    no: number,
-    pips: number,
+    no?: number,
+    pips?: number,
     modifier?: number,
     multiplier?: number
   ) {
@@ -30,5 +31,19 @@ export class DiceRolled {
     this.multiplier = doesExist(multiplier) ? multiplier : 1;
     this.no = doesExist(no) ? no : 1;
     this.pips = doesExist(pips) ? pips : 6;
+  }
+
+  toString(): string {
+    return ''.concat(
+      this.no.toString(),
+      'D',
+      this.pips.toString(),
+      this.modifier < 0
+        ? this.modifier.toString()
+        : this.modifier > 0
+        ? `+${this.modifier}`
+        : '',
+      this.multiplier !== 1 ? `x${this.multiplier}` : ''
+    );
   }
 }

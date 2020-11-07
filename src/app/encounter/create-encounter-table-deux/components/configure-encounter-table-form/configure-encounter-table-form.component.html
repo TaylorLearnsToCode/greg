@@ -1,0 +1,15 @@
+<form [formGroup]="parentForm">
+  <h2>Table Configuration</h2>
+  <div>
+    <label for="name">Table Name:</label>
+    <input formControlName="name" name="name" type="text" />
+  </div>
+  <div>
+    <label for="type">Table Type:</label>
+    <select formControlName="type" name="type">
+      <ng-container *ngFor="let key of ENCOUNTER_TABLE_TYPES_ITERABLE">
+        <option [value]="key">{{ ENCOUNTER_TABLE_TYPES[key] }}</option>
+      </ng-container>
+    </select>
+  </div>
+</form>

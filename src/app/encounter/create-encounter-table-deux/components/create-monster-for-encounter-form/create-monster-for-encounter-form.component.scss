@@ -1,0 +1,13 @@
+@import "src/assets/styles/variables";
+@include smallTextFields();
+@include smallNumberFields();
+
+form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 0.25em;
+}
+
+.wide-load {
+  grid-column: span 3;
+}
