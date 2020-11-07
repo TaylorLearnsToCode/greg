@@ -1,0 +1,69 @@
+<ng-container *ngIf="viewState$ | async as vs">
+  <greg-page-template headerText="GREG - Create Encounter Table">
+    <first-content>
+      <form>
+        <section class="dice-pool">
+          <greg-dice-pool-form
+            [parentForm]="encounterTableForm"
+          ></greg-dice-pool-form>
+        </section>
+        <section class="table-config">
+          <greg-configure-encounter-table-form
+            [parentForm]="encounterTableForm"
+          ></greg-configure-encounter-table-form>
+        </section>
+        <section class="enc-table">
+          <p>
+            <a (click)="clearEncounters()">Clear Encounters</a>
+            |
+            <a (click)="rebuildEncounters()">Rebuild from Dice Rolled</a>
+            |
+            <label for="importTableInput" style="padding: 0">
+              <a (click)="import()">Import</a>
+            </label>
+            <input
+              #importTableInput
+              accept=".json"
+              multiple="false"
+              name="importTableInput"
+              type="file"
+              (change)="onImportSelected()"
+            />
+            |
+            <a (click)="export()">Export</a>
+          </p>
+          <ng-container
+            *ngIf="tableType == ENCOUNTER_TABLE_TYPES.STANDARD; else nested"
+          >
+            <greg-create-standard-encounter-form
+              #createStandard
+              [parentForm]="encounterTableForm"
+              (createEncounterTableAction)="
+                onCreateEncounterTableAction($event)
+              "
+            ></greg-create-standard-encounter-form>
+          </ng-container>
+          <ng-template #nested>
+            <greg-create-nested-encounter-form
+              [parentForm]="encounterTableForm"
+            ></greg-create-nested-encounter-form>
+          </ng-template>
+        </section>
+      </form>
+    </first-content>
+    <second-content>
+      <ng-container [ngSwitch]="vs.action">
+        <ng-container *ngSwitchCase="ENCOUNTER_TABLE_ACTIONS.UPSERT_ENCOUNTER">
+          <greg-create-encounter-form
+            [parentForm]="encounterTableForm"
+            [activeEncounterIndex]="vs.activeEncounterIndex"
+            (createEncounterTableAction)="onCreateEncounterTableAction($event)"
+          ></greg-create-encounter-form>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <p>Action Area</p>
+        </ng-container>
+      </ng-container>
+    </second-content>
+  </greg-page-template>
+</ng-container>

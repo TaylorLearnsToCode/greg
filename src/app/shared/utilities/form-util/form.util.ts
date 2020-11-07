@@ -17,6 +17,12 @@ export function buildFormFromObject(obj: any): AbstractControl {
   obj = doesExist(obj) ? obj : '';
   if (Array.isArray(obj)) {
     return buildFormArrayFromArray(obj);
+  } else if (obj instanceof Map) {
+    const formObj = {};
+    for (const key of obj.keys()) {
+      formObj[key] = obj.get(key);
+    }
+    return buildFormGroupFromObject(formObj);
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
     return buildFormGroupFromObject(obj);
   } else {

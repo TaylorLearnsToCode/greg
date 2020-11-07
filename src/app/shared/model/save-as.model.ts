@@ -11,6 +11,7 @@ export class SaveAs {
    * SaveAs Constructor
    * @param  {SaveAsClass} asClass? Defaults to SaveAsClass.FTR
    * @param  {number} level? Defaults to 0
+   * @todo convert to single object constructor
    */
   constructor(asClass?: SaveAsClass, level?: number) {
     this.asClass = doesExist(asClass) ? asClass : SaveAsClass.FTR;
@@ -21,7 +22,7 @@ export class SaveAs {
 /** Supported playable classes for comparison calculating monster saves */
 export enum SaveAsClass {
   /** Fighting Man */
-  FTR = 'FTR',
+  FTR,
   /** Magic User */
-  MU = 'MU',
+  MU,
 }

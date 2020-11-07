@@ -11,6 +11,7 @@ export class Weapon {
   /**
    * Weapon constructor. "Name" property presented first, as it serves as a
    * verbal and mental identifier for the weapon; all other arguments alphebeitzed.
+   * @todo - convert to object constructor
    */
   constructor(name?: string, damage?: DiceRolled) {
     this.damage = doesExist(damage) ? damage : new DiceRolled(1, 6);

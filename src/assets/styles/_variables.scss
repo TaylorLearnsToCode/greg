@@ -9,3 +9,15 @@ $text-white: #cccccc;
 @mixin indent() {
   padding-left: 2em;
 }
+
+@mixin smallNumberFields($size: 2em) {
+  input[type="number"] {
+    width: $size;
+  }
+}
+
+@mixin smallTextFields($size: 4em) {
+  input[type="text"] {
+    width: $size;
+  }
+}

@@ -1,0 +1,33 @@
+@import "src/assets/styles/variables";
+@include smallNumberFields();
+
+div {
+  &.single {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-areas: "input form add-remove";
+  }
+
+  &.split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "input add-remove"
+      "form form";
+  }
+}
+
+span {
+  &.input {
+    grid-area: input;
+  }
+
+  &.add-remove {
+    grid-area: add-remove;
+  }
+
+  &.dice-form {
+    grid-area: form;
+  }
+}
