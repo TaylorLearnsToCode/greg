@@ -79,6 +79,10 @@ export class CreateEncounterTableFacade {
           this.onUpsertEncounter(action.payload);
           break;
         }
+        case CreateEncounterTableActions.UPSERT_SUBTABLE: {
+          this.onUpsert(action);
+          break;
+        }
         default: {
           throw Error(`Unsupported action '${action.action}' detected.`);
         }
@@ -109,5 +113,10 @@ export class CreateEncounterTableFacade {
     this.activeEncounter = dto.encounter;
     this.activeEncounterIndex = dto.index;
     this.action = CreateEncounterTableActions.UPSERT_ENCOUNTER;
+  }
+
+  private onUpsert(action: ICreateEncounterTableAction): void {
+    this.activeEncounterIndex = action.payload;
+    this.action = action.action;
   }
 }

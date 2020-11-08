@@ -3,4 +3,5 @@ export enum CreateEncounterTableActions {
   EXPORT_TABLE,
   RETURN_VIEW,
   UPSERT_ENCOUNTER,
+  UPSERT_SUBTABLE,
 }
