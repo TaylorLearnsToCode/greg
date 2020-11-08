@@ -46,6 +46,9 @@
           <ng-template #nested>
             <greg-create-nested-encounter-form
               [parentForm]="encounterTableForm"
+              (createEncounterTableAction)="
+                onCreateEncounterTableAction($event)
+              "
             ></greg-create-nested-encounter-form>
           </ng-template>
         </section>
@@ -59,6 +62,9 @@
             [activeEncounterIndex]="vs.activeEncounterIndex"
             (createEncounterTableAction)="onCreateEncounterTableAction($event)"
           ></greg-create-encounter-form>
+        </ng-container>
+        <ng-container *ngSwitchCase="ENCOUNTER_TABLE_ACTIONS.UPSERT_SUBTABLE">
+          <p>subtable</p>
         </ng-container>
         <ng-container *ngSwitchDefault>
           <p>Action Area</p>

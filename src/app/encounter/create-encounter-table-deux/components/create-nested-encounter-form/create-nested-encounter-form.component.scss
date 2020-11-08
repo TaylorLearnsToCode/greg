@@ -1,0 +1,18 @@
+@import "src/assets/styles/variables";
+@include smallNumberFields();
+
+table {
+  border: solid 1px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: solid 1px;
+  padding: 0.25em 0.5em;
+}
+
+tr {
+  padding: 0.25em;
+}
