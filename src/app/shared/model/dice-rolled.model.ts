@@ -11,26 +11,14 @@ export class DiceRolled {
   /** The number of sides or results of the die: so, 6 for D6; 8 for D8 */
   pips: number;
 
-  /**
-   * DiceRolled Constructor. Arguments arranged such that it can be read traditionally:
-   *
-   * <i>{no}-d-{pips} plus/minus {modifier} times {multiplier}</i>
-   * @param  {number} no
-   * @param  {number} pips
-   * @param  {number} modifier?
-   * @param  {number} multiplier?
-   * @todo - convert to a single object payload
-   */
-  constructor(
-    no?: number,
-    pips?: number,
-    modifier?: number,
-    multiplier?: number
-  ) {
-    this.modifier = doesExist(modifier) ? modifier : 0;
-    this.multiplier = doesExist(multiplier) ? multiplier : 1;
-    this.no = doesExist(no) ? no : 1;
-    this.pips = doesExist(pips) ? pips : 6;
+  constructor(diceRolled?: DiceRolled) {
+    diceRolled = doesExist(diceRolled) ? diceRolled : ({} as DiceRolled);
+    this.modifier = doesExist(diceRolled.modifier) ? diceRolled.modifier : 0;
+    this.multiplier = doesExist(diceRolled.multiplier)
+      ? diceRolled.multiplier
+      : 1;
+    this.no = doesExist(diceRolled.no) ? diceRolled.no : 1;
+    this.pips = doesExist(diceRolled.pips) ? diceRolled.pips : 6;
   }
 
   toString(): string {

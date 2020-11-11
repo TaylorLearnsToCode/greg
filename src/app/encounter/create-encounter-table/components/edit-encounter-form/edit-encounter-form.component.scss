@@ -1,0 +1,8 @@
+@import "src/assets/styles/variables";
+@include smallNumberFields();
+@include smallTextFields(8em);
+@include standardTableStyles();
+
+label {
+  padding-right: 0.5em;
+}

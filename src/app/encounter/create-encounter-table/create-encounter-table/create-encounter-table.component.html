@@ -1,0 +1,41 @@
+<greg-page-template
+  headerText="GREG - Create Encounter Table"
+  [pageDisplayMode]="PAGE_DISPLAY_MODE"
+>
+  <first-content>
+    <greg-create-encounter-actions></greg-create-encounter-actions>
+    <greg-display-table-print></greg-display-table-print>
+    <greg-display-table-web></greg-display-table-web>
+  </first-content>
+  <second-content>
+    <div>
+      <section
+        class="configure-table"
+        *ngIf="combinedConfig$ | async as combinedConfig"
+      >
+        <greg-configure-encounter-table
+          [name]="combinedConfig[0]"
+          [type]="combinedConfig[1]"
+          (createEncounterTableAction)="onCreateEncounterTableAction($event)"
+        ></greg-configure-encounter-table>
+      </section>
+      <section class="dice-rolled" *ngIf="diceRolled$ | async as diceRolled">
+        <greg-configure-dice-rolled
+          [diceRolled]="diceRolled"
+          (createEncounterTableAction)="onCreateEncounterTableAction($event)"
+        ></greg-configure-dice-rolled>
+      </section>
+      <section
+        class="edit-table"
+        *ngIf="combinedEncounters$ | async as combinedEncounters"
+      >
+        <greg-edit-encounter-table
+          [diceRolled]="combinedEncounters[0]"
+          [encounterRollMapping]="combinedEncounters[1]"
+          [encounters]="combinedEncounters[2]"
+          (createEncounterTableAction)="onCreateEncounterTableAction($event)"
+        ></greg-edit-encounter-table>
+      </section>
+    </div>
+  </second-content>
+</greg-page-template>

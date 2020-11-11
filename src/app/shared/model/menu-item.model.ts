@@ -17,25 +17,18 @@ export class MenuItem {
   /** Optional link: indicates where this menu item should route when clicked */
   routerLink: string;
 
-  /**
-   * Class Constructor
-   * @param  {string} id
-   * @param  {string} label
-   * @param  {MenuItem[]} children?
-   * @param  {boolean} isExpanded?
-   * @param  {string} routerLink?
-   */
-  constructor(
-    id: string,
-    label: string,
-    children?: MenuItem[],
-    isExpanded?: boolean,
-    routerLink?: string
-  ) {
-    this.id = id;
-    this.label = label;
-    this.isExpanded = doesExist(isExpanded) ? isExpanded : false;
-    this.children = doesExist(children) ? children : [];
-    this.routerLink = doesExist(routerLink) ? routerLink : null;
+  constructor(menuItem?: MenuItem) {
+    menuItem = doesExist(menuItem) ? menuItem : ({} as MenuItem);
+    this.children = doesExist(menuItem.children)
+      ? menuItem.children.map((item) => new MenuItem(item))
+      : [];
+    this.id = doesExist(menuItem.id) ? menuItem.id : '';
+    this.isExpanded = doesExist(menuItem.isExpanded)
+      ? menuItem.isExpanded
+      : false;
+    this.label = doesExist(menuItem.label) ? menuItem.label : '';
+    this.routerLink = doesExist(menuItem.routerLink)
+      ? menuItem.routerLink
+      : null;
   }
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from '@shared/shared.module';
+import { EncounterSharedModule } from '@encounter/encounter-shared/encounter-shared.module';
 import { EncounterNotFoundComponent } from './encounter-not-found/encounter-not-found.component';
 
 const routes: Routes = [
@@ -13,7 +13,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [EncounterNotFoundComponent],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, EncounterSharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

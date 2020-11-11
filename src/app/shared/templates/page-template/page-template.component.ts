@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { PageDisplayMode } from '@shared/model/page-display-mode.enum';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 
 /** Template component for a standard one-column or adaptive two-column layout. */
@@ -12,8 +13,11 @@ export class PageTemplateComponent implements OnInit {
   @Input() headerText: string;
   /** The subtitle text of the page - to be printed in italics */
   @Input() headerSubtext: string;
-  /** Flag - if TRUE, the 'data' selector will be turned off */
-  @Input() isSingleColumn: boolean;
+  /** How the layout should render; defaults to two-column, DOUBLE */
+  @Input() pageDisplayMode: PageDisplayMode;
+
+  /** Local read-only instance for supported page display modes. */
+  readonly PAGE_DISPLAY_MODES = PageDisplayMode;
 
   /** Read-only accessor for whether or not the subtext container in the header should render. */
   get shouldDisplayHeaderSubtext(): boolean {
@@ -52,10 +56,23 @@ export class PageTemplateComponent implements OnInit {
     this._shouldDisplayHeaderSubtext = doesExist(this.headerSubtext);
   }
 
-  /** Sets parent wrapper class to single or double based on isSingleColumn input */
+  /** Sets parent wrapper class to single or double based on pageDisplayMode input */
   private setWrapperClasses(): void {
-    this._wrapperClasses = this.isSingleColumn
-      ? ['page-template--single']
-      : ['page-template--double'];
+    this._wrapperClasses = [];
+    switch (this.pageDisplayMode) {
+      case PageDisplayMode.SINGLE: {
+        this._wrapperClasses.push('page-template--single');
+        break;
+      }
+      case PageDisplayMode.STACKED: {
+        this._wrapperClasses.push('page-template--stacked');
+        break;
+      }
+      case PageDisplayMode.DOUBLE:
+      default: {
+        this._wrapperClasses.push('page-template--double');
+        break;
+      }
+    }
   }
 }
