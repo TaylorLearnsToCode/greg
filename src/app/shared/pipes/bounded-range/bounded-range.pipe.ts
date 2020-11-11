@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { BoundedRange } from '@shared/model/bounded-range.model';
 import { getBoundedRange } from '@shared/utilities/dice-roller/dice-roller.util';
 
 /** Pipe for displaying generic dice ranges. */
@@ -15,9 +16,9 @@ export class BoundedRangePipe implements PipeTransform {
    * @param  {any} diceRolled - typed as {any} to support overloading when extending
    */
   transform(diceRolled: any): any {
-    const boundedRange: number[] = Array.isArray(diceRolled)
+    const boundedRange: BoundedRange = Array.isArray(diceRolled)
       ? getBoundedRange(...diceRolled)
       : getBoundedRange(diceRolled);
-    return `${boundedRange[0]}-${boundedRange[1]}`;
+    return `${boundedRange.low}-${boundedRange.high}`;
   }
 }

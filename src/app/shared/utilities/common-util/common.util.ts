@@ -75,6 +75,8 @@ export function doesExist(obj: any): boolean {
 export function isEmpty(obj: string | any[]): boolean {
   if (Array.isArray(obj)) {
     return isArrayEmpty(obj);
+  } else if (typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
   } else {
     return isStringEmpty(obj);
   }

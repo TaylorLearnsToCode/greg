@@ -1,3 +1,4 @@
+import { BoundedRange } from '@shared/model/bounded-range.model';
 import { DiceRolled } from '../../model/dice-rolled.model';
 
 /**
@@ -5,7 +6,7 @@ import { DiceRolled } from '../../model/dice-rolled.model';
  * results in the form of a two-element array.
  * @param  {DiceRolled[]} ...dice
  */
-export function getBoundedRange(...dicePools: DiceRolled[]): number[] {
+export function getBoundedRange(...dicePools: DiceRolled[]): BoundedRange {
   const boundedRange: number[] = [];
   let min = 0;
   let max = 0;
@@ -13,7 +14,10 @@ export function getBoundedRange(...dicePools: DiceRolled[]): number[] {
     min += (pool.modifier + pool.no) * pool.multiplier;
     max += (pool.modifier + pool.pips * pool.no) * pool.multiplier;
   });
-  return [min, max];
+  return new BoundedRange({
+    low: min,
+    high: max,
+  } as BoundedRange);
 }
 
 /**
@@ -23,7 +27,7 @@ export function getBoundedRange(...dicePools: DiceRolled[]): number[] {
  */
 export function getRollRange(...dicePools: DiceRolled[]): number[] {
   const result: number[] = [];
-  const [min, max] = getBoundedRange(...dicePools);
+  const [min, max] = getBoundedRange(...dicePools).range;
   for (let i = min; i <= max; i++) {
     result.push(i);
   }
@@ -75,7 +79,9 @@ export function rollDice(...dice: any[]): number {
     });
   } else {
     const [no, pips, modifier, multiplier] = dice;
-    result += rollDice(new DiceRolled(no, pips, modifier, multiplier));
+    result += rollDice(
+      new DiceRolled({ no, pips, modifier, multiplier } as DiceRolled)
+    );
   }
   return result;
 }

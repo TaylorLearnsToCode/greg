@@ -21,3 +21,14 @@ $text-white: #cccccc;
     width: $size;
   }
 }
+
+@mixin standardTableStyles() {
+  table {
+    width: 100%;
+
+    td,
+    th {
+      padding: 0em 0.25em;
+    }
+  }
+}

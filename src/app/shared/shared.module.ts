@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DiceRollerFormComponent } from './components/dice-roller-form/dice-roller-form.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { SaveAsFormComponent } from './components/save-as-form/save-as-form.component';
 import { WeaponsFormComponent } from './components/weapons-form/weapons-form.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { BoundedRangePipe } from './pipes/bounded-range/bounded-range.pipe';
@@ -13,6 +14,7 @@ const components = [
   DiceRollerFormComponent,
   MenuBarComponent,
   PageTemplateComponent,
+  SaveAsFormComponent,
   WeaponsFormComponent,
   WelcomeComponent,
 ];

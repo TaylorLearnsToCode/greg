@@ -37,15 +37,6 @@ section {
   }
 }
 
-.page-template--single {
-  @extend %page-template;
-  grid-template-columns: auto;
-  grid-template-areas:
-    "header"
-    "menu"
-    "first";
-}
-
 .page-template--double {
   @extend %page-template;
   grid-template-columns: 1fr 1fr;
@@ -62,4 +53,23 @@ section {
       "first"
       "second";
   }
+}
+
+.page-template--single {
+  @extend %page-template;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "header"
+    "menu"
+    "first";
+}
+
+.page-template--stacked {
+  @extend %page-template;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "header"
+    "menu"
+    "first"
+    "second";
 }

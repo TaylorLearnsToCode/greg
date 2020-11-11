@@ -53,7 +53,7 @@ export class Monster {
     this.alignment = doesExist(monster.alignment) ? monster.alignment : '';
     this.armorClass = doesExist(monster.armorClass) ? monster.armorClass : 9;
     this.attacks = doesExist(monster.attacks)
-      ? monster.attacks.map((attack) => new Weapon(attack.name, attack.damage))
+      ? monster.attacks.map((attack) => new Weapon(attack))
       : [new Weapon()];
     this.frequency = doesExist(monster.frequency) ? monster.frequency : '';
     this.hitDice = doesExist(monster.hitDice) ? monster.hitDice : 0;
@@ -66,15 +66,15 @@ export class Monster {
       : 120;
     this.name = doesExist(monster.name) ? monster.name : '';
     this.noDungeon = doesExist(monster.noDungeon)
-      ? new DiceRolled(monster.noDungeon.no, monster.noDungeon.pips)
+      ? new DiceRolled(monster.noDungeon)
       : new DiceRolled();
     this.notes = doesExist(monster.notes) ? monster.notes : '';
     this.noWilderness = doesExist(monster.noWilderness)
-      ? new DiceRolled(monster.noWilderness.no, monster.noWilderness.pips)
+      ? new DiceRolled(monster.noWilderness)
       : new DiceRolled();
     this.pctInLair = doesExist(monster.pctInLair) ? monster.pctInLair : 0;
     this.saveAs = doesExist(monster.saveAs)
-      ? new SaveAs(monster.saveAs.asClass, monster.saveAs.level)
+      ? new SaveAs(monster.saveAs)
       : new SaveAs();
     this.treasureTypeCarried = doesExist(monster.treasureTypeCarried)
       ? monster.treasureTypeCarried

@@ -1,21 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from '@shared/shared.module';
-import { CreateEncounterTableComponent } from './components/create-encounter-table/create-encounter-table.component';
-import { EncounterMonsterFormComponent } from './components/encounter-monster-form/encounter-monster-form.component';
-import { EncounterTableDisplayPrintComponent } from './components/encounter-table-display-print/encounter-table-display-print.component';
-import { EncounterTableDisplayWebComponent } from './components/encounter-table-display-web/encounter-table-display-web.component';
-import { EncounterTableDisplayComponent } from './components/encounter-table-display/encounter-table-display.component';
-import { EncounterTableFormComponent } from './components/encounter-table-form/encounter-table-form.component';
-import { MonsterAttacksFormComponent } from './components/monster-attacks-form/monster-attacks-form.component';
-import { AttacksAndDamagePipe } from './pipes/attacks-and-damage/attacks-and-damage.pipe';
-import { CombinedHitDicePipe } from './pipes/combined-hit-dice/combined-hit-dice.pipe';
-import { CombinedMovementPipe } from './pipes/combined-movement/combined-movement.pipe';
-import { EncounterRollPipe } from './pipes/encounter-roll/encounter-roll.pipe';
-import { MonsterTacticalMovementPipe } from './pipes/monster-tactical-movement/monster-tactical-movement.pipe';
-import { NoAppearingRangePipe } from './pipes/no-appearing-range/no-appearing-range.pipe';
-import { StandardEncounterFormComponent } from './components/standard-encounter-form/standard-encounter-form.component';
+import { CreateEncounterTableComponent } from '@encounter/create-encounter-table/create-encounter-table/create-encounter-table.component';
+import { EncounterSharedModule } from '@encounter/encounter-shared/encounter-shared.module';
+import { ConfigureDiceRolledComponent } from './components/configure-dice-rolled/configure-dice-rolled.component';
+import { ConfigureEncounterTableComponent } from './components/configure-encounter-table/configure-encounter-table.component';
+import { CreateEncounterActionsComponent } from './components/create-encounter-actions/create-encounter-actions.component';
+import { DisplayTablePrintComponent } from './components/display-table-print/display-table-print.component';
+import { DisplayTableWebComponent } from './components/display-table-web/display-table-web.component';
+import { EditEncounterFormComponent } from './components/edit-encounter-form/edit-encounter-form.component';
+import { EditEncounterTableComponent } from './components/edit-encounter-table/edit-encounter-table.component';
 
 const routes: Routes = [
   {
@@ -26,23 +20,17 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    ConfigureDiceRolledComponent,
+    ConfigureEncounterTableComponent,
+    CreateEncounterActionsComponent,
     CreateEncounterTableComponent,
-    EncounterTableFormComponent,
-    EncounterTableDisplayComponent,
-    MonsterTacticalMovementPipe,
-    EncounterTableDisplayPrintComponent,
-    EncounterRollPipe,
-    NoAppearingRangePipe,
-    CombinedMovementPipe,
-    EncounterTableDisplayWebComponent,
-    AttacksAndDamagePipe,
-    CombinedHitDicePipe,
-    MonsterAttacksFormComponent,
-    EncounterMonsterFormComponent,
-    StandardEncounterFormComponent,
+    DisplayTablePrintComponent,
+    DisplayTableWebComponent,
+    EditEncounterTableComponent,
+    EditEncounterFormComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
   exports: [RouterModule],
+  imports: [CommonModule, RouterModule.forChild(routes), EncounterSharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreateEncounterTableModule {}

@@ -1,14 +1,15 @@
+import { BoundedRange } from '@shared/model/bounded-range.model';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { getBoundedRange, getRollRange, rollDice } from './dice-roller.util';
 
 describe('DiceRoller', () => {
   let d6: DiceRolled;
   let d8: DiceRolled;
-  let variableRange: number[];
+  let variableRange: BoundedRange;
 
   beforeEach(() => {
-    d6 = new DiceRolled(1, 6);
-    d8 = new DiceRolled(1, 8);
+    d6 = new DiceRolled();
+    d8 = new DiceRolled({ pips: 8 } as DiceRolled);
     variableRange = null;
   });
 
@@ -44,6 +45,10 @@ describe('DiceRoller', () => {
   });
 
   describe('getRollRange', () => {
+    let variableRange: number[];
+
+    beforeEach(() => (variableRange = null));
+
     it('should return 1-6', () => {
       variableRange = getRollRange(d6);
       expect(variableRange.length).toBe(6);
@@ -100,8 +105,10 @@ describe('DiceRoller', () => {
 
   /* Utility Functions */
   function runBoundedRangeExpectation(low: number, high: number): void {
-    expect(variableRange.length).toBe(2);
-    expect(variableRange[0]).toBe(low);
-    expect(variableRange[1]).toBe(high);
+    expect(variableRange.range.length).toBe(2);
+    expect(variableRange.range[0]).toBe(low);
+    expect(variableRange.low).toBe(low);
+    expect(variableRange.range[1]).toBe(high);
+    expect(variableRange.high).toBe(high);
   }
 });

@@ -1,0 +1,6 @@
+@import "src/assets/styles/variables";
+@include smallNumberFields();
+
+input {
+  margin-left: 0.25em;
+}

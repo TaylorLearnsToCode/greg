@@ -1,0 +1,59 @@
+<form [formGroup]="encounterForm">
+  <label for="name">Encounter Name:</label>
+  <input formControlName="name" name="name" type="text" />
+  <div class="monster-array" formArrayName="monsters">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>AC</th>
+        <th>HD</th>
+        <th>Attacks &amp; Damage</th>
+        <th>Move</th>
+        <th>Save As</th>
+        <th>Morale</th>
+        <th>&nbsp;</th>
+      </tr>
+      <ng-container *ngIf="monstersArray.length > 0; else noMonsters">
+        <tr *ngFor="let monster of monstersArray.controls; index as i">
+          <ng-container [formGroupName]="i">
+            <td>
+              <input formControlName="name" type="text" />
+            </td>
+            <td>
+              <input formControlName="armorClass" type="number" />
+            </td>
+            <td>
+              <input formControlName="hitDice" type="number" />
+              +
+              <input formControlNamee="hitPointModifier" type="number" />
+            </td>
+            <td>
+              <greg-weapons-form [parentForm]="monster"></greg-weapons-form>
+            </td>
+            <td>
+              <input formControlName="movementExploration" type="number" />
+              {{ monster.value.movementTactical }}
+            </td>
+            <td>
+              <greg-save-as-form [parentForm]="monster"></greg-save-as-form>
+            </td>
+            <td>
+              <input formControlName="morale" type="number" />
+            </td>
+            <td>
+              <a (click)="addMonster(i)">+</a>
+              /
+              <a (click)="removeMonster(i)">-</a>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
+      <ng-template #noMonsters>
+        <td>&nbsp;</td>
+        <td colspan="6">
+          <a (click)="addMonster()">Add Encounter Creature</a>
+        </td>
+      </ng-template>
+    </table>
+  </div>
+</form>

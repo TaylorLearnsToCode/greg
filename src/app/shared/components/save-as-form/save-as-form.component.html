@@ -1,0 +1,8 @@
+<form [formGroup]="saveAsForm">
+  <select formControlName="asClass">
+    <option *ngFor="let option of AS_CLASS_OPTIONS" [value]="AS_CLASS[option]">
+      {{ option }}
+    </option>
+  </select>
+  <input formControlName="level" type="number" />
+</form>

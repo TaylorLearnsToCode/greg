@@ -8,13 +8,6 @@ const createEncounterTable: LoadChildren = () =>
     '@encounter/create-encounter-table/create-encounter-table.module'
   ).then((m) => m.CreateEncounterTableModule);
 
-/** Other LoadChildren function to load the Create Encounter Table module */
-/* istanbul ignore next */
-const createEncounterTableDeux: LoadChildren = () =>
-  import(
-    '@encounter/create-encounter-table-deux/create-encounter-table-deux.module'
-  ).then((m) => m.CreateEncounterTableDeuxModule);
-
 /** LoadChildren function to load the Encounter Not Found module */
 /* istanbul ignore next */
 const encounterNotFound: LoadChildren = () =>
@@ -64,10 +57,6 @@ function buildEncounterRoute(): Route {
   encounterRoutes.push({
     path: 'create-encounter-table',
     loadChildren: createEncounterTable,
-  });
-  encounterRoutes.push({
-    path: 'create-encounter-table-deux',
-    loadChildren: createEncounterTableDeux,
   });
   encounterRoutes.push({
     path: '**',

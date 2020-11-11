@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { PageDisplayMode } from '@shared/model/page-display-mode.enum';
 import { PageTemplateComponent } from './page-template.component';
 
 describe('PageTemplateComponent', () => {
@@ -32,13 +33,13 @@ describe('PageTemplateComponent', () => {
   });
 
   it('should assign single-column class designation', () => {
-    component.isSingleColumn = true;
+    component.pageDisplayMode = PageDisplayMode.SINGLE;
     component.ngOnInit();
     expect(component.wrapperClasses).toContain('page-template--single');
   });
 
   it('should assign double-column class designation', () => {
-    component.isSingleColumn = false;
+    component.pageDisplayMode = PageDisplayMode.DOUBLE;
     component.ngOnInit();
     expect(component.wrapperClasses).toContain('page-template--double');
   });

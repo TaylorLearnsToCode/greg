@@ -1,0 +1,12 @@
+div {
+  margin-bottom: 0.5em;
+
+  &.action-bar {
+    text-align: center;
+  }
+
+  &.config-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
