@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { PageDisplayMode } from '@shared/model/page-display-mode.enum';
 import { PageTemplateComponent } from './page-template.component';
 
@@ -7,7 +7,7 @@ describe('PageTemplateComponent', () => {
   let component: PageTemplateComponent;
   let fixture: ComponentFixture<PageTemplateComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PageTemplateComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

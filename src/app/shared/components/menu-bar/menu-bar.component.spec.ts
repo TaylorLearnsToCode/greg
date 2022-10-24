@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuItem } from '@shared/model/menu-item.model';
@@ -13,7 +13,7 @@ describe('MenuBarComponent', () => {
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MenuBarComponent],
       imports: [RouterTestingModule],
