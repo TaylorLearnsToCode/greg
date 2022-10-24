@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.enum';
 import { ICreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.interface';
 import { IUpdateConfigDto } from '@encounter/create-encounter-table/model/update-config-dto.interface';
+import { EncounterLocation } from '@encounter/encounter-shared/model/encounter-locationS.enum';
 import { EncounterTableType } from '@encounter/encounter-shared/model/encounter-table-types.enum';
 import { EncounterTable } from '@encounter/encounter-shared/model/encounter-table.model';
 import { Encounter } from '@encounter/encounter-shared/model/encounter.model';
@@ -51,6 +52,14 @@ export class CreateEncounterTableFacadeService {
   private encountersSource = new BehaviorSubject<
     Array<Encounter | EncounterTable>
   >(null);
+  private get location(): EncounterLocation {
+    return cloneObject(this.locationSource.value) as EncounterLocation;
+  }
+  private set location(newLocation: EncounterLocation) {
+    deepFreeze(newLocation);
+    this.locationSource.next(newLocation);
+  }
+  private locationSource = new BehaviorSubject<EncounterLocation>(null);
   private get name(): string {
     return this.nameSource.value;
   }
@@ -70,6 +79,7 @@ export class CreateEncounterTableFacadeService {
   diceRolled$: Observable<DiceRolled[]>;
   encounterRollMapping$: Observable<IRollMapping[]>;
   encounters$: Observable<Array<Encounter | EncounterTable>>;
+  location$: Observable<EncounterLocation>;
   name$: Observable<string>;
   type$: Observable<EncounterTableType>;
 
@@ -155,6 +165,7 @@ export class CreateEncounterTableFacadeService {
     this.diceRolled = table.diceRolled;
     this.encounterRollMapping = table.encounterRollMapping;
     this.encounters = table.encounters;
+    this.location = table.location;
     this.name = table.name;
     this.type = EncounterTableType.UNSPECIFIED;
   }
@@ -169,6 +180,9 @@ export class CreateEncounterTableFacadeService {
     this.encounters$ = this.encountersSource
       .asObservable()
       .pipe(takeUntil(this.destroySource));
+    this.location$ = this.locationSource
+      .asObservable()
+      .pipe(takeUntil(this.destroySource));
     this.name$ = this.nameSource
       .asObservable()
       .pipe(takeUntil(this.destroySource));
@@ -178,6 +192,7 @@ export class CreateEncounterTableFacadeService {
   }
 
   private onSaveConfig(config: IUpdateConfigDto): void {
+    this.location = config.location;
     this.name = config.name;
     this.type = config.type;
   }

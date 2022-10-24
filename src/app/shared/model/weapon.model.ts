@@ -20,6 +20,6 @@ export class Weapon {
         ? weapon.damage
         : ({ no: 1, pips: 6 } as DiceRolled)
     );
-    this.name = doesExist(name) ? name : '';
+    this.name = doesExist(weapon.name) ? weapon.name : '';
   }
 }
