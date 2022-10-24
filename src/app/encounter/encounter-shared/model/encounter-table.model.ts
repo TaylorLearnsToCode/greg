@@ -1,6 +1,7 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { IRollMapping } from '@shared/model/roll-index-mapping.interface';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { EncounterLocation } from './encounter-locationS.enum';
 import { EncounterTableType } from './encounter-table-types.enum';
 import { Encounter } from './encounter.model';
 
@@ -8,6 +9,7 @@ export class EncounterTable {
   diceRolled: DiceRolled[];
   encounterRollMapping: IRollMapping[];
   encounters: Array<Encounter | EncounterTable>;
+  location: EncounterLocation;
   name: string;
   type: EncounterTableType;
 
@@ -32,6 +34,9 @@ export class EncounterTable {
           }
         })
       : [];
+    this.location = doesExist(encounterTable.location)
+      ? encounterTable.location
+      : EncounterLocation.DUNGEON;
     this.name = doesExist(encounterTable.name)
       ? encounterTable.name
       : 'Encounter Table';

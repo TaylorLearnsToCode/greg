@@ -14,8 +14,9 @@ export class BoundedRangePipe implements PipeTransform {
    * * DiceRolled
    * * DiceRolled[]
    * @param  {any} diceRolled - typed as {any} to support overloading when extending
+   * @param  {any[]} ...args - optional arguments usable by implementing functions
    */
-  transform(diceRolled: any): any {
+  transform(diceRolled: any, ...args: any[]): any {
     const boundedRange: BoundedRange = Array.isArray(diceRolled)
       ? getBoundedRange(...diceRolled)
       : getBoundedRange(diceRolled);

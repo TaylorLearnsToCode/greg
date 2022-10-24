@@ -1,16 +1,20 @@
 @import "src/assets/styles/variables";
 @include smallNumberFields();
-@include smallTextFields(6em);
+
+%grid-display {
+  display: grid;
+  column-gap: 0.5em;
+}
 
 div {
   &.single {
-    display: grid;
+    @extend %grid-display;
     grid-template-columns: 2fr 2fr 1fr;
     grid-template-areas: "input form add-remove";
   }
 
   &.split {
-    display: grid;
+    @extend %grid-display;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
@@ -22,6 +26,7 @@ div {
 span {
   &.input {
     grid-area: input;
+    text-align: right;
   }
 
   &.add-remove {

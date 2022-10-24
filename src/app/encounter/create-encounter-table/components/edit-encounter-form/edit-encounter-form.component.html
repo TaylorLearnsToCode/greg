@@ -5,6 +5,7 @@
     <table>
       <tr>
         <th>Name</th>
+        <th>No. Appearing</th>
         <th>AC</th>
         <th>HD</th>
         <th>Attacks &amp; Damage</th>
@@ -20,12 +21,26 @@
               <input formControlName="name" type="text" />
             </td>
             <td>
+              <!-- Fix This via CSS -->
+              <label for="noDungeon">In Dungeon:</label>
+              <greg-dice-roller-form
+                name="noDungeon"
+                [parentForm]="monster.get('noDungeon')"
+              ></greg-dice-roller-form>
+              <br />
+              <label for="noWilderness">In Wilderness:</label>
+              <greg-dice-roller-form
+                name="noWilderness"
+                [parentForm]="monster.get('noWilderness')"
+              ></greg-dice-roller-form>
+            </td>
+            <td>
               <input formControlName="armorClass" type="number" />
             </td>
             <td>
               <input formControlName="hitDice" type="number" />
               +
-              <input formControlNamee="hitPointModifier" type="number" />
+              <input formControlName="hitPointModifier" type="number" />
             </td>
             <td>
               <greg-weapons-form [parentForm]="monster"></greg-weapons-form>

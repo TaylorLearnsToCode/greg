@@ -5,7 +5,7 @@ import { BoundedRangePipe } from './bounded-range.pipe';
 describe('BoundedRangePipe', () => {
   let pipe: BoundedRangePipe;
 
-  const d6 = new DiceRolled(1, 6);
+  const d6 = new DiceRolled();
 
   beforeEach(() => {
     TestBed.configureTestingModule({

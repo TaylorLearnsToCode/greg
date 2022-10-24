@@ -20,5 +20,15 @@
         {{ option }}
       </option>
     </select>
+
+    <label for="location">Location:</label>
+    <select formControlName="location" name="location">
+      <option
+        *ngFor="let option of LOCATION_OPTIONS"
+        [value]="LOCATION_TYPES[option]"
+      >
+        {{ option }}
+      </option>
+    </select>
   </div>
 </section>

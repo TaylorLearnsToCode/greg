@@ -7,7 +7,6 @@ import { DiceRolled } from '../../model/dice-rolled.model';
  * @param  {DiceRolled[]} ...dice
  */
 export function getBoundedRange(...dicePools: DiceRolled[]): BoundedRange {
-  const boundedRange: number[] = [];
   let min = 0;
   let max = 0;
   dicePools.forEach((pool) => {
