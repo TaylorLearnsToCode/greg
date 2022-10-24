@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { SharedModule } from '@shared/shared.module';
@@ -10,7 +10,7 @@ describe('DiceRollerFormComponent', () => {
   let component: DiceRollerFormComponent;
   let fixture: ComponentFixture<DiceRollerFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DiceRollerFormComponent],
       imports: [SharedModule],

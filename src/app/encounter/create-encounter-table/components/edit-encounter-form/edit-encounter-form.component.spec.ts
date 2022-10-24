@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EditEncounterFormComponent } from './edit-encounter-form.component';
 
@@ -6,7 +6,7 @@ describe('EditEncounterFormComponent', () => {
   let component: EditEncounterFormComponent;
   let fixture: ComponentFixture<EditEncounterFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EditEncounterFormComponent ]
     })
