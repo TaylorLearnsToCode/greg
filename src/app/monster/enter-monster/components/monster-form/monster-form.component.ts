@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
+import { WwwMonster } from '@shared/model/www-monster.model';
+import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 
 /** Presenter element for user entry of new monsters. UNDER CONSTRUCTION */
 @Component({
@@ -24,13 +26,14 @@ export class MonsterFormComponent implements OnInit {
     this.initializeSystemsMap();
   }
 
-  private initializeMonsterForm() {
-    this.monsterForm = this.formBuilder.group({
-      system: new FormControl<string>('www'),
-    });
+  private initializeMonsterForm(): void {
+    this.monsterForm = buildFormFromObject(
+      new WwwMonster()
+    ) as UntypedFormGroup;
+    this.monsterForm.addControl('system', new FormControl<string>('www'));
   }
 
-  private initializeSystemsMap() {
+  private initializeSystemsMap(): void {
     this.systems = {};
     this.systems['bx'] = 'Basic / Expert';
     this.systems['www'] = 'Weapons, Wits, & Wizardry';
