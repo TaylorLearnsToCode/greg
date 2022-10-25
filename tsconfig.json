@@ -23,6 +23,6 @@
       "@test/*": ["src/assets/test-data/*"]
     },
     "sourceMap": true,
-    "target": "es2015"
+    "target": "es2020"
   }
 }

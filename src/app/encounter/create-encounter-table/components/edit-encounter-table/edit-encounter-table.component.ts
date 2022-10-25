@@ -8,7 +8,7 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { CreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.enum';
 import { ICreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.interface';
 import { EncounterRowTypes } from '@encounter/create-encounter-table/model/encounter-row-types.enum';
@@ -40,15 +40,15 @@ export class EditEncounterTableComponent implements OnInit, OnChanges {
 
   readonly ROW_TYPES = EncounterRowTypes;
 
-  get encountersForm(): FormArray {
-    return this.form.get('encounters') as FormArray;
+  get encountersForm(): UntypedFormArray {
+    return this.form.get('encounters') as UntypedFormArray;
   }
-  form: FormGroup = new FormGroup({
-    encounterRollMapping: new FormArray([]),
-    encounters: new FormArray([]),
+  form: UntypedFormGroup = new UntypedFormGroup({
+    encounterRollMapping: new UntypedFormArray([]),
+    encounters: new UntypedFormArray([]),
   });
-  get mappingForm(): FormArray {
-    return this.form.get('encounterRollMapping') as FormArray;
+  get mappingForm(): UntypedFormArray {
+    return this.form.get('encounterRollMapping') as UntypedFormArray;
   }
 
   constructor() {}
@@ -127,7 +127,7 @@ export class EditEncounterTableComponent implements OnInit, OnChanges {
   private addFormRow(idx?: number, isCreature?: boolean): void {
     const newRowContentControl = doesExist(isCreature)
       ? buildFormFromObject(isCreature ? new Encounter() : new EncounterTable())
-      : new FormControl({});
+      : new UntypedFormControl({});
     const newMapping = {} as IRollMapping;
     if (doesExist(idx)) {
       newMapping.index = idx;
@@ -147,7 +147,7 @@ export class EditEncounterTableComponent implements OnInit, OnChanges {
   private editFormRow(idx: number, isCreature?: boolean): void {
     const rowContentControl = doesExist(isCreature)
       ? buildFormFromObject(isCreature ? new Encounter() : new EncounterTable())
-      : new FormControl({});
+      : new UntypedFormControl({});
     this.encountersForm.setControl(idx, rowContentControl);
   }
 

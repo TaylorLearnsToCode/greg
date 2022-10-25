@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { SharedModule } from '@shared/shared.module';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -23,7 +23,7 @@ describe('DiceRollerFormComponent', () => {
     component = fixture.componentInstance;
     component.parentForm = buildFormFromObject(
       new DiceRolled(1, 6)
-    ) as FormGroup;
+    ) as UntypedFormGroup;
     fixture.detectChanges();
   });
 
