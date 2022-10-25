@@ -28,6 +28,14 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -65,8 +73,12 @@
           "configurations": {
             "production": {
               "browserTarget": "guided-random-encounter-generator:build:production"
+            },
+            "development": {
+              "browserTarget": "guided-random-encounter-generator:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

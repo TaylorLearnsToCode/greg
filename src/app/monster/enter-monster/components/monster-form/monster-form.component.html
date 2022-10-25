@@ -5,4 +5,24 @@
       {{ systems[systemCode] }}
     </option>
   </select>
+
+  <label>Movement:</label>
+  <span>
+    <input formControlName="movement" type="number" />" (<input
+      formControlName="charge"
+      type="number"
+    />")
+  </span>
+
+  <label>No. Appearing:</label>
+  <greg-dice-roller-form
+    name="noAppearing"
+    [parentForm]="monsterForm.get('noAppearing')"
+  ></greg-dice-roller-form>
+
+  <label>Chance In Lair:</label>
+  <span> <input formControlName="chanceInLair" type="number" />% </span>
+
+  <label>Morale</label>
+  <input formControlName="morale" type="number" />
 </form>
