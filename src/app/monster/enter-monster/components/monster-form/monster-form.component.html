@@ -1,1 +1,8 @@
-<p>monster-form works!</p>
+<form [formGroup]="monsterForm">
+  <label>System:</label>
+  <select formControlName="system">
+    <option *ngFor="let systemCode of systemsList" [ngValue]="systemCode">
+      {{ systems[systemCode] }}
+    </option>
+  </select>
+</form>
