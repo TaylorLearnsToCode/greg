@@ -31,6 +31,7 @@ export class MonsterFormComponent implements OnInit {
       new WwwMonster()
     ) as UntypedFormGroup;
     this.monsterForm.addControl('system', new FormControl<string>('www'));
+    console.warn(this.monsterForm);
   }
 
   private initializeSystemsMap(): void {
