@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
-import { WwwMonster } from '@shared/model/www-monster.model';
+import {
+  FormControl,
+  UntypedFormArray,
+  UntypedFormGroup,
+} from '@angular/forms';
+import { WeaponEquivalence, WwwMonster } from '@shared/model/www-monster.model';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 
 /** Presenter element for user entry of new monsters. UNDER CONSTRUCTION */
@@ -17,8 +21,16 @@ export class MonsterFormComponent implements OnInit {
     return Object.keys(this.systems);
   }
 
+  get meleeAttacks(): UntypedFormArray {
+    return this.monsterForm.get('meleeAttacks') as UntypedFormArray;
+  }
+
+  get missileAttacks(): UntypedFormArray {
+    return this.monsterForm.get('missileAttacks') as UntypedFormArray;
+  }
+
   /** MonsterFormComponent Constructor */
-  constructor(private formBuilder: FormBuilder) {}
+  constructor() {}
 
   /** Initializer Method */
   ngOnInit(): void {
@@ -26,12 +38,19 @@ export class MonsterFormComponent implements OnInit {
     this.initializeSystemsMap();
   }
 
+  addMeleeAttack(): void {
+    this.meleeAttacks.push(buildFormFromObject(new WeaponEquivalence()));
+  }
+
+  addMissileAttack(): void {
+    this.missileAttacks.push(buildFormFromObject(new WeaponEquivalence()));
+  }
+
   private initializeMonsterForm(): void {
     this.monsterForm = buildFormFromObject(
       new WwwMonster()
     ) as UntypedFormGroup;
     this.monsterForm.addControl('system', new FormControl<string>('www'));
-    console.warn(this.monsterForm);
   }
 
   private initializeSystemsMap(): void {
