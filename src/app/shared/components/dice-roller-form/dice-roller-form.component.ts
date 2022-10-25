@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 /**
  * Presenter component to house re-usable form for when a user is defining
@@ -12,7 +12,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class DiceRollerFormComponent {
   /** The form in which the dice are being defined. */
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   /** If TRUE, breaks the UI such that the no. and pips appear on one line and modifier and multiplier on a second. */
   @Input() splitLines: boolean;
 }

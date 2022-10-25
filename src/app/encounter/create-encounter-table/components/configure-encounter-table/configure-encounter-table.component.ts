@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { CreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.enum';
 import { ICreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.interface';
 import { EncounterLocation } from '@encounter/encounter-shared/model/encounter-locationS.enum';
@@ -36,10 +36,10 @@ export class ConfigureEncounterTableComponent implements OnInit, OnChanges {
     (key) => !RegExp(/^\d+$/).test(key)
   );
 
-  form: FormGroup = new FormGroup({
-    location: new FormControl(),
-    name: new FormControl(),
-    type: new FormControl(),
+  form: UntypedFormGroup = new UntypedFormGroup({
+    location: new UntypedFormControl(),
+    name: new UntypedFormControl(),
+    type: new UntypedFormControl(),
   });
 
   constructor() {}

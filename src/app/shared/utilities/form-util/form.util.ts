@@ -1,8 +1,8 @@
 import {
   AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
 } from '@angular/forms';
 import { doesExist } from '../common-util/common.util';
 
@@ -26,7 +26,7 @@ export function buildFormFromObject(obj: any): AbstractControl {
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
     return buildFormGroupFromObject(obj);
   } else {
-    return new FormControl(obj);
+    return new UntypedFormControl(obj);
   }
 }
 
@@ -35,8 +35,8 @@ export function buildFormFromObject(obj: any): AbstractControl {
  * to the array's contents.
  * @param  {any[]} array
  */
-function buildFormArrayFromArray(array: any[]): FormArray {
-  const formArray = new FormArray([]);
+function buildFormArrayFromArray(array: any[]): UntypedFormArray {
+  const formArray = new UntypedFormArray([]);
   array.forEach((element) => formArray.push(buildFormFromObject(element)));
   return formArray;
 }
@@ -46,8 +46,8 @@ function buildFormArrayFromArray(array: any[]): FormArray {
  * to the object's properties and their values.
  * @param  {any} obj
  */
-function buildFormGroupFromObject(obj: any): FormGroup {
-  const formGroup = new FormGroup({});
+function buildFormGroupFromObject(obj: any): UntypedFormGroup {
+  const formGroup = new UntypedFormGroup({});
   Object.keys(obj).forEach((key) =>
     formGroup.addControl(key, buildFormFromObject(obj[key]))
   );

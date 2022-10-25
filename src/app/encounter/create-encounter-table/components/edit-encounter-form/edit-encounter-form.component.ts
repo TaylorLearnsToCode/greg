@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Monster } from '@shared/model/monster.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -10,10 +10,10 @@ import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
   styleUrls: ['./edit-encounter-form.component.scss'],
 })
 export class EditEncounterFormComponent implements OnInit {
-  @Input() encounterForm: FormGroup;
+  @Input() encounterForm: UntypedFormGroup;
 
-  get monstersArray(): FormArray {
-    return this.encounterForm.get('monsters') as FormArray;
+  get monstersArray(): UntypedFormArray {
+    return this.encounterForm.get('monsters') as UntypedFormArray;
   }
 
   constructor() {}

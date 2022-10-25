@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Weapon } from '@shared/model/weapon.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -10,14 +10,14 @@ import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
   styleUrls: ['./weapons-form.component.scss'],
 })
 export class WeaponsFormComponent implements OnInit {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   @Input() set splitLines(split: boolean) {
     this.layoutClass = split ? 'split' : 'single';
   }
 
   layoutClass = 'single';
-  get weaponsFormArray(): FormArray {
-    return this.parentForm.get('attacks') as FormArray;
+  get weaponsFormArray(): UntypedFormArray {
+    return this.parentForm.get('attacks') as UntypedFormArray;
   }
 
   constructor() {}

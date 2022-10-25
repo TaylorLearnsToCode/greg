@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { CreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.enum';
 import { ICreateEncounterTableAction } from '@encounter/create-encounter-table/model/create-encounter-table-action.interface';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
@@ -25,14 +25,14 @@ export class ConfigureDiceRolledComponent implements OnInit, OnChanges {
     ICreateEncounterTableAction
   >();
 
-  get diceRolledForm(): FormArray {
-    return this.form.get('diceRolled') as FormArray;
+  get diceRolledForm(): UntypedFormArray {
+    return this.form.get('diceRolled') as UntypedFormArray;
   }
-  set diceRolledForm(array: FormArray) {
+  set diceRolledForm(array: UntypedFormArray) {
     this.form.setControl('diceRolled', array);
   }
-  form: FormGroup = new FormGroup({
-    diceRolled: new FormArray([]),
+  form: UntypedFormGroup = new UntypedFormGroup({
+    diceRolled: new UntypedFormArray([]),
   });
 
   constructor() {}
@@ -80,6 +80,6 @@ export class ConfigureDiceRolledComponent implements OnInit, OnChanges {
   }
 
   private buildDiceRolledFormArray(diceRolled: DiceRolled[]): void {
-    this.diceRolledForm = buildFormFromObject(diceRolled) as FormArray;
+    this.diceRolledForm = buildFormFromObject(diceRolled) as UntypedFormArray;
   }
 }

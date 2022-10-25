@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SaveAsClass } from '@shared/model/save-as-class.enum';
 
 @Component({
@@ -8,15 +8,15 @@ import { SaveAsClass } from '@shared/model/save-as-class.enum';
   styleUrls: ['./save-as-form.component.scss'],
 })
 export class SaveAsFormComponent implements OnInit {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
 
   readonly AS_CLASS = SaveAsClass;
   readonly AS_CLASS_OPTIONS = Object.keys(SaveAsClass).filter(
     (key) => !RegExp(/^\d+$/).test(key)
   );
 
-  get saveAsForm(): FormGroup {
-    return this.parentForm.get('saveAs') as FormGroup;
+  get saveAsForm(): UntypedFormGroup {
+    return this.parentForm.get('saveAs') as UntypedFormGroup;
   }
 
   constructor() {}
