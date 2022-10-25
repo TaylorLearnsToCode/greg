@@ -1,0 +1,16 @@
+div {
+  margin-bottom: 0.5em;
+
+  &.action-bar {
+    text-align: center;
+  }
+
+  &.add-pool {
+    text-align: center;
+  }
+
+  &.form-array {
+    display: grid;
+    grid-template-columns: 3em 1fr 4em;
+  }
+}

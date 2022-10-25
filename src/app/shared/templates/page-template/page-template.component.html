@@ -1,0 +1,15 @@
+<div [ngClass]="wrapperClasses">
+  <header>
+    <h1>{{ headerText }}</h1>
+    <div *ngIf="shouldDisplayHeaderSubtext">{{ headerSubtext }}</div>
+  </header>
+  <section class="menu-bar">
+    <greg-menu-bar></greg-menu-bar>
+  </section>
+  <section class="first">
+    <ng-content select="first-content"></ng-content>
+  </section>
+  <section *ngIf="pageDisplayMode !== PAGE_DISPLAY_MODES.SINGLE" class="second">
+    <ng-content select="second-content"></ng-content>
+  </section>
+</div>

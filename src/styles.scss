@@ -1,5 +1,19 @@
 @import "assets/styles/variables";
 
+a {
+  color: $anchor-orange-light;
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+    font-style: italic;
+  }
+
+  &:visited {
+    color: $anchor-orange-dark;
+  }
+}
+
 body {
   background-color: $background-black;
   color: $text-white;
@@ -12,4 +26,21 @@ h4,
 h5,
 h6 {
   color: $header-orange;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+label {
+  color: $anchor-orange-light;
+  font-weight: bold;
 }

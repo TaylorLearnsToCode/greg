@@ -1,0 +1,30 @@
+<form [formGroup]="parentForm">
+  <ng-container formArrayName="attacks">
+    <ng-container *ngIf="weaponsFormArray.length > 0; else noAttacks">
+      <ng-container
+        *ngFor="let attack of weaponsFormArray.controls; index as a"
+      >
+        <div [formGroupName]="a" [ngClass]="layoutClass">
+          <span class="input">
+            <input formControlName="name" type="text" />
+          </span>
+          <span class="add-remove">
+            (
+            <a (click)="addWeapon(a)">+</a>
+            /
+            <a (click)="removeWeapon(a)">-</a>
+            )
+          </span>
+          <span class="dice-form">
+            <greg-dice-roller-form
+              [parentForm]="attack.get('damage')"
+            ></greg-dice-roller-form>
+          </span>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noAttacks>
+      <a (click)="addWeapon()">Add a Weapon or Attack</a>
+    </ng-template>
+  </ng-container>
+</form>

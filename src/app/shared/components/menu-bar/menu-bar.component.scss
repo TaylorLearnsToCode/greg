@@ -1,0 +1,28 @@
+@import "../../../../assets/styles/variables";
+
+section {
+  display: inline-block;
+  padding: 0.2em;
+}
+
+span {
+  background-color: $background-dark;
+  border: solid 1px $text-white;
+  color: $header-orange;
+  padding: 0.1em 0.5em;
+  position: relative;
+
+  &:hover {
+    background-color: $header-orange;
+    color: $background-dark;
+    cursor: pointer;
+  }
+}
+
+.child-options {
+  position: absolute;
+
+  > * {
+    display: block;
+  }
+}

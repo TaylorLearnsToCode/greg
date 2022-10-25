@@ -5,13 +5,24 @@
   To learn more about this file see: https://angular.io/config/solution-tsconfig.
 */
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "lib": ["es2018", "dom"],
+    "module": "es2020",
+    "moduleResolution": "node",
+    "outDir": "./dist/out-tsc",
+    "paths": {
+      "@encounter/*": ["src/app/encounter/*"],
+      "@monster/*": ["src/app/monster/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@test/*": ["src/assets/test-data/*"]
     },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-]
+    "sourceMap": true,
+    "target": "es2020"
+  }
 }

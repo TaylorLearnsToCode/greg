@@ -1,0 +1,28 @@
+<h2>Configure Dice Pool</h2>
+<section [formGroup]="form">
+  <div class="action-bar">
+    <a (click)="clear()">Clear</a>
+    |
+    <a (click)="reset()">Reset</a>
+    |
+    <a (click)="save()">Save</a>
+  </div>
+  <ng-container *ngIf="diceRolledForm.length > 0; else noDice">
+    <div class="form-array" formArrayName="diceRolled">
+      <ng-container *ngFor="let die of diceRolledForm.controls; index as i">
+        <span> {{ i + 1 }}. </span>
+        <span>
+          <greg-dice-roller-form [parentForm]="die"></greg-dice-roller-form>
+        </span>
+        <span>
+          <a (click)="addDicePool(i)">+</a>
+          /
+          <a (click)="removeDicePool(i)">-</a>
+        </span>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-template #noDice>
+    <div class="add-pool"><a (click)="addDicePool()">Add Dice Pool</a></div>
+  </ng-template>
+</section>
