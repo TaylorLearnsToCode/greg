@@ -1,1 +1,22 @@
-<p>monster-display works!</p>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Movement</th>
+    <th>TreasureType</th>
+    <th>Morale</th>
+  </tr>
+  <tr *ngFor="let monster of monster$ | async">
+    <td>{{ monster.name }}</td>
+    <td>{{ monster.movement }}"</td>
+    <td>{{ monster.treasureType }}</td>
+    <td>{{ monster.morale }}</td>
+  </tr>
+</table>
+<section>
+  <button (click)="exportMonsters()">Export</button>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <label>Import: </label>
+  <input #fileInput type="file" />
+  <br />
+  <button *ngIf="showImport" (click)="importMonsters()">Import Selected</button>
+</section>
