@@ -1,22 +1,42 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Movement</th>
+    <th>Move (Charge)</th>
+    <th>No. Appearing</th>
+    <th>Chance In Lair</th>
     <th>TreasureType</th>
     <th>Morale</th>
+    <th>Attacks As</th>
+    <th>Defends As</th>
+    <th>Special</th>
   </tr>
   <tr *ngFor="let monster of monster$ | async">
     <td>{{ monster.name }}</td>
-    <td>{{ monster.movement }}"</td>
+    <td>{{ monster.movement }}" ({{ monster.charge }}")</td>
+    <td>{{ monster.noAppearing | boundedRange }}</td>
+    <td>{{ monster.chanceInLair }}%</td>
     <td>{{ monster.treasureType }}</td>
     <td>{{ monster.morale }}</td>
+    <td>
+      {{ weaponDisplay(monster.meleeAttacks) }}
+      <ng-container *ngIf="monster.missileAttacks?.length">
+        <br />
+        {{ weaponDisplay(monster.missileAttacks) }}
+      </ng-container>
+    </td>
+    <td>
+      {{ defendsAsDisplay(monster.defendsAs) }}
+    </td>
+    <td>{{ monster.specialQualities.substring(5) }} ...</td>
   </tr>
 </table>
 <section>
   <button (click)="exportMonsters()">Export</button>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <label>Import: </label>
-  <input #fileInput type="file" />
+  <input #fileInput (change)="checkShouldImport()" type="file" />
   <br />
-  <button *ngIf="showImport" (click)="importMonsters()">Import Selected</button>
+  <button *ngIf="shouldImport$ | async" (click)="importMonsters()">
+    Import Selected
+  </button>
 </section>

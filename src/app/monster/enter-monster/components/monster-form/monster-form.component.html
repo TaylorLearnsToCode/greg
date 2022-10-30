@@ -26,11 +26,14 @@
   <label>Chance In Lair:</label>
   <span> <input formControlName="chanceInLair" type="number" />% </span>
 
-  <label>Morale</label>
+  <label>Treasure Type:</label>
+  <input formControlName="treasureType" type="string" />
+
+  <label>Morale:</label>
   <input formControlName="morale" type="number" />
 
   <span>
-    <label>Melee Attacks</label>
+    <label>Melee Attacks:</label>
     <br />
     <button (click)="addMeleeAttack()">Add Attack</button>
   </span>
@@ -62,7 +65,7 @@
   </div>
 
   <span>
-    <label>Missile Attacks</label>
+    <label>Missile Attacks:</label>
     <br />
     <button (click)="addMissileAttack()">Add Missile Attack</button>
   </span>
@@ -87,7 +90,7 @@
     </table>
   </div>
 
-  <label>Special Qualities</label>
+  <label>Special Qualities:</label>
   <textarea formControlName="specialQualities"></textarea>
 </form>
 <section>
