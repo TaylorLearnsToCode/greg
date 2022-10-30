@@ -1,6 +1,7 @@
 import { DiceRolled } from './dice-rolled.model';
 
 export class WwwMonster {
+  name: string = '';
   movement: number = 0;
   charge: number = 0;
   noAppearing: DiceRolled = new DiceRolled();

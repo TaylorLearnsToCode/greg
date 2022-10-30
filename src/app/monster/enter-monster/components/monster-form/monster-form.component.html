@@ -6,6 +6,9 @@
     </option>
   </select>
 
+  <label>Name</label>
+  <input formControlName="name" type="string" />
+
   <label>Movement:</label>
   <span>
     <input formControlName="movement" type="number" />" (<input
@@ -87,3 +90,6 @@
   <label>Special Qualities</label>
   <textarea formControlName="specialQualities"></textarea>
 </form>
+<section>
+  <button (click)="addMonsterToSource()">Add</button>
+</section>

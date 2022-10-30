@@ -4,6 +4,7 @@ import {
   UntypedFormArray,
   UntypedFormGroup,
 } from '@angular/forms';
+import { MonsterControllerService } from '@monster/enter-monster/services/monster-controller/monster-controller.service';
 import { WeaponEquivalence, WwwMonster } from '@shared/model/www-monster.model';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 
@@ -30,7 +31,7 @@ export class MonsterFormComponent implements OnInit {
   }
 
   /** MonsterFormComponent Constructor */
-  constructor() {}
+  constructor(private monsterController: MonsterControllerService) {}
 
   /** Initializer Method */
   ngOnInit(): void {
@@ -44,6 +45,11 @@ export class MonsterFormComponent implements OnInit {
 
   addMissileAttack(): void {
     this.missileAttacks.push(buildFormFromObject(new WeaponEquivalence()));
+  }
+
+  addMonsterToSource(): void {
+    this.monsterController.addMonster(this.monsterForm.value);
+    this.monsterForm.reset();
   }
 
   private initializeMonsterForm(): void {
