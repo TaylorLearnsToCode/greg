@@ -33,7 +33,11 @@ export class MonsterControllerService {
     const fileReader: FileReader = new FileReader();
     fileReader.addEventListener('load', () => {
       const result: string = fileReader.result as string;
-      this.monsterSource.next(JSON.parse(result));
+      const newMonsters: WwwMonster[] = JSON.parse(result);
+      if (this.monsters.length) {
+        newMonsters.unshift(...this.monsters);
+      }
+      this.monsterSource.next(newMonsters);
     });
     fileReader.readAsText(file);
   }
