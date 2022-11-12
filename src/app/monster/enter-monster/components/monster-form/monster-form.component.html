@@ -1,1 +1,98 @@
-<p>monster-form works!</p>
+<form [formGroup]="monsterForm">
+  <label>System:</label>
+  <select formControlName="system">
+    <option *ngFor="let systemCode of systemsList" [ngValue]="systemCode">
+      {{ systems[systemCode] }}
+    </option>
+  </select>
+
+  <label>Name</label>
+  <input formControlName="name" type="string" />
+
+  <label>Movement:</label>
+  <span>
+    <input formControlName="movement" type="number" />" (<input
+      formControlName="charge"
+      type="number"
+    />")
+  </span>
+
+  <label>No. Appearing:</label>
+  <greg-dice-roller-form
+    name="noAppearing"
+    [parentForm]="monsterForm.get('noAppearing')"
+  ></greg-dice-roller-form>
+
+  <label>Chance In Lair:</label>
+  <span> <input formControlName="chanceInLair" type="number" />% </span>
+
+  <label>Treasure Type:</label>
+  <input formControlName="treasureType" type="string" />
+
+  <label>Morale:</label>
+  <input formControlName="morale" type="number" />
+
+  <span>
+    <label>Melee Attacks:</label>
+    <br />
+    <button (click)="addMeleeAttack()">Add Attack</button>
+  </span>
+  <div formArrayName="meleeAttacks">
+    <table>
+      <tr>
+        <th>Man Equiv.</th>
+        <th>Attack Type</th>
+        <th>Modifier</th>
+        <th>Length</th>
+      </tr>
+      <tr *ngFor="let melee of meleeAttacks.controls; index as i">
+        <ng-container [formGroupName]="i">
+          <td>
+            <input formControlName="no" type="number" />
+          </td>
+          <td>
+            <input formControlName="type" type="string" />
+          </td>
+          <td>
+            <input formControlName="modifier" type="number" />
+          </td>
+          <td>
+            <input formControlName="length" type="number" />
+          </td>
+        </ng-container>
+      </tr>
+    </table>
+  </div>
+
+  <span>
+    <label>Missile Attacks:</label>
+    <br />
+    <button (click)="addMissileAttack()">Add Missile Attack</button>
+  </span>
+  <div formArrayName="missileAttacks">
+    <table>
+      <tr>
+        <th>Man Equiv.</th>
+        <th>Attack Type</th>
+        <th>Modifier</th>
+      </tr>
+      <tr *ngFor="let attack of missileAttacks.controls; index as i">
+        <ng-container [formGroupName]="i">
+          <td><input formControlName="no" type="number" /></td>
+          <td>
+            <input formControlName="type" type="string" />
+          </td>
+          <td>
+            <input formControlName="modifier" type="number" />
+          </td>
+        </ng-container>
+      </tr>
+    </table>
+  </div>
+
+  <label>Special Qualities:</label>
+  <textarea formControlName="specialQualities"></textarea>
+</form>
+<section>
+  <button (click)="addMonsterToSource()">Add</button>
+</section>
