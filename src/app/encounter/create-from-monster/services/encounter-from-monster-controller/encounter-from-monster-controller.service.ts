@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EncounterListEntry } from '@encounter/create-from-monster/model/encounter-list-entry';
-import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { BoundedRange } from '@shared/model/bounded-range.model';
 import { WwwMonster } from '@shared/model/www-monster.model';
+import { ExportService } from '@shared/services/export/export.service';
 import { cloneObject } from '@shared/utilities/common-util/common.util';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -18,7 +19,27 @@ export class EncounterFromMonsterControllerService {
   encounterList$: Observable<EncounterListEntry[]> =
     this.encounterListSource.asObservable();
 
-  constructor() {}
+  constructor(private exportService: ExportService) {}
+
+  clearEncounterList(): void {
+    this.encounterListSource.next([]);
+  }
+
+  exportEncounterList(): void {
+    this.exportService.exportAsJson(this.encounterList, 'encounter-list');
+  }
+
+  importExistingList(file: File): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const newList: EncounterListEntry[] = JSON.parse(result);
+      const nextList = this.encounterList;
+      nextList.push(...newList);
+      this.encounterListSource.next(nextList);
+    });
+    fileReader.readAsText(file);
+  }
 
   importMonsterList(file: File): void {
     const fileReader: FileReader = new FileReader();
@@ -28,7 +49,7 @@ export class EncounterFromMonsterControllerService {
       const nextList: EncounterListEntry[] = this.encounterList;
       for (let monster of monsterList) {
         nextList.push({
-          range: new DiceRolled(),
+          range: new BoundedRange(),
           encounter: monster,
         } as EncounterListEntry);
       }
