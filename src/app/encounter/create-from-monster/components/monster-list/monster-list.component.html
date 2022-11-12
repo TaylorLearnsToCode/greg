@@ -1,29 +1,46 @@
 <ng-container *ngIf="encounterList$ | async">
-  <label>Import Monsters:</label>
-  <input #fileInput (change)="importMonsters()" type="file" />
+  <section>
+    <span>
+      <label>From Monsters: </label>
+      <input #monsterInput (change)="importMonsters()" type="file" />
+    </span>
+    <span>
+      <label>From Saved List: </label>
+      <input #listInput (change)="importExistingList()" type="file" />
+    </span>
+  </section>
 
   <form [formGroup]="encounterListForm">
     <table formArrayName="encounterFormArray">
       <colgroup>
-        <col width="190px;" />
+        <col width="100px;" />
         <col />
       </colgroup>
       <tr>
         <th>Roll</th>
-        <th>Result</th>
+        <th style="text-align: left; padding-left: 3em">Result</th>
       </tr>
       <tr *ngFor="let enc of encounterListFormArray.controls; index as i">
         <ng-container [formGroupName]="i">
           <td>
-            <greg-dice-roller-form
+            <greg-bounded-range-form
               [parentForm]="enc.get('range')"
-            ></greg-dice-roller-form>
+            ></greg-bounded-range-form>
           </td>
           <td>
-            {{ i | json }}
+            <greg-dice-roller-form
+              [parentForm]="enc.get('encounter').get('noAppearing')"
+            ></greg-dice-roller-form>
+            {{ enc.get("encounter").get("name").value }}
+            ( Treasure Type:
+            {{ enc.get("encounter").get("treasureType").value }} )
           </td>
         </ng-container>
       </tr>
     </table>
+    <section>
+      <button (click)="exportEncounterTable()">Export</button>
+      <button (click)="clearEncounterTable()">Clear</button>
+    </section>
   </form>
 </ng-container>

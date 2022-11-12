@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BoundedRangeFormComponent } from './components/bounded-range-form/bounded-range-form.component';
 import { DiceRollerFormComponent } from './components/dice-roller-form/dice-roller-form.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { SaveAsFormComponent } from './components/save-as-form/save-as-form.component';
@@ -11,6 +12,7 @@ import { PageTemplateComponent } from './templates/page-template/page-template.c
 
 /** "Private" container for components in the Shared Module to reduce file length, re-using the variable as a spread */
 const components = [
+  BoundedRangeFormComponent,
   DiceRollerFormComponent,
   MenuBarComponent,
   PageTemplateComponent,

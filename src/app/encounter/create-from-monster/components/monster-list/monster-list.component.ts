@@ -17,8 +17,11 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./monster-list.component.scss'],
 })
 export class MonsterListComponent implements OnInit {
-  @ViewChild('fileInput')
-  importButtonRef: ElementRef;
+  @ViewChild('listInput')
+  listInputRef: ElementRef;
+
+  @ViewChild('monsterInput')
+  monsterInputRef: ElementRef;
 
   encounterList$: Observable<EncounterListEntry[]>;
   encounterListForm: UntypedFormGroup;
@@ -28,8 +31,12 @@ export class MonsterListComponent implements OnInit {
     >;
   }
 
-  private get importButton(): HTMLInputElement {
-    return this.importButtonRef.nativeElement as HTMLInputElement;
+  private get listInput(): HTMLInputElement {
+    return this.listInputRef.nativeElement as HTMLInputElement;
+  }
+
+  private get monsterInput(): HTMLInputElement {
+    return this.monsterInputRef.nativeElement as HTMLInputElement;
   }
 
   constructor(
@@ -45,9 +52,22 @@ export class MonsterListComponent implements OnInit {
     );
   }
 
+  clearEncounterTable(): void {
+    this.controllerService.clearEncounterList();
+  }
+
+  exportEncounterTable(): void {
+    this.controllerService.exportEncounterList();
+  }
+
+  importExistingList(): void {
+    this.controllerService.importExistingList(this.listInput.files[0]);
+    this.listInput.value = '';
+  }
+
   importMonsters(): void {
-    this.controllerService.importMonsterList(this.importButton.files[0]);
-    this.importButton.value = '';
+    this.controllerService.importMonsterList(this.monsterInput.files[0]);
+    this.monsterInput.value = '';
   }
 
   private buildEncounterListForm(encounterList: EncounterListEntry[]): void {
