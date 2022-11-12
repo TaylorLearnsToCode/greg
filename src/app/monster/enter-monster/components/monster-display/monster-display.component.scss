@@ -8,4 +8,9 @@ td {
 
 section {
   text-align: center;
+
+  .import-export {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+  }
 }

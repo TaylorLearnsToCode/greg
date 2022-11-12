@@ -1,5 +1,6 @@
 <table>
   <tr>
+    <th>&nbsp;</th>
     <th>Name</th>
     <th>Move (Charge)</th>
     <th>No. Appearing</th>
@@ -10,7 +11,8 @@
     <th>Defends As</th>
     <th>Special</th>
   </tr>
-  <tr *ngFor="let monster of monster$ | async">
+  <tr *ngFor="let monster of monster$ | async; index as i">
+    <td><input type="checkbox" [value]="i" /></td>
     <td>{{ monster.name }}</td>
     <td>{{ monster.movement }}" ({{ monster.charge }}")</td>
     <td>{{ monster.noAppearing | boundedRange }}</td>
@@ -27,16 +29,16 @@
     <td>
       {{ defendsAsDisplay(monster.defendsAs) }}
     </td>
-    <td>{{ monster.specialQualities.substring(5) }} ...</td>
+    <td>{{ monster.specialQualities.substring(0, 5) }} ...</td>
   </tr>
 </table>
 <section>
-  <button (click)="exportMonsters()">Export</button>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <label>Import: </label>
-  <input #fileInput (change)="checkShouldImport()" type="file" />
-  <br />
-  <button *ngIf="shouldImport$ | async" (click)="importMonsters()">
-    Import Selected
-  </button>
+  <div class="import-export">
+    <button (click)="exportMonsters()">Export</button>
+
+    <label>Import: </label>
+    <input #fileInput (change)="importMonsters()" type="file" />
+  </div>
+
+  <button (click)="removeSelectedMonsters()">Remove Monsters</button>
 </section>

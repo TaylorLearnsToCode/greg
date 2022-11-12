@@ -5,8 +5,7 @@ import {
   WeaponEquivalence,
   WwwMonster,
 } from '@shared/model/www-monster.model';
-import { doesExist } from '@shared/utilities/common-util/common.util';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 /** Presenter element for showing a monster object. UNDER CONSTRUCTION. */
 @Component({
@@ -16,10 +15,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class MonsterDisplayComponent implements OnInit {
   monster$: Observable<WwwMonster[]>;
-  shouldImport$: Observable<boolean>;
-  private shouldImportSource: BehaviorSubject<boolean> = new BehaviorSubject(
-    false
-  );
 
   @ViewChild('fileInput')
   importButton: ElementRef;
@@ -30,14 +25,6 @@ export class MonsterDisplayComponent implements OnInit {
   /** Initializer Method */
   ngOnInit(): void {
     this.monster$ = this.monsterController.monster$;
-    this.shouldImport$ = this.shouldImportSource.asObservable();
-  }
-
-  checkShouldImport(): void {
-    this.shouldImportSource.next(
-      doesExist(this.importButton) &&
-        this.importButton.nativeElement.value != ''
-    );
   }
 
   defendsAsDisplay(defense: ManEquivalence): string {
@@ -54,6 +41,11 @@ export class MonsterDisplayComponent implements OnInit {
     this.monsterController.importMonsters(
       this.importButton.nativeElement.files[0]
     );
+    this.importButton.nativeElement.value = '';
+  }
+
+  removeSelectedMonsters(): void {
+    alert('Coming next');
   }
 
   weaponDisplay(weapons: WeaponEquivalence[]): string {
