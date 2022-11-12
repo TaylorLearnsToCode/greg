@@ -8,7 +8,9 @@ export class BoundedRange {
   }
 
   constructor(boundedRange?: BoundedRange) {
-    boundedRange = doesExist(boundedRange) ? boundedRange : boundedRange;
+    boundedRange = doesExist(boundedRange)
+      ? boundedRange
+      : ({} as BoundedRange);
     if (
       doesExist(boundedRange.range) &&
       this.validateRange(boundedRange.range)

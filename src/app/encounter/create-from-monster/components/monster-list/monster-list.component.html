@@ -1,0 +1,29 @@
+<ng-container *ngIf="encounterList$ | async">
+  <label>Import Monsters:</label>
+  <input #fileInput (change)="importMonsters()" type="file" />
+
+  <form [formGroup]="encounterListForm">
+    <table formArrayName="encounterFormArray">
+      <colgroup>
+        <col width="190px;" />
+        <col />
+      </colgroup>
+      <tr>
+        <th>Roll</th>
+        <th>Result</th>
+      </tr>
+      <tr *ngFor="let enc of encounterListFormArray.controls; index as i">
+        <ng-container [formGroupName]="i">
+          <td>
+            <greg-dice-roller-form
+              [parentForm]="enc.get('range')"
+            ></greg-dice-roller-form>
+          </td>
+          <td>
+            {{ i | json }}
+          </td>
+        </ng-container>
+      </tr>
+    </table>
+  </form>
+</ng-container>
