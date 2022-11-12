@@ -1,6 +1,6 @@
 <table>
   <tr>
-    <th>&nbsp;</th>
+    <th *ngIf="removeMode$ | async">&nbsp;</th>
     <th>Name</th>
     <th>Move (Charge)</th>
     <th>No. Appearing</th>
@@ -12,7 +12,9 @@
     <th>Special</th>
   </tr>
   <tr *ngFor="let monster of monster$ | async; index as i">
-    <td><input type="checkbox" [value]="i" /></td>
+    <td *ngIf="removeMode$ | async">
+      <input type="checkbox" (change)="toggleCheckedMonsterAt(i)" />
+    </td>
     <td>{{ monster.name }}</td>
     <td>{{ monster.movement }}" ({{ monster.charge }}")</td>
     <td>{{ monster.noAppearing | boundedRange }}</td>
@@ -40,5 +42,14 @@
     <input #fileInput (change)="importMonsters()" type="file" />
   </div>
 
-  <button (click)="removeSelectedMonsters()">Remove Monsters</button>
+  <ng-container *ngIf="removeMode$ | async; else readMode">
+    <div>
+      <button (click)="removeSelectedMonsters()">Remove</button>
+      <button (click)="toggleRemoveMonsters()">Cancel</button>
+    </div>
+  </ng-container>
+  <ng-template #readMode>
+    <button (click)="toggleRemoveMonsters()">Remove Monsters</button>
+    <button (click)="clearMonsters()">Remove All</button>
+  </ng-template>
 </section>
