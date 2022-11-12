@@ -8,6 +8,13 @@ const createEncounterTable: LoadChildren = () =>
     '@encounter/create-encounter-table/create-encounter-table.module'
   ).then((m) => m.CreateEncounterTableModule);
 
+/** LoadChildren function to load the Create Encounter Table from Monsters module */
+/* istanbul ignore next */
+const createFromMonster: LoadChildren = () =>
+  import('@encounter/create-from-monster/create-from-monster.module').then(
+    (m) => m.CreateFromMonsterModule
+  );
+
 /** LoadChildren function to load the Encounter Not Found module */
 /* istanbul ignore next */
 const encounterNotFound: LoadChildren = () =>
@@ -33,6 +40,7 @@ const monsterNotFound: LoadChildren = () =>
 export enum RouteLabels {
   'create-encounter-table' = 'Create Encounter Table',
   'create-encounter-table-deux' = 'Create Encounter Table Deux',
+  'create-from-monster' = 'Create from Monster',
   encounter = 'Encounter',
   'enter-monster' = 'Enter Monster',
   monster = 'Monster',
@@ -57,6 +65,10 @@ function buildEncounterRoute(): Route {
   encounterRoutes.push({
     path: 'create-encounter-table',
     loadChildren: createEncounterTable,
+  });
+  encounterRoutes.push({
+    path: 'create-from-monster',
+    loadChildren: createFromMonster,
   });
   encounterRoutes.push({
     path: '**',

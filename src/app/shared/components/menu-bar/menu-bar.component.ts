@@ -17,7 +17,7 @@ export class MenuBarComponent {
 
   /**
    * Component Constructor
-   * @param  {Router} privaterouter
+   * @param  {Router} router private
    */
   constructor(private router: Router) {}
 
