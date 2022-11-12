@@ -49,8 +49,7 @@ export class MonsterFormComponent implements OnInit {
 
   addMonsterToSource(): void {
     this.monsterController.addMonster(this.monsterForm.value);
-    this.monsterForm.reset();
-    this.monsterForm.get('system').setValue('www');
+    this.initializeMonsterForm();
   }
 
   private initializeMonsterForm(): void {

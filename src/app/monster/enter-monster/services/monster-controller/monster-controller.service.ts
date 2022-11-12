@@ -25,6 +25,10 @@ export class MonsterControllerService {
     this.monsterSource.next(monsters);
   }
 
+  clearMonsters(): void {
+    this.monsterSource.next([]);
+  }
+
   exportMonsters(): void {
     this.exportService.exportAsJson(this.monsters, 'monsters');
   }
@@ -40,5 +44,14 @@ export class MonsterControllerService {
       this.monsterSource.next(newMonsters);
     });
     fileReader.readAsText(file);
+  }
+
+  removeMonstersAt(indices: number[]): void {
+    indices.sort((a: number, b: number) => b - a);
+    const newMonsters = this.monsters;
+    for (let i of indices) {
+      newMonsters.splice(i, 1);
+    }
+    this.monsterSource.next(newMonsters);
   }
 }

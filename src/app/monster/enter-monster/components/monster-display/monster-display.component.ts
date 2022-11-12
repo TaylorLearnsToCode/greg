@@ -5,7 +5,7 @@ import {
   WeaponEquivalence,
   WwwMonster,
 } from '@shared/model/www-monster.model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 /** Presenter element for showing a monster object. UNDER CONSTRUCTION. */
 @Component({
@@ -15,9 +15,18 @@ import { Observable } from 'rxjs';
 })
 export class MonsterDisplayComponent implements OnInit {
   monster$: Observable<WwwMonster[]>;
+  removeMode$: Observable<boolean>;
 
   @ViewChild('fileInput')
   importButton: ElementRef;
+
+  private checkedMonsters: number[] = [];
+  private removeModeSource: BehaviorSubject<boolean> = new BehaviorSubject(
+    false
+  );
+  private get removeMode(): boolean {
+    return this.removeModeSource.value;
+  }
 
   /** MonsterDisplayComponent Constructor */
   constructor(private monsterController: MonsterControllerService) {}
@@ -25,6 +34,11 @@ export class MonsterDisplayComponent implements OnInit {
   /** Initializer Method */
   ngOnInit(): void {
     this.monster$ = this.monsterController.monster$;
+    this.removeMode$ = this.removeModeSource.asObservable();
+  }
+
+  clearMonsters(): void {
+    this.monsterController.clearMonsters();
   }
 
   defendsAsDisplay(defense: ManEquivalence): string {
@@ -45,7 +59,24 @@ export class MonsterDisplayComponent implements OnInit {
   }
 
   removeSelectedMonsters(): void {
-    alert('Coming next');
+    this.monsterController.removeMonstersAt(this.checkedMonsters);
+    this.toggleRemoveMonsters();
+  }
+
+  toggleCheckedMonsterAt(index: number): void {
+    const selectedIndex = this.checkedMonsters.indexOf(index);
+    if (selectedIndex < 0) {
+      this.checkedMonsters.push(index);
+    } else {
+      this.checkedMonsters.splice(selectedIndex, 1);
+    }
+  }
+
+  toggleRemoveMonsters(): void {
+    if (this.removeMode) {
+      this.checkedMonsters = [];
+    }
+    this.removeModeSource.next(!this.removeMode);
   }
 
   weaponDisplay(weapons: WeaponEquivalence[]): string {
