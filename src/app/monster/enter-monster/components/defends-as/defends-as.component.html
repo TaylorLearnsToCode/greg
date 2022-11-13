@@ -1,0 +1,9 @@
+<ng-container [formGroup]="parentForm">
+  <input formControlName="no" type="number" />
+  &nbsp;
+  <select formControlName="troopType">
+    <option *ngFor="let type of TROOP_TYPES" [ngValue]="type">
+      {{ type }}
+    </option>
+  </select>
+</ng-container>

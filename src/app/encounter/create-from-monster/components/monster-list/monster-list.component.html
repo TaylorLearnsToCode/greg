@@ -1,0 +1,60 @@
+<ng-container *ngIf="encounterList$ | async">
+  <section>
+    <span>
+      <label>From Monsters: </label>
+      <input #monsterInput (change)="importMonsters()" type="file" />
+    </span>
+    <span>
+      <label>From Saved List: </label>
+      <input #listInput (change)="importExistingList()" type="file" />
+    </span>
+  </section>
+
+  <form [formGroup]="encounterListForm">
+    <table>
+      <colgroup>
+        <col width="100px;" />
+        <col />
+      </colgroup>
+      <tr>
+        <th>Roll</th>
+        <th style="text-align: left; padding-left: 3em">Result</th>
+      </tr>
+      <ng-container formArrayName="encounterFormArray">
+        <tr *ngFor="let enc of encounterListFormArray.controls; index as i">
+          <ng-container [formGroupName]="i">
+            <td>
+              <greg-bounded-range-form
+                [parentForm]="enc.get('range')"
+              ></greg-bounded-range-form>
+            </td>
+            <td>
+              <greg-dice-roller-form
+                [parentForm]="enc.get('encounter').get('noAppearing')"
+              ></greg-dice-roller-form>
+              {{ enc.get("encounter").get("name").value }}
+              ( Treasure Type:
+              {{ enc.get("encounter").get("treasureType").value }} )
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </table>
+  </form>
+</ng-container>
+
+<section>
+  <button (click)="exportEncounterTable()">Export</button>
+  <button (click)="clearEncounterTable()">Clear</button>
+</section>
+
+<form [formGroup]="diceToRollForm">
+  <ng-container *ngIf="diceToRoll$ | async">
+    <section>
+      <label>Dice to Roll:</label>
+      <greg-dice-roller-form
+        [parentForm]="diceToRollForm"
+      ></greg-dice-roller-form>
+    </section>
+  </ng-container>
+</form>
