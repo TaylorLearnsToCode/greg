@@ -40,9 +40,21 @@
         </tr>
       </ng-container>
     </table>
-    <section>
-      <button (click)="exportEncounterTable()">Export</button>
-      <button (click)="clearEncounterTable()">Clear</button>
-    </section>
   </form>
 </ng-container>
+
+<section>
+  <button (click)="exportEncounterTable()">Export</button>
+  <button (click)="clearEncounterTable()">Clear</button>
+</section>
+
+<form [formGroup]="diceToRollForm">
+  <ng-container *ngIf="diceToRoll$ | async">
+    <section>
+      <label>Dice to Roll:</label>
+      <greg-dice-roller-form
+        [parentForm]="diceToRollForm"
+      ></greg-dice-roller-form>
+    </section>
+  </ng-container>
+</form>
