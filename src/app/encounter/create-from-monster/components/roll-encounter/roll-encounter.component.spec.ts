@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EncounterListComponent } from './encounter-list.component';
+import { RollEncounterComponent } from './roll-encounter.component';
 
-describe('EncounterListComponent', () => {
-  let component: EncounterListComponent;
-  let fixture: ComponentFixture<EncounterListComponent>;
+describe('RollEncounterComponent', () => {
+  let component: RollEncounterComponent;
+  let fixture: ComponentFixture<RollEncounterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EncounterListComponent ]
+      declarations: [ RollEncounterComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EncounterListComponent);
+    fixture = TestBed.createComponent(RollEncounterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
