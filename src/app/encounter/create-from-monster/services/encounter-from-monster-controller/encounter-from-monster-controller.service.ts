@@ -3,7 +3,10 @@ import { EncounterListEntry } from '@encounter/create-from-monster/model/encount
 import { BoundedRange } from '@shared/model/bounded-range.model';
 import { WwwMonster } from '@shared/model/www-monster.model';
 import { ExportService } from '@shared/services/export/export.service';
-import { cloneObject } from '@shared/utilities/common-util/common.util';
+import {
+  cloneObject,
+  doesExist,
+} from '@shared/utilities/common-util/common.util';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -25,7 +28,10 @@ export class EncounterFromMonsterControllerService {
     this.encounterListSource.next([]);
   }
 
-  exportEncounterList(): void {
+  exportEncounterList(encounterList?: EncounterListEntry[]): void {
+    if (doesExist(encounterList)) {
+      this.encounterListSource.next(encounterList);
+    }
     this.exportService.exportAsJson(this.encounterList, 'encounter-list');
   }
 

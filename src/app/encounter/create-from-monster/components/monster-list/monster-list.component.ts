@@ -57,7 +57,9 @@ export class MonsterListComponent implements OnInit {
   }
 
   exportEncounterTable(): void {
-    this.controllerService.exportEncounterList();
+    this.controllerService.exportEncounterList(
+      this.encounterListFormArray.value
+    );
   }
 
   importExistingList(): void {
