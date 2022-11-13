@@ -11,7 +11,7 @@
   </section>
 
   <form [formGroup]="encounterListForm">
-    <table formArrayName="encounterFormArray">
+    <table>
       <colgroup>
         <col width="100px;" />
         <col />
@@ -20,23 +20,25 @@
         <th>Roll</th>
         <th style="text-align: left; padding-left: 3em">Result</th>
       </tr>
-      <tr *ngFor="let enc of encounterListFormArray.controls; index as i">
-        <ng-container [formGroupName]="i">
-          <td>
-            <greg-bounded-range-form
-              [parentForm]="enc.get('range')"
-            ></greg-bounded-range-form>
-          </td>
-          <td>
-            <greg-dice-roller-form
-              [parentForm]="enc.get('encounter').get('noAppearing')"
-            ></greg-dice-roller-form>
-            {{ enc.get("encounter").get("name").value }}
-            ( Treasure Type:
-            {{ enc.get("encounter").get("treasureType").value }} )
-          </td>
-        </ng-container>
-      </tr>
+      <ng-container formArrayName="encounterFormArray">
+        <tr *ngFor="let enc of encounterListFormArray.controls; index as i">
+          <ng-container [formGroupName]="i">
+            <td>
+              <greg-bounded-range-form
+                [parentForm]="enc.get('range')"
+              ></greg-bounded-range-form>
+            </td>
+            <td>
+              <greg-dice-roller-form
+                [parentForm]="enc.get('encounter').get('noAppearing')"
+              ></greg-dice-roller-form>
+              {{ enc.get("encounter").get("name").value }}
+              ( Treasure Type:
+              {{ enc.get("encounter").get("treasureType").value }} )
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
     </table>
     <section>
       <button (click)="exportEncounterTable()">Export</button>
