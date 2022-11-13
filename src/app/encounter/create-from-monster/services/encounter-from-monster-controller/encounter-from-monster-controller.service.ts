@@ -4,6 +4,7 @@ import { BoundedRange } from '@shared/model/bounded-range.model';
 import { WwwMonster } from '@shared/model/www-monster.model';
 import { ExportService } from '@shared/services/export/export.service';
 import {
+  areEqual,
   cloneObject,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
@@ -28,10 +29,11 @@ export class EncounterFromMonsterControllerService {
     this.encounterListSource.next([]);
   }
 
-  exportEncounterList(encounterList?: EncounterListEntry[]): void {
-    if (doesExist(encounterList)) {
-      this.encounterListSource.next(encounterList);
-    }
+  compareEncounterList(newList: EncounterListEntry[]): boolean {
+    return areEqual(newList, this.encounterList);
+  }
+
+  exportEncounterList(): void {
     this.exportService.exportAsJson(this.encounterList, 'encounter-list');
   }
 
@@ -62,5 +64,11 @@ export class EncounterFromMonsterControllerService {
       this.encounterListSource.next(nextList);
     });
     fileReader.readAsText(file);
+  }
+
+  updateEncounterList(encounterList: EncounterListEntry[]): void {
+    if (doesExist(encounterList)) {
+      this.encounterListSource.next(encounterList);
+    }
   }
 }
