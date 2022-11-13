@@ -90,6 +90,13 @@
     </table>
   </div>
 
+  <label>Defends As:</label>
+  <span>
+    <greg-defends-as
+      [parentForm]="monsterForm.get('defendsAs')"
+    ></greg-defends-as>
+  </span>
+
   <label>Special Qualities:</label>
   <textarea formControlName="specialQualities"></textarea>
 </form>
