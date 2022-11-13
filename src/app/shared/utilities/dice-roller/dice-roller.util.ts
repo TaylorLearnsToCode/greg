@@ -66,7 +66,7 @@ export function rollDice(dice: DiceRolled | DiceRolled[]): number;
  */
 export function rollDice(...dice: any[]): number {
   let result = 0;
-  if (dice[0] instanceof DiceRolled || Array.isArray(dice[0])) {
+  if (dice[0] instanceof DiceRolled || Array.isArray(dice)) {
     dice.forEach((die) => {
       if (Array.isArray(die)) {
         die.forEach((subDie) => (result += rollDice(subDie)));
@@ -77,7 +77,7 @@ export function rollDice(...dice: any[]): number {
       }
     });
   } else {
-    const [no, pips, modifier, multiplier] = dice;
+    const { no, pips, modifier, multiplier } = dice;
     result += rollDice(
       new DiceRolled({ no, pips, modifier, multiplier } as DiceRolled)
     );

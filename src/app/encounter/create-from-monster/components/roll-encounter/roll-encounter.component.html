@@ -1,1 +1,11 @@
-<p>roll-encounter works!</p>
+<ng-container *ngIf="encounterList$ | async as encounterList">
+  <ng-container *ngIf="diceToRoll$ | async as diceToRoll">
+    <section>
+      <button (click)="rollEncounter(encounterList, diceToRoll)">
+        Roll Encounter
+      </button>
+    </section>
+    <h3>Monster</h3>
+    <p>{{ noEncountered }} {{ monsterName }}</p>
+  </ng-container>
+</ng-container>

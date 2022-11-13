@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EncounterListEntry } from '@encounter/create-from-monster/model/encounter-list-entry';
 import { BoundedRange } from '@shared/model/bounded-range.model';
+import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { WwwMonster } from '@shared/model/www-monster.model';
 import { ExportService } from '@shared/services/export/export.service';
 import {
@@ -14,12 +15,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EncounterFromMonsterControllerService {
+  private diceToRollSource: BehaviorSubject<DiceRolled> = new BehaviorSubject(
+    new DiceRolled()
+  );
+  private get diceToRoll(): DiceRolled {
+    return cloneObject(this.diceToRollSource.value);
+  }
   private encounterListSource: BehaviorSubject<EncounterListEntry[]> =
     new BehaviorSubject([]);
   private get encounterList(): EncounterListEntry[] {
     return cloneObject(this.encounterListSource.value);
   }
 
+  diceToRoll$: Observable<DiceRolled> = this.diceToRollSource.asObservable();
   encounterList$: Observable<EncounterListEntry[]> =
     this.encounterListSource.asObservable();
 
@@ -27,6 +35,10 @@ export class EncounterFromMonsterControllerService {
 
   clearEncounterList(): void {
     this.encounterListSource.next([]);
+  }
+
+  compareDiceRolled(newDice: DiceRolled): boolean {
+    return areEqual(newDice, this.diceToRoll);
   }
 
   compareEncounterList(newList: EncounterListEntry[]): boolean {
@@ -64,6 +76,12 @@ export class EncounterFromMonsterControllerService {
       this.encounterListSource.next(nextList);
     });
     fileReader.readAsText(file);
+  }
+
+  updateDiceToRoll(newDice: DiceRolled): void {
+    if (doesExist(newDice)) {
+      this.diceToRollSource.next(newDice);
+    }
   }
 
   updateEncounterList(encounterList: EncounterListEntry[]): void {
