@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -7,8 +13,9 @@ import {
 } from '@angular/forms';
 import { EncounterListEntry } from '@encounter/create-from-monster/model/encounter-list-entry';
 import { EncounterFromMonsterControllerService } from '@encounter/create-from-monster/services/encounter-from-monster-controller/encounter-from-monster-controller.service';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +23,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './monster-list.component.html',
   styleUrls: ['./monster-list.component.scss'],
 })
-export class MonsterListComponent implements OnInit {
+export class MonsterListComponent implements OnInit, OnDestroy {
   @ViewChild('listInput')
   listInputRef: ElementRef;
 
@@ -30,6 +37,8 @@ export class MonsterListComponent implements OnInit {
       FormControl<EncounterListEntry>
     >;
   }
+
+  private formSub: Subscription;
 
   private get listInput(): HTMLInputElement {
     return this.listInputRef.nativeElement as HTMLInputElement;
@@ -50,6 +59,28 @@ export class MonsterListComponent implements OnInit {
     this.encounterList$ = this.controllerService.encounterList$.pipe(
       tap((list) => this.buildEncounterListForm(list))
     );
+    this.formSub = this.encounterListForm.valueChanges
+      .pipe(tap((changes) => this.saveValues(changes)))
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    if (doesExist(this.formSub)) {
+      this.formSub.unsubscribe();
+    }
+  }
+
+  saveValues(changes: any): void {
+    if (
+      doesExist(changes) &&
+      !this.controllerService.compareEncounterList(
+        this.encounterListFormArray.value
+      )
+    ) {
+      this.controllerService.updateEncounterList(
+        this.encounterListFormArray.value
+      );
+    }
   }
 
   clearEncounterTable(): void {
@@ -57,9 +88,7 @@ export class MonsterListComponent implements OnInit {
   }
 
   exportEncounterTable(): void {
-    this.controllerService.exportEncounterList(
-      this.encounterListFormArray.value
-    );
+    this.controllerService.exportEncounterList();
   }
 
   importExistingList(): void {
