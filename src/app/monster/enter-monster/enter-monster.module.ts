@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { EnterMonsterComponent } from './components/enter-monster/enter-monster.component';
 import { MonsterDisplayComponent } from './components/monster-display/monster-display.component';
 import { MonsterFormComponent } from './components/monster-form/monster-form.component';
+import { DefendsAsComponent } from './components/defends-as/defends-as.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     EnterMonsterComponent,
     MonsterFormComponent,
     MonsterDisplayComponent,
+    DefendsAsComponent,
   ],
   imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
   exports: [RouterModule],
