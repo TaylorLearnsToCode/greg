@@ -29,11 +29,25 @@ const enterMonster: LoadChildren = () =>
     (m) => m.EnterMonsterModule
   );
 
+/** LoadChildren function to load the Enter Treasure module */
+/* istanbul ignore next */
+const enterTreasure: LoadChildren = () =>
+  import('@treasure/enter-treasure/enter-treasure.module').then(
+    (m) => m.EnterTreasureModule
+  );
+
 /** LoadChildren function to load the Monster Not Found module */
 /* istanbul ignore next */
 const monsterNotFound: LoadChildren = () =>
   import('@monster/monster-not-found/monster-not-found.module').then(
     (m) => m.MonsterNotFoundModule
+  );
+
+/** LoadChildren function to load the Treasure Not Found module */
+/* istanbul ignore next */
+const treasureNotFound: LoadChildren = () =>
+  import('@treasure/treasure-not-found/treasure-not-found.module').then(
+    (m) => m.TreasureNotFoundModule
   );
 
 /** Human-readable labels for configured route paths */
@@ -43,7 +57,9 @@ export enum RouteLabels {
   'create-from-monster' = 'Create from Monster',
   encounter = 'Encounter',
   'enter-monster' = 'Enter Monster',
+  'enter-treasure' = 'Enter Treasure',
   monster = 'Monster',
+  treasure = 'Treasure',
   welcome = 'Home',
 }
 
@@ -56,6 +72,7 @@ export function readRoutes(): Route[] {
   });
   routes.push(buildMonsterRoute());
   routes.push(buildEncounterRoute());
+  routes.push(buildTreasureRoute());
   return routes;
 }
 
@@ -94,5 +111,22 @@ function buildMonsterRoute(): Route {
   return {
     path: 'monster',
     children: [...monsterRoutes],
+  } as Route;
+}
+
+/** "Private" function to return exclusively routes pertaining to the Treasure module. */
+function buildTreasureRoute(): Route {
+  const treasureRoutes: Route[] = [];
+  treasureRoutes.push({
+    path: 'enter-treasure',
+    loadChildren: enterTreasure,
+  });
+  treasureRoutes.push({
+    path: '**',
+    loadChildren: treasureNotFound,
+  });
+  return {
+    path: 'treasure',
+    children: [...treasureRoutes],
   } as Route;
 }
