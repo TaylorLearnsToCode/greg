@@ -15,7 +15,8 @@
       "@encounter/*": ["src/app/encounter/*"],
       "@monster/*": ["src/app/monster/*"],
       "@shared/*": ["src/app/shared/*"],
-      "@test/*": ["src/assets/test-data/*"]
+      "@test/*": ["src/assets/test-data/*"],
+      "@treasure/*": ["src/app/treasure/*"]
     },
     "sourceMap": true,
     "target": "es2015"
