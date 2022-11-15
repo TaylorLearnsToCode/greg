@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { ExportService } from '@shared/services/export/export.service';
 import {
   areEqual,
   cloneObject,
@@ -38,7 +39,7 @@ export class EnterTreasureControllerService {
 
   treasureList$ = this.treasureListSource.asObservable();
 
-  constructor() {}
+  constructor(private exportService: ExportService) {}
 
   addEntry(newEntry: TreasureListEntry): void {
     if (doesExist(newEntry)) {
@@ -62,6 +63,20 @@ export class EnterTreasureControllerService {
 
   containsEntry(newEntries: TreasureListEntry): boolean {
     return !!this.entries.filter((entry) => areEqual(entry, newEntries)).length;
+  }
+
+  exportList(): void {
+    this.exportService.exportAsJson(this.treasureList, 'treasure-list');
+  }
+
+  importSavedList(file: File): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const newList: TreasureList = JSON.parse(result);
+      this.treasureListSource.next(newList);
+    });
+    fileReader.readAsText(file);
   }
 
   updateDiceToRoll(newDice: DiceRolled): void {
