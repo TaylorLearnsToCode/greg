@@ -1,0 +1,7 @@
+@import '../../../../../assets/styles/variables';
+
+section {
+  @include twoAcross();
+  column-gap: 1em;
+  text-align: center;
+}

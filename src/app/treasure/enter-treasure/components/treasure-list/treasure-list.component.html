@@ -1,3 +1,11 @@
 <p *ngIf="treasureList$ | async as treasureList">
   {{ treasureList | json }}
 </p>
+<section>
+  <button (click)="exportList()">Export</button>
+
+  <span>
+    <label>Import: </label>
+    <input #listImport (change)="importSavedList()" type="file" />
+  </span>
+</section>
