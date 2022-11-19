@@ -43,6 +43,12 @@ export class MapOrMagicControllerServiceService {
     return newName === this.listName;
   }
 
+  removeItemAt(index: number): void {
+    const nextList = this.itemList;
+    nextList.splice(index, 1);
+    this.itemList = nextList;
+  }
+
   updateListName(newName: string): void {
     if (doesExist(newName)) {
       this.listName = newName;
