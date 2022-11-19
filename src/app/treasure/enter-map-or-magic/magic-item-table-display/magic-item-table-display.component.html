@@ -25,4 +25,7 @@
 <section>
   <button (click)="clearTable()">Clear List</button>
   <button (click)="exportList()">Export List</button>
+  <br />
+  <label>Import List: </label>
+  <input #importListInput (change)="importList()" type="file" />
 </section>
