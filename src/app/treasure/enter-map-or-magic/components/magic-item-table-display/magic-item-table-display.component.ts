@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { tap } from 'rxjs/operators';
-import { MapOrMagicControllerServiceService } from '../services/map-or-magic-controller-service/map-or-magic-controller-service.service';
+import { MapOrMagicControllerServiceService } from '@treasure/enter-map-or-magic/services/map-or-magic-controller-service/map-or-magic-controller-service.service';
 
 @Component({
   selector: 'greg-magic-item-table-display',
