@@ -1,0 +1,10 @@
+@import '../../../../assets/styles/variables';
+
+form {
+  @include twoAcross();
+}
+
+section {
+  margin-top: 0.5em;
+  text-align: center;
+}

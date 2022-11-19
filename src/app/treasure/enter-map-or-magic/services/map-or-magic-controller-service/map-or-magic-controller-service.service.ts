@@ -5,71 +5,78 @@ import {
   doesExist,
 } from '@shared/utilities/common-util/common.util';
 import {
-  MagicItem,
-  MagicItemList,
+  MagicItemTable,
+  MagicItemTableEntry,
 } from '@treasure/treasure-common/model/magic-item.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapOrMagicControllerServiceService {
-  private listNameSource: BehaviorSubject<string> = new BehaviorSubject('');
-  private get listName(): string {
-    return cloneObject(this.listNameSource.value);
+  private magicItemTableSource: BehaviorSubject<MagicItemTable> =
+    new BehaviorSubject(new MagicItemTable());
+  private get magicItemTable(): MagicItemTable {
+    return cloneObject(this.magicItemTableSource.value);
   }
-  private set listName(newName: string) {
-    this.listNameSource.next(newName);
-  }
-
-  private itemListSource: BehaviorSubject<MagicItem[]> = new BehaviorSubject(
-    []
-  );
-  private get itemList(): MagicItem[] {
-    return cloneObject(this.itemListSource.value);
-  }
-  private set itemList(newList: MagicItem[]) {
-    this.itemListSource.next(newList);
+  private set magicItemTable(newTable: MagicItemTable) {
+    this.magicItemTableSource.next(newTable);
   }
 
-  itemList$: Observable<MagicItem[]> = this.itemListSource.asObservable();
-  listName$: Observable<string> = this.listNameSource.asObservable();
+  magicItemTable$: Observable<MagicItemTable> =
+    this.magicItemTableSource.asObservable();
 
   constructor(private exportService: ExportService) {}
 
-  addToList(newItem: MagicItem): void {
-    const nextList = this.itemList;
-    nextList.push(newItem);
-    this.itemList = nextList;
+  addTableEntry(entry: MagicItemTableEntry): void {
+    const nextTable: MagicItemTable = this.magicItemTable;
+    nextTable.entries.push(entry);
+    this.magicItemTable = nextTable;
   }
 
-  compareListName(newName: string): boolean {
-    return newName === this.listName;
+  clearTable(): void {
+    this.magicItemTable = new MagicItemTable();
   }
 
-  exportList(): void {
-    const name: string =
-      doesExist(this.listName) && this.listName.length
-        ? this.listName
-        : 'MagicItems';
+  exportTable(): void {
+    const exportTable: MagicItemTable = this.magicItemTable;
     this.exportService.exportAsJson(
-      {
-        name,
-        entries: this.itemList,
-      } as MagicItemList,
-      name
+      exportTable,
+      doesExist(exportTable.name) && exportTable.name.length
+        ? exportTable.name
+        : 'Magic Item'
     );
   }
 
-  removeItemAt(index: number): void {
-    const nextList = this.itemList;
-    nextList.splice(index, 1);
-    this.itemList = nextList;
+  importTable(file: File): void {
+    this.importJSONFileToSubject(file, this.magicItemTableSource);
   }
 
-  updateListName(newName: string): void {
-    if (doesExist(newName)) {
-      this.listName = newName;
-    }
+  private importJSONFileToSubject(file: File, loadTarget: Subject<any>): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const nextItem = JSON.parse(result);
+      loadTarget.next(nextItem);
+    });
+    fileReader.readAsText(file);
+  }
+
+  removeEntryAt(index: number): void {
+    const nextTable: MagicItemTable = this.magicItemTable;
+    nextTable.entries.splice(index, 1);
+    this.magicItemTable = nextTable;
+  }
+
+  setTableName(name: string): void {
+    const nextTable: MagicItemTable = this.magicItemTable;
+    nextTable.name = name;
+    this.magicItemTable = nextTable;
+    /* Try this to see if it improves legibility:
+    this.magicItemTable = {
+      ...this.magicItemTable,
+      name
+    };
+    */
   }
 }
