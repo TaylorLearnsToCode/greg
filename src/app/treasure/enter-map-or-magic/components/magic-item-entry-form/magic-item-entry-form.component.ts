@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { MagicItemTableEntry } from '@treasure/treasure-common/model/magic-item.model';
-import { MapOrMagicControllerServiceService } from '../services/map-or-magic-controller-service/map-or-magic-controller-service.service';
+import { MapOrMagicControllerServiceService } from '@treasure/enter-map-or-magic/services/map-or-magic-controller-service/map-or-magic-controller-service.service';
 
 @Component({
   selector: 'greg-magic-item-entry-form',
