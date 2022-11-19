@@ -3,6 +3,7 @@ import {
   FormArray,
   FormControl,
   FormGroup,
+  UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
@@ -11,7 +12,6 @@ import {
   doesExist,
 } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { MagicItem } from '@treasure/treasure-common/model/magic-item.model';
 import {
   GemOrJewel,
   TreasureListEntry,
@@ -34,10 +34,8 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
   get jewelryForm(): FormArray<FormControl<GemOrJewel>> {
     return this.entryForm.get('jewelry') as FormArray<FormControl<GemOrJewel>>;
   }
-  get mapsAndMagicForm(): FormArray<FormControl<MagicItem>> {
-    return this.entryForm.get('mapsAndMagic') as FormArray<
-      FormControl<MagicItem>
-    >;
+  get mapsAndMagicForm(): FormArray<UntypedFormControl> {
+    return this.entryForm.get('mapsAndMagic') as FormArray<UntypedFormControl>;
   }
 
   private destroySource: Subject<void> = new Subject();
@@ -66,13 +64,14 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
   }
 
   addMapOrMagic(): void {
-    const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
+    alert('not yet implemented');
+    /*const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
     if (doesExist(treasureList.mapsAndMagic)) {
-      treasureList.mapsAndMagic.push(new MagicItem());
+      treasureList.mapsAndMagic.push(new MagicItemEntry());
     } else {
-      treasureList.mapsAndMagic = [new MagicItem()];
+      treasureList.mapsAndMagic = [new MagicItemEntry()];
     }
-    this.entryForm = buildFormFromObject(treasureList) as FormGroup;
+    this.entryForm = buildFormFromObject(treasureList) as FormGroup;*/
   }
 
   private saveDiceToRoll(changes: any): void {

@@ -1,0 +1,31 @@
+<label>List: </label>
+<input
+  #listNameInput
+  type="text"
+  (change)="updateListName()"
+  [(ngModel)]="listName"
+/>
+
+<ng-container *ngIf="magicItemTable$ | async as magicItemTable">
+  <table>
+    <colgroup>
+      <col style="width: 2em" />
+      <col />
+      <col style="width: 2em" />
+    </colgroup>
+    <tr>
+      <th>d100</th>
+      <th colspan="2" class="result-header">Result</th>
+    </tr>
+    <tr *ngFor="let item of magicItemTable.entries; index as i">
+      <td>{{ item.low }} - {{ item.high }}</td>
+      <td>{{ item.entry.name }}: {{ item.entry.description }}</td>
+      <td><a (click)="removeEntryAt(i)">X</a></td>
+    </tr>
+  </table>
+</ng-container>
+
+<section>
+  <button (click)="clearTable()">Clear List</button>
+  <button (click)="exportList()">Export List</button>
+</section>

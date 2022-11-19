@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 import { TreasureCommonModule } from '@treasure/treasure-common/treasure-common.module';
 import { EnterMapOrMagicComponent } from './components/enter-map-or-magic/enter-map-or-magic.component';
-import { MapOrMagicFormComponent } from './components/map-or-magic-form/map-or-magic-form.component';
-import { MapOrMagicListComponent } from './components/map-or-magic-list/map-or-magic-list.component';
+import { MagicItemEntryFormComponent } from './magic-item-entry-form/magic-item-entry-form.component';
+import { MagicItemTableDisplayComponent } from './magic-item-table-display/magic-item-table-display.component';
 
 const routes: Routes = [
   {
@@ -15,11 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    EnterMapOrMagicComponent,
-    MapOrMagicFormComponent,
-    MapOrMagicListComponent,
-  ],
+  declarations: [EnterMapOrMagicComponent, MagicItemEntryFormComponent, MagicItemTableDisplayComponent],
   imports: [
     CommonModule,
     TreasureCommonModule,
