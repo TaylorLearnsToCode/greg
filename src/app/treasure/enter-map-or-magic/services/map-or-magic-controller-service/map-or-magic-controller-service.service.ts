@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
+import { ExportService } from '@shared/services/export/export.service';
 import {
   cloneObject,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
-import { MagicItem } from '@treasure/treasure-common/model/magic-item.model';
+import {
+  MagicItem,
+  MagicItemList,
+} from '@treasure/treasure-common/model/magic-item.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -31,7 +35,7 @@ export class MapOrMagicControllerServiceService {
   itemList$: Observable<MagicItem[]> = this.itemListSource.asObservable();
   listName$: Observable<string> = this.listNameSource.asObservable();
 
-  constructor() {}
+  constructor(private exportService: ExportService) {}
 
   addToList(newItem: MagicItem): void {
     const nextList = this.itemList;
@@ -41,6 +45,20 @@ export class MapOrMagicControllerServiceService {
 
   compareListName(newName: string): boolean {
     return newName === this.listName;
+  }
+
+  exportList(): void {
+    const name: string =
+      doesExist(this.listName) && this.listName.length
+        ? this.listName
+        : 'MagicItems';
+    this.exportService.exportAsJson(
+      {
+        name,
+        entries: this.itemList,
+      } as MagicItemList,
+      name
+    );
   }
 
   removeItemAt(index: number): void {
