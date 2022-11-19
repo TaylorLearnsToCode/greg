@@ -1,4 +1,6 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { MagicItem } from '@treasure/enter-treasure/model/magic-item.model';
+import { AbstractTreasureItem } from './treasure-item.model';
 
 export class TreasureListEntry {
   type: string = '';
@@ -10,17 +12,8 @@ export class TreasureListEntry {
   jewelry: GemOrJewel[] = [];
 }
 
-class AbstractTreasureItem {
-  chanceOf: number = 0;
-}
-
 export class Specie extends AbstractTreasureItem {
   amount: DiceRolled = new DiceRolled();
-}
-
-export class MagicItem extends AbstractTreasureItem {
-  type: string = '';
-  description: string = '';
 }
 
 export class GemOrJewel extends AbstractTreasureItem {

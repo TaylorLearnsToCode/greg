@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MagicItem } from '@treasure/enter-treasure/model/treasure-list-entry.model';
+import { MagicItem } from '@treasure/enter-treasure/model/magic-item.model';
 
 @Component({
   selector: 'greg-magic-item-form',
