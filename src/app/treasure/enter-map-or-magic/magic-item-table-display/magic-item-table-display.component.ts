@@ -10,6 +10,8 @@ import { MapOrMagicControllerServiceService } from '../services/map-or-magic-con
 export class MagicItemTableDisplayComponent implements OnInit {
   @ViewChild('listNameInput')
   listNameRef: ElementRef;
+  @ViewChild('importListInput')
+  importListInputRef: ElementRef;
 
   listName: string;
   magicItemTable$ = this.controllerService.magicItemTable$.pipe(
@@ -26,6 +28,13 @@ export class MagicItemTableDisplayComponent implements OnInit {
 
   exportList(): void {
     this.controllerService.exportTable();
+  }
+
+  importList(): void {
+    this.controllerService.importTable(
+      this.importListInputRef.nativeElement.files[0]
+    );
+    this.importListInputRef.nativeElement.value = '';
   }
 
   removeEntryAt(index: number): void {
