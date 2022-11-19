@@ -1,1 +1,7 @@
-<p>Map or Magic</p>
+<label>Map or Magic Item Entry</label>
+<form [formGroup]="mapOrMagicEntryForm">
+  <greg-magic-item-form
+    [parentForm]="mapOrMagicEntryForm"
+  ></greg-magic-item-form>
+</form>
+<button (click)="addToList()">Add to List</button>

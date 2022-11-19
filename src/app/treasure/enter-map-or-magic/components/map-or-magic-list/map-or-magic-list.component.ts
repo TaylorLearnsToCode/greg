@@ -6,7 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MapOrMagicControllerServiceService } from '@treasure/enter-map-or-magic/services/map-or-magic-controller-service/map-or-magic-controller-service.service';
-import { Subject } from 'rxjs';
+import { MagicItem } from '@treasure/treasure-common/model/magic-item.model';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -17,6 +18,8 @@ import { takeUntil, tap } from 'rxjs/operators';
 export class MapOrMagicListComponent implements OnInit, OnDestroy {
   @ViewChild('listNameInput')
   listNameInputRef: ElementRef;
+
+  itemList$: Observable<MagicItem[]>;
 
   private destroySource: Subject<void> = new Subject();
   private get listNameInput(): HTMLInputElement {
@@ -32,6 +35,7 @@ export class MapOrMagicListComponent implements OnInit, OnDestroy {
         takeUntil(this.destroySource)
       )
       .subscribe();
+    this.itemList$ = this.controllerService.itemList$;
   }
 
   ngOnDestroy(): void {
