@@ -1,6 +1,6 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
-import { MagicItem } from '@treasure/enter-treasure/model/magic-item.model';
-import { AbstractTreasureItem } from './treasure-item.model';
+import { MagicItem } from '@treasure/treasure-common/model/magic-item.model';
+import { AbstractTreasureItem } from '@treasure/treasure-common/model/treasure-item.model';
 
 export class TreasureListEntry {
   type: string = '';

@@ -1,11 +1,11 @@
-import { AbstractTreasureItem } from './treasure-item.model';
+import { AbstractTreasureItem } from '@treasure/treasure-common/model/treasure-item.model';
 
 export class MagicItem extends AbstractTreasureItem {
   type: string = '';
   description: string = '';
 }
 
-export class MagicItemListEntry {
+export class MagicItemList {
   name: string = '';
   entries: MagicItem[] = [];
 }
