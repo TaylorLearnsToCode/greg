@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DiceRangePipe } from '@shared/pipes/dice-range/dice-range.pipe';
 import { BoundedRangeFormComponent } from './components/bounded-range-form/bounded-range-form.component';
 import { DiceRollerFormComponent } from './components/dice-roller-form/dice-roller-form.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
@@ -21,7 +22,7 @@ const components = [
   WelcomeComponent,
 ];
 
-const pipes = [BoundedRangePipe];
+const pipes = [DiceRangePipe, BoundedRangePipe];
 
 /** Container module for common or shared widgets and templates for the GREG app */
 @NgModule({
