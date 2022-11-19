@@ -42,6 +42,10 @@ export class MapOrMagicListComponent implements OnInit, OnDestroy {
     this.destroySource.next();
   }
 
+  removeEntry(index: number): void {
+    this.controllerService.removeItemAt(index);
+  }
+
   updateListName(): void {
     const name: string = this.listNameInput.value;
     if (!this.controllerService.compareListName(name)) {
