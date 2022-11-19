@@ -42,6 +42,10 @@ export class MapOrMagicListComponent implements OnInit, OnDestroy {
     this.destroySource.next();
   }
 
+  exportList(): void {
+    this.controllerService.exportList();
+  }
+
   removeEntry(index: number): void {
     this.controllerService.removeItemAt(index);
   }
