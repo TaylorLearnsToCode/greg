@@ -22,6 +22,13 @@ const encounterNotFound: LoadChildren = () =>
     (m) => m.EncounterNotFoundModule
   );
 
+/** LoadChildren function to load the Enter Map or Magic Item module */
+/* istanbul ignore next */
+const enterMapOrMagic: LoadChildren = () =>
+  import('@treasure/enter-map-or-magic/enter-map-or-magic.module').then(
+    (m) => m.EnterMapOrMagicModule
+  );
+
 /** LoadChildren function to load the Enter Monster module */
 /* istanbul ignore next */
 const enterMonster: LoadChildren = () =>
@@ -56,6 +63,7 @@ export enum RouteLabels {
   'create-encounter-table-deux' = 'Create Encounter Table Deux',
   'create-from-monster' = 'Create from Monster',
   encounter = 'Encounter',
+  'enter-map-or-magic' = 'Enter Map or Magic Item',
   'enter-monster' = 'Enter Monster',
   'enter-treasure' = 'Enter Treasure',
   monster = 'Monster',
@@ -120,6 +128,10 @@ function buildTreasureRoute(): Route {
   treasureRoutes.push({
     path: 'enter-treasure',
     loadChildren: enterTreasure,
+  });
+  treasureRoutes.push({
+    path: 'enter-map-or-magic',
+    loadChildren: enterMapOrMagic,
   });
   treasureRoutes.push({
     path: '**',

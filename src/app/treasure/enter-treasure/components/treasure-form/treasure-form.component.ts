@@ -11,9 +11,9 @@ import {
   doesExist,
 } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
+import { MagicItem } from '@treasure/enter-treasure/model/magic-item.model';
 import {
   GemOrJewel,
-  MagicItem,
   TreasureListEntry,
 } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { EnterTreasureControllerService } from '@treasure/enter-treasure/services/enter-treasure-controller/enter-treasure-controller.service';
