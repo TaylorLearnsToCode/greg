@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BoundedRange } from '@shared/model/bounded-range.model';
 import { ExportService } from '@shared/services/export/export.service';
 import {
   cloneObject,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
 import {
-  MagicItemTable,
   NestedMagicItemTable,
+  NestedMagicItemTableEntry,
 } from '@treasure/treasure-common/model/magic-item.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -28,7 +29,7 @@ export class NestedMagicItemTableControllerService {
 
   constructor(private exportService: ExportService) {}
 
-  addEntry(entry: MagicItemTable): void {
+  addEntry(entry: NestedMagicItemTableEntry): void {
     const nextTable: NestedMagicItemTable = this.nestedTable;
     nextTable.entries.push(entry);
     this.nestedTable = nextTable;
@@ -42,6 +43,19 @@ export class NestedMagicItemTableControllerService {
         ? exportTable.name
         : 'Nested Magic Item Table'
     );
+  }
+
+  importEntry(file: File): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const newEntry = JSON.parse(result);
+      this.addEntry({
+        chanceOf: new BoundedRange(),
+        entry: newEntry,
+      });
+    });
+    fileReader.readAsText(file);
   }
 
   setTableName(name: string): void {

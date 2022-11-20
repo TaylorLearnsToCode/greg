@@ -19,8 +19,15 @@ export class MagicItemTable {
   entries: MagicItemTableEntry[] = [];
 }
 
+/** Result entry for <i>nested</i> tables of magic items against which percentile rolls can be made. */
+export class NestedMagicItemTableEntry {
+  /** The percentile chance of encountering this item. Valid range is 1 to 100. */
+  chanceOf: BoundedRange = new BoundedRange();
+  entry: MagicItemTable | NestedMagicItemTable;
+}
+
 /** Model class for a nested table of magic items against which percentile rolls can be made. */
 export class NestedMagicItemTable {
   name: string = '';
-  entries: Array<MagicItemTable | NestedMagicItemTable> = [];
+  entries: NestedMagicItemTableEntry[] = [];
 }

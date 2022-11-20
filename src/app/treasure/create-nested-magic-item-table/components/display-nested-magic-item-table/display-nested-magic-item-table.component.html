@@ -1,10 +1,5 @@
 <label>Table Name: </label>
-<input
-  #tableNameInput
-  (change)="updateTableName()"
-  [(ngModel)]="tableName"
-  type="text"
-/>
+<span>{{ tableName }}</span>
 
 <p *ngIf="nestedTable$ | async as nestedTable">
   {{ nestedTable | json }}
