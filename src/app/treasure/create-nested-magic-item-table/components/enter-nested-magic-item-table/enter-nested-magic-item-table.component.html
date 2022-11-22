@@ -1,10 +1,6 @@
 <form [formGroup]="nestedTableForm">
   <label>Table Name: </label>
-  <input
-    formControlName="name"
-    type="text"
-    (change)="submitNestedTableName()"
-  />
+  <input formControlName="name" type="text" />
   <table formArrayName="entries">
     <tr>
       <th class="range-header">Range</th>

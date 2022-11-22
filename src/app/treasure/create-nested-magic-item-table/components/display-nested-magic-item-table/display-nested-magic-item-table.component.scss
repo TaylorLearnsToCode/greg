@@ -1,0 +1,17 @@
+label {
+  padding-left: 3em;
+}
+
+:host::ng-deep td {
+  padding: 0em 0.5em;
+}
+
+:host::ng-deep .chance-of {
+  text-align: center;
+  padding: 0px;
+}
+
+:host::ng-deep .result-header {
+  text-align: left;
+  padding-left: 3em;
+}

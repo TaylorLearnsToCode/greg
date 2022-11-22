@@ -63,14 +63,19 @@ export class EnterNestedMagicItemTableComponent implements OnInit, OnDestroy {
     this.uploadEntryInput.value = '';
   }
 
-  submitNestedTableName(): void {
-    this.controllerService.setTableName(this.nestedTableForm.value.name);
-  }
-
   private initializeNestedTableForm(): void {
     this.nestedTableForm = buildFormFromObject(
       new NestedMagicItemTable()
     ) as FormGroup;
-    console.warn(this.nestedTableForm);
+    this.nestedTableForm.valueChanges
+      .pipe(
+        tap((table) => {
+          if (!this.controllerService.compareTable(table)) {
+            this.controllerService.updateTable(table);
+          }
+        }),
+        takeUntil(this.destroySource)
+      )
+      .subscribe();
   }
 }

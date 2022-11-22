@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NestedMagicItemTableControllerService } from '@treasure/create-nested-magic-item-table/services/nested-magic-item-table-controller/nested-magic-item-table-controller.service';
-import { NestedMagicItemTable } from '@treasure/treasure-common/model/magic-item.model';
+import {
+  MagicItemTable,
+  NestedMagicItemTable,
+} from '@treasure/treasure-common/model/magic-item.model';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'greg-display-nested-magic-item-table',
@@ -11,15 +13,16 @@ import { tap } from 'rxjs/operators';
 })
 export class DisplayNestedMagicItemTableComponent implements OnInit {
   nestedTable$: Observable<NestedMagicItemTable>;
-  tableName: string;
 
   constructor(
     private controllerService: NestedMagicItemTableControllerService
   ) {}
 
   ngOnInit(): void {
-    this.nestedTable$ = this.controllerService.nestedTable$.pipe(
-      tap((nestedTable) => (this.tableName = nestedTable.name))
-    );
+    this.nestedTable$ = this.controllerService.nestedTable$;
+  }
+
+  isNestedTable(entry: MagicItemTable | NestedMagicItemTable): boolean {
+    return entry instanceof NestedMagicItemTable;
   }
 }
