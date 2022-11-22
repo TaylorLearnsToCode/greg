@@ -77,7 +77,7 @@ export class NestedMagicItemTableControllerService {
 
   removeEntryAt(index: number): void {
     const nextTable: NestedMagicItemTable = this.nestedTable;
-    nextTable.entries.splice(index, 0);
+    nextTable.entries.splice(index, 1);
     this.nestedTable = nextTable;
   }
 
