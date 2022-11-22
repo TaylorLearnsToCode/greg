@@ -6,6 +6,8 @@ import { TreasureCommonModule } from '@treasure/treasure-common/treasure-common.
 import { CreateNestedMagicItemTableComponent } from './components/create-nested-magic-item-table/create-nested-magic-item-table.component';
 import { EnterNestedMagicItemTableComponent } from './components/enter-nested-magic-item-table/enter-nested-magic-item-table.component';
 import { DisplayNestedMagicItemTableComponent } from './components/display-nested-magic-item-table/display-nested-magic-item-table.component';
+import { NestedMagicItemTablePresenterComponent } from './components/nested-magic-item-table-presenter/nested-magic-item-table-presenter.component';
+import { MagicItemPresenterComponent } from './components/magic-item-presenter/magic-item-presenter.component';
 
 const routes: Routes = [
   {
@@ -15,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CreateNestedMagicItemTableComponent, EnterNestedMagicItemTableComponent, DisplayNestedMagicItemTableComponent],
+  declarations: [CreateNestedMagicItemTableComponent, EnterNestedMagicItemTableComponent, DisplayNestedMagicItemTableComponent, NestedMagicItemTablePresenterComponent, MagicItemPresenterComponent],
   imports: [
     CommonModule,
     SharedModule,

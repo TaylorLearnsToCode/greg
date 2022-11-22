@@ -1,6 +1,24 @@
-<label>Table Name: </label>
-<span>{{ tableName }}</span>
-
-<p *ngIf="nestedTable$ | async as nestedTable">
-  {{ nestedTable | json }}
-</p>
+<ng-container *ngIf="nestedTable$ | async as nestedTable">
+  <label>{{ nestedTable.name }}</label>
+  <table>
+    <tr>
+      <th>Chance</th>
+      <th class="result-header">Result</th>
+    </tr>
+    <tr *ngFor="let tableEntry of nestedTable.entries">
+      <td class="chance-of">
+        {{ tableEntry.chanceOf | boundedRange }}
+      </td>
+      <td>
+        <ng-container *ngIf="isNestedTable(tableEntry.entry); else isItem">
+          <greg-nested-magic-item-table-presenter></greg-nested-magic-item-table-presenter>
+        </ng-container>
+        <ng-template #isItem>
+          <greg-magic-item-table-presenter
+            [magicItem]="tableEntry.entry"
+          ></greg-magic-item-table-presenter>
+        </ng-template>
+      </td>
+    </tr>
+  </table>
+</ng-container>

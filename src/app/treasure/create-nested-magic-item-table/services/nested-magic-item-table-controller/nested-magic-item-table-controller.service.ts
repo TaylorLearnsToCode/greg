@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BoundedRange } from '@shared/model/bounded-range.model';
 import { ExportService } from '@shared/services/export/export.service';
 import {
+  areEqual,
   cloneObject,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
@@ -33,6 +34,15 @@ export class NestedMagicItemTableControllerService {
     const nextTable: NestedMagicItemTable = this.nestedTable;
     nextTable.entries.push(entry);
     this.nestedTable = nextTable;
+  }
+
+  compareTable(table: NestedMagicItemTable): boolean {
+    const currentTable = this.nestedTable;
+    return (
+      doesExist(table) &&
+      table.name === currentTable.name &&
+      areEqual(table.entries, currentTable.entries)
+    );
   }
 
   exportTable(): void {
@@ -69,5 +79,9 @@ export class NestedMagicItemTableControllerService {
     const nextTable: NestedMagicItemTable = this.nestedTable;
     nextTable.entries.splice(index, 0);
     this.nestedTable = nextTable;
+  }
+
+  updateTable(newTable: NestedMagicItemTable): void {
+    this.nestedTable = newTable;
   }
 }
