@@ -22,7 +22,15 @@ export class DisplayNestedMagicItemTableComponent implements OnInit {
     this.nestedTable$ = this.controllerService.nestedTable$;
   }
 
+  exportTable(): void {
+    this.controllerService.exportTable();
+  }
+
   isNestedTable(entry: MagicItemTable | NestedMagicItemTable): boolean {
     return entry instanceof NestedMagicItemTable;
+  }
+
+  removeEntryAt(index: number): void {
+    this.controllerService.removeEntryAt(index);
   }
 }

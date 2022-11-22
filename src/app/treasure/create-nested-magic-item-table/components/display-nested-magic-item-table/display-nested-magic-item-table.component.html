@@ -3,9 +3,9 @@
   <table>
     <tr>
       <th>Chance</th>
-      <th class="result-header">Result</th>
+      <th colspan="2" class="result-header">Result</th>
     </tr>
-    <tr *ngFor="let tableEntry of nestedTable.entries">
+    <tr *ngFor="let tableEntry of nestedTable.entries; index as i">
       <td class="chance-of">
         {{ tableEntry.chanceOf | boundedRange }}
       </td>
@@ -19,6 +19,12 @@
           ></greg-magic-item-table-presenter>
         </ng-template>
       </td>
+      <td>
+        <a (click)="removeEntryAt(i)">X</a>
+      </td>
     </tr>
   </table>
+  <section>
+    <button (click)="exportTable()">Export</button>
+  </section>
 </ng-container>
