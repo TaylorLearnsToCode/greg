@@ -22,6 +22,10 @@ export class DisplayNestedMagicItemTableComponent implements OnInit {
     this.nestedTable$ = this.controllerService.nestedTable$;
   }
 
+  clearTable(): void {
+    this.controllerService.clear();
+  }
+
   exportTable(): void {
     this.controllerService.exportTable();
   }

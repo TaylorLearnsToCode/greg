@@ -36,6 +36,10 @@ export class NestedMagicItemTableControllerService {
     this.nestedTable = nextTable;
   }
 
+  clear(): void {
+    this.nestedTable = new NestedMagicItemTable();
+  }
+
   compareTable(table: NestedMagicItemTable): boolean {
     const currentTable = this.nestedTable;
     return (
