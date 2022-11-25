@@ -2,6 +2,9 @@
   <label>Dice to Roll:</label>
   <greg-dice-roller-form [parentForm]="diceToRollForm"></greg-dice-roller-form>
 </form>-->
+<ng-template #nil>
+  <div>Nil</div>
+</ng-template>
 
 <form [formGroup]="entryForm">
   <label>Type:</label>
@@ -32,12 +35,9 @@
       </ng-container>
     </ng-container>
   </div>
-  <ng-template #nil>
-    <div>Nil</div>
-  </ng-template>
 
   <label>Gems:</label>
-  <div formArrayName="gems">
+  <div *ngIf="gemsForm.controls.length; else nil" formArrayName="gems">
     <ng-container *ngFor="let gem of gemsForm.controls; index as i">
       <ng-container [formGroupName]="i">
         <greg-gem-jewel-form [parentForm]="gem"></greg-gem-jewel-form>

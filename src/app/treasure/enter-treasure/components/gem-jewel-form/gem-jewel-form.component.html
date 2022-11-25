@@ -5,6 +5,8 @@
   <label>Type:</label>
   <input formControlName="type" type="string" />
 
-  <label>GP Value:</label>
-  <input formControlName="gpValue" type="number" />
+  <label>Number Of:</label>
+  <greg-dice-roller-form
+    [parentForm]="parentForm.get('numberOf')"
+  ></greg-dice-roller-form>
 </div>
