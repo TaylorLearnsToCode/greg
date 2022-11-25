@@ -1,0 +1,68 @@
+<h3>Treasure Map</h3>
+<form [formGroup]="treasureMapForm" class="treasure-map-form">
+  <label>Name</label>
+  <input formControlName="name" type="text" />
+
+  <label>Silver</label>
+  <greg-dice-roller-form
+    [parentForm]="treasureMapForm.get('silver')"
+  ></greg-dice-roller-form>
+
+  <label>Gold</label>
+  <greg-dice-roller-form
+    [parentForm]="treasureMapForm.get('gold')"
+  ></greg-dice-roller-form>
+
+  <label>Gems</label>
+  <greg-dice-roller-form
+    [parentForm]="treasureMapForm.get('gems')"
+  ></greg-dice-roller-form>
+
+  <label>Jewelry</label>
+  <greg-dice-roller-form
+    [parentForm]="treasureMapForm.get('jewelry')"
+  ></greg-dice-roller-form>
+</form>
+<section>
+  <button (click)="saveTreasureMap()">Save Treasure Map Entry</button>
+</section>
+
+<h3>Magic Item Map</h3>
+<form [formGroup]="magicMapForm" class="magic-item-form">
+  <label>Name</label>
+  <span>&nbsp;</span>
+  <input formControlName="name" type="text" />
+
+  <ng-container formArrayName="treasure">
+    <ng-container
+      *ngFor="let entry of magicTreasureFormArray.controls; index as i"
+    >
+      <ng-container [formGroupName]="i">
+        <label>Number Of</label>
+        <input formControlName="numberOf" type="number" />
+
+        <ng-container *ngIf="isEntryPresent(entry.value); else importItem">
+          <span>
+            {{ entry.value.item.entry.name }}
+          </span>
+        </ng-container>
+        <ng-template #importItem>
+          <span>
+            <label>Import Item </label>
+            <input
+              #magicItemImport
+              (change)="importMagicItemList(i)"
+              type="file"
+            />
+            <a (click)="removeEntryAt(i)">X</a>
+          </span>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</form>
+<section>
+  <button (click)="addMagicTreasure()">Add Magic Treasure Entry</button>
+  <br />
+  <button (click)="saveMagicMap()">Save Magic Treasure Map Entry</button>
+</section>

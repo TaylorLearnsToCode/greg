@@ -1,10 +1,17 @@
-<label>List: </label>
-<input
-  #listNameInput
-  type="text"
-  (change)="updateListName()"
-  [(ngModel)]="listName"
-/>
+<div class="two-across">
+  <span>
+    <label>List: </label>
+    <input
+      #listNameInput
+      type="text"
+      (change)="updateListName()"
+      [(ngModel)]="listName"
+    />
+  </span>
+  <button (click)="toggleMapOrMagic()">
+    {{ enteringMagicItem ? "Enter Map" : "Enter Magic Item" }}
+  </button>
+</div>
 
 <ng-container *ngIf="magicItemTable$ | async as magicItemTable">
   <table>

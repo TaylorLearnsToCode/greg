@@ -1,6 +1,11 @@
 <greg-page-template>
   <first-content>
-    <greg-magic-item-entry-form></greg-magic-item-entry-form>
+    <ng-container *ngIf="enteringMagicItem$ | async; else enteringMap">
+      <greg-magic-item-entry-form></greg-magic-item-entry-form>
+    </ng-container>
+    <ng-template #enteringMap>
+      <greg-map-entry-form></greg-map-entry-form>
+    </ng-template>
   </first-content>
   <second-content>
     <greg-magic-item-table-display></greg-magic-item-table-display>

@@ -8,12 +8,22 @@ import {
   MagicItemTable,
   MagicItemTableEntry,
 } from '@treasure/treasure-common/model/magic-item.model';
+import { TreasureMap } from '@treasure/treasure-common/model/treasure-map.model';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapOrMagicControllerServiceService {
+  private enteringMagicItemSource: BehaviorSubject<boolean> =
+    new BehaviorSubject(true);
+  private get enteringMagicItem(): boolean {
+    return cloneObject(this.enteringMagicItemSource.value);
+  }
+  private set enteringMagicItem(isMagicItem: boolean) {
+    this.enteringMagicItemSource.next(isMagicItem);
+  }
+
   private magicItemTableSource: BehaviorSubject<MagicItemTable> =
     new BehaviorSubject(new MagicItemTable());
   private get magicItemTable(): MagicItemTable {
@@ -23,6 +33,8 @@ export class MapOrMagicControllerServiceService {
     this.magicItemTableSource.next(newTable);
   }
 
+  enteringMagicItem$: Observable<boolean> =
+    this.enteringMagicItemSource.asObservable();
   magicItemTable$: Observable<MagicItemTable> =
     this.magicItemTableSource.asObservable();
 
@@ -32,6 +44,13 @@ export class MapOrMagicControllerServiceService {
     const nextTable: MagicItemTable = this.magicItemTable;
     nextTable.entries.push(entry);
     this.magicItemTable = nextTable;
+  }
+
+  addTreasureMap(entry: TreasureMap): void {
+    const entryToAdd: MagicItemTableEntry = new MagicItemTableEntry({
+      entry,
+    } as MagicItemTableEntry);
+    this.addTableEntry(entryToAdd);
   }
 
   clearTable(): void {
@@ -52,14 +71,12 @@ export class MapOrMagicControllerServiceService {
     this.importJSONFileToSubject(file, this.magicItemTableSource);
   }
 
-  private importJSONFileToSubject(file: File, loadTarget: Subject<any>): void {
-    const fileReader: FileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      const result: string = fileReader.result as string;
-      const nextItem = JSON.parse(result);
-      loadTarget.next(nextItem);
-    });
-    fileReader.readAsText(file);
+  toggleEntryItem(isMagicItem?: boolean): void {
+    if (doesExist(isMagicItem)) {
+      this.enteringMagicItem = isMagicItem;
+    } else {
+      this.enteringMagicItem = !this.enteringMagicItem;
+    }
   }
 
   removeEntryAt(index: number): void {
@@ -69,14 +86,19 @@ export class MapOrMagicControllerServiceService {
   }
 
   setTableName(name: string): void {
-    const nextTable: MagicItemTable = this.magicItemTable;
-    nextTable.name = name;
-    this.magicItemTable = nextTable;
-    /* Try this to see if it improves legibility:
     this.magicItemTable = {
       ...this.magicItemTable,
-      name
+      name,
     };
-    */
+  }
+
+  private importJSONFileToSubject(file: File, loadTarget: Subject<any>): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const nextItem = JSON.parse(result);
+      loadTarget.next(nextItem);
+    });
+    fileReader.readAsText(file);
   }
 }

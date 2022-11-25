@@ -1,4 +1,6 @@
 import { BoundedRange } from '@shared/model/bounded-range.model';
+import { doesExist } from '@shared/utilities/common-util/common.util';
+import { MagicItemMap, TreasureMap } from './treasure-map.model';
 
 /** Base class for magic items, maps, or other equivalent articles of treasure. */
 export class MagicItem {
@@ -10,7 +12,17 @@ export class MagicItem {
 export class MagicItemTableEntry {
   /** The percentile chance of encountering this item. Valid range is 1 to 100. */
   chanceOf: BoundedRange = new BoundedRange();
-  entry: MagicItem = new MagicItem();
+  entry: MagicItem | TreasureMap | MagicItemMap = new MagicItem();
+
+  constructor(magicItemTableEntry?: MagicItemTableEntry) {
+    if (doesExist(magicItemTableEntry)) {
+      Object.keys(this).forEach((key) => {
+        if (doesExist(magicItemTableEntry[key])) {
+          this[key] = magicItemTableEntry[key];
+        }
+      });
+    }
+  }
 }
 
 /** Model class for a table of magic items on which percentile rolls can be made. */
