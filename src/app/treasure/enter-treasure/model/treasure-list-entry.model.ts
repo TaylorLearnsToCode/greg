@@ -34,7 +34,6 @@ export class Specie extends AbstractTreasureTypeEntry {
 }
 
 export class GemOrJewel extends AbstractTreasureTypeEntry {
-  type = '';
-  // should be "NUMBER" as a DiceRolled
-  gpValue: number = 0;
+  type: string = '';
+  numberOf: DiceRolled = new DiceRolled();
 }
