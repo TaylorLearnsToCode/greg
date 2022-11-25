@@ -29,7 +29,9 @@ export function areEqual(first: any, second: any): boolean {
  */
 export function cloneObject(obj: any): any {
   let retObj: any;
-  if (Array.isArray(obj)) {
+  if (!doesExist(obj)) {
+    return null;
+  } else if (Array.isArray(obj)) {
     retObj = [];
     obj.forEach((element) => retObj.push(cloneObject(element)));
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
