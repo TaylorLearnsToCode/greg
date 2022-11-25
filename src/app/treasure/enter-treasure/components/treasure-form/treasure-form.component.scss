@@ -9,7 +9,7 @@ div {
   @include centerAndPad();
 }
 
-form {
+form, .two-across {
   @include centerAndPad();
   @include twoAcross();
   row-gap: 0.5em;

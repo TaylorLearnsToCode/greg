@@ -8,6 +8,7 @@ import {
 } from '@shared/utilities/common-util/common.util';
 import { TreasureListEntry } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { TreasureList } from '@treasure/enter-treasure/model/treasure-list.model';
+import { NestedMagicItemTable } from '@treasure/treasure-common/model/magic-item.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -67,6 +68,17 @@ export class EnterTreasureControllerService {
 
   exportList(): void {
     this.exportService.exportAsJson(this.treasureList, 'treasure-list');
+  }
+
+  importMapOrMagic(file: File): void {
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const item: NestedMagicItemTable = JSON.parse(
+        result
+      ) as NestedMagicItemTable;
+    });
+    fileReader.readAsText(file);
   }
 
   importSavedList(file: File): void {

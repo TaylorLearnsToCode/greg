@@ -1,8 +1,7 @@
-mapsAndMagicForm
-<form [formGroup]="diceToRollForm">
+<!--<form [formGroup]="diceToRollForm">
   <label>Dice to Roll:</label>
   <greg-dice-roller-form [parentForm]="diceToRollForm"></greg-dice-roller-form>
-</form>
+</form>-->
 
 <form [formGroup]="entryForm">
   <label>Type:</label>
@@ -18,14 +17,24 @@ mapsAndMagicForm
   <greg-specie-form [parentForm]="entryForm.get('gold')"></greg-specie-form>
 
   <label>Maps & Magic:</label>
-  <div formArrayName="mapsAndMagic">
-    Soon
-    <!--    <ng-container *ngFor="let m of mapsAndMagicForm.controls; index as i">
+  <div
+    *ngIf="mapsAndMagicForm.controls.length; else nil"
+    formArrayName="mapsAndMagic"
+    class="two-across"
+  >
+    <ng-container *ngFor="let m of mapsAndMagicForm.controls; index as i">
       <ng-container [formGroupName]="i">
-        <greg-magic-item-form [parentForm]="m"></greg-magic-item-form>
+        <span>
+          <input formControlName="chanceOf" type="number" />
+          %
+        </span>
+        <input formControlName="name" type="text" />
       </ng-container>
-    </ng-container>-->
+    </ng-container>
   </div>
+  <ng-template #nil>
+    <div>Nil</div>
+  </ng-template>
 
   <label>Gems:</label>
   <div formArrayName="gems">
@@ -47,7 +56,9 @@ mapsAndMagicForm
 </form>
 
 <div>
-  <button (click)="addMapOrMagic()">Add Map or Magic Item</button>
+  <label>Import Nested Magic Item Table: </label>
+  <input #mapOrMagicItemInput (change)="importMapOrMagic()" type="file" />
+  <br />
   <button (click)="addGemOrJewel()">Add Gem</button>
   <button (click)="addGemOrJewel(true)">Add Jewelry</button>
 </div>
