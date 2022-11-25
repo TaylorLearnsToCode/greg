@@ -6,6 +6,7 @@ import { MagicItemEntryFormComponent } from '@treasure/enter-map-or-magic/compon
 import { MagicItemTableDisplayComponent } from '@treasure/enter-map-or-magic/components/magic-item-table-display/magic-item-table-display.component';
 import { TreasureCommonModule } from '@treasure/treasure-common/treasure-common.module';
 import { EnterMapOrMagicComponent } from './components/enter-map-or-magic/enter-map-or-magic.component';
+import { MapEntryFormComponent } from './components/map-entry-form/map-entry-form.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     EnterMapOrMagicComponent,
     MagicItemEntryFormComponent,
     MagicItemTableDisplayComponent,
+    MapEntryFormComponent,
   ],
   imports: [
     CommonModule,

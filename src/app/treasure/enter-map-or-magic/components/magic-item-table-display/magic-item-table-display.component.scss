@@ -1,10 +1,12 @@
+@import '../../../../../assets/styles/variables';
+
 section {
   text-align: center;
   margin-top: 0.5em;
 }
 
 table {
-  width: 100%;
+  @include standardTableStyles();
 }
 
 th.result-header {
@@ -19,4 +21,8 @@ th.result-header {
 .non-content-cells {
   text-align: center;
   width: 2em;
+}
+
+.two-across {
+  @include twoAcross();
 }
