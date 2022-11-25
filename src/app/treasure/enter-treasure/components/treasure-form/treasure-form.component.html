@@ -46,7 +46,7 @@
   </div>
 
   <label>Jewelry:</label>
-  <div formArrayName="jewelry">
+  <div *ngIf="jewelryForm.controls.length; else nil" formArrayName="jewelry">
     <ng-container *ngFor="let jewelry of jewelryForm.controls; index as i">
       <ng-container [formGroupName]="i">
         <greg-gem-jewel-form [parentForm]="jewelry"></greg-gem-jewel-form>
