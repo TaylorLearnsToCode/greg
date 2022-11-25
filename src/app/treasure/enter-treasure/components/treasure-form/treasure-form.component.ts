@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -14,9 +20,11 @@ import {
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import {
   GemOrJewel,
+  MapsAndMagicEntry,
   TreasureListEntry,
 } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { EnterTreasureControllerService } from '@treasure/enter-treasure/services/enter-treasure-controller/enter-treasure-controller.service';
+import { NestedMagicItemTable } from '@treasure/treasure-common/model/magic-item.model';
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
@@ -26,6 +34,12 @@ import { takeUntil, tap } from 'rxjs/operators';
   styleUrls: ['./treasure-form.component.scss'],
 })
 export class TreasureFormComponent implements OnInit, OnDestroy {
+  @ViewChild('mapOrMagicItemInput')
+  mapOrMagicItemInputRef: ElementRef;
+  private get mapOrMagicInput(): HTMLInputElement {
+    return this.mapOrMagicItemInputRef.nativeElement as HTMLInputElement;
+  }
+
   diceToRollForm: UntypedFormGroup;
   entryForm: UntypedFormGroup;
   get gemsForm(): FormArray<FormControl<GemOrJewel>> {
@@ -63,15 +77,28 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     this.entryForm = buildFormFromObject(treasureList) as FormGroup;
   }
 
-  addMapOrMagic(): void {
-    alert('not yet implemented');
-    /*const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
-    if (doesExist(treasureList.mapsAndMagic)) {
-      treasureList.mapsAndMagic.push(new MagicItemEntry());
-    } else {
-      treasureList.mapsAndMagic = [new MagicItemEntry()];
-    }
-    this.entryForm = buildFormFromObject(treasureList) as FormGroup;*/
+  importMapOrMagic(): void {
+    const file: File = this.mapOrMagicInput.files[0];
+    const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
+    const fileReader: FileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      const result: string = fileReader.result as string;
+      const item: NestedMagicItemTable = JSON.parse(
+        result
+      ) as NestedMagicItemTable;
+      const nextEntry: MapsAndMagicEntry = new MapsAndMagicEntry({
+        name: item.name,
+        entry: item,
+      } as MapsAndMagicEntry);
+      if (doesExist(treasureList.mapsAndMagic)) {
+        treasureList.mapsAndMagic.push(nextEntry);
+      } else {
+        treasureList.mapsAndMagic = [nextEntry];
+      }
+      this.mapOrMagicInput.value = '';
+      this.entryForm = buildFormFromObject(treasureList) as FormGroup;
+    });
+    fileReader.readAsText(file);
   }
 
   private saveDiceToRoll(changes: any): void {
