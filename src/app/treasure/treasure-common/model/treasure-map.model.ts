@@ -3,9 +3,7 @@ import { NestedMagicItemTableEntry } from './magic-item.model';
 
 export class TreasureMap {
   name: string = '';
-  get description(): string {
-    return 'Treasure Map';
-  }
+  readonly description: string = 'Treasure Map';
   silver: DiceRolled = new DiceRolled();
   gold: DiceRolled = new DiceRolled();
   gems: DiceRolled = new DiceRolled();
@@ -14,9 +12,7 @@ export class TreasureMap {
 
 export class MagicItemMap {
   name: string = '';
-  get description(): string {
-    return 'Magic Item Map';
-  }
+  readonly description: string = 'Magic Item Map';
   treasure: MagicItemMapEntry[] = [];
 }
 
