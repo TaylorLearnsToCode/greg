@@ -65,6 +65,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     this.clearEntry();
     this.subDiceRollChanges();
     this.subTreasureList();
+    this.subEditEntry();
   }
 
   ngOnDestroy(): void {
@@ -135,6 +136,17 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     this.diceToRollForm.valueChanges
       .pipe(
         tap((changes) => this.saveDiceToRoll(changes)),
+        takeUntil(this.destroySource)
+      )
+      .subscribe();
+  }
+
+  private subEditEntry(): void {
+    this.controllerService.editEntry$
+      .pipe(
+        tap(
+          (entry) => (this.entryForm = buildFormFromObject(entry) as FormGroup)
+        ),
         takeUntil(this.destroySource)
       )
       .subscribe();

@@ -28,6 +28,10 @@ export class TreasureListComponent implements OnInit {
     this.controllerService.clearList();
   }
 
+  editRecord(index: number): void {
+    this.controllerService.editEntryAt(index);
+  }
+
   exportList(): void {
     this.controllerService.exportList();
   }
@@ -35,5 +39,9 @@ export class TreasureListComponent implements OnInit {
   importSavedList(): void {
     this.controllerService.importSavedList(this.listImportInput.files[0]);
     this.listImportInput.value = '';
+  }
+
+  removeRecord(index: number): void {
+    this.controllerService.removeRecordAt(index);
   }
 }

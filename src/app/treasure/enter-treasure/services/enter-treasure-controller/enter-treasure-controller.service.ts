@@ -9,7 +9,7 @@ import {
 import { TreasureListEntry } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { TreasureList } from '@treasure/enter-treasure/model/treasure-list.model';
 import { NestedMagicItemTable } from '@treasure/treasure-common/model/magic-item.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,11 @@ export class EnterTreasureControllerService {
   private get treasureList(): TreasureList {
     return cloneObject(this.treasureListSource.value);
   }
+  private set treasureList(newList: TreasureList) {
+    this.treasureListSource.next(newList);
+  }
+
+  private editEntrySource: Subject<TreasureListEntry> = new Subject();
 
   private get diceToRoll(): DiceRolled {
     return this.treasureList.diceToRoll;
@@ -39,6 +44,7 @@ export class EnterTreasureControllerService {
   }
 
   treasureList$ = this.treasureListSource.asObservable();
+  editEntry$ = this.editEntrySource.asObservable();
 
   constructor(private exportService: ExportService) {}
 
@@ -70,6 +76,10 @@ export class EnterTreasureControllerService {
     return !!this.entries.filter((entry) => areEqual(entry, newEntries)).length;
   }
 
+  editEntryAt(index: number): void {
+    this.editEntrySource.next(this.treasureList.entries[index]);
+  }
+
   exportList(): void {
     this.exportService.exportAsJson(this.treasureList, 'treasure-list');
   }
@@ -99,5 +109,11 @@ export class EnterTreasureControllerService {
     if (doesExist(newDice)) {
       this.diceToRoll = newDice;
     }
+  }
+
+  removeRecordAt(index: number): void {
+    const nextList: TreasureList = this.treasureList;
+    nextList.entries.splice(index, 1);
+    this.treasureList = nextList;
   }
 }
