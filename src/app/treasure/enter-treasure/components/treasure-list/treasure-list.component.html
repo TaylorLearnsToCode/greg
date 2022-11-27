@@ -1,3 +1,5 @@
+<ng-template #nil> Nil </ng-template>
+
 <section>
   <button (click)="exportList()">Export</button>
   <button (click)="clearList()">Clear</button>
@@ -8,6 +10,51 @@
   </span>
 </section>
 
-<p *ngIf="treasureList$ | async as treasureList">
-  {{ treasureList | json }}
-</p>
+<ng-container *ngIf="treasureList$ | async as treasureList">
+  <p>Dice to Roll: {{ treasureList.diceToRoll | json }}</p>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Copper</th>
+      <th>Silver</th>
+      <th>Gold</th>
+      <th>Gems</th>
+      <th>Jewelry</th>
+      <th>Maps or Magic</th>
+    </tr>
+    <tr *ngFor="let entry of treasureList.entries">
+      <td class="left-align">{{ entry.type }}</td>
+      <td>{{ entry.copper | speciePipe }}</td>
+      <td>{{ entry.silver | speciePipe }}</td>
+      <td>{{ entry.gold | speciePipe }}</td>
+      <td>
+        <ng-container *ngIf="entry.gems.length; else nil">
+          <ng-container *ngFor="let gem of entry.gems; let last = last">
+            {{ gem | gemOrJewel }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+      <td>
+        <ng-container *ngIf="entry.jewelry.length; else nil">
+          <ng-container *ngFor="let jewel of entry.jewelry; let last = last">
+            {{ jewel | gemOrJewel }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+      <td>
+        <ng-container *ngIf="entry.mapsAndMagic.length; else nil">
+          <ng-container *ngFor="let mom of entry.mapsAndMagic; let last = last">
+            {{ mom | mapOrMagic }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+    </tr>
+  </table>
+
+  <p>
+    {{ treasureList | json }}
+  </p>
+</ng-container>
