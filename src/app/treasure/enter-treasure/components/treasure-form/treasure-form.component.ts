@@ -101,6 +101,20 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     fileReader.readAsText(file);
   }
 
+  removeMapOrMagic(index: number): void {
+    const nextEntry: TreasureListEntry = cloneObject(
+      this.entryForm.value
+    ) as TreasureListEntry;
+    nextEntry.mapsAndMagic.splice(index, 1);
+    this.entryForm = buildFormFromObject(nextEntry) as FormGroup;
+  }
+
+  saveEntry(): void {
+    this.controllerService.addEntry(this.entryForm.value);
+    this.entryForm.reset();
+    this.entryForm.setValue(new TreasureListEntry());
+  }
+
   private saveDiceToRoll(changes: any): void {
     if (
       doesExist(changes) &&
@@ -108,12 +122,6 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     ) {
       this.controllerService.updateDiceToRoll(this.diceToRollForm.value);
     }
-  }
-
-  saveEntry(): void {
-    this.controllerService.addEntry(this.entryForm.value);
-    this.entryForm.reset();
-    this.entryForm.setValue(new TreasureListEntry());
   }
 
   private subDiceRollChanges(): void {

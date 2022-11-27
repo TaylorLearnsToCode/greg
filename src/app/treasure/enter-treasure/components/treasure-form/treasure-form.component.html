@@ -23,7 +23,7 @@
   <div
     *ngIf="mapsAndMagicForm.controls.length; else nil"
     formArrayName="mapsAndMagic"
-    class="two-across"
+    class="maps-and-magic-array"
   >
     <ng-container *ngFor="let m of mapsAndMagicForm.controls; index as i">
       <ng-container [formGroupName]="i">
@@ -32,6 +32,7 @@
           %
         </span>
         <input formControlName="name" type="text" />
+        <a (click)="removeMapOrMagic(i)">X</a>
       </ng-container>
     </ng-container>
   </div>
