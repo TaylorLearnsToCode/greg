@@ -10,7 +10,7 @@ export class SpeciePipePipe implements PipeTransform {
 
   transform(value: Specie): string {
     if (value.chanceOf !== 0) {
-      return `${this.diceRangePipe.transform(value.amount)} - ${
+      return `${this.diceRangePipe.transform(value.amount)}: ${
         value.chanceOf
       }%`;
     } else {
