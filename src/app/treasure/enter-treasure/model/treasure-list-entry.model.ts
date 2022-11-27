@@ -16,6 +16,7 @@ export class TreasureListEntry {
 export class MapsAndMagicEntry {
   name: string = '';
   chanceOf: number = 0;
+  numberOf: number = 1;
   entry: NestedMagicItemTable = new NestedMagicItemTable();
 
   constructor(entry?: MapsAndMagicEntry) {
