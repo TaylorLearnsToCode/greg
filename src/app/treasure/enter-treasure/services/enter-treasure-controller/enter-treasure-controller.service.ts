@@ -58,6 +58,10 @@ export class EnterTreasureControllerService {
     }
   }
 
+  clearList(): void {
+    this.treasureListSource.next(new TreasureList());
+  }
+
   compareDiceToRoll(newDice: DiceRolled): boolean {
     return areEqual(newDice, this.diceToRoll);
   }

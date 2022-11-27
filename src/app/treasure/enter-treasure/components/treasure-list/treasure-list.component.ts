@@ -24,6 +24,10 @@ export class TreasureListComponent implements OnInit {
     this.treasureList$ = this.controllerService.treasureList$;
   }
 
+  clearList(): void {
+    this.controllerService.clearList();
+  }
+
   exportList(): void {
     this.controllerService.exportList();
   }

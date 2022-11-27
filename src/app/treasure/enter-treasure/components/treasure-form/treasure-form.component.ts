@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
 import {
+  areEqual,
   cloneObject,
   doesExist,
 } from '@shared/utilities/common-util/common.util';
@@ -53,6 +54,9 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
   }
 
   private destroySource: Subject<void> = new Subject();
+  private get entry(): TreasureListEntry {
+    return cloneObject(this.entryForm.value) as TreasureListEntry;
+  }
 
   constructor(private controllerService: EnterTreasureControllerService) {}
 
@@ -60,6 +64,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     this.diceToRollForm = buildFormFromObject(new DiceRolled()) as FormGroup;
     this.entryForm = buildFormFromObject(new TreasureListEntry()) as FormGroup;
     this.subDiceRollChanges();
+    this.subTreasureList();
   }
 
   ngOnDestroy(): void {
@@ -67,7 +72,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
   }
 
   addGemOrJewel(isJewelry?: boolean): void {
-    const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
+    const treasureList: TreasureListEntry = this.entry;
     const property: string = isJewelry ? 'jewelry' : 'gems';
     if (doesExist(treasureList[property])) {
       treasureList[property].push(new GemOrJewel());
@@ -79,7 +84,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
 
   importMapOrMagic(): void {
     const file: File = this.mapOrMagicInput.files[0];
-    const treasureList: TreasureListEntry = cloneObject(this.entryForm.value);
+    const treasureList: TreasureListEntry = this.entry;
     const fileReader: FileReader = new FileReader();
     fileReader.addEventListener('load', () => {
       const result: string = fileReader.result as string;
@@ -101,11 +106,9 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     fileReader.readAsText(file);
   }
 
-  removeMapOrMagic(index: number): void {
-    const nextEntry: TreasureListEntry = cloneObject(
-      this.entryForm.value
-    ) as TreasureListEntry;
-    nextEntry.mapsAndMagic.splice(index, 1);
+  removeArrayElementAt(arrayProperty: string, index: number): void {
+    const nextEntry: TreasureListEntry = this.entry;
+    nextEntry[arrayProperty].splice(index, 1);
     this.entryForm = buildFormFromObject(nextEntry) as FormGroup;
   }
 
@@ -128,6 +131,19 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
     this.diceToRollForm.valueChanges
       .pipe(
         tap((changes) => this.saveDiceToRoll(changes)),
+        takeUntil(this.destroySource)
+      )
+      .subscribe();
+  }
+
+  private subTreasureList(): void {
+    this.controllerService.treasureList$
+      .pipe(
+        tap((treasureList) => {
+          if (!areEqual(treasureList.diceToRoll, this.diceToRollForm.value)) {
+            this.diceToRollForm.setValue(treasureList.diceToRoll);
+          }
+        }),
         takeUntil(this.destroySource)
       )
       .subscribe();

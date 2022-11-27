@@ -15,7 +15,12 @@ form {
   row-gap: 0.5em;
 }
 
-.maps-and-magic-array {
+.one-with-remove {
+  display: grid;
+  grid-template-columns: 1fr 2em;
+}
+
+.two-with-remove {
   display: grid;
   grid-template-columns: 1fr 1fr 2em;
 }
