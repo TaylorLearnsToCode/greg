@@ -9,8 +9,13 @@ div {
   @include centerAndPad();
 }
 
-form, .two-across {
+form {
   @include centerAndPad();
   @include twoAcross();
   row-gap: 0.5em;
+}
+
+.maps-and-magic-array {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2em;
 }
