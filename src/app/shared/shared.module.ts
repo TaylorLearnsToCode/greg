@@ -9,6 +9,7 @@ import { SaveAsFormComponent } from './components/save-as-form/save-as-form.comp
 import { WeaponsFormComponent } from './components/weapons-form/weapons-form.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { BoundedRangePipe } from './pipes/bounded-range/bounded-range.pipe';
+import { DiceRolledPipe } from './pipes/dice-rolled/dice-rolled.pipe';
 import { PageTemplateComponent } from './templates/page-template/page-template.component';
 
 /** "Private" container for components in the Shared Module to reduce file length, re-using the variable as a spread */
@@ -22,7 +23,7 @@ const components = [
   WelcomeComponent,
 ];
 
-const pipes = [DiceRangePipe, BoundedRangePipe];
+const pipes = [DiceRangePipe, BoundedRangePipe, DiceRolledPipe];
 
 /** Container module for common or shared widgets and templates for the GREG app */
 @NgModule({

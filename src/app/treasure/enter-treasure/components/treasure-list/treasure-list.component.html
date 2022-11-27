@@ -11,7 +11,7 @@
 </section>
 
 <ng-container *ngIf="treasureList$ | async as treasureList">
-  <p>Dice to Roll: {{ treasureList.diceToRoll | json }}</p>
+  <p><b>Dice to Roll:</b> {{ treasureList.diceToRoll | diceRolled }}</p>
   <table>
     <tr>
       <th>Type</th>
@@ -21,6 +21,7 @@
       <th>Gems</th>
       <th>Jewelry</th>
       <th>Maps or Magic</th>
+      <th>&nbsp;</th>
     </tr>
     <tr *ngFor="let entry of treasureList.entries">
       <td class="left-align">{{ entry.type }}</td>
@@ -50,6 +51,9 @@
             <br *ngIf="!last" />
           </ng-container>
         </ng-container>
+      </td>
+      <td>
+        <div class="edit-pencil"><a>&#x270F;</a></div>
       </td>
     </tr>
   </table>
