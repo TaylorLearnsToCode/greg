@@ -24,16 +24,25 @@
   <div
     *ngIf="mapsAndMagicForm.controls.length; else nil"
     formArrayName="mapsAndMagic"
-    class="two-with-remove"
+    class="two-across"
   >
     <ng-container *ngFor="let m of mapsAndMagicForm.controls; index as i">
       <ng-container [formGroupName]="i">
         <span>
-          <input formControlName="chanceOf" type="number" />
-          %
+          <label>Name: </label>
+          <input formControlName="name" type="text" />
         </span>
-        <input formControlName="name" type="text" />
-        <a (click)="removeArrayElementAt('mapsAndMagic', i)">X</a>
+        <span style="padding-top: 0.5em">
+          <a (click)="removeArrayElementAt('mapsAndMagic', i)"> X </a>
+        </span>
+        <span>
+          <label>Chance Of:</label>
+          <input formControlName="chanceOf" type="number" />
+        </span>
+        <span>
+          <label>No Of:</label>
+          <input formControlName="numberOf" type="number" />
+        </span>
       </ng-container>
     </ng-container>
   </div>
