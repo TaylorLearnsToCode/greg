@@ -20,3 +20,7 @@ section {
 .edit-pencil {
   transform: rotate(90deg);
 }
+
+.two-across {
+  @include twoAcross();
+}

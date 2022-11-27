@@ -23,7 +23,7 @@
       <th>Maps or Magic</th>
       <th>&nbsp;</th>
     </tr>
-    <tr *ngFor="let entry of treasureList.entries">
+    <tr *ngFor="let entry of treasureList.entries; index as i">
       <td class="left-align">{{ entry.type }}</td>
       <td>{{ entry.copper | speciePipe }}</td>
       <td>{{ entry.silver | speciePipe }}</td>
@@ -52,13 +52,10 @@
           </ng-container>
         </ng-container>
       </td>
-      <td>
-        <div class="edit-pencil"><a>&#x270F;</a></div>
+      <td class="two-across">
+        <div class="edit-pencil"><a (click)="editRecord(i)">&#x270F;</a></div>
+        <a (click)="removeRecord(i)">X</a>
       </td>
     </tr>
   </table>
-
-  <p>
-    {{ treasureList | json }}
-  </p>
 </ng-container>
