@@ -62,7 +62,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.diceToRollForm = buildFormFromObject(new DiceRolled()) as FormGroup;
-    this.entryForm = buildFormFromObject(new TreasureListEntry()) as FormGroup;
+    this.clearEntry();
     this.subDiceRollChanges();
     this.subTreasureList();
   }
@@ -80,6 +80,10 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
       treasureList[property] = [new GemOrJewel()];
     }
     this.entryForm = buildFormFromObject(treasureList) as FormGroup;
+  }
+
+  clearEntry(): void {
+    this.entryForm = buildFormFromObject(new TreasureListEntry()) as FormGroup;
   }
 
   importMapOrMagic(): void {
