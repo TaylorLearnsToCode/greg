@@ -1,10 +1,11 @@
-<!--<form [formGroup]="diceToRollForm">
-  <label>Dice to Roll:</label>
-  <greg-dice-roller-form [parentForm]="diceToRollForm"></greg-dice-roller-form>
-</form>-->
 <ng-template #nil>
   <div>Nil</div>
 </ng-template>
+
+<form [formGroup]="diceToRollForm">
+  <label>Dice to Roll:</label>
+  <greg-dice-roller-form [parentForm]="diceToRollForm"></greg-dice-roller-form>
+</form>
 
 <form [formGroup]="entryForm">
   <label>Type:</label>
@@ -23,7 +24,7 @@
   <div
     *ngIf="mapsAndMagicForm.controls.length; else nil"
     formArrayName="mapsAndMagic"
-    class="maps-and-magic-array"
+    class="two-with-remove"
   >
     <ng-container *ngFor="let m of mapsAndMagicForm.controls; index as i">
       <ng-container [formGroupName]="i">
@@ -32,25 +33,35 @@
           %
         </span>
         <input formControlName="name" type="text" />
-        <a (click)="removeMapOrMagic(i)">X</a>
+        <a (click)="removeArrayElementAt('mapsAndMagic', i)">X</a>
       </ng-container>
     </ng-container>
   </div>
 
   <label>Gems:</label>
-  <div *ngIf="gemsForm.controls.length; else nil" formArrayName="gems">
+  <div
+    *ngIf="gemsForm.controls.length; else nil"
+    class="one-with-remove"
+    formArrayName="gems"
+  >
     <ng-container *ngFor="let gem of gemsForm.controls; index as i">
       <ng-container [formGroupName]="i">
         <greg-gem-jewel-form [parentForm]="gem"></greg-gem-jewel-form>
+        <a (click)="removeArrayElementAt('gems', i)">X</a>
       </ng-container>
     </ng-container>
   </div>
 
   <label>Jewelry:</label>
-  <div *ngIf="jewelryForm.controls.length; else nil" formArrayName="jewelry">
+  <div
+    *ngIf="jewelryForm.controls.length; else nil"
+    class="one-with-remove"
+    formArrayName="jewelry"
+  >
     <ng-container *ngFor="let jewelry of jewelryForm.controls; index as i">
       <ng-container [formGroupName]="i">
         <greg-gem-jewel-form [parentForm]="jewelry"></greg-gem-jewel-form>
+        <a (click)="removeArrayElementAt('jewelry', i)">X</a>
       </ng-container>
     </ng-container>
   </div>

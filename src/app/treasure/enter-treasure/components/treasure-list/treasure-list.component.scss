@@ -1,7 +1,8 @@
 @import '../../../../../assets/styles/variables';
 
 section {
-  @include twoAcross();
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
   column-gap: 1em;
   text-align: center;
 }
