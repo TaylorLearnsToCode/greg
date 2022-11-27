@@ -1,5 +1,15 @@
 @import '../../../../../assets/styles/variables';
 
+@include standardTableStyles();
+
+td {
+  text-align: center;
+
+  &.left-align {
+    text-align: left;
+  }
+}
+
 section {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;

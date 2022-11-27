@@ -119,7 +119,7 @@ export class TreasureFormComponent implements OnInit, OnDestroy {
   saveEntry(): void {
     this.controllerService.addEntry(this.entryForm.value);
     this.entryForm.reset();
-    this.entryForm.setValue(new TreasureListEntry());
+    this.clearEntry();
   }
 
   private saveDiceToRoll(changes: any): void {
