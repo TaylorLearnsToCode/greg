@@ -1,6 +1,3 @@
-<p *ngIf="treasureList$ | async as treasureList">
-  {{ treasureList | json }}
-</p>
 <section>
   <button (click)="exportList()">Export</button>
   <button (click)="clearList()">Clear</button>
@@ -10,3 +7,7 @@
     <input #listImport (change)="importSavedList()" type="file" />
   </span>
 </section>
+
+<p *ngIf="treasureList$ | async as treasureList">
+  {{ treasureList | json }}
+</p>
