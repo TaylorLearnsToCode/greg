@@ -12,6 +12,7 @@ import { TreasureFormComponent } from './components/treasure-form/treasure-form.
 import { TreasureListComponent } from './components/treasure-list/treasure-list.component';
 import { GemOrJewelPipe } from './pipes/gem-or-jewel/gem-or-jewel.pipe';
 import { MapOrMagicPipe } from './pipes/map-or-magic/map-or-magic.pipe';
+import { RollTreasureComponent } from './components/roll-treasure/roll-treasure.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
     SpeciePipePipe,
     GemOrJewelPipe,
     MapOrMagicPipe,
+    RollTreasureComponent,
   ],
   imports: [
     CommonModule,

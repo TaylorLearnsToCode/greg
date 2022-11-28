@@ -11,7 +11,16 @@
 </section>
 
 <ng-container *ngIf="treasureList$ | async as treasureList">
-  <p><b>Dice to Roll:</b> {{ treasureList.diceToRoll | diceRolled }}</p>
+  <section>
+    <p><strong>Dice to Roll:</strong></p>
+    <p>{{ treasureList.diceToRoll | diceRolled }}</p>
+    <p>
+      <button (click)="toggleAreEnteringTreasure()">
+        {{ toggleButtonText }}
+      </button>
+    </p>
+  </section>
+
   <table>
     <tr>
       <th>Type</th>
@@ -53,8 +62,15 @@
         </ng-container>
       </td>
       <td class="two-across">
-        <div class="edit-pencil"><a (click)="editRecord(i)">&#x270F;</a></div>
-        <a (click)="removeRecord(i)">X</a>
+        <ng-container *ngIf="areEnteringTreasure; else rollList">
+          <div class="edit-pencil"><a (click)="editRecord(i)">&#x270F;</a></div>
+          <a (click)="removeRecord(i)">X</a>
+        </ng-container>
+        <ng-template #rollList>
+          <span style="font-size: 28px">
+            <a (click)="rollEntry(treasureList.entries[i])">&#9861;</a>
+          </span>
+        </ng-template>
       </td>
     </tr>
   </table>
