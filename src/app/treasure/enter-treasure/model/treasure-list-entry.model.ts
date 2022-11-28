@@ -13,6 +13,27 @@ export class TreasureListEntry {
   jewelry: GemOrJewel[] = [];
 }
 
+export class TreasureRollResult {
+  copper: number = 0;
+  silver: number = 0;
+  gold: number = 0;
+  gems: GemRollResult[] = [];
+}
+
+export class GemRollResult {
+  no10: number = 0;
+  no50: number = 0;
+  no100: number = 0;
+  no500: number = 0;
+  no1k: number = 0;
+  no5k: number = 0;
+  no10k: number = 0;
+  no25k: number = 0;
+  no50k: number = 0;
+  no100k: number = 0;
+  no500k: number = 0;
+}
+
 export class MapsAndMagicEntry {
   name: string = '';
   chanceOf: number = 0;
