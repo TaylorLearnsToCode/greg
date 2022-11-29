@@ -4,6 +4,8 @@ import { rollDice } from '@shared/utilities/dice-roller/dice-roller.util';
 import {
   GemOrJewel,
   GemRollResult,
+  RolledGemChances,
+  RolledGemValue,
   Specie,
   TreasureListEntry,
   TreasureRollResult,
@@ -52,40 +54,57 @@ export class RollTreasureControllerService {
     this.rolledTreasure = rolledTreasure;
   }
 
-  private rollGems(gems: GemOrJewel[]): GemRollResult[] {
-    const result: GemRollResult[] = [];
-    let nextResult: GemRollResult;
-
-    let noOfGems: number;
-    for (let gem of gems) {
-      nextResult = new GemRollResult();
-      noOfGems = rollDice(gem.numberOf);
-
-      let roll: number;
-      for (let i = 0; i < noOfGems; i++) {
-        roll = rollDice(this.d100);
-        if (roll <= 10) {
-          nextResult.no10++;
-        } else if (roll <= 25) {
-          nextResult.no50++;
-        } else if (roll <= 75) {
-          nextResult.no100++;
-        } else if (roll <= 90) {
-          nextResult.no500++;
-        } else {
-          nextResult.no1k++;
-        }
-      }
-
-      // handle the 1-in-6 higher category
-
-      result.push(nextResult);
+  private checkForNextLevelGem(key: number): number {
+    if (rollDice(this.d6) === 1 && key < 11) {
+      key++;
+      key = this.checkForNextLevelGem(key);
     }
+    return key;
+  }
+
+  private rollGem(gem: GemOrJewel): GemRollResult {
+    const result: GemRollResult = new GemRollResult();
+
+    if (rollDice(this.d100) > gem.chanceOf) {
+      return result;
+    }
+
+    const gems: number[] = [];
+    let roll: number;
+    for (let i = 0; i < rollDice(gem.numberOf); i++) {
+      roll = rollDice(this.d100);
+      RolledGemChances.forEach((chance: number, key: number) => {
+        if (roll <= chance) {
+          gems.push(key);
+        }
+      });
+    }
+
+    let incrementBy: number;
+    if (gems.length > 99) {
+      incrementBy = 10;
+    } else if (gems.length > 9) {
+      incrementBy = 5;
+    } else {
+      incrementBy = 1;
+    }
+
+    for (let i = 0; i < gems.length; i += incrementBy) {
+      gems[i] = this.checkForNextLevelGem(gems[i]);
+    }
+
+    gems.forEach((key: number) => result[RolledGemValue.get(key)]++);
 
     return result;
   }
 
+  private rollGems(gems: GemOrJewel[]): GemRollResult[] {
+    const result: GemRollResult[] = [];
+    gems.forEach((gem) => result.push(this.rollGem(gem)));
+    return result;
+  }
+
   private rollSpecie(specie: Specie): number {
-    return rollDice(specie.amount);
+    return rollDice(this.d100) <= specie.chanceOf ? rollDice(specie.amount) : 0;
   }
 }
