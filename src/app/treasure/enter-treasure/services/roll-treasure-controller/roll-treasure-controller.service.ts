@@ -3,11 +3,6 @@ import { DiceRolled } from '@shared/model/dice-rolled.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-roller/dice-roller.util';
 import {
-  JewelRollResult,
-  RolledJewelValues,
-} from '@treasure/enter-treasure/model/treasure-jewelry.model';
-import {
-  GemOrJewel,
   MapsAndMagicEntry,
   Specie,
   TreasureListEntry,
@@ -15,6 +10,7 @@ import {
 } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { MapsAndMagicResult } from '@treasure/enter-treasure/model/treasure-maps-and-magic.model';
 import { rollGems } from '@treasure/enter-treasure/utilities/gem-roller.util';
+import { rollJewelry } from '@treasure/enter-treasure/utilities/jewelry-roller.util';
 import {
   MagicItem,
   MagicItemTable,
@@ -69,40 +65,8 @@ export class RollTreasureControllerService {
       treasureList.mapsAndMagic
     );
     rolledTreasure.gems = rollGems(treasureList.gems);
-    rolledTreasure.jewelry = this.rollJewelry(treasureList.jewelry);
+    rolledTreasure.jewelry = rollJewelry(treasureList.jewelry);
     this.rolledTreasure = rolledTreasure;
-  }
-
-  private rollJewelry(jewelry: GemOrJewel[]): JewelRollResult[] {
-    const result: JewelRollResult[] = [];
-    jewelry.forEach((jewel) => result.push(this.rollJewel(jewel)));
-    return result;
-  }
-
-  private rollJewel(jewel: GemOrJewel): JewelRollResult {
-    const result: JewelRollResult = new JewelRollResult();
-
-    if (rollDice(this.d100) > jewel.chanceOf) {
-      return result;
-    }
-
-    const jewels: number[] = [];
-    let roll: number;
-    let valuation: DiceRolled;
-    for (let i = 0; i < rollDice(jewel.numberOf); i++) {
-      roll = rollDice(this.d100);
-
-      RolledJewelValues.forEach((value: DiceRolled, key: number) => {
-        if (roll <= key) {
-          valuation = value;
-        }
-      });
-
-      jewels.push(rollDice(valuation));
-    }
-
-    result.values = jewels;
-    return result;
   }
 
   private findTargetTable(table: NestedMagicItemTableEntry): MagicItemTable {
