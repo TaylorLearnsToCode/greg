@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-roller/dice-roller.util';
 import {
-  GemOrJewel,
-  GemRollResult,
   JewelRollResult,
-  RolledGemChances,
-  RolledGemValue,
   RolledJewelValues,
+} from '@treasure/enter-treasure/model/treasure-jewelry.model';
+import {
+  GemOrJewel,
+  MapsAndMagicEntry,
   Specie,
   TreasureListEntry,
   TreasureRollResult,
 } from '@treasure/enter-treasure/model/treasure-list-entry.model';
+import { MapsAndMagicResult } from '@treasure/enter-treasure/model/treasure-maps-and-magic.model';
+import { rollGems } from '@treasure/enter-treasure/utilities/gem-roller.util';
+import {
+  MagicItem,
+  MagicItemTable,
+  NestedMagicItemTable,
+  NestedMagicItemTableEntry,
+} from '@treasure/treasure-common/model/magic-item.model';
+import {
+  MagicItemMap,
+  TreasureMap,
+} from '@treasure/treasure-common/model/treasure-map.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -52,59 +65,12 @@ export class RollTreasureControllerService {
     rolledTreasure.copper = this.rollSpecie(treasureList.copper);
     rolledTreasure.silver = this.rollSpecie(treasureList.silver);
     rolledTreasure.gold = this.rollSpecie(treasureList.gold);
-    rolledTreasure.gems = this.rollGems(treasureList.gems);
+    rolledTreasure.mapsAndMagic = this.rollMapsAndMagic(
+      treasureList.mapsAndMagic
+    );
+    rolledTreasure.gems = rollGems(treasureList.gems);
     rolledTreasure.jewelry = this.rollJewelry(treasureList.jewelry);
     this.rolledTreasure = rolledTreasure;
-  }
-
-  private checkForNextLevelGem(key: number): number {
-    if (rollDice(this.d6) === 1 && key < 11) {
-      key++;
-      key = this.checkForNextLevelGem(key);
-    }
-    return key;
-  }
-
-  private rollGem(gem: GemOrJewel): GemRollResult {
-    const result: GemRollResult = new GemRollResult();
-
-    if (rollDice(this.d100) > gem.chanceOf) {
-      return result;
-    }
-
-    const gems: number[] = [];
-    let roll: number;
-    for (let i = 0; i < rollDice(gem.numberOf); i++) {
-      roll = rollDice(this.d100);
-      RolledGemChances.forEach((chance: number, key: number) => {
-        if (roll <= chance) {
-          gems.push(key);
-        }
-      });
-    }
-
-    let incrementBy: number;
-    if (gems.length > 99) {
-      incrementBy = 10;
-    } else if (gems.length > 9) {
-      incrementBy = 5;
-    } else {
-      incrementBy = 1;
-    }
-
-    for (let i = 0; i < gems.length; i += incrementBy) {
-      gems[i] = this.checkForNextLevelGem(gems[i]);
-    }
-
-    gems.forEach((key: number) => result[RolledGemValue.get(key)]++);
-
-    return result;
-  }
-
-  private rollGems(gems: GemOrJewel[]): GemRollResult[] {
-    const result: GemRollResult[] = [];
-    gems.forEach((gem) => result.push(this.rollGem(gem)));
-    return result;
   }
 
   private rollJewelry(jewelry: GemOrJewel[]): JewelRollResult[] {
@@ -136,6 +102,88 @@ export class RollTreasureControllerService {
     }
 
     result.values = jewels;
+    return result;
+  }
+
+  private findTargetTable(table: NestedMagicItemTableEntry): MagicItemTable {
+    let targetTable: MagicItemTable;
+    if (doesExist(table.entry)) {
+      targetTable = table.entry as MagicItemTable;
+    } else {
+      targetTable = this.findTargetTable(table);
+    }
+    return targetTable;
+  }
+
+  private rollOnNestedMagicItemTable(
+    table: NestedMagicItemTable
+  ): Array<MagicItem | TreasureMap | MagicItemMap> {
+    let targetTable: MagicItemTable;
+    let result: Array<MagicItem | TreasureMap | MagicItemMap> = [];
+    for (let tableEntry of table.entries) {
+      targetTable = this.findTargetTable(tableEntry);
+      const roll = rollDice(this.d100);
+      for (let item of targetTable.entries) {
+        if (roll >= item.chanceOf.low && roll <= item.chanceOf.high) {
+          if (doesExist((item as any).entries)) {
+            this.rollOnMagicItemTable(item as any as MagicItemTable);
+          } else {
+            result.push(item.entry);
+          }
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  private rollOnMagicItemTable(
+    table: MagicItemTable
+  ): MagicItem | TreasureMap | MagicItemMap {
+    const roll = rollDice(this.d100);
+    let targetEntry;
+    for (let entry of table.entries) {
+      if (roll >= entry.chanceOf.low && roll <= entry.chanceOf.high) {
+        targetEntry = entry;
+        break;
+      }
+    }
+
+    if (doesExist((table as any).entries)) {
+      return this.rollOnMagicItemTable(targetEntry);
+    } else if (doesExist(targetEntry.entry)) {
+      return targetEntry.entry;
+    }
+  }
+
+  private rollMapOrMagicItem(item: MapsAndMagicEntry): MapsAndMagicResult {
+    const result: MapsAndMagicResult = new MapsAndMagicResult();
+
+    if (rollDice(this.d100) > item.chanceOf) {
+      return result;
+    }
+
+    let rolledMapOrMagicItem: Array<MagicItem | TreasureMap | MagicItemMap>;
+    for (let i = 0; i < item.numberOf; i++) {
+      rolledMapOrMagicItem = this.rollOnNestedMagicItemTable(item.entry);
+      rolledMapOrMagicItem.forEach((item) => {
+        if (item.description === 'Treasure Map') {
+        } else if (item.description === 'Magic Item Map') {
+        } else {
+          result.items.push(item);
+        }
+      });
+    }
+    return result;
+  }
+
+  private rollMapsAndMagic(
+    mapsAndMagic: MapsAndMagicEntry[]
+  ): MapsAndMagicResult[] {
+    const result: MapsAndMagicResult[] = [];
+    mapsAndMagic.forEach((mapOrMagic) =>
+      result.push(this.rollMapOrMagicItem(mapOrMagic))
+    );
     return result;
   }
 
