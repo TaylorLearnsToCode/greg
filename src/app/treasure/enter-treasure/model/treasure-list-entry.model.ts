@@ -18,6 +18,7 @@ export class TreasureRollResult {
   silver: number = 0;
   gold: number = 0;
   gems: GemRollResult[] = [];
+  jewelry: JewelRollResult[] = [];
 }
 
 export class GemRollResult {
@@ -81,3 +82,30 @@ export class GemOrJewel extends AbstractTreasureTypeEntry {
   type: string = '';
   numberOf: DiceRolled = new DiceRolled();
 }
+
+export class JewelRollResult {
+  values: number[] = [];
+}
+
+export const RolledJewelValues: Map<number, DiceRolled> = new Map([
+  [
+    20,
+    new DiceRolled({
+      no: 3,
+      multiplier: 100,
+    } as DiceRolled),
+  ],
+  [
+    80,
+    new DiceRolled({
+      multiplier: 1000,
+    } as DiceRolled),
+  ],
+  [
+    100,
+    new DiceRolled({
+      pips: 10,
+      multiplier: 1000,
+    } as DiceRolled),
+  ],
+]);

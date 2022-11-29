@@ -4,8 +4,10 @@ import { rollDice } from '@shared/utilities/dice-roller/dice-roller.util';
 import {
   GemOrJewel,
   GemRollResult,
+  JewelRollResult,
   RolledGemChances,
   RolledGemValue,
+  RolledJewelValues,
   Specie,
   TreasureListEntry,
   TreasureRollResult,
@@ -51,6 +53,7 @@ export class RollTreasureControllerService {
     rolledTreasure.silver = this.rollSpecie(treasureList.silver);
     rolledTreasure.gold = this.rollSpecie(treasureList.gold);
     rolledTreasure.gems = this.rollGems(treasureList.gems);
+    rolledTreasure.jewelry = this.rollJewelry(treasureList.jewelry);
     this.rolledTreasure = rolledTreasure;
   }
 
@@ -101,6 +104,38 @@ export class RollTreasureControllerService {
   private rollGems(gems: GemOrJewel[]): GemRollResult[] {
     const result: GemRollResult[] = [];
     gems.forEach((gem) => result.push(this.rollGem(gem)));
+    return result;
+  }
+
+  private rollJewelry(jewelry: GemOrJewel[]): JewelRollResult[] {
+    const result: JewelRollResult[] = [];
+    jewelry.forEach((jewel) => result.push(this.rollJewel(jewel)));
+    return result;
+  }
+
+  private rollJewel(jewel: GemOrJewel): JewelRollResult {
+    const result: JewelRollResult = new JewelRollResult();
+
+    if (rollDice(this.d100) > jewel.chanceOf) {
+      return result;
+    }
+
+    const jewels: number[] = [];
+    let roll: number;
+    let valuation: DiceRolled;
+    for (let i = 0; i < rollDice(jewel.numberOf); i++) {
+      roll = rollDice(this.d100);
+
+      RolledJewelValues.forEach((value: DiceRolled, key: number) => {
+        if (roll <= key) {
+          valuation = value;
+        }
+      });
+
+      jewels.push(rollDice(valuation));
+    }
+
+    result.values = jewels;
     return result;
   }
 
