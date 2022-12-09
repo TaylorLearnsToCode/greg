@@ -1,4 +1,5 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { NestedMagicItemTableEntry } from './magic-item.model';
 
 export class TreasureMap {
@@ -19,4 +20,14 @@ export class MagicItemMap {
 export class MagicItemMapEntry {
   numberOf: number = 0;
   item: NestedMagicItemTableEntry = new NestedMagicItemTableEntry();
+
+  constructor(entry?: any) {
+    if (doesExist(entry)) {
+      Object.keys(entry).forEach((key) => {
+        if (doesExist(entry[key])) {
+          this[key] = entry[key];
+        }
+      });
+    }
+  }
 }

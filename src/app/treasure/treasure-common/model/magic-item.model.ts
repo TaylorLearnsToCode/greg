@@ -1,5 +1,5 @@
 import { BoundedRange } from '@shared/model/bounded-range.model';
-import { doesExist } from '@shared/utilities/common-util/common.util';
+import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { MagicItemMap, TreasureMap } from './treasure-map.model';
 
 /** Base class for magic items, maps, or other equivalent articles of treasure. */
@@ -14,14 +14,8 @@ export class MagicItemTableEntry {
   chanceOf: BoundedRange = new BoundedRange();
   entry: MagicItem | TreasureMap | MagicItemMap = new MagicItem();
 
-  constructor(magicItemTableEntry?: MagicItemTableEntry) {
-    if (doesExist(magicItemTableEntry)) {
-      Object.keys(this).forEach((key) => {
-        if (doesExist(magicItemTableEntry[key])) {
-          this[key] = magicItemTableEntry[key];
-        }
-      });
-    }
+  constructor(table?: any) {
+    constructInstance(table, this);
   }
 }
 

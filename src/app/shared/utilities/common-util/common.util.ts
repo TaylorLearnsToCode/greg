@@ -46,6 +46,23 @@ export function cloneObject(obj: any): any {
 }
 
 /**
+ * For a provided object, replaces the object's properties with the corresponding
+ * properties of a provided object argument.
+ * @param  {any} arg?
+ * @param  {any} obj?
+ * @returns void
+ */
+export function constructInstance(arg?: any, obj?: any): void {
+  if (doesExist(arg) && doesExist(obj)) {
+    Object.keys(obj).forEach((key) => {
+      if (doesExist(arg[key])) {
+        obj[key] = arg[key];
+      }
+    });
+  }
+}
+
+/**
  * For any object, iterate through properties and Object.freeze each.
  * @param  {any} obj
  */

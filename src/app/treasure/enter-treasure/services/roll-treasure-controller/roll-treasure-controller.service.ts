@@ -4,13 +4,14 @@ import { doesExist } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-roller/dice-roller.util';
 import {
   MapsAndMagicEntry,
-  Specie,
   TreasureListEntry,
   TreasureRollResult,
 } from '@treasure/enter-treasure/model/treasure-list-entry.model';
 import { MapsAndMagicResult } from '@treasure/enter-treasure/model/treasure-maps-and-magic.model';
 import { rollGems } from '@treasure/enter-treasure/utilities/gem-roller.util';
 import { rollJewelry } from '@treasure/enter-treasure/utilities/jewelry-roller.util';
+import { rollMapsAndMagic } from '@treasure/enter-treasure/utilities/map-and-magic-roller.util';
+import { rollSpecie } from '@treasure/enter-treasure/utilities/specie-roller.util';
 import {
   MagicItem,
   MagicItemTable,
@@ -58,12 +59,10 @@ export class RollTreasureControllerService {
 
   rollTreasure(treasureList: TreasureListEntry): void {
     const rolledTreasure: TreasureRollResult = new TreasureRollResult();
-    rolledTreasure.copper = this.rollSpecie(treasureList.copper);
-    rolledTreasure.silver = this.rollSpecie(treasureList.silver);
-    rolledTreasure.gold = this.rollSpecie(treasureList.gold);
-    rolledTreasure.mapsAndMagic = this.rollMapsAndMagic(
-      treasureList.mapsAndMagic
-    );
+    rolledTreasure.copper = rollSpecie(treasureList.copper);
+    rolledTreasure.silver = rollSpecie(treasureList.silver);
+    rolledTreasure.gold = rollSpecie(treasureList.gold);
+    rolledTreasure.mapsAndMagic = rollMapsAndMagic(treasureList.mapsAndMagic);
     rolledTreasure.gems = rollGems(treasureList.gems);
     rolledTreasure.jewelry = rollJewelry(treasureList.jewelry);
     this.rolledTreasure = rolledTreasure;
@@ -149,9 +148,5 @@ export class RollTreasureControllerService {
       result.push(this.rollMapOrMagicItem(mapOrMagic))
     );
     return result;
-  }
-
-  private rollSpecie(specie: Specie): number {
-    return rollDice(this.d100) <= specie.chanceOf ? rollDice(specie.amount) : 0;
   }
 }

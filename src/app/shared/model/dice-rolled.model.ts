@@ -1,24 +1,24 @@
-import { doesExist } from '../utilities/common-util/common.util';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 
 /** Object representing the roll of a set of like-faced dice */
 export class DiceRolled {
   /** A number to be added to or taken away from the roll */
-  modifier: number;
+  modifier: number = 0;
   /** A number by which the roll should be multiplied */
-  multiplier: number;
+  multiplier: number = 1;
   /** The total number of dice of a given size to be rolled */
-  no: number;
+  no: number = 1;
   /** The number of sides or results of the die: so, 6 for D6; 8 for D8 */
-  pips: number;
+  pips: number = 6;
 
-  constructor(diceRolled?: DiceRolled) {
-    diceRolled = doesExist(diceRolled) ? diceRolled : ({} as DiceRolled);
-    this.modifier = doesExist(diceRolled.modifier) ? diceRolled.modifier : 0;
-    this.multiplier = doesExist(diceRolled.multiplier)
-      ? diceRolled.multiplier
-      : 1;
-    this.no = doesExist(diceRolled.no) ? diceRolled.no : 1;
-    this.pips = doesExist(diceRolled.pips) ? diceRolled.pips : 6;
+  constructor(diceRolled?: any) {
+    if (doesExist(diceRolled)) {
+      Object.keys(this).forEach((key) => {
+        if (doesExist(diceRolled[key])) {
+          this[key] = diceRolled[key];
+        }
+      });
+    }
   }
 
   toString(): string {

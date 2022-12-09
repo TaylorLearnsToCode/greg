@@ -35,6 +35,16 @@ export function getRollRange(...dicePools: DiceRolled[]): number[] {
   }
   return result;
 }
+/**
+ * Returns true if the provided number, the roll, is between the high and
+ * low bounds of the provided range.
+ * @param  {number} roll
+ * @param  {BoundedRange} range
+ * @returns boolean
+ */
+export function isWithinRange(roll: number, range: BoundedRange): boolean {
+  return roll >= range.low && roll <= range.high;
+}
 
 /**
  * Rolls {no} number of dice, each with {pips} faces, and returns the result.
