@@ -1,5 +1,5 @@
 import { DiceRolled } from '@shared/model/dice-rolled.model';
-import { doesExist } from '@shared/utilities/common-util/common.util';
+import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { NestedMagicItemTable } from '@treasure/treasure-common/model/magic-item.model';
 import { AbstractTreasureTypeEntry } from '@treasure/treasure-common/model/treasure-item.model';
 import { GemRollResult } from './treasure-gems.model';
@@ -31,14 +31,8 @@ export class MapsAndMagicEntry {
   numberOf: number = 1;
   entry: NestedMagicItemTable = new NestedMagicItemTable();
 
-  constructor(entry?: MapsAndMagicEntry) {
-    if (doesExist(entry)) {
-      Object.keys(this).forEach((key) => {
-        if (doesExist(entry[key])) {
-          this[key] = entry[key];
-        }
-      });
-    }
+  constructor(entry?: any) {
+    constructInstance(entry, this);
   }
 }
 
