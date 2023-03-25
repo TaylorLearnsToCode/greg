@@ -1,0 +1,38 @@
+<div class="two-across">
+  <span>
+    <label>List: </label>
+    <input
+      #listNameInput
+      type="text"
+      (change)="updateListName()"
+      [(ngModel)]="listName"
+    />
+  </span>
+  <button (click)="toggleMapOrMagic()">
+    {{ enteringMagicItem ? "Enter Map" : "Enter Magic Item" }}
+  </button>
+</div>
+
+<ng-container *ngIf="magicItemTable$ | async as magicItemTable">
+  <table>
+    <tr>
+      <th>d100</th>
+      <th colspan="2" class="result-header">Result</th>
+    </tr>
+    <tr *ngFor="let item of magicItemTable.entries; index as i">
+      <td class="non-content-cells">{{ item.chanceOf | boundedRange }}</td>
+      <td class="content-cells">
+        {{ item.entry.name }}: {{ item.entry.description }}
+      </td>
+      <td class="non-content-cells"><a (click)="removeEntryAt(i)">X</a></td>
+    </tr>
+  </table>
+</ng-container>
+
+<section>
+  <button (click)="clearTable()">Clear List</button>
+  <button (click)="exportList()">Export List</button>
+  <br />
+  <label>Import List: </label>
+  <input #importListInput (change)="importList()" type="file" />
+</section>

@@ -1,0 +1,26 @@
+@import '../../../../../assets/styles/variables';
+
+@mixin centerAndPad() {
+  text-align: center;
+  padding: 0.5em 0em;
+}
+
+div {
+  @include centerAndPad();
+}
+
+form, .two-across {
+  @include centerAndPad();
+  @include twoAcross();
+  row-gap: 0.5em;
+}
+
+.one-with-remove {
+  display: grid;
+  grid-template-columns: 1fr 2em;
+}
+
+.two-with-remove {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2em;
+}

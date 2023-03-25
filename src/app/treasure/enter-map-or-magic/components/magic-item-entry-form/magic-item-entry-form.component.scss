@@ -1,0 +1,14 @@
+@import '../../../../../assets/styles/variables';
+
+form {
+  @include twoAcross();
+}
+
+h3 {
+  @include indent();
+}
+
+section {
+  margin-top: 0.5em;
+  text-align: center;
+}

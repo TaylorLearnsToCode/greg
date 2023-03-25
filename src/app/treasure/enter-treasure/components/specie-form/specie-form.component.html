@@ -1,0 +1,9 @@
+<span [formGroup]="parentForm">
+  <label>Chance Of:</label>
+  <span> <input formControlName="chanceOf" type="number" />% </span>
+
+  <label>Amount:</label>
+  <greg-dice-roller-form
+    [parentForm]="parentForm.get('amount')"
+  ></greg-dice-roller-form>
+</span>

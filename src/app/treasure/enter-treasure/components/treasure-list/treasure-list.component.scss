@@ -1,0 +1,26 @@
+@import '../../../../../assets/styles/variables';
+
+@include standardTableStyles();
+
+td {
+  text-align: center;
+
+  &.left-align {
+    text-align: left;
+  }
+}
+
+section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  column-gap: 1em;
+  text-align: center;
+}
+
+.edit-pencil {
+  transform: rotate(90deg);
+}
+
+.two-across {
+  @include twoAcross();
+}

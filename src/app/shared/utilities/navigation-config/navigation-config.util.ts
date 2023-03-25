@@ -15,11 +15,25 @@ const createFromMonster: LoadChildren = () =>
     (m) => m.CreateFromMonsterModule
   );
 
+/** LoadChildren function to load the Create Nested Map or Magic Item Table module */
+/* istanbul ignore next */
+const createNestedMagicItemTable: LoadChildren = () =>
+  import(
+    '@treasure/create-nested-magic-item-table/create-nested-magic-item-table.module'
+  ).then((m) => m.CreateNestedMagicItemTableModule);
+
 /** LoadChildren function to load the Encounter Not Found module */
 /* istanbul ignore next */
 const encounterNotFound: LoadChildren = () =>
   import('@encounter/encounter-not-found/encounter-not-found.module').then(
     (m) => m.EncounterNotFoundModule
+  );
+
+/** LoadChildren function to load the Enter Map or Magic Item module */
+/* istanbul ignore next */
+const enterMapOrMagic: LoadChildren = () =>
+  import('@treasure/enter-map-or-magic/enter-map-or-magic.module').then(
+    (m) => m.EnterMapOrMagicModule
   );
 
 /** LoadChildren function to load the Enter Monster module */
@@ -29,6 +43,13 @@ const enterMonster: LoadChildren = () =>
     (m) => m.EnterMonsterModule
   );
 
+/** LoadChildren function to load the Enter Treasure module */
+/* istanbul ignore next */
+const enterTreasure: LoadChildren = () =>
+  import('@treasure/enter-treasure/enter-treasure.module').then(
+    (m) => m.EnterTreasureModule
+  );
+
 /** LoadChildren function to load the Monster Not Found module */
 /* istanbul ignore next */
 const monsterNotFound: LoadChildren = () =>
@@ -36,14 +57,25 @@ const monsterNotFound: LoadChildren = () =>
     (m) => m.MonsterNotFoundModule
   );
 
+/** LoadChildren function to load the Treasure Not Found module */
+/* istanbul ignore next */
+const treasureNotFound: LoadChildren = () =>
+  import('@treasure/treasure-not-found/treasure-not-found.module').then(
+    (m) => m.TreasureNotFoundModule
+  );
+
 /** Human-readable labels for configured route paths */
 export enum RouteLabels {
   'create-encounter-table' = 'Create Encounter Table',
   'create-encounter-table-deux' = 'Create Encounter Table Deux',
+  'create-nested-magic-item-table' = 'Create Nested Map/Magic Table',
   'create-from-monster' = 'Create from Monster',
   encounter = 'Encounter',
+  'enter-map-or-magic' = 'Enter Map or Magic Item',
   'enter-monster' = 'Enter Monster',
+  'enter-treasure' = 'Enter Treasure',
   monster = 'Monster',
+  treasure = 'Treasure',
   welcome = 'Home',
 }
 
@@ -56,6 +88,7 @@ export function readRoutes(): Route[] {
   });
   routes.push(buildMonsterRoute());
   routes.push(buildEncounterRoute());
+  routes.push(buildTreasureRoute());
   return routes;
 }
 
@@ -94,5 +127,30 @@ function buildMonsterRoute(): Route {
   return {
     path: 'monster',
     children: [...monsterRoutes],
+  } as Route;
+}
+
+/** "Private" function to return exclusively routes pertaining to the Treasure module. */
+function buildTreasureRoute(): Route {
+  const treasureRoutes: Route[] = [];
+  treasureRoutes.push({
+    path: 'enter-treasure',
+    loadChildren: enterTreasure,
+  });
+  treasureRoutes.push({
+    path: 'enter-map-or-magic',
+    loadChildren: enterMapOrMagic,
+  });
+  treasureRoutes.push({
+    path: 'create-nested-magic-item-table',
+    loadChildren: createNestedMagicItemTable,
+  });
+  treasureRoutes.push({
+    path: '**',
+    loadChildren: treasureNotFound,
+  });
+  return {
+    path: 'treasure',
+    children: [...treasureRoutes],
   } as Route;
 }

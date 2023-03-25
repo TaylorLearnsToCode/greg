@@ -1,5 +1,6 @@
 import { BoundedRange } from '@shared/model/bounded-range.model';
 import { DiceRolled } from '../../model/dice-rolled.model';
+import { doesExist } from '../common-util/common.util';
 
 /**
  * For a collection of provided dice pools, provides the minimum and maximum possible
@@ -9,10 +10,12 @@ import { DiceRolled } from '../../model/dice-rolled.model';
 export function getBoundedRange(...dicePools: DiceRolled[]): BoundedRange {
   let min = 0;
   let max = 0;
-  dicePools.forEach((pool) => {
-    min += (pool.modifier + pool.no) * pool.multiplier;
-    max += (pool.modifier + pool.pips * pool.no) * pool.multiplier;
-  });
+  dicePools
+    .filter((pool) => doesExist(pool))
+    .forEach((pool) => {
+      min += (pool.modifier + pool.no) * pool.multiplier;
+      max += (pool.modifier + pool.pips * pool.no) * pool.multiplier;
+    });
   return new BoundedRange({
     low: min,
     high: max,
@@ -31,6 +34,16 @@ export function getRollRange(...dicePools: DiceRolled[]): number[] {
     result.push(i);
   }
   return result;
+}
+/**
+ * Returns true if the provided number, the roll, is between the high and
+ * low bounds of the provided range.
+ * @param  {number} roll
+ * @param  {BoundedRange} range
+ * @returns boolean
+ */
+export function isWithinRange(roll: number, range: BoundedRange): boolean {
+  return roll >= range.low && roll <= range.high;
 }
 
 /**

@@ -29,7 +29,9 @@ export function areEqual(first: any, second: any): boolean {
  */
 export function cloneObject(obj: any): any {
   let retObj: any;
-  if (Array.isArray(obj)) {
+  if (!doesExist(obj)) {
+    return null;
+  } else if (Array.isArray(obj)) {
     retObj = [];
     obj.forEach((element) => retObj.push(cloneObject(element)));
   } else if (typeof obj === 'object' && !(obj instanceof Date)) {
@@ -41,6 +43,23 @@ export function cloneObject(obj: any): any {
     retObj = obj;
   }
   return retObj;
+}
+
+/**
+ * For a provided object, replaces the object's properties with the corresponding
+ * properties of a provided object argument.
+ * @param  {any} arg?
+ * @param  {any} obj?
+ * @returns void
+ */
+export function constructInstance(arg?: any, obj?: any): void {
+  if (doesExist(arg) && doesExist(obj)) {
+    Object.keys(obj).forEach((key) => {
+      if (doesExist(arg[key])) {
+        obj[key] = arg[key];
+      }
+    });
+  }
 }
 
 /**

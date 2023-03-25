@@ -1,0 +1,18 @@
+<h3>Magic Item</h3>
+<form [formGroup]="magicItemEntryForm">
+  <label>Chance: </label>
+  <greg-bounded-range-form
+    [parentForm]="magicItemEntryForm.get('chanceOf')"
+  ></greg-bounded-range-form>
+
+  <ng-container [formGroup]="magicItemEntryForm.get('entry')">
+    <label>Name: </label>
+    <input formControlName="name" type="text" />
+
+    <label>Description: </label>
+    <input formControlName="description" type="text" />
+  </ng-container>
+</form>
+<section>
+  <button (click)="addItem()">Add Entry to List</button>
+</section>

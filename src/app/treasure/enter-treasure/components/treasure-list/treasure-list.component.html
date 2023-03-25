@@ -1,0 +1,77 @@
+<ng-template #nil> Nil </ng-template>
+
+<section>
+  <button (click)="exportList()">Export</button>
+  <button (click)="clearList()">Clear</button>
+
+  <span>
+    <label>Import: </label>
+    <input #listImport (change)="importSavedList()" type="file" />
+  </span>
+</section>
+
+<ng-container *ngIf="treasureList$ | async as treasureList">
+  <section>
+    <p><strong>Dice to Roll:</strong></p>
+    <p>{{ treasureList.diceToRoll | diceRolled }}</p>
+    <p>
+      <button (click)="toggleAreEnteringTreasure()">
+        {{ toggleButtonText }}
+      </button>
+    </p>
+  </section>
+
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Copper</th>
+      <th>Silver</th>
+      <th>Gold</th>
+      <th>Gems</th>
+      <th>Jewelry</th>
+      <th>Maps or Magic</th>
+      <th>&nbsp;</th>
+    </tr>
+    <tr *ngFor="let entry of treasureList.entries; index as i">
+      <td class="left-align">{{ entry.type }}</td>
+      <td>{{ entry.copper | speciePipe }}</td>
+      <td>{{ entry.silver | speciePipe }}</td>
+      <td>{{ entry.gold | speciePipe }}</td>
+      <td>
+        <ng-container *ngIf="entry.gems.length; else nil">
+          <ng-container *ngFor="let gem of entry.gems; let last = last">
+            {{ gem | gemOrJewel }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+      <td>
+        <ng-container *ngIf="entry.jewelry.length; else nil">
+          <ng-container *ngFor="let jewel of entry.jewelry; let last = last">
+            {{ jewel | gemOrJewel }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+      <td>
+        <ng-container *ngIf="entry.mapsAndMagic.length; else nil">
+          <ng-container *ngFor="let mom of entry.mapsAndMagic; let last = last">
+            {{ mom | mapOrMagic }}
+            <br *ngIf="!last" />
+          </ng-container>
+        </ng-container>
+      </td>
+      <td class="two-across">
+        <ng-container *ngIf="areEnteringTreasure; else rollList">
+          <div class="edit-pencil"><a (click)="editRecord(i)">&#x270F;</a></div>
+          <a (click)="removeRecord(i)">X</a>
+        </ng-container>
+        <ng-template #rollList>
+          <span style="font-size: 28px">
+            <a (click)="rollEntry(treasureList.entries[i])">&#9861;</a>
+          </span>
+        </ng-template>
+      </td>
+    </tr>
+  </table>
+</ng-container>

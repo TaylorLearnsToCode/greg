@@ -1,0 +1,26 @@
+<form [formGroup]="nestedTableForm">
+  <label>Table Name: </label>
+  <input formControlName="name" type="text" />
+  <table formArrayName="entries">
+    <tr>
+      <th class="range-header">Range</th>
+      <th class="result-header">Result</th>
+    </tr>
+    <tr *ngFor="let entry of entries.controls; index as i">
+      <ng-container [formGroupName]="i">
+        <td>
+          <greg-bounded-range-form
+            [parentForm]="entry.get('chanceOf')"
+          ></greg-bounded-range-form>
+        </td>
+        <td class="result-entry">
+          {{ entry.get("entry").value.name }}
+        </td>
+      </ng-container>
+    </tr>
+  </table>
+</form>
+<section>
+  <label>Upload Entry: </label>
+  <input #uploadEntryInput (change)="importEntry()" type="file" />
+</section>

@@ -12,17 +12,32 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "module": "es2020",
     "moduleResolution": "node",
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@encounter/*": ["src/app/encounter/*"],
-      "@monster/*": ["src/app/monster/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@test/*": ["src/assets/test-data/*"]
+      "@encounter/*": [
+        "src/app/encounter/*"
+      ],
+      "@monster/*": [
+        "src/app/monster/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@test/*": [
+        "src/assets/test-data/*"
+      ],
+      "@treasure/*": [
+        "src/app/treasure/*"
+      ]
     },
     "sourceMap": true,
-    "target": "es2020"
+    "target": "ES2022",
+    "useDefineForClassFields": false
   }
 }
