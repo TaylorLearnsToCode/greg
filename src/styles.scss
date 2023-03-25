@@ -1,4 +1,5 @@
-@import "assets/styles/variables";
+/* You can add global styles to this file, and also import other style files */
+@import './assets/variables';
 
 a {
   color: $anchor-orange-light;
@@ -41,6 +42,16 @@ input[type="number"] {
 }
 
 label {
-  color: $anchor-orange-light;
+  color: $header-orange;
   font-weight: bold;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  td,
+  th {
+    padding: 0em 0.25em;
+  }
 }

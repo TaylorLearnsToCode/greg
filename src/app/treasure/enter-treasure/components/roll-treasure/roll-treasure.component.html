@@ -1,7 +1,0 @@
-<h3>Treasure</h3>
-<ng-container *ngIf="rolledTreasure$ | async as rolledTreasure; else noResult">
-  {{ rolledTreasure | json }}
-</ng-container>
-<ng-template #noResult>
-  <div>~</div>
-</ng-template>

@@ -1,9 +1,0 @@
-@import '../../../../../assets/styles/variables';
-
-div {
-  text-align: center;
-}
-
-h3 {
-  @include indent();
-}

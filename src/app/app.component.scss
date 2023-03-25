@@ -1,0 +1,46 @@
+@import '/src/assets/variables';
+
+%dark-background {
+  background: $background-dark;
+  border: solid 1px $header-orange;
+}
+
+div.greg-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+header {
+  @extend %dark-background;
+  @include indent();
+}
+header div {
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+
+main {
+  @extend %dark-background;
+}
+
+nav {
+  background-color: $background-light;
+  border-left: solid 1px $header-orange;
+  border-right: solid 1px $header-orange;
+}
+nav section {
+  display: inline-block;
+  margin: .25em 0em;
+  padding: 0.2em;
+}
+nav span {
+  @extend %dark-background;
+  color: $header-orange;
+  padding: 0.1em 0.5em;
+  position: relative;
+}
+nav span:hover {
+  background-color: $header-orange;
+  color: $background-dark;
+  cursor: pointer;
+}
