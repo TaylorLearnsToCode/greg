@@ -1,1 +1,42 @@
-<router-outlet></router-outlet>
+<div
+  class="greg-wrapper"
+  *ngIf="appComponentViewState$ | async as state; else stillLoading"
+>
+  <header>
+    <h1>{{ state.headerText }}</h1>
+    <div *ngIf="hasSubtext">
+      {{ state.headerSubtext }}
+    </div>
+  </header>
+
+  <nav>
+    <ng-container *ngFor="let navRoute of state.navRoutes">
+      <section
+        (mouseenter)="toggleCollapse(navRoute.menuLabel)"
+        (mouseleave)="toggleCollapse(navRoute.menuLabel)"
+      >
+        <span (click)="navigateTo(navRoute.routePath)">
+          {{ navRoute.menuLabel }}
+          <small *ngIf="navRoute.children">
+            {{ navRoute.isExpanded ? "&#9650;" : "&#9660;" }}
+          </small>
+        </span>
+        <div *ngIf="navRoute.isExpanded" class="child-options">
+          <ng-container *ngFor="let childRoute of navRoute.children">
+            <span (click)="navigateTo(childRoute.routePath)">
+              {{ childRoute.menuLabel }}
+            </span>
+          </ng-container>
+        </div>
+      </section>
+    </ng-container>
+  </nav>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<ng-template #stillLoading>
+  <p>Loading...</p>
+</ng-template>

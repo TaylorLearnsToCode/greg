@@ -1,25 +1,27 @@
-# GREG - Guided Random Encounter Generator
+# GuidedRandomEncounterGenerator
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.4.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
-Its purpose is to help with the automated generation of dungeons, dungeon encounters, wildernesses, and wilderness encounters in Old School or OSR games.
+## Development server
 
-## License
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-This project is under the TST (Totally Steal This) License.
+## Code scaffolding
 
-If you want to use it, fork it, whatever: do it. A link back would be nice, but I... don't care. Any way that the software makes your game better? That's the purpose of the software - the fact that it's making your game better means it's served it's purpose.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Will try to load an official license file eventually.
+## Build
 
-## Contact
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-Blog: [ClericsWearRingmail.blogspot.com](https://clericswearringmail.blogspot.com/)
+## Running unit tests
 
-Discord: [ClericsWearRingmail#5545](https://discord.com/)
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-MeWe: [ClericsWearRingmail](https://www.mewe.com/i/clericswearringmail)
+## Running end-to-end tests
 
-## Feature Roadmap
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-...coming soon...
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
