@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageDisplayMode } from '@shared/model/page-display-mode.enum';
+import { PageDisplayMode } from '@shared/model/ui/page-display-mode.enum';
 
 @Component({
   selector: 'greg-welcome-landing',

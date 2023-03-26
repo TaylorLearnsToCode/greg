@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppComponentViewModel } from '@shared/model/app-component-view.model';
+import { AppComponentViewModel } from '@shared/model/ui/app-component-view.model';
 import { IAppState } from '@shared/model/app-state.model';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 

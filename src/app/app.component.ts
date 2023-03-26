@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppComponentViewModel } from '@shared/model/app-component-view.model';
+import { AppComponentViewModel } from '@shared/model/ui/app-component-view.model';
 import { AppComponentManagerService } from '@shared/services/app-component-manager/app-component-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { Observable, tap } from 'rxjs';

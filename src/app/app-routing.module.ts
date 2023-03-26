@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { NAVIGATION_ROUTES } from '@assets/navigation-routes.config';
-import { NavRoute } from '@shared/model/nav-route.interface';
+import { NavRoute } from '@shared/model/ui/nav-route.interface';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 
 /** Iterates through configured NAVIGATION_ROUTES and, for each, adds a Route to the application routing. */
