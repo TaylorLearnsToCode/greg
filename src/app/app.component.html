@@ -2,6 +2,7 @@
   class="greg-wrapper"
   *ngIf="appComponentViewState$ | async as state; else stillLoading"
 >
+  <!-- Application Header -->
   <header>
     <h1>{{ state.headerText }}</h1>
     <div *ngIf="hasSubtext">
@@ -9,6 +10,7 @@
     </div>
   </header>
 
+  <!-- Navigation Menu Bar -->
   <nav>
     <ng-container *ngFor="let navRoute of state.navRoutes">
       <section
@@ -23,7 +25,11 @@
         </span>
         <div *ngIf="navRoute.isExpanded" class="child-options">
           <ng-container *ngFor="let childRoute of navRoute.children">
-            <span (click)="navigateTo(childRoute.routePath)">
+            <span
+              (click)="
+                navigateTo(navRoute.routePath + '/' + childRoute.routePath)
+              "
+            >
               {{ childRoute.menuLabel }}
             </span>
           </ng-container>
@@ -32,11 +38,13 @@
     </ng-container>
   </nav>
 
+  <!-- Route Content -->
   <main>
     <router-outlet></router-outlet>
   </main>
 </div>
 
+<!-- Loading Template Message -->
 <ng-template #stillLoading>
   <p>Loading...</p>
 </ng-template>

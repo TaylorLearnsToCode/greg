@@ -6,6 +6,11 @@ $background-light: #333333;
 $header-orange: #dd7700;
 $text-white: #cccccc;
 
+%grid-display {
+  display: grid;
+  row-gap: 0.2em;
+}
+
 @mixin hideFileInputs() {
   input[type='file'] {
     visibility: hidden;
@@ -17,13 +22,20 @@ $text-white: #cccccc;
   padding-left: 2em;
 }
 
+@mixin oneColumnLayout($textAlign: center) {
+  @extend %grid-display;
+  grid-template-columns: 1fr;
+  text-align: $textAlign;
+}
+
 @mixin smallNumberInputs($size: 2em) {
   input[type='number'] {
     width: $size;
   }
 }
 
-@mixin twoColumnLayout() {
-  display: grid;
+@mixin twoColumnLayout($textAlign: left) {
+  @extend %grid-display;
   grid-template-columns: repeat(2, 1fr);
+  text-align: $textAlign;
 }

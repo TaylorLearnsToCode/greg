@@ -44,3 +44,10 @@ nav span:hover {
   color: $background-dark;
   cursor: pointer;
 }
+.child-options {
+  position: absolute;
+  z-index: 1;
+}
+.child-options > * {
+  display: block;
+}

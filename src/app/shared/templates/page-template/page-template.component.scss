@@ -27,4 +27,5 @@ section.page-template--stacked {
 section.page-template--double {
   grid-template-areas:
     "first second";
+  grid-template-columns: repeat(2, 1fr);
 }

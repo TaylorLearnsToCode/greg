@@ -1,0 +1,59 @@
+<greg-page-template>
+  <first-content>
+    <!-- Form -->
+    <form [formGroup]="treasureTypeForm">
+      <section class="type-definition">
+        <label>Type:</label>
+        <span>
+          <input formControlName="type" type="text" />
+        </span>
+      </section>
+
+      <label class="articles">Articles</label>
+      <ng-container formArrayName="entries">
+        <section
+          class="articles"
+          *ngFor="let treasureArticle of articlesFormArray.controls; index as i"
+        >
+          <ng-container [formGroupName]="i">
+            <div class="reposition">
+              <a (click)="shiftArticle('up')">&#8963;</a>
+              <a (click)="shiftArticle('down')">&#8964;</a>
+            </div>
+            <div class="type-content">
+              <label>Name:</label>
+              <input formControlName="name" type="text" />
+
+              <label>Quantity:</label>
+              <greg-dice-rolled-form
+                [fromParentForm]="treasureArticle"
+                identifier="quantity"
+              ></greg-dice-rolled-form>
+
+              <label>Chance Of:</label>
+              <input formControlName="chanceOf" type="number" />
+
+              <label>...on:</label>
+              <greg-dice-rolled-form
+                [fromParentForm]="treasureArticle"
+                identifier="diceRolled"
+              ></greg-dice-rolled-form>
+            </div>
+            <div>
+              <a (click)="removeArticle(i)">X</a>
+            </div>
+          </ng-container>
+        </section>
+      </ng-container>
+    </form>
+
+    <section class="type-controls">
+      <a (click)="addTreasureArticle()">+ Add Treasure Article</a>
+    </section>
+  </first-content>
+
+  <second-content>
+    <!-- Current In memory List-->
+    <p>{{ treasureTypeForm.value | json }}</p>
+  </second-content>
+</greg-page-template>
