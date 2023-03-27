@@ -13,6 +13,8 @@ export class TreasureType {
    * lists to be checked in sequence.
    */
   entries: TreasureArticle[] = [];
+  /** The game system to which this treasure type maps */
+  system: string = '';
 
   constructor(type?: any) {
     constructInstance(this, type);

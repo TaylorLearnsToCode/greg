@@ -3,9 +3,14 @@
     <!-- Form -->
     <form [formGroup]="treasureTypeForm">
       <section class="type-definition">
-        <label>Type:</label>
         <span>
+          <label>Type:</label>
           <input formControlName="type" type="text" />
+        </span>
+
+        <span>
+          <label>System:</label>
+          <input formControlName="system" type="text" />
         </span>
       </section>
 
