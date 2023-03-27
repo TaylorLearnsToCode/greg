@@ -2,10 +2,8 @@
 
 @include smallNumberInputs(4em);
 
-div.reposition a {
-  display: block;
-  height: 0.6em;
-  margin-top: -0.25em;
+div.reposition {
+  @include oneColumnLayout();
 }
 
 div.type-content {
