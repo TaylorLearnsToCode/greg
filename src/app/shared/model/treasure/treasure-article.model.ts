@@ -10,7 +10,7 @@ export class TreasureArticle extends Rollable {
   /** Human readable identifier for the article */
   name: string = '';
   /** The number - expressed as a dice pool - of the article; accepts integer, as well */
-  quantity: DiceRolled = new DiceRolled();
+  quantity: DiceRolled | number = new DiceRolled();
 
   constructor(article?: any) {
     super();

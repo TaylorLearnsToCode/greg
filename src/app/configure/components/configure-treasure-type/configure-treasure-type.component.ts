@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
+import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-treasure-type',
@@ -14,11 +16,17 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     return this.treasureTypeForm.get('entries') as FormArray<FormGroup>;
   }
   treasureTypeForm: FormGroup;
+  treasureTypes$: Observable<TreasureType[]>;
+
+  constructor(private dataService: DataManagerService) {}
 
   ngOnInit(): void {
     this.treasureTypeForm = buildFormFromObject(
       new TreasureType()
     ) as FormGroup;
+    this.treasureTypes$ = this.dataService.dataState$.pipe(
+      map((dataState) => dataState.treasureTypes)
+    );
   }
 
   addTreasureArticle(): void {
@@ -29,6 +37,13 @@ export class ConfigureTreasureTypeComponent implements OnInit {
 
   removeArticle(index: number): void {
     this.articlesFormArray.removeAt(index);
+  }
+
+  saveArticle(): void {
+    this.dataService.persist(
+      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      this.treasureTypeForm.value
+    );
   }
 
   shiftArticle(index: number, direction: string): void {

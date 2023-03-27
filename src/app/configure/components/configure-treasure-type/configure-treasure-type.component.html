@@ -54,11 +54,24 @@
 
     <section class="type-controls">
       <a (click)="addTreasureArticle()">+ Add Treasure Article</a>
+      <hr />
+      <a (click)="saveArticle()">Save Article</a>
     </section>
   </first-content>
 
   <second-content>
     <!-- Current In memory List-->
     <p>{{ treasureTypeForm.value | json }}</p>
+    <hr />
+    <ng-container *ngIf="treasureTypes$ | async as treasureTypes">
+      <ul *ngIf="treasureTypes.length; else noTreasureTypes">
+        <li *ngFor="let type of treasureTypes">
+          {{ type.system }}: {{ type.type }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #noTreasureTypes>
+      <p>No treasure types currently saved.</p>
+    </ng-template>
   </second-content>
 </greg-page-template>
