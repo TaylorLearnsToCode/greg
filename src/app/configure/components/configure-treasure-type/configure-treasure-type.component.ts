@@ -31,7 +31,20 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     this.articlesFormArray.removeAt(index);
   }
 
-  shiftArticle(direction: string): void {
-    throw new Error(`Shift ${direction} not yet implemented`);
+  shiftArticle(index: number, direction: string): void {
+    const targetControl = this.articlesFormArray.at(index);
+    let newIndex = index;
+    switch (direction) {
+      case 'up':
+        newIndex--;
+        break;
+      case 'down':
+        newIndex++;
+        break;
+      default:
+        throw new Error(`Invalid direction provided: ${direction}`);
+    }
+    this.articlesFormArray.removeAt(index);
+    this.articlesFormArray.insert(newIndex, targetControl);
   }
 }

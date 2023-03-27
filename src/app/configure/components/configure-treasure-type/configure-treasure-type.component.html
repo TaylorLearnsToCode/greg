@@ -17,8 +17,8 @@
         >
           <ng-container [formGroupName]="i">
             <div class="reposition">
-              <a (click)="shiftArticle('up')">&#8963;</a>
-              <a (click)="shiftArticle('down')">&#8964;</a>
+              <a (click)="shiftArticle(i, 'up')">&uArr;</a>
+              <a (click)="shiftArticle(i, 'down')">&dArr;</a>
             </div>
             <div class="type-content">
               <label>Name:</label>
