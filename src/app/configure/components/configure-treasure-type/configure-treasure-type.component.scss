@@ -36,8 +36,8 @@ section.type-controls {
 
 section.type-definition {
   @include twoColumnLayout();
+  margin-bottom: 0.5em;
 }
 section.type-definition label {
-  padding-right: 4em;
-  text-align: right;
+  padding-right: 1em;
 }
