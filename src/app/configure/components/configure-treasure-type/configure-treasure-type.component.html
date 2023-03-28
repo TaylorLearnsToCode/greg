@@ -55,7 +55,16 @@
     <section class="type-controls">
       <a (click)="addTreasureArticle()">+ Add Treasure Article</a>
       <hr />
-      <a (click)="saveArticle()">Save Article</a>
+      <a (click)="saveTreasureType()">Save Treasure Type</a>
+      <a (click)="importTreasureType()">Import Treasure Type</a>
+      <input
+        #treasureTypeImport
+        accept=".{{ TREASURE_TYPE }}"
+        (change)="onTreasureTypeImport()"
+        type="file"
+      />
+      <a (click)="exportTreasureType()">Export Treasure Type</a>
+      <a (click)="clearTreasureTypeForm()">Clear Form</a>
     </section>
   </first-content>
 
@@ -71,6 +80,18 @@
           <a (click)="deleteTreasureType(type)">X</a>
         </div>
       </ng-container>
+
+      <section class="type-controls">
+        <a (click)="importTreasureTypeList()">Import List</a>
+        <input
+          #treasureTypeListImport
+          accept=".GREG-CONFIG"
+          (change)="onTreasureTypeListImport()"
+          type="file"
+        />
+        <a (click)="exportTreasureTypeList()">Export List</a>
+        <a (click)="clearTreasureTypeList()">Clear List</a>
+      </section>
     </section>
     <ng-template #noTreasureTypes>
       <p>No treasure types currently saved.</p>

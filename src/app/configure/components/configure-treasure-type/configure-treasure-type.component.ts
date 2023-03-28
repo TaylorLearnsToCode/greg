@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -12,11 +12,24 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./configure-treasure-type.component.scss'],
 })
 export class ConfigureTreasureTypeComponent implements OnInit {
+  @ViewChild('treasureTypeImport') treasureTypeImportRef: ElementRef;
+  @ViewChild('treasureTypeListImport') treasureTypeListImportRef: ElementRef;
+
+  readonly TREASURE_TYPE =
+    DataManagerService.PERSISTENCE_TYPES.treasureType.toUpperCase();
+
   get articlesFormArray(): FormArray<FormGroup> {
     return this.treasureTypeForm.get('entries') as FormArray<FormGroup>;
   }
   treasureTypeForm: FormGroup;
   treasureTypes$: Observable<TreasureType[]>;
+
+  private get treasureTypeImport(): HTMLInputElement {
+    return this.treasureTypeImportRef.nativeElement as HTMLInputElement;
+  }
+  private get treasureTypeListImport(): HTMLInputElement {
+    return this.treasureTypeListImportRef.nativeElement as HTMLInputElement;
+  }
 
   constructor(private dataService: DataManagerService) {}
 
@@ -29,16 +42,30 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     );
   }
 
+  /** Adds a blank Treasure Article to the end of the Treasure Articles list */
   addTreasureArticle(): void {
     this.articlesFormArray.push(
       buildFormFromObject(new TreasureArticle()) as FormGroup
     );
   }
 
-  editTreasureType(type: TreasureType): void {
-    this.treasureTypeForm = buildFormFromObject(type) as FormGroup;
+  /** Removes all treasure types from browser storage */
+  clearTreasureTypeList(): void {
+    this.dataService.clear(DataManagerService.PERSISTENCE_TYPES.treasureType);
   }
 
+  /** Rebuilds the treasure type form, clearing out all state from it */
+  clearTreasureTypeForm(): void {
+    this.treasureTypeForm = buildFormFromObject(
+      new TreasureType()
+    ) as FormGroup;
+  }
+
+  /**
+   * Removes a target Treasure Type from browser local storage
+   *
+   * @param  {TreasureType} type
+   */
   deleteTreasureType(type: TreasureType): void {
     this.dataService.delete(
       type,
@@ -46,17 +73,107 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     );
   }
 
+  /**
+   * Loads a target Treasure Type into the UI form for editing.
+   * Unsaved changes in the form when edit is selected are lost.
+   *
+   * @param  {TreasureType} type
+   */
+  editTreasureType(type: TreasureType): void {
+    this.treasureTypeForm = buildFormFromObject(type) as FormGroup;
+  }
+
+  /**
+   * Exports the current active Treasure Type to JSON format, downloading
+   * to the user's machine.
+   */
+  exportTreasureType(): void {
+    this.dataService.exportObject(
+      this.treasureTypeForm.value,
+      ''.concat(
+        this.treasureTypeForm.value.system,
+        '-',
+        this.treasureTypeForm.value.type
+      ),
+      `.${this.TREASURE_TYPE}`
+    );
+  }
+
+  /**
+   * Exports the visible list of treasure types on the right panel
+   * from browser storage to the user's local machine
+   */
+  exportTreasureTypeList(): void {
+    this.dataService.exportFromStorage(
+      DataManagerService.PERSISTENCE_TYPES.treasureType
+    );
+  }
+
+  /** Opens file import to select treasure type to load into memory */
+  importTreasureType(): void {
+    this.treasureTypeImport.click();
+  }
+
+  /** Opens file import to select treasure type list to load into browser storage */
+  importTreasureTypeList(): void {
+    this.treasureTypeListImport.click();
+  }
+
+  /** Handler function for import event on Treasure Type */
+  onTreasureTypeImport(): void {
+    if (this.treasureTypeImport.files?.length) {
+      (
+        this.dataService.import<TreasureType>(
+          this.treasureTypeImport.files[0]
+        ) as Observable<TreasureType>
+      ).subscribe((type) => {
+        this.treasureTypeForm = buildFormFromObject(
+          new TreasureType(type)
+        ) as FormGroup;
+        this.treasureTypeImport.value = '';
+      });
+    } else {
+      throw new Error('No treasure type import file found.');
+    }
+  }
+
+  /** Handler function for import event on Treasure Type List */
+  onTreasureTypeListImport(): void {
+    if (this.treasureTypeListImport.files?.length) {
+      this.dataService.import<TreasureType[]>(
+        this.treasureTypeListImport.files[0],
+        DataManagerService.PERSISTENCE_TYPES.treasureType
+      );
+      this.treasureTypeListImport.value = '';
+    } else {
+      throw new Error('No treasure type import file found.');
+    }
+  }
+
+  /**
+   * Removes the Treasure Article at a provided index from the Treasure Articles list.
+   *
+   * @param  {number} index
+   */
   removeArticle(index: number): void {
     this.articlesFormArray.removeAt(index);
   }
 
-  saveArticle(): void {
+  /** Persists the current active treasure type to browser storage */
+  saveTreasureType(): void {
     this.dataService.persist(
       DataManagerService.PERSISTENCE_TYPES.treasureType,
       this.treasureTypeForm.value
     );
   }
 
+  /**
+   * Moves a target Treasure Article up or down in the display according to
+   * the provided direction argument.
+   *
+   * @param  {number} index
+   * @param  {string} direction 'up' or 'down', case sensitive, are supported.
+   */
   shiftArticle(index: number, direction: string): void {
     const targetControl = this.articlesFormArray.at(index);
     let newIndex = index;
