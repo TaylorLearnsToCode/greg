@@ -63,13 +63,15 @@
     <!-- Current In memory List-->
     <p>{{ treasureTypeForm.value | json }}</p>
     <hr />
-    <ng-container *ngIf="treasureTypes$ | async as treasureTypes">
-      <ul *ngIf="treasureTypes.length; else noTreasureTypes">
-        <li *ngFor="let type of treasureTypes">
-          {{ type.system }}: {{ type.type }}
-        </li>
-      </ul>
-    </ng-container>
+    <section *ngIf="treasureTypes$ | async as treasureTypes">
+      <ng-container *ngIf="treasureTypes.length; else noTreasureTypes">
+        <div class="treasure-list" *ngFor="let type of treasureTypes">
+          <a (click)="editTreasureType(type)">&#x270E;</a>
+          <span>{{ type.type }} ( {{ type.system }} )</span>
+          <a (click)="deleteTreasureType(type)">X</a>
+        </div>
+      </ng-container>
+    </section>
     <ng-template #noTreasureTypes>
       <p>No treasure types currently saved.</p>
     </ng-template>
