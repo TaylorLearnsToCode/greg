@@ -35,6 +35,17 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     );
   }
 
+  editTreasureType(type: TreasureType): void {
+    this.treasureTypeForm = buildFormFromObject(type) as FormGroup;
+  }
+
+  deleteTreasureType(type: TreasureType): void {
+    this.dataService.delete(
+      type,
+      DataManagerService.PERSISTENCE_TYPES.treasureType
+    );
+  }
+
   removeArticle(index: number): void {
     this.articlesFormArray.removeAt(index);
   }

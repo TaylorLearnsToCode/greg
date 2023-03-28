@@ -28,6 +28,16 @@ export class DataManagerService {
   // export to JSON
   // import from JSON
 
+  delete(object: any, fromKey: string): void {
+    switch (fromKey) {
+      case DataManagerService.PERSISTENCE_TYPES.treasureType:
+        this.deleteTreasureType(object);
+        break;
+      default:
+        throw new Error(`Data type ${fromKey} not currently supported.`);
+    }
+  }
+
   /**
    * Puts a given object into persistent browser storage.
    *
@@ -45,6 +55,33 @@ export class DataManagerService {
       default:
         throw new Error(`Data type ${key} not currently supported.`);
     }
+    this.refreshDataState();
+  }
+
+  /**
+   * Removes a target treasure type from the treasure type collection.
+   *
+   * @param  {TreasureType} type
+   */
+  private deleteTreasureType(type: TreasureType): void {
+    const types: TreasureType[] = this.retrieve<TreasureType[]>(
+      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      []
+    );
+    const typeIndex: number = types.findIndex(
+      (t) => t.type === type.type && t.system === type.system
+    );
+    if (typeIndex !== -1) {
+      types.splice(typeIndex, 1);
+    } else {
+      console.warn(
+        `Treasure type ${type.type} for system ${type.system} not found to remove!`
+      );
+    }
+    localStorage.setItem(
+      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      JSON.stringify(types)
+    );
     this.refreshDataState();
   }
 
