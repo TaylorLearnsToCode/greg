@@ -48,9 +48,14 @@
               <span>
                 <select formControlName="type">
                   <option disabled value="">-- Select --</option>
-                  <option *ngFor="let articleKey of articleTypeKeys">
-                    {{ articleValue(articleKey) }}
-                  </option>
+                  <ng-container *ngIf="articleTypeKeys">
+                    <option
+                      *ngFor="let articleKey of articleTypeKeys"
+                      [ngValue]="articleKey"
+                    >
+                      {{ articleValue(articleKey) }}
+                    </option>
+                  </ng-container>
                 </select>
               </span>
             </div>

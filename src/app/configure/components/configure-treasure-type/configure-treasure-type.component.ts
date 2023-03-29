@@ -87,7 +87,9 @@ export class ConfigureTreasureTypeComponent implements OnInit {
    * @param  {TreasureType} type
    */
   editTreasureType(type: TreasureType): void {
-    this.treasureTypeForm = buildFormFromObject(type) as FormGroup;
+    this.treasureTypeForm = buildFormFromObject(
+      new TreasureType(type)
+    ) as FormGroup;
   }
 
   /**
