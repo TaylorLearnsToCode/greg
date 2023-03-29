@@ -17,6 +17,11 @@ export class TreasureType {
   system: string = '';
 
   constructor(type?: any) {
+    if (type?.entries?.length) {
+      type.entries = (type.entries as []).map(
+        (entry) => new TreasureArticle(entry)
+      );
+    }
     constructInstance(this, type);
   }
 }
