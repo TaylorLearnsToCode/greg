@@ -43,6 +43,16 @@
                 [fromParentForm]="treasureArticle"
                 identifier="diceRolled"
               ></greg-dice-rolled-form>
+
+              <label>Type:</label>
+              <span>
+                <select formControlName="type">
+                  <option disabled value="">-- Select --</option>
+                  <option *ngFor="let articleKey of articleTypeKeys">
+                    {{ articleValue(articleKey) }}
+                  </option>
+                </select>
+              </span>
             </div>
             <div>
               <a (click)="removeArticle(i)">X</a>
