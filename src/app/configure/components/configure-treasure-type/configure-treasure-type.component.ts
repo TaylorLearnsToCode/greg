@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -18,6 +19,12 @@ export class ConfigureTreasureTypeComponent implements OnInit {
   readonly TREASURE_TYPE =
     DataManagerService.PERSISTENCE_TYPES.treasureType.toUpperCase();
 
+  get articleTypeKeys(): string[] {
+    return Object.keys(TREASURE_ARTICLE_TYPES).map((key) => key);
+  }
+  articleValue(key: string): string {
+    return (TREASURE_ARTICLE_TYPES as any)[key];
+  }
   get articlesFormArray(): FormArray<FormGroup> {
     return this.treasureTypeForm.get('entries') as FormArray<FormGroup>;
   }

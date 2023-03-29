@@ -1,3 +1,4 @@
+import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import {
   constructInstance,
   doesExist,
@@ -11,6 +12,8 @@ export class TreasureArticle extends Rollable {
   name: string = '';
   /** The number - expressed as a dice pool - of the article; accepts integer, as well */
   quantity: DiceRolled | number = new DiceRolled();
+  /** The type of treasure - coins, magic swords, etc - represented by this entry */
+  type: TREASURE_ARTICLE_TYPES = '' as TREASURE_ARTICLE_TYPES;
 
   constructor(article?: any) {
     super();
