@@ -11,6 +11,9 @@ export class GenerateBxTreasureService
   extends AbstractTreasureGenerator
   implements TreasureGeneratorService
 {
+  generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
+    throw new Error('Method not implemented.');
+  }
   generateGems(article: TreasureArticle): ValueablesResult[] {
     throw new Error('Method not implemented.');
   }
