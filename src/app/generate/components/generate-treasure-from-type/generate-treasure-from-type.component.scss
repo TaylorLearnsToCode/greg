@@ -1,0 +1,15 @@
+@import '/src/assets/variables';
+
+section.treasure-type-list article {
+  @include baseDisplayGrid();
+  grid-template-columns: 2em 1fr 2fr;
+  margin: 0.2em 0em;
+}
+
+.centered {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}

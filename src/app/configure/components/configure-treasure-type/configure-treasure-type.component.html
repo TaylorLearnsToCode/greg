@@ -10,7 +10,17 @@
 
         <span>
           <label>System:</label>
-          <input formControlName="system" type="text" />
+          <select formControlName="system">
+            <option disabled value="">-- Select --</option>
+            <ng-container *ngIf="supportedSystems">
+              <option
+                *ngFor="let systemKey of supportedSystems"
+                [ngValue]="systemKey"
+              >
+                {{ supportedSystem(systemKey) }}
+              </option>
+            </ng-container>
+          </select>
         </span>
       </section>
 
