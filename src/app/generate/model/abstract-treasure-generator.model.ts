@@ -14,17 +14,26 @@ export abstract class AbstractTreasureGenerator {
   private returnResult: TreasureResult[];
 
   abstract generateGems(article: TreasureArticle): ValueablesResult[] | null;
+  abstract generateJewelry(article: TreasureArticle): ValueablesResult[] | null;
 
   generateTreasureByType(treasureType: TreasureType): TreasureResult[] {
     this.returnResult = [];
-    let nextResult: TreasureResult | null;
     for (const article of treasureType.entries) {
       switch ((this.TREASURE_ARTICLE_TYPES as any)[article.type]) {
         case this.TREASURE_ARTICLE_TYPES.GEMS:
           this.pushToResults(this.generateGems(article));
           break;
+        case this.TREASURE_ARTICLE_TYPES.JEWELRY:
+          this.pushToResults(this.generateJewelry(article));
+          break;
+        case this.TREASURE_ARTICLE_TYPES.MAGIC_ITEM:
+          throw new Error(`${article.type} not yet implemented`);
+          break;
         case this.TREASURE_ARTICLE_TYPES.SPECIE:
           this.pushToResults(this.generateSpecie(article));
+          break;
+        case this.TREASURE_ARTICLE_TYPES.TREASURE_MAP:
+          throw new Error(`${article.type} not yet implemented`);
           break;
         default:
           throw new Error(`Unsupported type ${article.type}`);
