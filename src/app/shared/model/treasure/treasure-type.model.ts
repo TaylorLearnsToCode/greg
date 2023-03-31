@@ -1,3 +1,4 @@
+import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { TreasureArticle } from './treasure-article.model';
 
@@ -14,7 +15,7 @@ export class TreasureType {
    */
   entries: TreasureArticle[] = [];
   /** The game system to which this treasure type maps */
-  system: string = '';
+  system: SUPPORTED_SYSTEMS = '' as SUPPORTED_SYSTEMS;
 
   constructor(type?: any) {
     if (type?.entries?.length) {

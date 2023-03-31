@@ -26,8 +26,6 @@ export class DataManagerService {
     this.refreshDataState();
   }
 
-  // import from JSON
-
   /**
    * Blanks a given key in browser storage and re-emits the new state.
    *

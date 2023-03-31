@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -27,6 +28,12 @@ export class ConfigureTreasureTypeComponent implements OnInit {
   }
   get articlesFormArray(): FormArray<FormGroup> {
     return this.treasureTypeForm.get('entries') as FormArray<FormGroup>;
+  }
+  supportedSystem(key: string): string {
+    return (SUPPORTED_SYSTEMS as any)[key];
+  }
+  get supportedSystems(): string[] {
+    return Object.keys(SUPPORTED_SYSTEMS).map((key) => key);
   }
   treasureTypeForm: FormGroup;
   treasureTypes$: Observable<TreasureType[]>;
