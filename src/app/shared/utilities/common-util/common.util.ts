@@ -58,6 +58,8 @@ export function doesExist(object: any): boolean {
  * provided identifier, the item will update itself, replacing the old index.
  * Otherwise, the item will be pushed to the end of the collection.
  *
+ * If more than one identifier is necessary, a comma delimited string is accepted.
+ *
  * @param  {T} item
  * @param  {T[]} collection
  * @param {string} identifier optional: default 'name'
@@ -67,13 +69,69 @@ export function insertOrReplace<T>(
   collection: T[],
   identifier?: string
 ): void {
-  const id: string = identifier == undefined ? 'name' : identifier;
-  const index: number = collection.findIndex(
-    (c) => (c as any)[id] == (item as any)[id]
-  );
+  const ids: string[] =
+    identifier == undefined ? ['name'] : identifier.split(',');
+  let index: number = findIndexMatchingAllKeys(item, collection, ids);
   if (index !== -1) {
     collection.splice(index, 1, item);
   } else {
     collection.push(item);
   }
+}
+
+/**
+ * Removes the target item from the target collection based on the provided identifier.
+ * Comma-delimited identifers are supported if multiple fields are to be checked.
+ *
+ * @param  {T} item
+ * @param  {T[]} collection
+ * @param  {string} identifier optional: default 'name'
+ */
+export function removeOrWarn<T>(
+  item: T,
+  collection: T[],
+  identifier?: string
+): void {
+  const ids: string[] =
+    identifier == undefined ? ['name'] : identifier.split(',');
+  let index: number = findIndexMatchingAllKeys(item, collection, ids);
+  if (index != -1) {
+    collection.splice(index, 1);
+  } else {
+    console.warn(`Item ${(item as any)[ids[0]]} was not found to remove.`);
+  }
+}
+
+/**
+ * Searches a provided collection for an object in the collection which has fields and values
+ * in common with a provided single item. If so, returns the index of that matching entry:
+ * otherwise, returns -1.
+ *
+ * @param  {T} item
+ * @param  {T[]} collection
+ * @param  {string[]} conditions
+ */
+function findIndexMatchingAllKeys<T>(
+  item: T,
+  collection: T[],
+  conditions: string[]
+): number {
+  let index: number = -1;
+  for (let i = 0; i < collection.length; i++) {
+    const idsMatch: boolean[] = [];
+    let t: T;
+    for (const id of conditions) {
+      t = collection[i];
+      idsMatch.push(
+        doesExist((t as any)[id]) &&
+          doesExist((item as any)[id]) &&
+          (t as any)[id] === (item as any)[id]
+      );
+    }
+    if (!idsMatch.some((matchValue) => !matchValue)) {
+      index = i;
+      break;
+    }
+  }
+  return index;
 }

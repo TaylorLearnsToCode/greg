@@ -44,12 +44,15 @@
   </first-content>
 
   <second-content>
-    <section *ngIf="magicItemList$ | async as magicItemList">
+    <section
+      class="magic-items"
+      *ngIf="magicItemList$ | async as magicItemList"
+    >
       <ng-container *ngIf="magicItemList.length; else noItems">
         <div class="item-list" *ngFor="let item of magicItemList">
-          <a>&#x270E;</a>
+          <a (click)="editMagicItem(item)">&#x270E;</a>
           <span>{{ item.name }}</span>
-          <a>X</a>
+          <a (click)="deleteMagicItem(item)">X</a>
         </div>
       </ng-container>
       <ng-template #noItems>
@@ -57,9 +60,15 @@
       </ng-template>
     </section>
     <section class="list-controls">
-      <a>Import List</a>
-      <a>Export List</a>
-      <a>Clear List</a>
+      <a (click)="importMagicItemList()">Import List</a>
+      <input
+        #magicItemListImport
+        accept=".GREG-CONFIG"
+        (change)="onMagicItemListImport()"
+        type="file"
+      />
+      <a (click)="exportMagicItemList()">Export List</a>
+      <a (click)="clearMagicItemList()">Clear List</a>
     </section>
   </second-content>
 </greg-page-template>
