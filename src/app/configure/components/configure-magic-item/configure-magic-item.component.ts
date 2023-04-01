@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -11,6 +12,8 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./configure-magic-item.component.scss'],
 })
 export class ConfigureMagicItemComponent implements OnInit {
+  readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+
   get diceRolledForm(): FormGroup {
     return this.magicItemForm.get('diceRolled') as FormGroup;
   }
@@ -37,7 +40,7 @@ export class ConfigureMagicItemComponent implements OnInit {
   /** Persists the current item to browser storage */
   saveItem(): void {
     this.dataService.persist(
-      DataManagerService.PERSISTENCE_TYPES.magicItem,
+      PERSISTENCE_TYPES.magicItem,
       this.magicItemForm.value
     );
   }
