@@ -8,6 +8,7 @@ import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import {
   doesExist,
   insertOrReplace,
+  removeOrWarn,
 } from '@shared/utilities/common-util/common.util';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ImportExportService } from './import-export/import-export.service';
@@ -49,6 +50,9 @@ export class DataManagerService {
    */
   delete(object: any, fromKey: string): void {
     switch (fromKey) {
+      case this.PERSISTENCE_TYPES.magicItem:
+        this.deleteMagicItem(object);
+        break;
       case this.PERSISTENCE_TYPES.treasureType:
         this.deleteTreasureType(object);
         break;
@@ -136,7 +140,24 @@ export class DataManagerService {
   }
 
   /**
-   * Removes a target treasure type from the treasure type collection.
+   * Removes the target magic item from the magic item collection
+   *
+   * @param  {MagicItem} item
+   */
+  private deleteMagicItem(item: MagicItem): void {
+    const items: MagicItem[] = this.retrieve<MagicItem[]>(
+      this.PERSISTENCE_TYPES.magicItem
+    );
+    removeOrWarn(item, items);
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.magicItem,
+      JSON.stringify(items)
+    );
+    this.refreshDataState();
+  }
+
+  /**
+   * Removes a target treasure type from the treasure type collection
    *
    * @param  {TreasureType} type
    */
@@ -144,16 +165,7 @@ export class DataManagerService {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
       this.PERSISTENCE_TYPES.treasureType
     );
-    const typeIndex: number = types.findIndex(
-      (t) => t.type === type.type && t.system === type.system
-    );
-    if (typeIndex !== -1) {
-      types.splice(typeIndex, 1);
-    } else {
-      console.warn(
-        `Treasure type ${type.type} for system ${type.system} not found to remove!`
-      );
-    }
+    removeOrWarn(type, types, 'type,system');
     localStorage.setItem(
       this.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)
@@ -208,7 +220,7 @@ export class DataManagerService {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
       this.PERSISTENCE_TYPES.treasureType
     );
-    insertOrReplace(treasureType, types, 'type');
+    insertOrReplace(treasureType, types, 'type,system');
     localStorage.setItem(
       this.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)

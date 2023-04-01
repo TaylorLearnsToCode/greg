@@ -13,6 +13,7 @@ import { map, Observable } from 'rxjs';
 })
 export class ConfigureMagicItemComponent implements OnInit {
   @ViewChild('magicItemImport') magicItemImportRef: ElementRef;
+  @ViewChild('magicItemListImport') magicItemListImportRef: ElementRef;
 
   readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
   readonly MAGIC_ITEM = PERSISTENCE_TYPES.magicItem.toUpperCase();
@@ -22,6 +23,9 @@ export class ConfigureMagicItemComponent implements OnInit {
   }
   get magicItemImport(): HTMLInputElement {
     return this.magicItemImportRef.nativeElement as HTMLInputElement;
+  }
+  get magicItemListImport(): HTMLInputElement {
+    return this.magicItemListImportRef.nativeElement as HTMLInputElement;
   }
   magicItemForm: FormGroup;
   magicItemList$: Observable<MagicItem[]>;
@@ -43,6 +47,29 @@ export class ConfigureMagicItemComponent implements OnInit {
     this.magicItemForm = buildFormFromObject(new MagicItem()) as FormGroup;
   }
 
+  /** Removes the current magic item list from browser storage */
+  clearMagicItemList(): void {
+    this.dataService.clear(this.PERSISTENCE_TYPES.magicItem);
+  }
+
+  /**
+   * Removes a target magic item from browser storage.
+   *
+   * @param  {MagicItem} item
+   */
+  deleteMagicItem(item: MagicItem): void {
+    this.dataService.delete(item, this.PERSISTENCE_TYPES.magicItem);
+  }
+
+  /**
+   * Loads a target magic item into the active form for edit
+   *
+   * @param  {MagicItem} item
+   */
+  editMagicItem(item: MagicItem): void {
+    this.magicItemForm = buildFormFromObject(new MagicItem(item)) as FormGroup;
+  }
+
   /** Exports current form magic item to a file on the user's local machine */
   exportMagicItem(): void {
     this.dataService.exportObject(
@@ -52,9 +79,19 @@ export class ConfigureMagicItemComponent implements OnInit {
     );
   }
 
+  /** Exports magic items from storage */
+  exportMagicItemList(): void {
+    this.dataService.exportFromStorage(this.PERSISTENCE_TYPES.magicItem);
+  }
+
   /** Click handler for Import action */
   importMagicItem(): void {
     this.magicItemImport.click();
+  }
+
+  /** Click handler for Import List action */
+  importMagicItemList(): void {
+    this.magicItemListImport.click();
   }
 
   /** Imports a specified magic item file into the form */
@@ -72,6 +109,19 @@ export class ConfigureMagicItemComponent implements OnInit {
       this.magicItemImport.value = '';
     } else {
       throw new Error('No magic item type import file found.');
+    }
+  }
+
+  /** Imports a specified magic item file into memmory */
+  onMagicItemListImport(): void {
+    if (this.magicItemListImport.files?.length) {
+      this.dataService.import<MagicItem[]>(
+        this.magicItemListImport.files[0],
+        this.PERSISTENCE_TYPES.magicItem
+      );
+      this.magicItemListImport.value = '';
+    } else {
+      throw new Error('No magic item list type import file found.');
     }
   }
 
