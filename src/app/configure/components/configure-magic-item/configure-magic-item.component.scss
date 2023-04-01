@@ -1,0 +1,24 @@
+@import '/src/assets/variables';
+
+@include smallNumberInputs();
+
+form {
+  padding: 0.5em 0em;
+}
+form div {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(2, 1fr 2fr);
+  margin-bottom: 0.3em;
+  row-gap: 0.3em;
+}
+form section {
+  @include twoColumnLayout();
+}
+form textarea {
+  display: block;
+}
+
+span.form-controls {
+  @include oneColumnLayout();
+  padding-top: 1em;
+}
