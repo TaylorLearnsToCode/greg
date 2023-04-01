@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
+import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
@@ -8,25 +9,24 @@ import {
   doesExist,
   insertOrReplace,
 } from '@shared/utilities/common-util/common.util';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ImportExportService } from './import-export/import-export.service';
 
 /** Central API for accessing, importing, and persisting application configurations */
 @Injectable({
   providedIn: 'root',
 })
 export class DataManagerService {
-  // provide constant for supported keys
-  static readonly PERSISTENCE_TYPES = {
-    magicItem: 'greg-magic-item',
-    treasureArticle: 'greg-treasure-article',
-    treasureType: 'greg-treasure-type',
-  };
+  readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   dataState$: Observable<DataState>;
 
   private dataStateSource = new BehaviorSubject<DataState>(new DataState());
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private importExportService: ImportExportService
+  ) {
     this.dataState$ = this.dataStateSource.asObservable();
     this.refreshDataState();
   }
@@ -49,7 +49,7 @@ export class DataManagerService {
    */
   delete(object: any, fromKey: string): void {
     switch (fromKey) {
-      case DataManagerService.PERSISTENCE_TYPES.treasureType:
+      case this.PERSISTENCE_TYPES.treasureType:
         this.deleteTreasureType(object);
         break;
       default:
@@ -65,22 +65,22 @@ export class DataManagerService {
    */
   exportFromStorage(key: string): void {
     const exportable = this.retrieve(key, null);
-    this.exportObject(exportable, key.toUpperCase(), 'GREG-CONFIG');
+    this.importExportService.exportObject(
+      exportable,
+      key.toUpperCase(),
+      'GREG-CONFIG'
+    );
   }
 
   /**
+   * Exports a given file to JSON format with some specified properties
+   *
    * @param  {any} obj
    * @param  {string} fileName optional: default "export"
    * @param  {string} fileType optional: default "json"
    */
   exportObject(obj: any, fileName?: string, fileType?: string): void {
-    const a: HTMLAnchorElement = this.document.createElement('a');
-    a.href = URL.createObjectURL(this.buildPayload(obj));
-    a.download = `${this.deriveFileName(fileName)}.${this.deriveFileType(
-      fileType
-    )}`;
-    a.target = '_blank';
-    a.click();
+    this.importExportService.exportObject(obj, fileName, fileType);
   }
 
   /**
@@ -98,39 +98,35 @@ export class DataManagerService {
    */
   import<T>(file: File, destination?: string): Observable<T> | void {
     if (destination == undefined || destination == null) {
-      return this.readFile<T>(file);
+      return this.importExportService.readFile<T>(file);
     } else {
-      this.readFile<T>(file).subscribe((value) => {
-        switch (destination) {
-          case DataManagerService.PERSISTENCE_TYPES.treasureType:
-            for (const type of value as TreasureType[]) {
-              this.persist(destination, type);
-            }
-            break;
-          default:
-            throw new Error(
-              `Destination ${destination} is not currently supported.`
-            );
+      this.importExportService.readFile<T>(file).subscribe((value) => {
+        if (Array.isArray(value)) {
+          for (const valueItem of value) {
+            this.persist(destination, valueItem);
+          }
+        } else {
+          this.persist(destination, value);
         }
       });
     }
   }
 
   /**
-   * Puts a given object into persistent browser storage
+   * Puts a single given object into persistent browser storage
    *
    * @param  {string} key - the identifier of the value being stored
    * @param  {any} object - the object value being stored
    */
   persist(key: string, object: any): void {
     switch (key) {
-      case DataManagerService.PERSISTENCE_TYPES.magicItem:
+      case this.PERSISTENCE_TYPES.magicItem:
         this.persistMagicItem(object as MagicItem);
         break;
-      case DataManagerService.PERSISTENCE_TYPES.treasureArticle:
+      case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
-      case DataManagerService.PERSISTENCE_TYPES.treasureType:
+      case this.PERSISTENCE_TYPES.treasureType:
         this.persistTreasureType(object as TreasureType);
         break;
       default:
@@ -140,27 +136,13 @@ export class DataManagerService {
   }
 
   /**
-   * Converts a given object into a Blob for export to file.
-   *
-   * @param  {any} obj
-   */
-  private buildPayload(obj: any): Blob {
-    if (!doesExist(obj)) {
-      throw Error('No object provided for export');
-    }
-    return new Blob([JSON.stringify(obj)], {
-      type: 'text/plain',
-    });
-  }
-
-  /**
    * Removes a target treasure type from the treasure type collection.
    *
    * @param  {TreasureType} type
    */
   private deleteTreasureType(type: TreasureType): void {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureType
+      this.PERSISTENCE_TYPES.treasureType
     );
     const typeIndex: number = types.findIndex(
       (t) => t.type === type.type && t.system === type.system
@@ -173,40 +155,10 @@ export class DataManagerService {
       );
     }
     localStorage.setItem(
-      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      this.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)
     );
     this.refreshDataState();
-  }
-
-  /**
-   * For a given file name, returns a space-less version of the name to be applied
-   * to a given file for export.
-   *
-   * @param  {string} fileName optional: default "export"
-   */
-  private deriveFileName(fileName?: string): string {
-    if (fileName == undefined) {
-      fileName = 'export';
-    }
-    return doesExist(fileName) ? fileName.replaceAll(' ', '') : 'export';
-  }
-
-  /**
-   * Based on a provided fileType argument, returns the file type to be applied
-   * to a given file for import/export
-   *
-   * @param  {string} fileType optional: default "json"
-   */
-  private deriveFileType(fileType?: string): string {
-    if (fileType == undefined) {
-      fileType = 'json';
-    }
-    return doesExist(fileType)
-      ? fileType.charAt(0) === '.'
-        ? fileType.substring(1)
-        : fileType
-      : 'json';
   }
 
   /**
@@ -218,11 +170,11 @@ export class DataManagerService {
    */
   private persistMagicItem(magicItem: MagicItem): void {
     const items: MagicItem[] = this.retrieve<MagicItem[]>(
-      DataManagerService.PERSISTENCE_TYPES.magicItem
+      this.PERSISTENCE_TYPES.magicItem
     );
     insertOrReplace<MagicItem>(magicItem, items);
     localStorage.setItem(
-      DataManagerService.PERSISTENCE_TYPES.magicItem,
+      this.PERSISTENCE_TYPES.magicItem,
       JSON.stringify(items)
     );
   }
@@ -236,11 +188,11 @@ export class DataManagerService {
    */
   private persistTreasureArticle(treasureArticle: TreasureArticle): void {
     const articles: TreasureArticle[] = this.retrieve<TreasureArticle[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureArticle
+      this.PERSISTENCE_TYPES.treasureArticle
     );
     insertOrReplace(treasureArticle, articles);
     localStorage.setItem(
-      DataManagerService.PERSISTENCE_TYPES.treasureArticle,
+      this.PERSISTENCE_TYPES.treasureArticle,
       JSON.stringify(articles)
     );
   }
@@ -254,31 +206,13 @@ export class DataManagerService {
    */
   private persistTreasureType(treasureType: TreasureType): void {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureType
+      this.PERSISTENCE_TYPES.treasureType
     );
     insertOrReplace(treasureType, types, 'type');
     localStorage.setItem(
-      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      this.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)
     );
-  }
-
-  /**
-   * For a provided File, returns a self-closing observable emitting
-   * one result of type T.
-   *
-   * @param  {File} file
-   */
-  private readFile<T>(file: File): Observable<T> {
-    const resultSource = new Subject<T>();
-    const fileReader: FileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      const result: T = JSON.parse(fileReader.result as string);
-      resultSource.next(result);
-      resultSource.complete();
-    });
-    fileReader.readAsText(file);
-    return resultSource.asObservable();
   }
 
   /** Synchronizes current data state observable with fresh values from local storage */
@@ -286,13 +220,13 @@ export class DataManagerService {
     this.dataStateSource.next(
       new DataState({
         magicItems: this.retrieve<MagicItem[]>(
-          DataManagerService.PERSISTENCE_TYPES.magicItem
+          this.PERSISTENCE_TYPES.magicItem
         ),
         treasureArticles: this.retrieve<TreasureArticle[]>(
-          DataManagerService.PERSISTENCE_TYPES.treasureArticle
+          this.PERSISTENCE_TYPES.treasureArticle
         ),
         treasureTypes: this.retrieve<TreasureType[]>(
-          DataManagerService.PERSISTENCE_TYPES.treasureType
+          this.PERSISTENCE_TYPES.treasureType
         ),
       } as DataState)
     );

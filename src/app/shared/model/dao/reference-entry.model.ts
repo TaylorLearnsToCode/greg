@@ -9,7 +9,7 @@ export class ReferenceEntry {
    */
   chanceOfRange: BoundedRange = new BoundedRange();
   /**
-   * The value in DataManagerService.PERSISTENCE_TYPES under which the referred
+   * The value in the application's configured persistent types under which the referred
    * object is saved in browser storage
    */
   persistenceType: string = '';

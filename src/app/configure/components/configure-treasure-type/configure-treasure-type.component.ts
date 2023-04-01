@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
@@ -17,8 +18,8 @@ export class ConfigureTreasureTypeComponent implements OnInit {
   @ViewChild('treasureTypeImport') treasureTypeImportRef: ElementRef;
   @ViewChild('treasureTypeListImport') treasureTypeListImportRef: ElementRef;
 
-  readonly TREASURE_TYPE =
-    DataManagerService.PERSISTENCE_TYPES.treasureType.toUpperCase();
+  readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+  readonly TREASURE_TYPE = PERSISTENCE_TYPES.treasureType.toUpperCase();
 
   get articleTypeKeys(): string[] {
     return Object.keys(TREASURE_ARTICLE_TYPES).map((key) => key);
@@ -65,7 +66,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
 
   /** Removes all treasure types from browser storage */
   clearTreasureTypeList(): void {
-    this.dataService.clear(DataManagerService.PERSISTENCE_TYPES.treasureType);
+    this.dataService.clear(this.PERSISTENCE_TYPES.treasureType);
   }
 
   /** Rebuilds the treasure type form, clearing out all state from it */
@@ -81,10 +82,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
    * @param  {TreasureType} type
    */
   deleteTreasureType(type: TreasureType): void {
-    this.dataService.delete(
-      type,
-      DataManagerService.PERSISTENCE_TYPES.treasureType
-    );
+    this.dataService.delete(type, this.PERSISTENCE_TYPES.treasureType);
   }
 
   /**
@@ -120,9 +118,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
    * from browser storage to the user's local machine
    */
   exportTreasureTypeList(): void {
-    this.dataService.exportFromStorage(
-      DataManagerService.PERSISTENCE_TYPES.treasureType
-    );
+    this.dataService.exportFromStorage(this.PERSISTENCE_TYPES.treasureType);
   }
 
   /** Opens file import to select treasure type to load into memory */
@@ -158,7 +154,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     if (this.treasureTypeListImport.files?.length) {
       this.dataService.import<TreasureType[]>(
         this.treasureTypeListImport.files[0],
-        DataManagerService.PERSISTENCE_TYPES.treasureType
+        this.PERSISTENCE_TYPES.treasureType
       );
       this.treasureTypeListImport.value = '';
     } else {
@@ -178,7 +174,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
   /** Persists the current active treasure type to browser storage */
   saveTreasureType(): void {
     this.dataService.persist(
-      DataManagerService.PERSISTENCE_TYPES.treasureType,
+      this.PERSISTENCE_TYPES.treasureType,
       this.treasureTypeForm.value
     );
   }
