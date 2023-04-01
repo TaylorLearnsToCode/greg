@@ -1,6 +1,7 @@
 @import '/src/assets/variables';
 
 @include smallNumberInputs();
+@include hideFileInputs();
 
 div.item-list {
   align-items: center;
@@ -24,6 +25,10 @@ form section {
 form textarea {
   display: block;
   width: 90%;
+}
+
+section.list-controls {
+  @include oneColumnLayout();
 }
 
 span.form-controls {

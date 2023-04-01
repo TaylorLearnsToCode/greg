@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
@@ -12,10 +12,16 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./configure-magic-item.component.scss'],
 })
 export class ConfigureMagicItemComponent implements OnInit {
+  @ViewChild('magicItemImport') magicItemImportRef: ElementRef;
+
   readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+  readonly MAGIC_ITEM = PERSISTENCE_TYPES.magicItem.toUpperCase();
 
   get diceRolledForm(): FormGroup {
     return this.magicItemForm.get('diceRolled') as FormGroup;
+  }
+  get magicItemImport(): HTMLInputElement {
+    return this.magicItemImportRef.nativeElement as HTMLInputElement;
   }
   magicItemForm: FormGroup;
   magicItemList$: Observable<MagicItem[]>;
@@ -48,11 +54,26 @@ export class ConfigureMagicItemComponent implements OnInit {
 
   /** Click handler for Import action */
   importMagicItem(): void {
-    alert('Implement this next!');
+    this.magicItemImport.click();
   }
 
   /** Imports a specified magic item file into the form */
-  onImportMagicItem(): void {}
+  onMagicItemImport(): void {
+    if (this.magicItemImport.files?.length) {
+      (
+        this.dataService.import<MagicItem>(
+          this.magicItemImport.files[0]
+        ) as Observable<MagicItem>
+      ).subscribe((item) => {
+        this.magicItemForm = buildFormFromObject(
+          new MagicItem(item)
+        ) as FormGroup;
+      });
+      this.magicItemImport.value = '';
+    } else {
+      throw new Error('No magic item type import file found.');
+    }
+  }
 
   /** Persists the current item to browser storage */
   saveItem(): void {
