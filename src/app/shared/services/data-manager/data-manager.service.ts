@@ -1,9 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { DataState } from '@shared/model/dao/data-state.model';
+import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
-import { doesExist } from '@shared/utilities/common-util/common.util';
+import {
+  doesExist,
+  insertOrReplace,
+} from '@shared/utilities/common-util/common.util';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 /** Central API for accessing, importing, and persisting application configurations */
@@ -13,6 +17,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class DataManagerService {
   // provide constant for supported keys
   static readonly PERSISTENCE_TYPES = {
+    magicItem: 'greg-magic-item',
     treasureArticle: 'greg-treasure-article',
     treasureType: 'greg-treasure-type',
   };
@@ -119,6 +124,9 @@ export class DataManagerService {
    */
   persist(key: string, object: any): void {
     switch (key) {
+      case DataManagerService.PERSISTENCE_TYPES.magicItem:
+        this.persistMagicItem(object as MagicItem);
+        break;
       case DataManagerService.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
@@ -152,8 +160,7 @@ export class DataManagerService {
    */
   private deleteTreasureType(type: TreasureType): void {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureType,
-      []
+      DataManagerService.PERSISTENCE_TYPES.treasureType
     );
     const typeIndex: number = types.findIndex(
       (t) => t.type === type.type && t.system === type.system
@@ -203,6 +210,24 @@ export class DataManagerService {
   }
 
   /**
+   * Persists a provided MagicItem to local storage.
+   * If the specified article - by name - already exists in local storage,
+   * will update the value instead.
+   *
+   * @param  {MagicItem} magicItem
+   */
+  private persistMagicItem(magicItem: MagicItem): void {
+    const items: MagicItem[] = this.retrieve<MagicItem[]>(
+      DataManagerService.PERSISTENCE_TYPES.magicItem
+    );
+    insertOrReplace<MagicItem>(magicItem, items);
+    localStorage.setItem(
+      DataManagerService.PERSISTENCE_TYPES.magicItem,
+      JSON.stringify(items)
+    );
+  }
+
+  /**
    * Persists a provided TreasureArticle to local storage.
    * If the specified article - by name - already exists in local storage,
    * will update the value instead.
@@ -211,8 +236,7 @@ export class DataManagerService {
    */
   private persistTreasureArticle(treasureArticle: TreasureArticle): void {
     const articles: TreasureArticle[] = this.retrieve<TreasureArticle[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureArticle,
-      []
+      DataManagerService.PERSISTENCE_TYPES.treasureArticle
     );
     const articleIndex: number = articles.findIndex(
       (article) => article.name === treasureArticle.name
@@ -237,8 +261,7 @@ export class DataManagerService {
    */
   private persistTreasureType(treasureType: TreasureType): void {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
-      DataManagerService.PERSISTENCE_TYPES.treasureType,
-      []
+      DataManagerService.PERSISTENCE_TYPES.treasureType
     );
     const typeIndex: number = types.findIndex(
       (type) =>
@@ -277,13 +300,14 @@ export class DataManagerService {
   private refreshDataState() {
     this.dataStateSource.next(
       new DataState({
+        magicItems: this.retrieve<MagicItem[]>(
+          DataManagerService.PERSISTENCE_TYPES.magicItem
+        ),
         treasureArticles: this.retrieve<TreasureArticle[]>(
-          DataManagerService.PERSISTENCE_TYPES.treasureArticle,
-          []
+          DataManagerService.PERSISTENCE_TYPES.treasureArticle
         ),
         treasureTypes: this.retrieve<TreasureType[]>(
-          DataManagerService.PERSISTENCE_TYPES.treasureType,
-          []
+          DataManagerService.PERSISTENCE_TYPES.treasureType
         ),
       } as DataState)
     );
@@ -294,10 +318,12 @@ export class DataManagerService {
    * If a stored value with the given key is not found, returns the defaultObject provided.
    *
    * @param  {string} key
-   * @param  {T} defaultObject
+   * @param  {T} defaultObject - optional
    */
-  private retrieve<T>(key: string, defaultObject: T): T {
+  private retrieve<T>(key: string, defaultObject?: T): T {
     const value: string = localStorage.getItem(key) as string;
-    return doesExist(value) ? (JSON.parse(value) as T) : defaultObject;
+    const returnDefault: T =
+      defaultObject == undefined ? ([] as T) : defaultObject;
+    return doesExist(value) ? (JSON.parse(value) as T) : returnDefault;
   }
 }

@@ -94,9 +94,6 @@
   </first-content>
 
   <second-content>
-    <!-- Current In memory List-->
-    <p>{{ treasureTypeForm.value | json }}</p>
-    <hr />
     <section *ngIf="treasureTypes$ | async as treasureTypes">
       <ng-container *ngIf="treasureTypes.length; else noTreasureTypes">
         <div class="treasure-list" *ngFor="let type of treasureTypes">

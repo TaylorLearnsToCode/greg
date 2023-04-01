@@ -2,6 +2,13 @@
 
 @include smallNumberInputs();
 
+div.item-list {
+  align-items: center;
+  column-gap: 1em;
+  display: grid;
+  grid-template-columns: 1em 1fr 1em;
+}
+
 form {
   padding: 0.5em 0em;
 }

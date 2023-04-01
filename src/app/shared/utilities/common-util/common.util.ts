@@ -52,3 +52,28 @@ export function constructInstance(
 export function doesExist(object: any): boolean {
   return object != null && object != undefined;
 }
+
+/**
+ * If the provided item is found in the provided collection, matched by the
+ * provided identifier, the item will update itself, replacing the old index.
+ * Otherwise, the item will be pushed to the end of the collection.
+ *
+ * @param  {T} item
+ * @param  {T[]} collection
+ * @param {string} identifier optional: default 'name'
+ */
+export function insertOrReplace<T>(
+  item: T,
+  collection: T[],
+  identifier?: string
+): void {
+  const id: string = identifier == undefined ? 'name' : identifier;
+  const index: number = collection.findIndex(
+    (c) => (c as any)[id] == (item as any)[id]
+  );
+  if (index !== -1) {
+    collection.splice(index, 1, item);
+  } else {
+    collection.push(item);
+  }
+}
