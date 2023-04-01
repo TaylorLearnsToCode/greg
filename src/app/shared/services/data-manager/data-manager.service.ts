@@ -238,14 +238,7 @@ export class DataManagerService {
     const articles: TreasureArticle[] = this.retrieve<TreasureArticle[]>(
       DataManagerService.PERSISTENCE_TYPES.treasureArticle
     );
-    const articleIndex: number = articles.findIndex(
-      (article) => article.name === treasureArticle.name
-    );
-    if (articleIndex !== -1) {
-      articles.splice(articleIndex, 1, treasureArticle);
-    } else {
-      articles.push(treasureArticle);
-    }
+    insertOrReplace(treasureArticle, articles);
     localStorage.setItem(
       DataManagerService.PERSISTENCE_TYPES.treasureArticle,
       JSON.stringify(articles)
@@ -263,15 +256,7 @@ export class DataManagerService {
     const types: TreasureType[] = this.retrieve<TreasureType[]>(
       DataManagerService.PERSISTENCE_TYPES.treasureType
     );
-    const typeIndex: number = types.findIndex(
-      (type) =>
-        type.type === treasureType.type && type.system === treasureType.system
-    );
-    if (typeIndex !== -1) {
-      types.splice(typeIndex, 1, treasureType);
-    } else {
-      types.push(treasureType);
-    }
+    insertOrReplace(treasureType, types, 'type');
     localStorage.setItem(
       DataManagerService.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)
