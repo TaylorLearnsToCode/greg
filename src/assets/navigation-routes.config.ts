@@ -12,6 +12,14 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
     isExpanded: false,
     children: [
       {
+        menuLabel: 'Configure Magic Item',
+        routePath: 'magic-item',
+      } as NavRoute,
+      {
+        menuLabel: 'Configure Magic Item Table',
+        routePath: 'magic-item-table',
+      } as NavRoute,
+      {
         menuLabel: 'Configure Treasure Type',
         routePath: 'treasure-type',
       } as NavRoute,

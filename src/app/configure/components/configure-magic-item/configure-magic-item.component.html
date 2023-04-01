@@ -1,0 +1,45 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="magicItemForm">
+      <div>
+        <label>Name:</label>
+        <span>
+          <input formControlName="name" type="text" />
+        </span>
+
+        <label>Quantity:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="quantityForm"
+        ></greg-dice-rolled-form>
+
+        <label>Chance Of:</label>
+        <input formControlName="chanceOf" type="number" />
+
+        <label>...on:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="diceRolledForm"
+        ></greg-dice-rolled-form>
+      </div>
+
+      <section>
+        <span>
+          <label>Notes, Function, or Description:</label>
+          <textarea formControlName="notes"></textarea>
+        </span>
+
+        <span class="form-controls">
+          <a>Save Magic Item</a>
+          <a>Import Magic Item</a>
+          <a>Export Magic Item</a>
+          <a (click)="clearForm()">Clear Form</a>
+        </span>
+      </section>
+    </form>
+  </first-content>
+
+  <second-content>
+    <p>
+      {{ magicItemForm.value | json }}
+    </p>
+  </second-content>
+</greg-page-template>
