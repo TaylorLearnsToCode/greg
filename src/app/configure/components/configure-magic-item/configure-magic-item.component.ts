@@ -37,6 +37,23 @@ export class ConfigureMagicItemComponent implements OnInit {
     this.magicItemForm = buildFormFromObject(new MagicItem()) as FormGroup;
   }
 
+  /** Exports current form magic item to a file on the user's local machine */
+  exportMagicItem(): void {
+    this.dataService.exportObject(
+      this.magicItemForm.value,
+      this.magicItemForm.value.name,
+      this.PERSISTENCE_TYPES.magicItem.toUpperCase()
+    );
+  }
+
+  /** Click handler for Import action */
+  importMagicItem(): void {
+    alert('Implement this next!');
+  }
+
+  /** Imports a specified magic item file into the form */
+  onImportMagicItem(): void {}
+
   /** Persists the current item to browser storage */
   saveItem(): void {
     this.dataService.persist(
