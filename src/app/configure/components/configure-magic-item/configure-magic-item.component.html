@@ -28,7 +28,7 @@
         </span>
 
         <span class="form-controls">
-          <a>Save Magic Item</a>
+          <a (click)="saveItem()">Save Magic Item</a>
           <a>Import Magic Item</a>
           <a>Export Magic Item</a>
           <a (click)="clearForm()">Clear Form</a>
@@ -41,5 +41,17 @@
     <p>
       {{ magicItemForm.value | json }}
     </p>
+    <section *ngIf="magicItemList$ | async as magicItemList">
+      <ng-container *ngIf="magicItemList.length; else noItems">
+        <div class="item-list" *ngFor="let item of magicItemList">
+          <a>&#x270E;</a>
+          <span>{{ item.name }}</span>
+          <a>X</a>
+        </div>
+      </ng-container>
+      <ng-template #noItems>
+        <p>No magic items have been configured.</p>
+      </ng-template>
+    </section>
   </second-content>
 </greg-page-template>
