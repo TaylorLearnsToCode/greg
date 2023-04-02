@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { ReferenceEntry } from '@shared/model/dao/reference-entry.model';
@@ -75,6 +75,44 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     this.magicItemTableForm = buildFormFromObject(
       new MagicItemTable()
     ) as FormGroup;
+  }
+
+  /**
+   * Fills either the high side or the low side of the chanceOf array based
+   * on the values in the other columns.
+   *
+   * @param  {string} side Accepts "high" or "low"
+   */
+  fillChanceOf(side: string): void {
+    if (side !== 'low' && side !== 'high') {
+      throw new Error(`Invalid chance of side ${side} specified.`);
+    }
+
+    let constantSide: FormControl;
+    let targetSide: FormControl;
+    for (let i = 0; i < this.magicItemEntriesFormArray.controls.length; i++) {
+      if (side === 'low' && i === 0) {
+        this.chanceOfRangeForm(i).get(side)?.setValue(1);
+        continue;
+      } else if (
+        side === 'high' &&
+        i == this.magicItemEntriesFormArray.controls.length - 1
+      ) {
+        const max = this.magicItemTableForm.value.diceToRoll.pips;
+        this.chanceOfRangeForm(i).get(side)?.setValue(max);
+        continue;
+      }
+
+      targetSide = this.chanceOfRangeForm(i).get(side) as FormControl;
+      constantSide =
+        side === 'low'
+          ? (this.chanceOfRangeForm(i - 1).get('high') as FormControl)
+          : (this.chanceOfRangeForm(i + 1).get('low') as FormControl);
+
+      targetSide.setValue(
+        side === 'low' ? constantSide.value + 1 : constantSide.value - 1
+      );
+    }
   }
 
   /**
