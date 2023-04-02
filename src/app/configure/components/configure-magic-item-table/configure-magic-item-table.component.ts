@@ -58,12 +58,24 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    * @param  {MagicItem|MagicItemTable} addition
    */
   addToForm(addition: MagicItem | MagicItemTable): void {
+    const persistenceType = doesExist((addition as any).entries)
+      ? this.PERSISTENCE_TYPES.magicItemTable
+      : this.PERSISTENCE_TYPES.magicItem;
+
+    if (
+      persistenceType === this.PERSISTENCE_TYPES.magicItemTable &&
+      (addition as MagicItemTable).name ===
+        this.magicItemTableForm.value.name &&
+      (addition as MagicItemTable).system ==
+        this.magicItemTableForm.value.system
+    ) {
+      throw new Error('Cannot nest a table in itself!');
+    }
+
     const referenceToAdd = buildFormFromObject(
       new ReferenceEntry({
         reference: addition.name,
-        persistenceType: doesExist((addition as any).entries)
-          ? this.PERSISTENCE_TYPES.magicItemTable
-          : this.PERSISTENCE_TYPES.magicItem,
+        persistenceType,
       } as ReferenceEntry)
     );
     referenceToAdd.get('reference')?.disable();
@@ -122,6 +134,17 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    */
   removeReference(index: number): void {
     this.magicItemEntriesFormArray.removeAt(index);
+  }
+
+  /**
+   * Persists the current magic item table into browser storage.
+   * Overwrites if a duplicate system and name are found.
+   */
+  saveTable(): void {
+    this.dataService.persist(
+      this.PERSISTENCE_TYPES.magicItemTable,
+      this.magicItemTableForm.value
+    );
   }
 
   /**

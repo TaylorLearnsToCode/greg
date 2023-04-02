@@ -128,6 +128,9 @@ export class DataManagerService {
       case this.PERSISTENCE_TYPES.magicItem:
         this.persistMagicItem(object as MagicItem);
         break;
+      case this.PERSISTENCE_TYPES.magicItemTable:
+        this.persistMagicItemTable(object as MagicItemTable);
+        break;
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
@@ -189,6 +192,24 @@ export class DataManagerService {
     localStorage.setItem(
       this.PERSISTENCE_TYPES.magicItem,
       JSON.stringify(items)
+    );
+  }
+
+  /**
+   * Persists a provided MagicItemTable to local storage.
+   * If the specified table - by name and system - already exists in local storage,
+   * will update the value instead.
+   *
+   * @param  {MagicItemTable} table
+   */
+  private persistMagicItemTable(table: MagicItemTable): void {
+    const tables: MagicItemTable[] = this.retrieve<MagicItemTable[]>(
+      this.PERSISTENCE_TYPES.magicItemTable
+    );
+    insertOrReplace<MagicItemTable>(table, tables, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.magicItemTable,
+      JSON.stringify(tables)
     );
   }
 
