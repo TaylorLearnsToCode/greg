@@ -9,6 +9,7 @@ import { ConfigureTreasureMapComponent } from './components/configure-treasure-m
 import { ConfigureTreasureTypeTableComponent } from './components/configure-treasure-type-table/configure-treasure-type-table.component';
 import { ConfigureTreasureTypeComponent } from './components/configure-treasure-type/configure-treasure-type.component';
 import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
+import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounded-range-form.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,7 @@ const routes: Routes = [
     ConfigureMagicItemComponent,
     ConfigureMagicItemTableComponent,
     ConfigureTreasureMapComponent,
+    BoundedRangeFormComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
