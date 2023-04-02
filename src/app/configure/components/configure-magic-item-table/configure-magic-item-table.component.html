@@ -1,1 +1,100 @@
-<p>configure-magic-item-table works!</p>
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="magicItemTableForm">
+      <section class="table-metadata">
+        <label>Name:</label>
+        <input formControlName="name" type="text" />
+
+        <label>System:</label>
+        <select formControlName="system">
+          <option disabled value="">-- Select --</option>
+          <option
+            *ngFor="let systemKey of supportedSystemKeys"
+            [ngValue]="systemKey"
+          >
+            {{ supportedSystem(systemKey) }}
+          </option>
+        </select>
+
+        <label>Dice to Roll:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="diceToRollForm"
+        ></greg-dice-rolled-form>
+      </section>
+
+      <ng-container
+        *ngIf="magicItemEntriesFormArray.controls.length; else noEntries"
+      >
+        <section class="table-entries" formArrayName="entries">
+          <ng-container
+            *ngFor="let entry of magicItemEntriesFormArray.controls; index as i"
+          >
+            <ng-container [formGroupName]="i">
+              <div class="reposition">
+                <a (click)="shiftArticle(i, 'up')">&uArr;</a>
+                <a (click)="shiftArticle(i, 'down')">&dArr;</a>
+              </div>
+              <greg-bounded-range-form
+                [boundedRangeForm]="chanceOfRangeForm(i)"
+              ></greg-bounded-range-form>
+              <span>
+                <input formControlName="reference" type="text" />
+              </span>
+              <a (click)="removeReference(i)">X</a>
+            </ng-container>
+          </ng-container>
+        </section>
+
+        <section class="table-controls">
+          <div>
+            <a>Fill High</a>
+            <a>Fill Low</a>
+            <hr />
+            <a>Save Table</a>
+            <a>Import Table</a>
+            <a>Export Table</a>
+            <a>Clear</a>
+          </div>
+        </section>
+      </ng-container>
+      <ng-template #noEntries>
+        <div class="table-entries">
+          <p>No entries assigned.</p>
+          <p>
+            Click <a>+</a> on available items to add them as an entry result to
+            this table.
+          </p>
+        </div>
+      </ng-template>
+    </form>
+  </first-content>
+
+  <second-content>
+    <label>Magic Items</label>
+    <section class="magic-items" *ngIf="magicItems$ | async as magicItems">
+      <ng-container *ngIf="magicItems.length; else noneLoaded">
+        <div *ngFor="let magicItem of magicItems; index as i">
+          <a (click)="addToForm(magicItem)">+</a>
+          <span>{{ magicItem.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+
+    <label>Nestable Tables</label>
+    <section
+      class="magic-item-tables"
+      *ngIf="magicItemTables$ | async as magicItemTables"
+    >
+      <ng-container *ngIf="magicItemTables.length; else noneLoaded">
+        <div *ngFor="let magicItemTable of magicItemTables; index as i">
+          <a (click)="addToForm(magicItemTable)">+</a>
+          <span>{{ magicItemTable.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+
+    <ng-template #noneLoaded>
+      <p>None loaded.</p>
+    </ng-template>
+  </second-content>
+</greg-page-template>

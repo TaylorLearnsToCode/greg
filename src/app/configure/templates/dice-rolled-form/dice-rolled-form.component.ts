@@ -15,8 +15,6 @@ import { doesExist } from '@shared/utilities/common-util/common.util';
   styleUrls: ['./dice-rolled-form.component.scss'],
 })
 export class DiceRolledFormComponent {
-  private _diceRolledForm: FormGroup;
-
   /** The dice pool to be defined by this form */
   @Input() set diceRolledForm(formGroup: FormGroup) {
     this._diceRolledForm = formGroup;
@@ -42,4 +40,6 @@ export class DiceRolledFormComponent {
   @Input() identifier: string;
   /** Whether or not the modifier/multiplier should appear on a second line in the display. */
   @Input() splitLines: boolean;
+
+  private _diceRolledForm: FormGroup;
 }

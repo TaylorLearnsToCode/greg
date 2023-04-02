@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
+import { MagicItemTable } from '@shared/model/treasure/magic-item-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -233,6 +234,9 @@ export class DataManagerService {
       new DataState({
         magicItems: this.retrieve<MagicItem[]>(
           this.PERSISTENCE_TYPES.magicItem
+        ),
+        magicItemTables: this.retrieve<MagicItemTable[]>(
+          this.PERSISTENCE_TYPES.magicItemTable
         ),
         treasureArticles: this.retrieve<TreasureArticle[]>(
           this.PERSISTENCE_TYPES.treasureArticle
