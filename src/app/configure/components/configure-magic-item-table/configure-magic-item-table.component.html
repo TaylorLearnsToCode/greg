@@ -44,19 +44,8 @@
             </ng-container>
           </ng-container>
         </section>
-
-        <section class="table-controls">
-          <div>
-            <a (click)="fillChanceOf('high')">Fill High</a>
-            <a (click)="fillChanceOf('low')">Fill Low</a>
-            <hr />
-            <a (click)="saveTable()">Save Table</a>
-            <a>Import Table</a>
-            <a>Export Table</a>
-            <a (click)="clearForm()">Clear</a>
-          </div>
-        </section>
       </ng-container>
+
       <ng-template #noEntries>
         <div class="table-entries">
           <p>No entries assigned.</p>
@@ -66,6 +55,24 @@
           </p>
         </div>
       </ng-template>
+
+      <section class="table-controls">
+        <div>
+          <a (click)="fillChanceOf('high')">Fill High</a>
+          <a (click)="fillChanceOf('low')">Fill Low</a>
+          <hr />
+          <a (click)="saveTable()">Save Table</a>
+          <a (click)="importMagicItemTable()">Import Table</a>
+          <input
+            #magicItemTableImport
+            accept=".{{ MAGIC_ITEM_TABLE }}"
+            (change)="onMagicItemTableImport()"
+            type="file"
+          />
+          <a (click)="exportMagicItemTable()">Export Table</a>
+          <a (click)="clearForm()">Clear</a>
+        </div>
+      </section>
     </form>
   </first-content>
 
@@ -97,9 +104,14 @@
         </ng-container>
       </section>
       <section class="controls">
-        <!-- TODO Implement these next! -->
-        <a>Import List</a>
-        <a>Export List</a>
+        <a (click)="importTables()">Import List</a>
+        <input
+          #magicItemTableListImport
+          (change)="onMagicItemTableListImport()"
+          accept=".GREG-CONFIG"
+          type="file"
+        />
+        <a (click)="exportTables()">Export List</a>
         <a (click)="clearTables()">Clear List</a>
       </section>
     </section>

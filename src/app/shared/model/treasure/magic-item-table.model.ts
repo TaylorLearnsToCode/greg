@@ -15,6 +15,21 @@ export class MagicItemTable {
   system: SUPPORTED_SYSTEMS = '' as SUPPORTED_SYSTEMS;
 
   constructor(table?: any) {
+    this.massageEntries(table);
     constructInstance(this, table);
+  }
+
+  /**
+   * If the argument table is present, checks for referenc entries. If found,
+   * ensures they are initialized as ReferenceEntry, not plain JSON objects
+   *
+   * @param  {any} table optional
+   */
+  private massageEntries(table?: any): void {
+    if (table != undefined && table.entries.length) {
+      for (let i = 0; i < table.entries.length; i++) {
+        table.entries[i] = new ReferenceEntry(table.entries[i]);
+      }
+    }
   }
 }

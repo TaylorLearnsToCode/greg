@@ -1,6 +1,7 @@
 @import '/src/assets/variables';
 
 @include smallNumberInputs();
+@include hideFileInputs();
 
 div.not-nestable a {
   visibility: hidden;
