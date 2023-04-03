@@ -80,16 +80,20 @@
       </ng-container>
     </section>
 
-    <label>Nestable Tables</label>
+    <label>Saved Tables</label>
     <section
       class="magic-item-tables"
       *ngIf="magicItemTables$ | async as magicItemTables"
     >
       <ng-container *ngIf="magicItemTables.length; else noneLoaded">
-        <div *ngFor="let magicItemTable of magicItemTables; index as i">
-          <a (click)="addToForm(magicItemTable)">+</a>
-          <span>{{ magicItemTable.name }}</span>
-        </div>
+        <ng-container
+          *ngFor="let magicItemTable of magicItemTables; index as i"
+        >
+          <div [ngClass]="isNestable(magicItemTable)">
+            <a (click)="addToForm(magicItemTable)">+</a>
+            <span>{{ magicItemTable.name }}</span>
+          </div>
+        </ng-container>
       </ng-container>
     </section>
 
