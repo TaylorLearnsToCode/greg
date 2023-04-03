@@ -1,6 +1,6 @@
 import { SPECIE_TYPES } from '@assets/specie-types.config';
 import { constructInstance } from '@shared/utilities/common-util/common.util';
-import { TreasureResult } from './treasure-result.model';
+import { TreasureResult } from '@generate/model/treasure-result.model';
 
 /**
  * Representation of something of value in a treasure.

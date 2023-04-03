@@ -3,7 +3,7 @@ import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
-import { TreasureResult } from './treasure-result.model';
+import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ValueablesResult } from './valuables-result.model';
 
 export abstract class AbstractTreasureGenerator {

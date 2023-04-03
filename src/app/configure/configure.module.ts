@@ -8,8 +8,9 @@ import { ConfigureMagicItemComponent } from './components/configure-magic-item/c
 import { ConfigureTreasureMapComponent } from './components/configure-treasure-map/configure-treasure-map.component';
 import { ConfigureTreasureTypeTableComponent } from './components/configure-treasure-type-table/configure-treasure-type-table.component';
 import { ConfigureTreasureTypeComponent } from './components/configure-treasure-type/configure-treasure-type.component';
-import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
+import { TempConvertLegacyComponent } from './components/temp-convert-legacy/temp-convert-legacy.component';
 import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounded-range-form.component';
+import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
     path: 'treasure-type-table',
     component: ConfigureTreasureTypeTableComponent,
   },
+  {
+    path: 'TEMP-convert-legacy',
+    component: TempConvertLegacyComponent,
+  },
 ];
 
 /** Module to configure system, environment, and inputs for the generation of encounter data. */
@@ -45,6 +50,7 @@ const routes: Routes = [
     ConfigureMagicItemTableComponent,
     ConfigureTreasureMapComponent,
     BoundedRangeFormComponent,
+    TempConvertLegacyComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
