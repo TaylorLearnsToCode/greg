@@ -52,8 +52,11 @@ section.magic-item-tables {
 }
 section.magic-item-tables div {
   @include baseDisplayGrid();
-  grid-template-columns: 1em 1fr 1em;
+  grid-template-columns: 1em 1fr 1.5em 1.5em;
   margin-top: 0.3em;
+}
+section.magic-item-tables div .edit-pencil {
+  transform: translate(0, -0.2em);
 }
 section.magic-item-tables .controls {
   @include oneColumnLayout();
