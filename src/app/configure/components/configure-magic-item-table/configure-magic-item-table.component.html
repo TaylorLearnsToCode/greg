@@ -22,11 +22,9 @@
         ></greg-dice-rolled-form>
       </section>
 
-      <ng-container
-        *ngIf="magicItemEntriesFormArray.controls.length; else noEntries"
-      >
+      <ng-container *ngIf="hasEntries(); else noEntries">
         <section class="table-entries" formArrayName="entries">
-          <ng-container
+          <div
             *ngFor="let entry of magicItemEntriesFormArray.controls; index as i"
           >
             <ng-container [formGroupName]="i">
@@ -42,7 +40,7 @@
               </span>
               <a (click)="removeReference(i)">X</a>
             </ng-container>
-          </ng-container>
+          </div>
         </section>
       </ng-container>
 
@@ -58,9 +56,6 @@
 
       <section class="table-controls">
         <div>
-          <a (click)="fillChanceOf('high')">Fill High</a>
-          <a (click)="fillChanceOf('low')">Fill Low</a>
-          <hr />
           <a (click)="saveTable()">Save Table</a>
           <a (click)="importMagicItemTable()">Import Table</a>
           <input
@@ -71,6 +66,11 @@
           />
           <a (click)="exportMagicItemTable()">Export Table</a>
           <a (click)="clearForm()">Clear</a>
+          <ng-container *ngIf="hasEntries()">
+            <hr />
+            <a (click)="fillChanceOf('high')">Fill High</a>
+            <a (click)="fillChanceOf('low')">Fill Low</a>
+          </ng-container>
         </div>
       </section>
     </form>

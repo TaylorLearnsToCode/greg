@@ -67,9 +67,10 @@ section.table-controls div {
   @include oneColumnLayout();
 }
 
-section.table-entries {
+section.table-entries > div {
   @include baseDisplayGrid();
   grid-template-columns: 1em 6em 1fr 1em;
+  padding: 0.3em 0em;
 }
 
 .table-entries {

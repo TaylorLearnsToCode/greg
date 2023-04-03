@@ -176,6 +176,11 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     }
   }
 
+  /** Returns whether or not the form currently has */
+  hasEntries(): boolean {
+    return this.magicItemEntriesFormArray.controls.length > 0;
+  }
+
   /** Click handler for the import of a single magic item table for edit in the local form */
   importMagicItemTable(): void {
     this.magicItemTableImport.click();
