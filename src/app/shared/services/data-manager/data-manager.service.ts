@@ -50,9 +50,13 @@ export class DataManagerService {
    * @param  {string} fromKey
    */
   delete(object: any, fromKey: string): void {
+    // TODO - genericize this. These methods are all the same logic with different variable names!
     switch (fromKey) {
       case this.PERSISTENCE_TYPES.magicItem:
         this.deleteMagicItem(object);
+        break;
+      case this.PERSISTENCE_TYPES.magicItemTable:
+        this.deleteMagicItemTable(object);
         break;
       case this.PERSISTENCE_TYPES.treasureType:
         this.deleteTreasureType(object);
@@ -156,6 +160,23 @@ export class DataManagerService {
     localStorage.setItem(
       this.PERSISTENCE_TYPES.magicItem,
       JSON.stringify(items)
+    );
+    this.refreshDataState();
+  }
+
+  /**
+   * Removes a magic item table from the magic item table collection
+   *
+   * @param  {MagicItemTable} table
+   */
+  private deleteMagicItemTable(table: MagicItemTable): void {
+    const tables: MagicItemTable[] = this.retrieve<MagicItemTable[]>(
+      this.PERSISTENCE_TYPES.magicItemTable
+    );
+    removeOrWarn(table, tables, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.magicItemTable,
+      JSON.stringify(tables)
     );
     this.refreshDataState();
   }
