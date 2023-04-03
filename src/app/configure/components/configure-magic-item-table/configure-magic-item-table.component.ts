@@ -118,19 +118,28 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     this.dataService.delete(table, this.PERSISTENCE_TYPES.magicItemTable);
   }
 
+  /**
+   * Pushes a specified table to the active form for edit.
+   *
+   * @param  {MagicItemTable} table
+   */
+  editTable(table: MagicItemTable): void {
+    this.enableDisableFormEntries('enable');
+    this.magicItemTableForm = buildFormFromObject(
+      new MagicItemTable(table)
+    ) as FormGroup;
+    this.enableDisableFormEntries('disable');
+  }
+
   /** Exports the current under-work table to a file on the user's local machine */
   exportMagicItemTable(): void {
-    this.magicItemEntriesFormArray.controls.forEach((control) => {
-      control.get('reference')?.enable();
-    });
+    this.enableDisableFormEntries('enable');
     this.dataService.exportObject(
       this.magicItemTableForm.value,
       `${this.magicItemTableForm.value.system}-${this.magicItemTableForm.value.name}`,
       this.PERSISTENCE_TYPES.magicItemTable.toUpperCase()
     );
-    this.magicItemEntriesFormArray.controls.forEach((control) => {
-      control.get('reference')?.disable();
-    });
+    this.enableDisableFormEntries('disable');
   }
 
   /** Exports the current stored magic item tables to the user's local machine */
@@ -212,10 +221,12 @@ export class ConfigureMagicItemTableComponent implements OnInit {
           this.magicItemTableImport.files[0]
         ) as Observable<MagicItemTable[]>
       ).subscribe((table) => {
+        this.enableDisableFormEntries('enable');
         this.magicItemTableForm = buildFormFromObject(
           new MagicItemTable(table)
         ) as FormGroup;
         this.magicItemTableImport.value = '';
+        this.enableDisableFormEntries('disable');
       });
     }
   }
@@ -223,10 +234,12 @@ export class ConfigureMagicItemTableComponent implements OnInit {
   /** Event handler for upload of magic item tables for import */
   onMagicItemTableListImport(): void {
     if (this.magicItemTableListImport.files?.length) {
+      this.enableDisableFormEntries('enable');
       this.dataService.import(
         this.magicItemTableListImport.files[0],
         this.PERSISTENCE_TYPES.magicItemTable
       );
+      this.enableDisableFormEntries('disable');
     }
   }
 
@@ -244,10 +257,12 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    * Overwrites if a duplicate system and name are found.
    */
   saveTable(): void {
+    this.enableDisableFormEntries('enable');
     this.dataService.persist(
       this.PERSISTENCE_TYPES.magicItemTable,
       this.magicItemTableForm.value
     );
+    this.enableDisableFormEntries('disable');
   }
 
   /**
@@ -272,5 +287,25 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     }
     this.magicItemEntriesFormArray.removeAt(index);
     this.magicItemEntriesFormArray.insert(newIndex, targetControl);
+  }
+
+  /**
+   * Enables or disables the reference field according to the provided option
+   *
+   * @param  {string} option Accepts "enable" or "disable"
+   */
+  private enableDisableFormEntries(option: string): void {
+    this.magicItemEntriesFormArray.controls.forEach((control) => {
+      switch (option) {
+        case 'enable':
+          control.get('reference')?.enable();
+          break;
+        case 'disable':
+          control.get('reference')?.disable();
+          break;
+        default:
+          throw new Error(`Unsupported option ${option} specified.`);
+      }
+    });
   }
 }

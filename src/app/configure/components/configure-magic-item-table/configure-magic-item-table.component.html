@@ -99,6 +99,9 @@
           <div [ngClass]="isNestable(magicItemTable)">
             <a (click)="addToForm(magicItemTable)">+</a>
             <span>{{ magicItemTable.name }}</span>
+            <a class="edit-pencil" (click)="editTable(magicItemTable)"
+              >&#x270E;</a
+            >
             <a (click)="deleteTable(magicItemTable)">X</a>
           </div>
         </ng-container>
