@@ -127,6 +127,13 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     }
   }
 
+  isNestable(magicItemTable: MagicItemTable): string {
+    return magicItemTable.name === this.magicItemTableForm.value.name &&
+      magicItemTable.system == this.magicItemTableForm.value.system
+      ? 'not-nestable'
+      : '';
+  }
+
   /**
    * Removes the reference from the active form at the given index
    *
