@@ -85,16 +85,23 @@
       class="magic-item-tables"
       *ngIf="magicItemTables$ | async as magicItemTables"
     >
-      <ng-container *ngIf="magicItemTables.length; else noneLoaded">
+      <section *ngIf="magicItemTables.length; else noneLoaded">
         <ng-container
           *ngFor="let magicItemTable of magicItemTables; index as i"
         >
           <div [ngClass]="isNestable(magicItemTable)">
             <a (click)="addToForm(magicItemTable)">+</a>
             <span>{{ magicItemTable.name }}</span>
+            <a (click)="deleteTable(magicItemTable)">X</a>
           </div>
         </ng-container>
-      </ng-container>
+      </section>
+      <section class="controls">
+        <!-- TODO Implement these next! -->
+        <a>Import List</a>
+        <a>Export List</a>
+        <a (click)="clearTables()">Clear List</a>
+      </section>
     </section>
 
     <ng-template #noneLoaded>

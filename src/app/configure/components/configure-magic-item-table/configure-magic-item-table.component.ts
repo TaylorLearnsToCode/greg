@@ -89,6 +89,20 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     ) as FormGroup;
   }
 
+  /** Removes all saved magic item tables from browser storage */
+  clearTables(): void {
+    this.dataService.clear(this.PERSISTENCE_TYPES.magicItemTable);
+  }
+
+  /**
+   * Removes a target table from browser storage.
+   *
+   * @param  {MagicItemTable} table
+   */
+  deleteTable(table: MagicItemTable): void {
+    this.dataService.delete(table, this.PERSISTENCE_TYPES.magicItemTable);
+  }
+
   /**
    * Fills either the high side or the low side of the chanceOf array based
    * on the values in the other columns.
@@ -127,11 +141,11 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     }
   }
 
-  isNestable(magicItemTable: MagicItemTable): string {
+  isNestable(magicItemTable: MagicItemTable): string[] {
     return magicItemTable.name === this.magicItemTableForm.value.name &&
       magicItemTable.system == this.magicItemTableForm.value.system
-      ? 'not-nestable'
-      : '';
+      ? ['not-nestable', 'list-item']
+      : ['list-item'];
   }
 
   /**
