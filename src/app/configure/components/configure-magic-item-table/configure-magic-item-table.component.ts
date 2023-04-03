@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
@@ -16,6 +16,12 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./configure-magic-item-table.component.scss'],
 })
 export class ConfigureMagicItemTableComponent implements OnInit {
+  @ViewChild('magicItemTableImport') magicItemTableImportRef: ElementRef;
+  @ViewChild('magicItemTableListImport')
+  magicItemTableListImportRef: ElementRef;
+
+  readonly MAGIC_ITEM_TABLE: string;
+
   chanceOfRangeForm(index: number): FormGroup {
     return this.magicItemEntriesFormArray.controls[index].get(
       'chanceOfRange'
@@ -40,7 +46,16 @@ export class ConfigureMagicItemTableComponent implements OnInit {
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
-  constructor(private dataService: DataManagerService) {}
+  private get magicItemTableImport(): HTMLInputElement {
+    return this.magicItemTableImportRef.nativeElement as HTMLInputElement;
+  }
+  private get magicItemTableListImport(): HTMLInputElement {
+    return this.magicItemTableListImportRef.nativeElement as HTMLInputElement;
+  }
+
+  constructor(private dataService: DataManagerService) {
+    this.MAGIC_ITEM_TABLE = this.PERSISTENCE_TYPES.magicItemTable;
+  }
 
   ngOnInit(): void {
     this.magicItemTables$ = this.dataService.dataState$.pipe(
@@ -103,6 +118,26 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     this.dataService.delete(table, this.PERSISTENCE_TYPES.magicItemTable);
   }
 
+  /** Exports the current under-work table to a file on the user's local machine */
+  exportMagicItemTable(): void {
+    this.magicItemEntriesFormArray.controls.forEach((control) => {
+      control.get('reference')?.enable();
+    });
+    this.dataService.exportObject(
+      this.magicItemTableForm.value,
+      `${this.magicItemTableForm.value.system}-${this.magicItemTableForm.value.name}`,
+      this.PERSISTENCE_TYPES.magicItemTable.toUpperCase()
+    );
+    this.magicItemEntriesFormArray.controls.forEach((control) => {
+      control.get('reference')?.disable();
+    });
+  }
+
+  /** Exports the current stored magic item tables to the user's local machine */
+  exportTables(): void {
+    this.dataService.exportFromStorage(this.PERSISTENCE_TYPES.magicItemTable);
+  }
+
   /**
    * Fills either the high side or the low side of the chanceOf array based
    * on the values in the other columns.
@@ -141,11 +176,53 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     }
   }
 
+  /** Click handler for the import of a single magic item table for edit in the local form */
+  importMagicItemTable(): void {
+    this.magicItemTableImport.click();
+  }
+
+  /** Click handler for the import of file tables into storage */
+  importTables(): void {
+    this.magicItemTableListImport.click();
+  }
+
+  /**
+   * Returns whether or not a given magic item table is eligible to nest as a reference
+   * in the current table under work in the magic item table form.
+   *
+   * @param  {MagicItemTable} magicItemTable
+   */
   isNestable(magicItemTable: MagicItemTable): string[] {
     return magicItemTable.name === this.magicItemTableForm.value.name &&
       magicItemTable.system == this.magicItemTableForm.value.system
       ? ['not-nestable', 'list-item']
       : ['list-item'];
+  }
+
+  /** Event handler for upload of magic item tables for import */
+  onMagicItemTableImport(): void {
+    if (this.magicItemTableImport.files?.length) {
+      (
+        this.dataService.import(
+          this.magicItemTableImport.files[0]
+        ) as Observable<MagicItemTable[]>
+      ).subscribe((table) => {
+        this.magicItemTableForm = buildFormFromObject(
+          new MagicItemTable(table)
+        ) as FormGroup;
+        this.magicItemTableImport.value = '';
+      });
+    }
+  }
+
+  /** Event handler for upload of magic item tables for import */
+  onMagicItemTableListImport(): void {
+    if (this.magicItemTableListImport.files?.length) {
+      this.dataService.import(
+        this.magicItemTableListImport.files[0],
+        this.PERSISTENCE_TYPES.magicItemTable
+      );
+    }
   }
 
   /**
