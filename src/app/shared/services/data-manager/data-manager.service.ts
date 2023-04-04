@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
-import { MagicItemTable } from '@shared/model/treasure/magic-item-table.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -133,7 +133,7 @@ export class DataManagerService {
         this.persistMagicItem(object as MagicItem);
         break;
       case this.PERSISTENCE_TYPES.magicItemTable:
-        this.persistMagicItemTable(object as MagicItemTable);
+        this.persistMagicItemTable(object as ReferenceEntryTable);
         break;
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
@@ -167,10 +167,10 @@ export class DataManagerService {
   /**
    * Removes a magic item table from the magic item table collection
    *
-   * @param  {MagicItemTable} table
+   * @param  {ReferenceEntryTable} table
    */
-  private deleteMagicItemTable(table: MagicItemTable): void {
-    const tables: MagicItemTable[] = this.retrieve<MagicItemTable[]>(
+  private deleteMagicItemTable(table: ReferenceEntryTable): void {
+    const tables: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
       this.PERSISTENCE_TYPES.magicItemTable
     );
     removeOrWarn(table, tables, 'name,system');
@@ -221,13 +221,13 @@ export class DataManagerService {
    * If the specified table - by name and system - already exists in local storage,
    * will update the value instead.
    *
-   * @param  {MagicItemTable} table
+   * @param  {ReferenceEntryTable} table
    */
-  private persistMagicItemTable(table: MagicItemTable): void {
-    const tables: MagicItemTable[] = this.retrieve<MagicItemTable[]>(
+  private persistMagicItemTable(table: ReferenceEntryTable): void {
+    const tables: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
       this.PERSISTENCE_TYPES.magicItemTable
     );
-    insertOrReplace<MagicItemTable>(table, tables, 'name,system');
+    insertOrReplace<ReferenceEntryTable>(table, tables, 'name,system');
     localStorage.setItem(
       this.PERSISTENCE_TYPES.magicItemTable,
       JSON.stringify(tables)
@@ -277,7 +277,7 @@ export class DataManagerService {
         magicItems: this.retrieve<MagicItem[]>(
           this.PERSISTENCE_TYPES.magicItem
         ),
-        magicItemTables: this.retrieve<MagicItemTable[]>(
+        magicItemTables: this.retrieve<ReferenceEntryTable[]>(
           this.PERSISTENCE_TYPES.magicItemTable
         ),
         treasureArticles: this.retrieve<TreasureArticle[]>(

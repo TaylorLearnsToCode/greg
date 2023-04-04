@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { ReferenceEntry } from '@shared/model/dao/reference-entry.model';
-import { MagicItemTable } from '@shared/model/treasure/magic-item-table.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
@@ -34,7 +34,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     return this.magicItemTableForm.get('entries') as FormArray;
   }
   magicItemTableForm: FormGroup;
-  magicItemTables$: Observable<MagicItemTable[]>;
+  magicItemTables$: Observable<ReferenceEntryTable[]>;
   magicItems$: Observable<MagicItem[]>;
   supportedSystem(key: string): string {
     return (this.SUPPORTED_SYSTEMS as any)[key];
@@ -70,18 +70,18 @@ export class ConfigureMagicItemTableComponent implements OnInit {
   /**
    * Creates a reference from a provided addition and adds it to the active form
    *
-   * @param  {MagicItem|MagicItemTable} addition
+   * @param  {MagicItem|ReferenceEntryTable} addition
    */
-  addToForm(addition: MagicItem | MagicItemTable): void {
+  addToForm(addition: MagicItem | ReferenceEntryTable): void {
     const persistenceType = doesExist((addition as any).entries)
       ? this.PERSISTENCE_TYPES.magicItemTable
       : this.PERSISTENCE_TYPES.magicItem;
 
     if (
       persistenceType === this.PERSISTENCE_TYPES.magicItemTable &&
-      (addition as MagicItemTable).name ===
+      (addition as ReferenceEntryTable).name ===
         this.magicItemTableForm.value.name &&
-      (addition as MagicItemTable).system ==
+      (addition as ReferenceEntryTable).system ==
         this.magicItemTableForm.value.system
     ) {
       throw new Error('Cannot nest a table in itself!');
@@ -100,7 +100,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
   /** Resets the magic item table form to a clean state */
   clearForm(): void {
     this.magicItemTableForm = buildFormFromObject(
-      new MagicItemTable()
+      new ReferenceEntryTable()
     ) as FormGroup;
   }
 
@@ -112,21 +112,21 @@ export class ConfigureMagicItemTableComponent implements OnInit {
   /**
    * Removes a target table from browser storage.
    *
-   * @param  {MagicItemTable} table
+   * @param  {ReferenceEntryTable} table
    */
-  deleteTable(table: MagicItemTable): void {
+  deleteTable(table: ReferenceEntryTable): void {
     this.dataService.delete(table, this.PERSISTENCE_TYPES.magicItemTable);
   }
 
   /**
    * Pushes a specified table to the active form for edit.
    *
-   * @param  {MagicItemTable} table
+   * @param  {ReferenceEntryTable} table
    */
-  editTable(table: MagicItemTable): void {
+  editTable(table: ReferenceEntryTable): void {
     this.enableDisableFormEntries('enable');
     this.magicItemTableForm = buildFormFromObject(
-      new MagicItemTable(table)
+      new ReferenceEntryTable(table)
     ) as FormGroup;
     this.enableDisableFormEntries('disable');
   }
@@ -204,9 +204,9 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    * Returns whether or not a given magic item table is eligible to nest as a reference
    * in the current table under work in the magic item table form.
    *
-   * @param  {MagicItemTable} magicItemTable
+   * @param  {ReferenceEntryTable} magicItemTable
    */
-  isNestable(magicItemTable: MagicItemTable): string[] {
+  isNestable(magicItemTable: ReferenceEntryTable): string[] {
     return magicItemTable.name === this.magicItemTableForm.value.name &&
       magicItemTable.system == this.magicItemTableForm.value.system
       ? ['not-nestable', 'list-item']
@@ -219,11 +219,11 @@ export class ConfigureMagicItemTableComponent implements OnInit {
       (
         this.dataService.import(
           this.magicItemTableImport.files[0]
-        ) as Observable<MagicItemTable[]>
+        ) as Observable<ReferenceEntryTable[]>
       ).subscribe((table) => {
         this.enableDisableFormEntries('enable');
         this.magicItemTableForm = buildFormFromObject(
-          new MagicItemTable(table)
+          new ReferenceEntryTable(table)
         ) as FormGroup;
         this.magicItemTableImport.value = '';
         this.enableDisableFormEntries('disable');
