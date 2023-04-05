@@ -11,6 +11,7 @@ import { ConfigureTreasureTypeComponent } from './components/configure-treasure-
 import { TempConvertLegacyComponent } from './components/temp-convert-legacy/temp-convert-legacy.component';
 import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounded-range-form.component';
 import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
+import { RollableTableTemplateComponent } from './templates/rollable-table-template/rollable-table-template.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'magic-item-table',
     component: ConfigureMagicItemTableComponent,
+  },
+  {
+    path: 'treasure-map',
+    component: ConfigureTreasureMapComponent,
   },
   {
     path: 'treasure-type',
@@ -51,6 +56,7 @@ const routes: Routes = [
     ConfigureTreasureMapComponent,
     BoundedRangeFormComponent,
     TempConvertLegacyComponent,
+    RollableTableTemplateComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

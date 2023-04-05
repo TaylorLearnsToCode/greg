@@ -1,5 +1,5 @@
 import { constructInstance } from '@shared/utilities/common-util/common.util';
-import { BoundedRange } from '../utility/bounded-range.model';
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 
 /** A lookup reference for use with linking table entries to browser storage locations */
 export class ReferenceEntry {

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
-import { ReferenceEntry } from '@shared/model/dao/reference-entry.model';
+import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
