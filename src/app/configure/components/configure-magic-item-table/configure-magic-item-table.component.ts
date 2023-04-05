@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
-import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
@@ -22,9 +22,9 @@ export class ConfigureMagicItemTableComponent implements OnInit {
 
   readonly MAGIC_ITEM_TABLE: string;
 
-  chanceOfRangeForm(index: number): FormGroup {
+  chanceOfForm(index: number): FormGroup {
     return this.magicItemEntriesFormArray.controls[index].get(
-      'chanceOfRange'
+      'chanceOf'
     ) as FormGroup;
   }
   get diceToRollForm(): FormGroup {
@@ -162,22 +162,22 @@ export class ConfigureMagicItemTableComponent implements OnInit {
     let targetSide: FormControl;
     for (let i = 0; i < this.magicItemEntriesFormArray.controls.length; i++) {
       if (side === 'low' && i === 0) {
-        this.chanceOfRangeForm(i).get(side)?.setValue(1);
+        this.chanceOfForm(i).get(side)?.setValue(1);
         continue;
       } else if (
         side === 'high' &&
         i == this.magicItemEntriesFormArray.controls.length - 1
       ) {
         const max = this.magicItemTableForm.value.diceToRoll.pips;
-        this.chanceOfRangeForm(i).get(side)?.setValue(max);
+        this.chanceOfForm(i).get(side)?.setValue(max);
         continue;
       }
 
-      targetSide = this.chanceOfRangeForm(i).get(side) as FormControl;
+      targetSide = this.chanceOfForm(i).get(side) as FormControl;
       constantSide =
         side === 'low'
-          ? (this.chanceOfRangeForm(i - 1).get('high') as FormControl)
-          : (this.chanceOfRangeForm(i + 1).get('low') as FormControl);
+          ? (this.chanceOfForm(i - 1).get('high') as FormControl)
+          : (this.chanceOfForm(i + 1).get('low') as FormControl);
 
       targetSide.setValue(
         side === 'low' ? constantSide.value + 1 : constantSide.value - 1

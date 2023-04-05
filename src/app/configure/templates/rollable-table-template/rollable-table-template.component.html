@@ -1,5 +1,51 @@
 <greg-page-template>
   <first-content>
+    <form [formGroup]="tableForm">
+      <section class="form-head">
+        <label>Name:</label>
+        <span>
+          <input formControlName="name" type="text" />
+        </span>
+
+        <label>System:</label>
+        <span>
+          <select formControlName="system">
+            <option disabled value="">-- Select --</option>
+            <option
+              *ngFor="let systemKey of supportedSystemKeys"
+              [ngValue]="systemKey"
+            >
+              {{ supportedSystem(systemKey) }}
+            </option>
+          </select>
+        </span>
+
+        <label>Dice Pool:</label>
+        <greg-dice-rolled-form
+          [fromParentForm]="tableForm"
+          identifier="diceToRoll"
+        ></greg-dice-rolled-form>
+      </section>
+
+      <label>Entries</label>
+      <section class="form-entries">
+        <ng-container *ngIf="entriesFormArray.controls.length; else noEntries">
+          <div *ngFor="let entry of entriesFormArray.controls; index as i">
+            <span>
+              <a (click)="shiftEntry(i, 'up')">&uArr;</a>
+              <a (click)="shiftEntry(i, 'down')">&dArr;</a>
+            </span>
+            <greg-bounded-range-form
+              [boundedRangeForm]="boundedRangeForm(i)"
+            ></greg-bounded-range-form>
+            {{ entry.value.name }}
+            <a>X</a>
+          </div>
+        </ng-container>
+
+        <ng-template #noEntries> No rollable entries configured. </ng-template>
+      </section>
+    </form>
     <ng-content select="entries-form"></ng-content>
   </first-content>
 
