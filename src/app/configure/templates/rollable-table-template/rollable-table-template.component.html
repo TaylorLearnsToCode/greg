@@ -1,0 +1,9 @@
+<greg-page-template>
+  <first-content>
+    <ng-content select="entries-form"></ng-content>
+  </first-content>
+
+  <second-content>
+    {{ tableForm.value | json }}
+  </second-content>
+</greg-page-template>
