@@ -1,0 +1,10 @@
+@import '/src/assets/variables';
+
+label {
+  padding: 0em 0.5em;
+}
+
+section.form-head {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(2, 1fr 2fr);
+}
