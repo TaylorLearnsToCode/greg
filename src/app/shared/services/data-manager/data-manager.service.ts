@@ -148,6 +148,38 @@ export class DataManagerService {
   }
 
   /**
+   * For the list of items saved to browser storage identified by a provided key,
+   * moves the item at the specified index one step in the indicated direction
+   *
+   * @param  {string} key
+   * @param  {number} index
+   * @param  {string} direction Accepts "up" or "down"
+   */
+  shiftListEntry(key: string, index: number, direction: string): void {
+    let newIndex;
+    switch (direction) {
+      case 'up':
+        newIndex = index - 1;
+        break;
+      case 'down':
+        newIndex = index + 1;
+        break;
+      default:
+        throw new Error(`Invalid direction ${direction} specified.`);
+    }
+    const savedList: any[] = this.retrieve(key);
+    if (newIndex === -1 || newIndex === savedList.length) {
+      return;
+    }
+    const targetItem = savedList.splice(index, 1);
+    savedList.splice(newIndex, 0, targetItem);
+    this.clear(key);
+    for (const item of savedList) {
+      this.persist(key, item);
+    }
+  }
+
+  /**
    * Removes the target magic item from the magic item collection
    *
    * @param  {MagicItem} item

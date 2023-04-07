@@ -31,25 +31,28 @@
       <section class="form-entries">
         <ng-container *ngIf="entriesFormArray.controls.length; else noEntries">
           <div *ngFor="let entry of entriesFormArray.controls; index as i">
-            <span>
+            <span class="shift-entry">
               <a (click)="shiftEntry(i, 'up')">&uArr;</a>
               <a (click)="shiftEntry(i, 'down')">&dArr;</a>
             </span>
             <greg-bounded-range-form
               [boundedRangeForm]="boundedRangeForm(i)"
             ></greg-bounded-range-form>
-            {{ entry.value.name }}
-            <a>X</a>
+            {{ entryName(i) }}
+            <a (click)="removeEntry(i)">X</a>
           </div>
         </ng-container>
 
-        <ng-template #noEntries> No rollable entries configured. </ng-template>
+        <ng-template #noEntries>
+          <p>No rollable entries configured.</p>
+        </ng-template>
       </section>
     </form>
-    <ng-content select="entries-form"></ng-content>
   </first-content>
 
   <second-content>
     {{ tableForm.value | json }}
+    <hr />
+    <ng-content select="add-entry-form"></ng-content>
   </second-content>
 </greg-page-template>

@@ -4,7 +4,14 @@ label {
   padding: 0em 0.5em;
 }
 
+section.form-entries div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 6em 1fr 1em;
+  margin: 0.3em 0em;
+}
+
 section.form-head {
   @include baseDisplayGrid();
   grid-template-columns: repeat(2, 1fr 2fr);
+  margin-bottom: 1em;
 }
