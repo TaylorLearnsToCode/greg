@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 
 // TODO: rename to indicate it's a form
 @Component({
@@ -9,6 +10,14 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
   styleUrls: ['./rollable-table-template.component.scss'],
 })
 export class RollableTableTemplateComponent {
+  /** The key by which a named entry in the list is identified; default "name" */
+  @Input() set entryIdentifier(identifier: string) {
+    this._entryIdentifier = identifier;
+  }
+  get entryIdentifier(): string {
+    return doesExist(this._entryIdentifier) ? this._entryIdentifier : 'name';
+  }
+
   /**
    * The FormGroup used to house the table under edit.
    * Should be created from an object which extends AbstractRollableTable.
@@ -29,6 +38,15 @@ export class RollableTableTemplateComponent {
     return this.tableForm.get('entries') as FormArray;
   }
   /**
+   * Pseudo-accessor: returns the name of a given FormArray element, as
+   * identified by the configured entry identifier field.
+   *
+   * @param  {number} index
+   */
+  entryName(index: number): string {
+    return (this.entriesFormArray.value[index] as any)[this.entryIdentifier];
+  }
+  /**
    * Pseudo-accessor: returns a GREG supported game system identified by a
    * provided key value
    *
@@ -43,6 +61,16 @@ export class RollableTableTemplateComponent {
   }
 
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
+
+  private _entryIdentifier: string;
+
+  /**
+   * Removes the form array entry at the specified index from the current table under edit
+   * @param  {number} index
+   */
+  removeEntry(index: number): void {
+    this.entriesFormArray.removeAt(index);
+  }
 
   /**
    * Moves the control at a target index one step up or down in the array,

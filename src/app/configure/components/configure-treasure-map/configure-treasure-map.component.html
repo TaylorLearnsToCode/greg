@@ -1,3 +1,31 @@
 <greg-rollable-table-template
+  entryIdentifier="reference"
   [tableForm]="treasureMapForm"
-></greg-rollable-table-template>
+>
+  <add-entry-form>
+    <label>Add Treasure Article</label>
+    <section class="add-treasure-article">Add</section>
+
+    <hr />
+
+    <label>Add Magic Item</label>
+    <section
+      *ngIf="magicItemList$ | async as magicItemList"
+      class="add-magic-item"
+    >
+      <ng-container *ngIf="magicItemList.length; else noItems">
+        <div *ngFor="let magicItem of magicItemList; index as i">
+          <a (click)="addMagicItem(magicItem)">+Add</a>
+          <span class="shift-entry">
+            <a (click)="shiftMagicItem(i, 'up')">&uArr;</a>
+            <a (click)="shiftMagicItem(i, 'down')">&dArr;</a>
+          </span>
+          {{ magicItem.name }}
+        </div>
+      </ng-container>
+      <ng-template #noItems>
+        <p>No magic items configured.</p>
+      </ng-template>
+    </section>
+  </add-entry-form>
+</greg-rollable-table-template>

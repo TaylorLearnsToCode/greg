@@ -1,0 +1,15 @@
+@import '/src/assets/variables';
+
+add-entry-form > hr {
+  margin: em 0em;
+}
+
+add-entry-form > label {
+  @include indent();
+}
+
+section.add-magic-item > div {
+  @include baseDisplayGrid();
+  grid-template-columns: 2.5em 1.5em 1fr;
+  margin-bottom: 0.5em;
+}
