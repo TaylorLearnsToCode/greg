@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
+import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -16,6 +17,7 @@ import { map, Observable } from 'rxjs';
 export class ConfigureTreasureMapComponent implements OnInit {
   magicItemList$: Observable<MagicItem[]>;
   treasureMapForm: FormGroup;
+  treasureArticleForm: FormGroup;
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
@@ -26,6 +28,7 @@ export class ConfigureTreasureMapComponent implements OnInit {
       map((state) => state.magicItems)
     );
     this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
+    this.resetTreasureArticleForm();
   }
 
   /**
@@ -41,6 +44,13 @@ export class ConfigureTreasureMapComponent implements OnInit {
         } as ReferenceEntry)
       )
     );
+  }
+
+  /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */
+  resetTreasureArticleForm(): void {
+    this.treasureArticleForm = buildFormFromObject(
+      new TreasureArticle()
+    ) as FormGroup;
   }
 
   /**
