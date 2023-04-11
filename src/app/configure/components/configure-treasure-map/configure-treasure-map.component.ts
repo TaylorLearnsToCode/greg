@@ -17,6 +17,7 @@ import { map, Observable } from 'rxjs';
 export class ConfigureTreasureMapComponent implements OnInit {
   magicItemList$: Observable<MagicItem[]>;
   treasureMapForm: FormGroup;
+  treasureMapRefList$: Observable<TreasureArticle[]>;
   treasureArticleForm: FormGroup;
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
@@ -26,6 +27,9 @@ export class ConfigureTreasureMapComponent implements OnInit {
   ngOnInit(): void {
     this.magicItemList$ = this.dataService.dataState$.pipe(
       map((state) => state.magicItems)
+    );
+    this.treasureMapRefList$ = this.dataService.dataState$.pipe(
+      map((state) => state.treasureMapRefs)
     );
     this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
     this.resetTreasureArticleForm();
@@ -44,6 +48,29 @@ export class ConfigureTreasureMapComponent implements OnInit {
         } as ReferenceEntry)
       )
     );
+  }
+
+  /**
+   * Saves the current article in the treasure article form as a reference and
+   * adds it to the treasure map under edit.
+   */
+  addMapTreasureArticle(): void {
+    this.dataService.persist(
+      this.PERSISTENCE_TYPES.treasureMapRef,
+      this.treasureArticleForm.value
+    );
+    (this.treasureMapForm.get('entries') as FormArray).push(
+      buildFormFromObject(
+        new ReferenceEntry({
+          reference:
+            this.treasureMapForm.value.name +
+            '-' +
+            this.treasureArticleForm.value.name,
+          persistenceType: this.PERSISTENCE_TYPES.treasureMapRef,
+        } as ReferenceEntry)
+      )
+    );
+    this.resetTreasureArticleForm();
   }
 
   /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */

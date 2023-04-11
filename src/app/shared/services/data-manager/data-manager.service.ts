@@ -138,6 +138,9 @@ export class DataManagerService {
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
+      case this.PERSISTENCE_TYPES.treasureMapRef:
+        this.persistTreasureMapReference(object as TreasureArticle);
+        break;
       case this.PERSISTENCE_TYPES.treasureType:
         this.persistTreasureType(object as TreasureType);
         break;
@@ -285,6 +288,24 @@ export class DataManagerService {
   }
 
   /**
+   * Persists a provided TreasureArticle to local storage as a Treasure Map Reference.
+   * If the specified article - by name - already exists in local storage,
+   * will update the value instead.
+   *
+   * @param  {TreasureArticle} reference
+   */
+  private persistTreasureMapReference(reference: TreasureArticle): void {
+    const references: TreasureArticle[] = this.retrieve<TreasureArticle[]>(
+      this.PERSISTENCE_TYPES.treasureMapRef
+    );
+    insertOrReplace(reference, references);
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.treasureMapRef,
+      JSON.stringify(references)
+    );
+  }
+
+  /**
    * Persists a provided TreasureType into local storage.
    * If the type already exists - by type identifier and system - will update the type
    * in storage instead.
@@ -314,6 +335,9 @@ export class DataManagerService {
         ),
         treasureArticles: this.retrieve<TreasureArticle[]>(
           this.PERSISTENCE_TYPES.treasureArticle
+        ),
+        treasureMapRefs: this.retrieve<TreasureArticle[]>(
+          this.PERSISTENCE_TYPES.treasureMapRef
         ),
         treasureTypes: this.retrieve<TreasureType[]>(
           this.PERSISTENCE_TYPES.treasureType
