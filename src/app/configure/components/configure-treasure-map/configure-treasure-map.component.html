@@ -14,9 +14,21 @@
         ></greg-dice-rolled-form>
         <input formControlName="name" type="text" />
       </form>
-      <div>
-        <a>+Add</a>
+      <div class="map-articles-controls">
+        <a (click)="addMapTreasureArticle()">+Add</a>
         <a (click)="resetTreasureArticleForm()">Reset</a>
+      </div>
+      <div
+        class="map-articles-list"
+        *ngIf="treasureMapRefList$ | async as treasureMapRefList"
+      >
+        <ng-container *ngFor="let ref of treasureMapRefList">
+          <a>+</a>
+          <span>
+            {{ ref.name }}
+          </span>
+          <a>X</a>
+        </ng-container>
       </div>
     </section>
 
