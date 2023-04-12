@@ -62,7 +62,10 @@ export class DataManagerService {
         this.deleteTreasureType(object);
         break;
       default:
-        throw new Error(`Data type ${fromKey} not currently supported.`);
+        console.warn(
+          `Data type ${fromKey} not currently supported: defaulting to generic approach.`
+        );
+        this.deleteSavedItem(object, fromKey);
     }
   }
 
@@ -230,6 +233,22 @@ export class DataManagerService {
       this.PERSISTENCE_TYPES.treasureType,
       JSON.stringify(types)
     );
+    this.refreshDataState();
+  }
+
+  /**
+   * Removes a target item, identified by an optional identifier: default 'name',
+   * from its local storage collection, identified by a mandatory provided key, and
+   * then calls for a refresh of the data state.
+   *
+   * @param  {T} item
+   * @param  {string} key
+   * @param  {string} identifier?
+   */
+  private deleteSavedItem<T>(item: T, key: string, identifier?: string): void {
+    const items: T[] = this.retrieve<T[]>(key);
+    removeOrWarn(item, items, identifier);
+    localStorage.setItem(key, JSON.stringify(items));
     this.refreshDataState();
   }
 
