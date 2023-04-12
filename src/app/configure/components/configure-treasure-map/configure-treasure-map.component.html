@@ -22,12 +22,12 @@
         class="map-articles-list"
         *ngIf="treasureMapRefList$ | async as treasureMapRefList"
       >
-        <ng-container *ngFor="let ref of treasureMapRefList">
-          <a>+</a>
+        <ng-container *ngFor="let ref of treasureMapRefList; index as i">
+          <a (click)="addSavedMapTreasureReference(ref)">+</a>
           <span>
             {{ ref.name }}
           </span>
-          <a>X</a>
+          <a (click)="deleteTreasureMapEntry(ref)">X</a>
         </ng-container>
       </div>
     </section>

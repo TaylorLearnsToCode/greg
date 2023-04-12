@@ -73,6 +73,31 @@ export class ConfigureTreasureMapComponent implements OnInit {
     this.resetTreasureArticleForm();
   }
 
+  /**
+   * Provided a treasure article - adds the treasure article to the active form.
+   *
+   * @param  {TreasureArticle} reference
+   */
+  addSavedMapTreasureReference(reference: TreasureArticle): void {
+    (this.treasureMapForm.get('entries') as FormArray).push(
+      buildFormFromObject(
+        new ReferenceEntry({
+          reference: reference.name,
+          persistenceType: this.PERSISTENCE_TYPES.treasureMapRef,
+        } as ReferenceEntry)
+      )
+    );
+  }
+
+  /**
+   * Removes a target treasure map entry from local storage.
+   *
+   * @param  {TreasureArticle} entry
+   */
+  deleteTreasureMapEntry(entry: TreasureArticle): void {
+    this.dataService.delete(entry, this.PERSISTENCE_TYPES.treasureMapRef);
+  }
+
   /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */
   resetTreasureArticleForm(): void {
     this.treasureArticleForm = buildFormFromObject(
