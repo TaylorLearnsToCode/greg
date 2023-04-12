@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
@@ -16,11 +17,20 @@ import { map, Observable } from 'rxjs';
 })
 export class ConfigureTreasureMapComponent implements OnInit {
   magicItemList$: Observable<MagicItem[]>;
+  treasureArticleForm: FormGroup;
+  get treasureArticleTypeKeys(): string[] {
+    return Object.keys(this.TREASURE_ARTICLE_TYPES).filter(
+      (key) => key == 'GEMS' || key == 'JEWELRY' || key == 'SPECIE'
+    );
+  }
+  treasureArticleType(key: string): string {
+    return (this.TREASURE_ARTICLE_TYPES as any)[key];
+  }
   treasureMapForm: FormGroup;
   treasureMapRefList$: Observable<TreasureArticle[]>;
-  treasureArticleForm: FormGroup;
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+  private readonly TREASURE_ARTICLE_TYPES = TREASURE_ARTICLE_TYPES;
 
   constructor(private dataService: DataManagerService) {}
 
@@ -62,10 +72,11 @@ export class ConfigureTreasureMapComponent implements OnInit {
     (this.treasureMapForm.get('entries') as FormArray).push(
       buildFormFromObject(
         new ReferenceEntry({
-          reference:
-            this.treasureMapForm.value.name +
-            '-' +
+          reference: [
+            this.treasureMapForm.value.system,
+            this.treasureMapForm.value.name,
             this.treasureArticleForm.value.name,
+          ].join('-'),
           persistenceType: this.PERSISTENCE_TYPES.treasureMapRef,
         } as ReferenceEntry)
       )
@@ -101,7 +112,7 @@ export class ConfigureTreasureMapComponent implements OnInit {
   /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */
   resetTreasureArticleForm(): void {
     this.treasureArticleForm = buildFormFromObject(
-      new TreasureArticle()
+      new TreasureArticle({ type: 'SPECIE' })
     ) as FormGroup;
   }
 

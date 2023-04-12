@@ -29,6 +29,7 @@ section.add-treasure-article div.map-articles-list {
 }
 section.add-treasure-article form {
   @include baseDisplayGrid();
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  column-gap: 0.5em;
   margin-bottom: 0.5em;
 }
