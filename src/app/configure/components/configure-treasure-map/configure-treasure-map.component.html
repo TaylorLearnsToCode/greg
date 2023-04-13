@@ -39,7 +39,10 @@
           <span>
             {{ ref.name }}
           </span>
-          <a (click)="deleteTreasureMapEntry(ref)">X</a>
+          <a class="edit-pencil" (click)="editTreasureMapArticleEntry(ref)"
+            >&#x270E;</a
+          >
+          <a (click)="deleteTreasureMapArticleEntry(ref)">X</a>
         </ng-container>
       </div>
     </section>
