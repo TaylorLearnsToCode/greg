@@ -36,14 +36,19 @@
       >
         <ng-container *ngFor="let ref of treasureMapRefList; index as i">
           <a (click)="addSavedMapTreasureReference(ref)">+</a>
-          <span>
-            {{ ref.name }}
-          </span>
+          <span> {{ ref.name }} ( {{ treasureArticleType(ref.type) }} ) </span>
           <a class="edit-pencil" (click)="editTreasureMapArticleEntry(ref)"
             >&#x270E;</a
           >
           <a (click)="deleteTreasureMapArticleEntry(ref)">X</a>
         </ng-container>
+      </div>
+
+      <div class="map-articles-controls">
+        <!-- Do these next -->
+        <a>Import</a>
+        <a>Export</a>
+        <a>Clear</a>
       </div>
     </section>
 
