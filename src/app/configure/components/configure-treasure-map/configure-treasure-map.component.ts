@@ -105,8 +105,20 @@ export class ConfigureTreasureMapComponent implements OnInit {
    *
    * @param  {TreasureArticle} entry
    */
-  deleteTreasureMapEntry(entry: TreasureArticle): void {
+  deleteTreasureMapArticleEntry(entry: TreasureArticle): void {
     this.dataService.delete(entry, this.PERSISTENCE_TYPES.treasureMapRef);
+  }
+
+  /**
+   * Positions a specified treasure article in the edit form, eligible to add to the
+   * treasure map under composition. Any unsaved changes in the form will be lost.
+   *
+   * @param  {TreasureArticle} entry
+   */
+  editTreasureMapArticleEntry(entry: TreasureArticle): void {
+    this.treasureArticleForm = buildFormFromObject(
+      new TreasureArticle(entry)
+    ) as FormGroup;
   }
 
   /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */
