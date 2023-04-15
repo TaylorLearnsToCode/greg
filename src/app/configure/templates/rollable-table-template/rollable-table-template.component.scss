@@ -1,5 +1,7 @@
 @import '/src/assets/variables';
 
+@include hideFileInputs();
+
 first-content form {
   @include baseDisplayGrid();
   grid-template-areas: 

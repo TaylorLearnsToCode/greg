@@ -56,7 +56,7 @@
         <label>Controls</label>
         <ul>
           <li>
-            <a>Import</a>
+            <a (click)="importFile()">Import</a>
           </li>
           <li style="padding-bottom: 0.5em">
             <a (click)="exportFile()">Export</a>
@@ -68,6 +68,12 @@
             <a>Clear</a>
           </li>
         </ul>
+        <input
+          #importInput
+          [accept]="acceptFileType"
+          (change)="onImportFile()"
+          type="file"
+        />
       </section>
     </form>
   </first-content>

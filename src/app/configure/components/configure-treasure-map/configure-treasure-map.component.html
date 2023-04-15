@@ -1,6 +1,7 @@
 <greg-rollable-table-template
   entryIdentifier="reference"
   [exportFileType]="FILE_TYPE"
+  (importEvent)="handleImport($event)"
   [tableForm]="treasureMapForm"
 >
   <add-entry-form>

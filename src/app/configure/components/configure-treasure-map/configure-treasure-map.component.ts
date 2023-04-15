@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { RollableTableComponent } from '@configure/model/rollable-table-component.interface';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
@@ -15,7 +16,9 @@ import { map, Observable } from 'rxjs';
   templateUrl: './configure-treasure-map.component.html',
   styleUrls: ['./configure-treasure-map.component.scss'],
 })
-export class ConfigureTreasureMapComponent implements OnInit {
+export class ConfigureTreasureMapComponent
+  implements OnInit, RollableTableComponent
+{
   readonly FILE_TYPE = PERSISTENCE_TYPES.treasureMap;
 
   magicItemList$: Observable<MagicItem[]>;
@@ -96,6 +99,20 @@ export class ConfigureTreasureMapComponent implements OnInit {
   editTreasureMapArticleEntry(entry: TreasureArticle): void {
     this.treasureArticleForm = buildFormFromObject(
       new TreasureArticle(entry)
+    ) as FormGroup;
+  }
+
+  /**
+   * When a file import event occurs from the template, the inbound event
+   * assumed to be a TreasureMap, inserts the new event into the active form.
+   *
+   * Unsaved changes are lost.
+   *
+   * @param  {TreasureMap} event
+   */
+  handleImport(event: TreasureMap): void {
+    this.treasureMapForm = buildFormFromObject(
+      new TreasureMap(event)
     ) as FormGroup;
   }
 
