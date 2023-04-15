@@ -27,8 +27,8 @@
         ></greg-dice-rolled-form>
       </section>
 
-      <label>Entries</label>
       <section class="form-entries">
+        <label>Entries</label>
         <ng-container *ngIf="entriesFormArray.controls.length; else noEntries">
           <div *ngFor="let entry of entriesFormArray.controls; index as i">
             <span class="shift-entry">
@@ -50,6 +50,21 @@
         <ng-template #noEntries>
           <p>No rollable entries configured.</p>
         </ng-template>
+      </section>
+
+      <section class="form-controls">
+        <label>Controls</label>
+        <ul>
+          <li>
+            <a>Export</a>
+          </li>
+          <li>
+            <a>Import</a>
+          </li>
+          <li>
+            <a>Clear</a>
+          </li>
+        </ul>
       </section>
     </form>
   </first-content>

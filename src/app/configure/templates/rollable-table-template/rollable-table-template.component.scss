@@ -1,13 +1,43 @@
 @import '/src/assets/variables';
 
+first-content form {
+  @include baseDisplayGrid();
+  grid-template-areas: 
+    "top top"
+    "left right";
+  grid-template-columns: repeat(2, 1fr);
+}
+
 label {
   padding: 0em 0.5em;
 }
 
+section.form-controls {
+  @include oneColumnLayout();
+  grid-area: right;
+}
+section.form-controls label {
+  padding: 0;
+}
+section.form-controls ul {
+  justify-self: center;
+  margin: 0;
+  padding: 0;
+}
+section.form-controls ul a {
+  margin-left: 1em;
+}
+
+section.form-entries {
+  grid-area: left;
+}
 section.form-entries div {
   @include baseDisplayGrid();
   grid-template-columns: 1em 6em 1fr 1em;
   margin: 0.3em 0em;
+}
+section.form-entries label {
+  @include indent();
 }
 section.form-entries p {
   font-size: small;
@@ -17,6 +47,7 @@ section.form-entries p {
 
 section.form-head {
   @include baseDisplayGrid();
+  grid-area: top;
   grid-template-columns: repeat(2, 1fr 2fr);
   margin-bottom: 1em;
 }
