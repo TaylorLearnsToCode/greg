@@ -19,7 +19,7 @@ import { map, Observable } from 'rxjs';
 export class ConfigureTreasureMapComponent
   implements OnInit, RollableTableComponent
 {
-  readonly FILE_TYPE = PERSISTENCE_TYPES.treasureMap;
+  readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES.treasureMap;
 
   magicItemList$: Observable<MagicItem[]>;
   treasureArticleForm: FormGroup;
@@ -32,6 +32,7 @@ export class ConfigureTreasureMapComponent
     return (this.TREASURE_ARTICLE_TYPES as any)[key];
   }
   treasureMapForm: FormGroup;
+  treasureMapList$: Observable<TreasureMap[]>;
   treasureMapRefList$: Observable<TreasureArticle[]>;
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
@@ -42,6 +43,9 @@ export class ConfigureTreasureMapComponent
   ngOnInit(): void {
     this.magicItemList$ = this.dataService.dataState$.pipe(
       map((state) => state.magicItems)
+    );
+    this.treasureMapList$ = this.dataService.dataState$.pipe(
+      map((state) => state.treasureMaps)
     );
     this.treasureMapRefList$ = this.dataService.dataState$.pipe(
       map((state) => state.treasureMapRefs)

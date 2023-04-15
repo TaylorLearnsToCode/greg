@@ -3,14 +3,16 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 // TODO: rename to indicate it's a form
 @Component({
@@ -18,7 +20,7 @@ import { Observable } from 'rxjs';
   templateUrl: './rollable-table-template.component.html',
   styleUrls: ['./rollable-table-template.component.scss'],
 })
-export class RollableTableTemplateComponent {
+export class RollableTableTemplateComponent implements OnInit {
   /** The key by which a named entry in the list is identified; default "name" */
   @Input() set entryIdentifier(identifier: string) {
     this._entryIdentifier = identifier;
@@ -26,19 +28,20 @@ export class RollableTableTemplateComponent {
   get entryIdentifier(): string {
     return doesExist(this._entryIdentifier) ? this._entryIdentifier : 'name';
   }
-  /** The file type to be associated with an exported version of the parent form */
-  @Input() exportFileType: string;
+  /** The supported persistence type to be associated with an exported version of the parent form */
+  @Input() persistenceType: string;
   /**
    * The FormGroup used to house the table under edit.
    * Should be created from an object which extends AbstractRollableTable.
    */
   @Input() tableForm: FormGroup;
+  /** Event emitter to produce files for consumption on Import action */
   @Output() importEvent = new EventEmitter();
   @ViewChild('importInput') importInputRef: ElementRef;
 
   /** File type to be sought by the Import button */
   get acceptFileType(): string {
-    return this.exportFileType ? `.${this.exportFileType}` : '*';
+    return this.persistenceType ? `.${this.persistenceType}` : '*';
   }
   /**
    * Pseudo-accessor: returns the FormGroup containing the chanceOf property of
@@ -62,6 +65,8 @@ export class RollableTableTemplateComponent {
   entryName(index: number): string {
     return (this.entriesFormArray.value[index] as any)[this.entryIdentifier];
   }
+  /** Observable representation of tables saved to browser storage */
+  savedTableList$: Observable<any>;
   /**
    * Pseudo-accessor: returns a GREG supported game system identified by a
    * provided key value
@@ -77,6 +82,7 @@ export class RollableTableTemplateComponent {
   }
 
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
+  private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   private _entryIdentifier: string;
   private get importInput(): HTMLInputElement {
@@ -84,6 +90,10 @@ export class RollableTableTemplateComponent {
   }
 
   constructor(private dataService: DataManagerService) {}
+
+  ngOnInit(): void {
+    this.initializeSavedTableListStream();
+  }
 
   /** Resets the parent table form */
   clearTableForm(): void {
@@ -98,7 +108,7 @@ export class RollableTableTemplateComponent {
     this.dataService.exportObject(
       this.tableForm.value,
       `${this.tableForm.value.system}-${this.tableForm.value.name}`,
-      this.exportFileType
+      this.persistenceType
     );
   }
 
@@ -129,6 +139,11 @@ export class RollableTableTemplateComponent {
     this.entriesFormArray.removeAt(index);
   }
 
+  /** Persists the value of the table form under edit to browser storage */
+  saveTableForm(): void {
+    this.dataService.persist(this.persistenceType, this.tableForm.value);
+  }
+
   /**
    * Moves the control at a target index one step up or down in the array,
    * as defined by the direction argument.
@@ -154,5 +169,19 @@ export class RollableTableTemplateComponent {
     const targetControl = this.entriesFormArray.at(index);
     this.entriesFormArray.removeAt(index);
     this.entriesFormArray.insert(newIndex, targetControl);
+  }
+
+  /**
+   * Based on the input persistence type, attempts to isolate the active list from the data
+   * manager state stream for display/use in the rollable table.
+   */
+  private initializeSavedTableListStream(): void {
+    const stateParam =
+      Object.keys(this.PERSISTENCE_TYPES).find(
+        (key) => (this.PERSISTENCE_TYPES as any)[key] === this.persistenceType
+      ) + 's';
+    this.savedTableList$ = this.dataService.dataState$.pipe(
+      map((state) => (state as any)[stateParam])
+    );
   }
 }

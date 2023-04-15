@@ -10,8 +10,17 @@ first-content form {
   grid-template-columns: repeat(2, 1fr);
 }
 
-label {
+first-content label {
   padding: 0em 0.5em;
+}
+
+hr {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+second-content label {
+  @include indent();
 }
 
 section.form-controls {
