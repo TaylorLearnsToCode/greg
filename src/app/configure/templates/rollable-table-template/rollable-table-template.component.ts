@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 
 // TODO: rename to indicate it's a form
@@ -17,7 +18,8 @@ export class RollableTableTemplateComponent {
   get entryIdentifier(): string {
     return doesExist(this._entryIdentifier) ? this._entryIdentifier : 'name';
   }
-
+  /** The file type to be associated with an exported version of the parent form */
+  @Input() exportFileType: string;
   /**
    * The FormGroup used to house the table under edit.
    * Should be created from an object which extends AbstractRollableTable.
@@ -63,6 +65,16 @@ export class RollableTableTemplateComponent {
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
   private _entryIdentifier: string;
+
+  constructor(private dataService: DataManagerService) {}
+
+  exportFile(): void {
+    this.dataService.exportObject(
+      this.tableForm.value,
+      `${this.tableForm.value.system}-${this.tableForm.value.name}`,
+      this.exportFileType
+    );
+  }
 
   /**
    * Removes the form array entry at the specified index from the current table under edit
