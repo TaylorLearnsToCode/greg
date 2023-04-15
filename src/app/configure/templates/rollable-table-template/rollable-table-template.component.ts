@@ -1,8 +1,16 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { Observable } from 'rxjs';
 
 // TODO: rename to indicate it's a form
 @Component({
@@ -25,7 +33,13 @@ export class RollableTableTemplateComponent {
    * Should be created from an object which extends AbstractRollableTable.
    */
   @Input() tableForm: FormGroup;
+  @Output() importEvent = new EventEmitter();
+  @ViewChild('importInput') importInputRef: ElementRef;
 
+  /** File type to be sought by the Import button */
+  get acceptFileType(): string {
+    return this.exportFileType ? `.${this.exportFileType}` : '*';
+  }
   /**
    * Pseudo-accessor: returns the FormGroup containing the chanceOf property of
    * an entry in the entries FormArray at the specified index.
@@ -65,15 +79,38 @@ export class RollableTableTemplateComponent {
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
   private _entryIdentifier: string;
+  private get importInput(): HTMLInputElement {
+    return this.importInputRef.nativeElement as HTMLInputElement;
+  }
 
   constructor(private dataService: DataManagerService) {}
 
+  /** Exports the provided parent table's value to the user's local machine */
   exportFile(): void {
     this.dataService.exportObject(
       this.tableForm.value,
       `${this.tableForm.value.system}-${this.tableForm.value.name}`,
       this.exportFileType
     );
+  }
+
+  /**
+   * Opens a prompt, enabling the user to select and import a table to work on.
+   * When an import occurs, the resulting JSON is emitted upwards.
+   */
+  importFile(): void {
+    this.importInput.click();
+  }
+
+  /** Handler method for file import event */
+  onImportFile<T>(): void {
+    if (this.importInput.files?.length) {
+      (
+        this.dataService.import<T>(this.importInput.files[0]) as Observable<T>
+      ).subscribe((file) => this.importEvent.emit(file));
+    } else {
+      throw new Error('No file found for import.');
+    }
   }
 
   /**
