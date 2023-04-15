@@ -61,30 +61,6 @@ export class ConfigureTreasureMapComponent implements OnInit {
   }
 
   /**
-   * Saves the current article in the treasure article form as a reference and
-   * adds it to the treasure map under edit.
-   */
-  addMapTreasureArticle(): void {
-    this.dataService.persist(
-      this.PERSISTENCE_TYPES.treasureMapRef,
-      this.treasureArticleForm.value
-    );
-    (this.treasureMapForm.get('entries') as FormArray).push(
-      buildFormFromObject(
-        new ReferenceEntry({
-          reference: [
-            this.treasureMapForm.value.system,
-            this.treasureMapForm.value.name,
-            this.treasureArticleForm.value.name,
-          ].join('-'),
-          persistenceType: this.PERSISTENCE_TYPES.treasureMapRef,
-        } as ReferenceEntry)
-      )
-    );
-    this.resetTreasureArticleForm();
-  }
-
-  /**
    * Provided a treasure article - adds the treasure article to the active form.
    *
    * @param  {TreasureArticle} reference
@@ -129,6 +105,18 @@ export class ConfigureTreasureMapComponent implements OnInit {
   }
 
   /**
+   * Saves the current article in the treasure article form as a reference and
+   * adds it to the treasure map under edit.
+   */
+  saveMapTreasureArticle(): void {
+    this.dataService.persist(this.PERSISTENCE_TYPES.treasureMapRef, {
+      ...this.treasureArticleForm.value,
+      name: this.buildActiveMapTreasureArticleName(),
+    });
+    this.resetTreasureArticleForm();
+  }
+
+  /**
    * Shifts the magic item at the specified index in the saved magic items list one
    * position in the specified direction.
    *
@@ -141,5 +129,14 @@ export class ConfigureTreasureMapComponent implements OnInit {
       index,
       direction
     );
+  }
+
+  /** Builds a specific special string from the active map and article under edit. */
+  private buildActiveMapTreasureArticleName(): string {
+    return [
+      this.treasureMapForm.value.system,
+      this.treasureMapForm.value.name,
+      this.treasureArticleForm.value.name,
+    ].join('-');
   }
 }
