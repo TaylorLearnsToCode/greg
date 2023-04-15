@@ -16,6 +16,8 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./configure-treasure-map.component.scss'],
 })
 export class ConfigureTreasureMapComponent implements OnInit {
+  readonly FILE_TYPE = PERSISTENCE_TYPES.treasureMap;
+
   magicItemList$: Observable<MagicItem[]>;
   treasureArticleForm: FormGroup;
   get treasureArticleTypeKeys(): string[] {
