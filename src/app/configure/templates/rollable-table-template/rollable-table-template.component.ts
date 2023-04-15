@@ -85,6 +85,14 @@ export class RollableTableTemplateComponent {
 
   constructor(private dataService: DataManagerService) {}
 
+  /** Resets the parent table form */
+  clearTableForm(): void {
+    while (this.entriesFormArray.controls.length > 0) {
+      this.removeEntry(this.entriesFormArray.controls.length - 1);
+    }
+    this.tableForm.reset();
+  }
+
   /** Exports the provided parent table's value to the user's local machine */
   exportFile(): void {
     this.dataService.exportObject(
