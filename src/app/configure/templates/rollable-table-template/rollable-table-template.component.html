@@ -69,7 +69,7 @@
           </li>
         </ul>
         <input
-          #importInput
+          #importTableInput
           [accept]="acceptFileType"
           (change)="onImportFile()"
           type="file"
@@ -84,8 +84,32 @@
     <hr />
 
     <label>Saved Tables</label>
-    <section *ngIf="savedTableList$ | async as savedTableList">
-      {{ savedTableList | json }}
+    <section
+      class="saved-tables"
+      *ngIf="savedTableList$ | async as savedTableList"
+    >
+      <ng-container *ngIf="savedTableList.length; else noTables">
+        <div
+          class="saved-entry"
+          *ngFor="let table of savedTableList; index as i"
+        >
+          <span class="shift-entry">
+            <a (click)="shiftTable(i, 'up')">&uArr;</a>
+            <a (click)="shiftTable(i, 'down')">&dArr;</a>
+          </span>
+          <span> {{ table.name }} ( {{ table.system }} ) </span>
+          <a class="edit-pencil" (click)="editSavedTable(table)">&#x270E;</a>
+          <a>X</a>
+        </div>
+      </ng-container>
+      <div class="saved-table-controls">
+        <a>Import</a>
+        <a>Export</a>
+        <a>Clear</a>
+      </div>
     </section>
+    <ng-template #noTables>
+      <p>No tables currently configured.</p>
+    </ng-template>
   </second-content>
 </greg-page-template>

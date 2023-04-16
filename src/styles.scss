@@ -13,6 +13,10 @@ a {
   &:visited {
     color: $anchor-orange-dark;
   }
+
+  &.edit-pencil {
+    transform: translate(0em, -0.15em)
+  }
 }
 
 body {
