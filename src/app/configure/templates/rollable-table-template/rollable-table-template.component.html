@@ -99,7 +99,7 @@
           </span>
           <span> {{ table.name }} ( {{ table.system }} ) </span>
           <a class="edit-pencil" (click)="editSavedTable(table)">&#x270E;</a>
-          <a>X</a>
+          <a (click)="deleteSavedTable(table)">X</a>
         </div>
       </ng-container>
       <div class="saved-table-controls">

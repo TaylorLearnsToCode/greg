@@ -104,6 +104,14 @@ export class RollableTableTemplateComponent implements OnInit {
     }
     this.tableForm.reset();
   }
+  /**
+   * Removes a target table from browser storage.
+   *
+   * @param  {T extends AbstractRollableTable} table
+   */
+  deleteSavedTable<T extends AbstractRollableTable>(table: T): void {
+    this.dataService.delete(table, this.persistenceType);
+  }
 
   /**
    * Rebuilds the target form using a provided table. Unsaved changes will be lost.
