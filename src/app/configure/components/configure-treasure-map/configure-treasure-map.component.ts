@@ -55,7 +55,10 @@ export class ConfigureTreasureMapComponent
   }
 
   /**
+   * TODO - this is broken
+   *
    * Adds a specified magic item to the treasure map's entries list
+   *
    * @param  {MagicItem} magicItem
    */
   addMagicItem(magicItem: MagicItem): void {

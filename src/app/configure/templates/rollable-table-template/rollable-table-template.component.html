@@ -102,10 +102,11 @@
           <a (click)="deleteSavedTable(table)">X</a>
         </div>
       </ng-container>
+
       <div class="saved-table-controls">
         <a>Import</a>
         <a>Export</a>
-        <a>Clear</a>
+        <a (click)="clearSavedTables()">Clear</a>
       </div>
     </section>
     <ng-template #noTables>

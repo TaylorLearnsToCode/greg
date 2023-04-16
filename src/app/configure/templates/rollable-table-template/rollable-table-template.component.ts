@@ -97,6 +97,11 @@ export class RollableTableTemplateComponent implements OnInit {
     this.initializeSavedTableListStream();
   }
 
+  /** Removes all tables of the specified persistence type from browser storage. */
+  clearSavedTables(): void {
+    this.dataService.clear(this.persistenceType);
+  }
+
   /** Resets the parent table form */
   clearTableForm(): void {
     while (this.entriesFormArray.controls.length > 0) {
@@ -104,6 +109,7 @@ export class RollableTableTemplateComponent implements OnInit {
     }
     this.tableForm.reset();
   }
+
   /**
    * Removes a target table from browser storage.
    *
