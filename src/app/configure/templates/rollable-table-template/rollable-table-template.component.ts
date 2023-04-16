@@ -10,8 +10,10 @@ import {
 import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { map, Observable } from 'rxjs';
 
 // TODO: rename to indicate it's a form
@@ -37,7 +39,7 @@ export class RollableTableTemplateComponent implements OnInit {
   @Input() tableForm: FormGroup;
   /** Event emitter to produce files for consumption on Import action */
   @Output() importEvent = new EventEmitter();
-  @ViewChild('importInput') importInputRef: ElementRef;
+  @ViewChild('importTableInput') importTableInputRef: ElementRef;
 
   /** File type to be sought by the Import button */
   get acceptFileType(): string {
@@ -85,8 +87,8 @@ export class RollableTableTemplateComponent implements OnInit {
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   private _entryIdentifier: string;
-  private get importInput(): HTMLInputElement {
-    return this.importInputRef.nativeElement as HTMLInputElement;
+  private get importTableInput(): HTMLInputElement {
+    return this.importTableInputRef.nativeElement as HTMLInputElement;
   }
 
   constructor(private dataService: DataManagerService) {}
@@ -103,6 +105,18 @@ export class RollableTableTemplateComponent implements OnInit {
     this.tableForm.reset();
   }
 
+  /**
+   * Rebuilds the target form using a provided table. Unsaved changes will be lost.
+   *
+   * @param  {T extends AbstractRollableTable} table
+   */
+  editSavedTable<T extends AbstractRollableTable>(table: T): void {
+    if (!doesExist(table.entries)) {
+      table.entries = [];
+    }
+    this.tableForm = buildFormFromObject(table) as FormGroup;
+  }
+
   /** Exports the provided parent table's value to the user's local machine */
   exportFile(): void {
     this.dataService.exportObject(
@@ -117,14 +131,16 @@ export class RollableTableTemplateComponent implements OnInit {
    * When an import occurs, the resulting JSON is emitted upwards.
    */
   importFile(): void {
-    this.importInput.click();
+    this.importTableInput.click();
   }
 
   /** Handler method for file import event */
   onImportFile<T>(): void {
-    if (this.importInput.files?.length) {
+    if (this.importTableInput.files?.length) {
       (
-        this.dataService.import<T>(this.importInput.files[0]) as Observable<T>
+        this.dataService.import<T>(
+          this.importTableInput.files[0]
+        ) as Observable<T>
       ).subscribe((file) => this.importEvent.emit(file));
     } else {
       throw new Error('No file found for import.');
@@ -169,6 +185,17 @@ export class RollableTableTemplateComponent implements OnInit {
     const targetControl = this.entriesFormArray.at(index);
     this.entriesFormArray.removeAt(index);
     this.entriesFormArray.insert(newIndex, targetControl);
+  }
+
+  /**
+   * Delegating to the data manager service, moves the target table up or down
+   * in its respective list.
+   *
+   * @param  {number} index
+   * @param  {string} direction Accepts "up" or "down"
+   */
+  shiftTable(index: number, direction: string): void {
+    this.dataService.shiftListEntry(this.persistenceType, index, direction);
   }
 
   /**
