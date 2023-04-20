@@ -13,6 +13,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { shiftFormArrayEntry } from '@shared/utilities/form-util/form.util';
 import { Observable, map } from 'rxjs';
 
 // TODO: rename to indicate it's a form
@@ -179,23 +180,7 @@ export class RollableTableTemplateComponent implements OnInit {
    * @param  {string} direction Accepts "up" or "down"
    */
   shiftEntry(index: number, direction: string): void {
-    let newIndex: number;
-    switch (direction) {
-      case 'up':
-        newIndex = index - 1;
-        break;
-      case 'down':
-        newIndex = index + 1;
-        break;
-      default:
-        throw new Error(`Unsupported direction ${direction} specified.`);
-    }
-    if (newIndex === -1 || newIndex === this.entriesFormArray.controls.length) {
-      return;
-    }
-    const targetControl = this.entriesFormArray.at(index);
-    this.entriesFormArray.removeAt(index);
-    this.entriesFormArray.insert(newIndex, targetControl);
+    shiftFormArrayEntry(index, direction, this.entriesFormArray);
   }
 
   /**

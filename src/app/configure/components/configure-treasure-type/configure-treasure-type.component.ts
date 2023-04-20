@@ -6,8 +6,11 @@ import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { map, Observable } from 'rxjs';
+import {
+  buildFormFromObject,
+  shiftFormArrayEntry,
+} from '@shared/utilities/form-util/form.util';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-treasure-type',
@@ -187,19 +190,6 @@ export class ConfigureTreasureTypeComponent implements OnInit {
    * @param  {string} direction 'up' or 'down', case sensitive, are supported.
    */
   shiftArticle(index: number, direction: string): void {
-    const targetControl = this.articlesFormArray.at(index);
-    let newIndex = index;
-    switch (direction) {
-      case 'up':
-        newIndex--;
-        break;
-      case 'down':
-        newIndex++;
-        break;
-      default:
-        throw new Error(`Invalid direction provided: ${direction}`);
-    }
-    this.articlesFormArray.removeAt(index);
-    this.articlesFormArray.insert(newIndex, targetControl);
+    shiftFormArrayEntry(index, direction, this.articlesFormArray);
   }
 }
