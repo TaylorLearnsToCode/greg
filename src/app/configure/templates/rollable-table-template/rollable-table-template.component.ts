@@ -13,8 +13,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
-import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { map, Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 // TODO: rename to indicate it's a form
 @Component({
@@ -37,8 +36,12 @@ export class RollableTableTemplateComponent implements OnInit {
    * Should be created from an object which extends AbstractRollableTable.
    */
   @Input() tableForm: FormGroup;
+
   /** Event emitter to produce files for consumption on Import action */
   @Output() importEvent = new EventEmitter();
+  /** Event emitter to signal an inbound  */
+  @Output() editSavedTableEvent = new EventEmitter();
+
   @ViewChild('importTableInput') importTableInputRef: ElementRef;
 
   /** File type to be sought by the Import button */
@@ -104,10 +107,7 @@ export class RollableTableTemplateComponent implements OnInit {
 
   /** Resets the parent table form */
   clearTableForm(): void {
-    while (this.entriesFormArray.controls.length > 0) {
-      this.removeEntry(this.entriesFormArray.controls.length - 1);
-    }
-    this.tableForm.reset();
+    this.editSavedTableEvent.emit({});
   }
 
   /**
@@ -125,10 +125,7 @@ export class RollableTableTemplateComponent implements OnInit {
    * @param  {T extends AbstractRollableTable} table
    */
   editSavedTable<T extends AbstractRollableTable>(table: T): void {
-    if (!doesExist(table.entries)) {
-      table.entries = [];
-    }
-    this.tableForm = buildFormFromObject(table) as FormGroup;
+    this.editSavedTableEvent.emit(table);
   }
 
   /** Exports the provided parent table's value to the user's local machine */
