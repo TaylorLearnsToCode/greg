@@ -8,8 +8,9 @@ import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { isEmpty } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { Observable, map } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-treasure-map',
@@ -41,6 +42,7 @@ export class ConfigureTreasureMapComponent
   constructor(private dataService: DataManagerService) {}
 
   ngOnInit(): void {
+    this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
     this.magicItemList$ = this.dataService.dataState$.pipe(
       map((state) => state.magicItems)
     );
@@ -50,13 +52,20 @@ export class ConfigureTreasureMapComponent
     this.treasureMapRefList$ = this.dataService.dataState$.pipe(
       map((state) => state.treasureMapRefs)
     );
-    this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
+    this.treasureMapRefList$ = combineLatest([
+      this.dataService.dataState$.pipe(map((state) => state.treasureMapRefs)),
+      this.treasureMapForm.valueChanges,
+    ]).pipe(
+      map(([treasureArticles, formMap]) =>
+        treasureArticles.filter((article) =>
+          this.filterMapRefListPredicate(article, new TreasureMap(formMap))
+        )
+      )
+    );
     this.resetTreasureArticleForm();
   }
 
   /**
-   * TODO - this is broken
-   *
    * Adds a specified magic item to the treasure map's entries list
    *
    * @param  {MagicItem} magicItem
@@ -87,6 +96,9 @@ export class ConfigureTreasureMapComponent
       )
     );
   }
+
+  /** Removes currently filtered treasure articles from map treasure article browser storage */
+  clearMapTreasureArticles(): void {}
 
   /**
    * Removes a target treasure map entry from local storage.
@@ -175,5 +187,40 @@ export class ConfigureTreasureMapComponent
       this.treasureMapForm.value.name,
       this.treasureArticleForm.value.name,
     ].join('-');
+  }
+
+  /**
+   * Returns true if:
+   * * The current map does not contain a Name or System
+   * * The current map contains a name or system and the article references either or both in its name
+   *
+   * Returns false otherwise.
+   *
+   * @param  {TreasureArticle} article
+   * @param  {TreasureMap} currentMap
+   */
+  private filterMapRefListPredicate(
+    article: TreasureArticle,
+    currentMap: TreasureMap
+  ): boolean {
+    console.warn(currentMap);
+    const nameIsEmpty = isEmpty(currentMap.name);
+    const systemIsEmpty = isEmpty(currentMap.system);
+    if (
+      (nameIsEmpty && systemIsEmpty) ||
+      (!nameIsEmpty &&
+        systemIsEmpty &&
+        article.name.includes(currentMap.name)) ||
+      (nameIsEmpty &&
+        !systemIsEmpty &&
+        article.name.includes(currentMap.system)) ||
+      (!nameIsEmpty &&
+        !systemIsEmpty &&
+        article.name.includes(currentMap.name) &&
+        article.name.includes(currentMap.system))
+    ) {
+      return true;
+    }
+    return false;
   }
 }
