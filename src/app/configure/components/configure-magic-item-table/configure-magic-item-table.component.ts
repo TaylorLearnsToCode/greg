@@ -7,8 +7,11 @@ import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
-import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { map, Observable } from 'rxjs';
+import {
+  buildFormFromObject,
+  shiftFormArrayEntry,
+} from '@shared/utilities/form-util/form.util';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-magic-item-table',
@@ -273,20 +276,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    * @param  {string} direction Accepts 'up' or 'down'
    */
   shiftArticle(index: number, direction: string): void {
-    const targetControl = this.magicItemEntriesFormArray.at(index);
-    let newIndex = index;
-    switch (direction) {
-      case 'up':
-        newIndex--;
-        break;
-      case 'down':
-        newIndex++;
-        break;
-      default:
-        throw new Error(`Invalid direction provided: ${direction}`);
-    }
-    this.magicItemEntriesFormArray.removeAt(index);
-    this.magicItemEntriesFormArray.insert(newIndex, targetControl);
+    shiftFormArrayEntry(index, direction, this.magicItemEntriesFormArray);
   }
 
   /**

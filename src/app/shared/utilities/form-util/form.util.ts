@@ -1,5 +1,6 @@
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
   UntypedFormArray,
@@ -33,6 +34,39 @@ export function buildFormFromObject(obj: any): AbstractControl {
     return new FormControl(obj);
   }
 }
+
+/**
+ * Moves the control at a specified index one step up or down in a target form array.
+ *
+ * @param  {number} index
+ * @param  {string} direction Accepts "up" or "down": case sensitive.
+ * @param  {FormArray} target
+ */
+export function shiftFormArrayEntry(
+  index: number,
+  direction: string,
+  target: FormArray
+): void {
+  let newIndex: number;
+  switch (direction) {
+    case 'up':
+      newIndex = index - 1;
+      break;
+    case 'down':
+      newIndex = index + 1;
+      break;
+    default:
+      throw new Error(`Unsupported direction ${direction} specified.`);
+  }
+  if (newIndex === -1 || newIndex === target.controls.length) {
+    return;
+  }
+  const targetControl = target.at(index);
+  target.removeAt(index);
+  target.insert(newIndex, targetControl);
+}
+
+/* -- begin "private" support functions -- */
 
 function buildFormArrayFromArray(array: any[]): UntypedFormArray {
   const formArray = new UntypedFormArray([]);
