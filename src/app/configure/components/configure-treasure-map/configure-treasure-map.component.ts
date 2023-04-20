@@ -9,7 +9,7 @@ import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { map, Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-treasure-map',
@@ -106,6 +106,17 @@ export class ConfigureTreasureMapComponent
   editTreasureMapArticleEntry(entry: TreasureArticle): void {
     this.treasureArticleForm = buildFormFromObject(
       new TreasureArticle(entry)
+    ) as FormGroup;
+  }
+
+  /**
+   * When an edit event is received, replace the active form.
+   *
+   * @param  {TreasureMap} treasureMap
+   */
+  handleEditSavedTable(treasureMap: TreasureMap): void {
+    this.treasureMapForm = buildFormFromObject(
+      new TreasureMap(treasureMap)
     ) as FormGroup;
   }
 
