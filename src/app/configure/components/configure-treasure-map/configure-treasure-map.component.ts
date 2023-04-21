@@ -3,8 +3,8 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { RollableTableComponent } from '@configure/model/rollable-table-component.interface';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
-import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -25,7 +25,7 @@ export class ConfigureTreasureMapComponent
   readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES.treasureMap;
   readonly MAP_TREASURE_ARTICLE = PERSISTENCE_TYPES.treasureMapRef;
 
-  magicItemList$: Observable<MagicItem[]>;
+  magicItemTableList$: Observable<ReferenceEntryTable[]>;
   treasureArticleForm: FormGroup;
   get treasureArticleTypeKeys(): string[] {
     return Object.keys(this.TREASURE_ARTICLE_TYPES).filter(
@@ -50,8 +50,8 @@ export class ConfigureTreasureMapComponent
 
   ngOnInit(): void {
     this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
-    this.magicItemList$ = this.dataService.dataState$.pipe(
-      map((state) => state.magicItems)
+    this.magicItemTableList$ = this.dataService.dataState$.pipe(
+      map((state) => state.magicItemTables)
     );
     this.treasureMapList$ = this.dataService.dataState$.pipe(
       map((state) => state.treasureMaps)
@@ -75,14 +75,14 @@ export class ConfigureTreasureMapComponent
   /**
    * Adds a specified magic item to the treasure map's entries list
    *
-   * @param  {MagicItem} magicItem
-   */
-  addMagicItem(magicItem: MagicItem): void {
+   * @param  {ReferenceEntryTable} magicTable
+   * */
+  addMagicItemTable(magicTable: ReferenceEntryTable): void {
     (this.treasureMapForm.get('entries') as FormArray).push(
       buildFormFromObject(
         new ReferenceEntry({
-          reference: magicItem.name,
-          persistenceType: this.PERSISTENCE_TYPES.magicItem,
+          reference: magicTable.name,
+          persistenceType: this.PERSISTENCE_TYPES.magicItemTable,
         } as ReferenceEntry)
       )
     );
@@ -215,9 +215,9 @@ export class ConfigureTreasureMapComponent
    * @param  {number} index
    * @param  {string} direction Accepts "up" or "down"
    */
-  shiftMagicItem(index: number, direction: string): void {
+  shiftMagicItemTable(index: number, direction: string): void {
     this.dataService.shiftListEntry(
-      this.PERSISTENCE_TYPES.magicItem,
+      this.PERSISTENCE_TYPES.magicItemTable,
       index,
       direction
     );
