@@ -64,19 +64,19 @@
 
     <hr />
 
-    <label>Add Magic Item</label>
+    <label>Add Magic Item Table</label>
     <section
-      *ngIf="magicItemList$ | async as magicItemList"
+      *ngIf="magicItemTableList$ | async as magicItemTableList"
       class="add-magic-item"
     >
-      <ng-container *ngIf="magicItemList.length; else noItems">
-        <div *ngFor="let magicItem of magicItemList; index as i">
-          <a (click)="addMagicItem(magicItem)">+Add</a>
+      <ng-container *ngIf="magicItemTableList.length; else noItems">
+        <div *ngFor="let magicItemTable of magicItemTableList; index as i">
+          <a (click)="addMagicItemTable(magicItemTable)">+Add</a>
           <span class="shift-entry">
-            <a (click)="shiftMagicItem(i, 'up')">&uArr;</a>
-            <a (click)="shiftMagicItem(i, 'down')">&dArr;</a>
+            <a (click)="shiftMagicItemTable(i, 'up')">&uArr;</a>
+            <a (click)="shiftMagicItemTable(i, 'down')">&dArr;</a>
           </span>
-          {{ magicItem.name }}
+          {{ magicItemTable.name }}
         </div>
       </ng-container>
       <ng-template #noItems>
