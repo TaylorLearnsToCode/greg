@@ -42,6 +42,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
   {
     children: [
       {
+        menuLabel: 'Generate Treasure Map',
+        routePath: 'treasure-map',
+      } as NavRoute,
+      {
         menuLabel: 'Generate Treasure from Type',
         routePath: 'treasure-from-type',
       } as NavRoute,

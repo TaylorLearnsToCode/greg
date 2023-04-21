@@ -33,26 +33,33 @@
         <a (click)="resetTreasureArticleForm()">Reset</a>
       </div>
 
-      <div
-        class="map-articles-list"
-        *ngIf="treasureMapRefList$ | async as treasureMapRefList"
-      >
-        <ng-container *ngFor="let ref of treasureMapRefList; index as i">
-          <a (click)="addSavedMapTreasureReference(ref)">+</a>
-          <span> {{ ref.name }} ( {{ treasureArticleType(ref.type) }} ) </span>
-          <a class="edit-pencil" (click)="editTreasureMapArticleEntry(ref)"
-            >&#x270E;</a
-          >
-          <a (click)="deleteTreasureMapArticleEntry(ref)">X</a>
-        </ng-container>
-      </div>
+      <ng-container *ngIf="treasureMapRefList$ | async as treasureMapRefList">
+        <div class="map-articles-list">
+          <ng-container *ngFor="let ref of treasureMapRefList; index as i">
+            <a (click)="addSavedMapTreasureReference(ref)">+</a>
+            <span>
+              {{ ref.name }} ( {{ treasureArticleType(ref.type) }} )
+            </span>
+            <a class="edit-pencil" (click)="editTreasureMapArticleEntry(ref)"
+              >&#x270E;</a
+            >
+            <a (click)="deleteTreasureMapArticleEntry(ref)">X</a>
+          </ng-container>
+        </div>
 
-      <div class="map-articles-controls">
-        <!-- Do these next -->
-        <a>Import</a>
-        <a>Export</a>
-        <a (click)="clearMapTreasureArticles()">Clear</a>
-      </div>
+        <div class="map-articles-controls">
+          <!-- Do these next -->
+          <a (click)="importMapTreasureArticles()">Import</a>
+          <input
+            #importMapArticlesInput
+            accept=".{{ MAP_TREASURE_ARTICLE }}"
+            (change)="onImportMapTreasureArticles()"
+            type="file"
+          />
+          <a (click)="exportMapTreasureArticles(treasureMapRefList)">Export</a>
+          <a (click)="clearMapTreasureArticles(treasureMapRefList)">Clear</a>
+        </div>
+      </ng-container>
     </section>
 
     <hr />

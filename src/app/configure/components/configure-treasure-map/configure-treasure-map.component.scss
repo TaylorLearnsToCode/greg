@@ -1,5 +1,6 @@
 @import '/src/assets/variables';
 
+@include hideFileInputs();
 @include smallNumberInputs();
 
 add-entry-form > hr {

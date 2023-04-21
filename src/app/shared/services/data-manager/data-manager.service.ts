@@ -158,6 +158,26 @@ export class DataManagerService {
   }
 
   /**
+   * Searches browser storage for a specific referenced article among a collection
+   * grouped under the provided PERSISTENCE_TYPES key.
+   *
+   * @param  {string} reference
+   * @param  {string} key
+   */
+  retrieveReference<T>(reference: string, key: string): T {
+    let result: T = null as T;
+    for (const item of this.retrieve<T[]>(key, [])) {
+      if ((item as any).name === reference) {
+        result = item;
+      }
+    }
+    if (doesExist(result)) {
+      return result;
+    }
+    throw new Error(`Reference ${reference} not found under key ${key}.`);
+  }
+
+  /**
    * For the list of items saved to browser storage identified by a provided key,
    * moves the item at the specified index one step in the indicated direction
    *

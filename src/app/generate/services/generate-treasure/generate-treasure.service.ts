@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
+import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { TreasureResult } from '@generate/model/treasure-result.model';
+import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { GenerateBxTreasureService } from './generate-bx-treasure/generate-bx-treasure.service';
 import { GenerateLbbTreasureService } from './generate-lbb-treasure/generate-lbb-treasure.service';
 import { GenerateWwwTreasureService } from './generate-www-treasure/generate-www-treasure.service';
@@ -23,7 +26,15 @@ export class GenerateTreasureService {
 
   generateTreasure(treasureType: TreasureType): TreasureResult[] {
     this.checkAndSetGeneratorService(treasureType.system);
-    return this.generatorService.generateTreasureByType(treasureType);
+    return this.generatorService.generateTreasureByTreasureType(treasureType);
+  }
+
+  generateTreasureFromTreasureMap(map: TreasureMap): TreasureMapResult {
+    this.checkAndSetGeneratorService(map.system);
+    const returnMap = this.generatorService.generateTreasureMap(map);
+    return doesExist(returnMap)
+      ? (returnMap as TreasureMapResult)
+      : new TreasureMapResult();
   }
 
   private checkAndSetGeneratorService(system: SUPPORTED_SYSTEMS): void {

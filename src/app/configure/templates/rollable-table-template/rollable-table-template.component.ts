@@ -134,7 +134,7 @@ export class RollableTableTemplateComponent implements OnInit {
     this.dataService.exportObject(
       this.tableForm.value,
       `${this.tableForm.value.system}-${this.tableForm.value.name}`,
-      this.persistenceType
+      this.persistenceType.toUpperCase()
     );
   }
 
