@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-generator.model';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
+import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
+import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
+import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { isBetween } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
@@ -60,7 +64,7 @@ export class GenerateLbbTreasureService
   /** The Nth gem under processing: one greater than the index of the current gem in the gem iterator */
   private nthGem: number;
 
-  constructor() {
+  constructor(private dataService: DataManagerService) {
     super();
   }
 
@@ -108,6 +112,29 @@ export class GenerateLbbTreasureService
       return this.jewelResult;
     }
     return null;
+  }
+
+  /**
+   * Returns a TreasureMapResult, as rolled on a provided TreasureMap.
+   *
+   * @param  {TreasureMap} map
+   */
+  generateTreasureMap(map: TreasureMap): TreasureMapResult | null {
+    const result: TreasureMapResult = new TreasureMapResult({ name: map.name });
+    const roll: number = rollDice(map.diceToRoll);
+
+    let article: TreasureArticle;
+    for (const entry of map.entries) {
+      if (isBetween(roll, entry.chanceOf)) {
+        article = this.dataService.retrieveReference(
+          entry.reference,
+          entry.persistenceType
+        );
+        result.results.push(...this.generateTreasureByArticleType(article));
+      }
+    }
+
+    return result;
   }
 
   /**

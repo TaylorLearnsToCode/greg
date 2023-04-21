@@ -1,3 +1,5 @@
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
+
 /**
  * Performs a deep-clone of a provided object: such that the object is new (not
  * a reference) and all of its properties are likewise new.
@@ -77,6 +79,59 @@ export function insertOrReplace<T>(
   } else {
     collection.push(item);
   }
+}
+/**
+ * Returns whether or not a {target} number is within the bounds of a provided BoundedRange
+ *
+ * @param  {number} target
+ * @param  {BoundedRange} range
+ * @param  {boolean} inclusive Optional: default TRUE
+ */
+export function isBetween(
+  target: number,
+  range: BoundedRange,
+  inclusive?: boolean
+): boolean;
+/**
+ * Returns whether or not a {target} number is between a provided {low} and {high} value
+ *
+ * @param  {number} target
+ * @param  {number} low
+ * @param  {number} high
+ * @param  {boolean} inclusive  Optional: default TRUE
+ */
+export function isBetween(
+  target: number,
+  low: number,
+  high: number,
+  inclusive?: boolean
+): boolean;
+export function isBetween(...args: any[]): boolean {
+  const target = args[0];
+
+  let targetRange: BoundedRange;
+  let isInclusive: boolean = true;
+  if (typeof args[1] === 'object') {
+    targetRange = new BoundedRange(args[1]);
+    if (args.length === 3 && args[2]) {
+      isInclusive = args[2];
+    }
+  } else {
+    targetRange = new BoundedRange({
+      low: args[1],
+      high: args[2],
+    } as BoundedRange);
+    if (args.length === 4 && args[3]) {
+      isInclusive = args[3];
+    }
+  }
+
+  if (isInclusive) {
+    targetRange.low--;
+    targetRange.high++;
+  }
+
+  return target > targetRange.low && target < targetRange.high;
 }
 
 /**

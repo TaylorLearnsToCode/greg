@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
@@ -20,7 +20,10 @@ import { Observable, combineLatest, map } from 'rxjs';
 export class ConfigureTreasureMapComponent
   implements OnInit, RollableTableComponent
 {
+  @ViewChild('importMapArticlesInput') importMapArticlesInputRef: ElementRef;
+
   readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES.treasureMap;
+  readonly MAP_TREASURE_ARTICLE = PERSISTENCE_TYPES.treasureMapRef;
 
   magicItemList$: Observable<MagicItem[]>;
   treasureArticleForm: FormGroup;
@@ -38,6 +41,10 @@ export class ConfigureTreasureMapComponent
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
   private readonly TREASURE_ARTICLE_TYPES = TREASURE_ARTICLE_TYPES;
+
+  private get importMapArticlesInput(): HTMLInputElement {
+    return this.importMapArticlesInputRef.nativeElement as HTMLInputElement;
+  }
 
   constructor(private dataService: DataManagerService) {}
 
@@ -91,14 +98,22 @@ export class ConfigureTreasureMapComponent
       buildFormFromObject(
         new ReferenceEntry({
           reference: reference.name,
-          persistenceType: this.PERSISTENCE_TYPES.treasureMapRef,
+          persistenceType: this.MAP_TREASURE_ARTICLE,
         } as ReferenceEntry)
       )
     );
   }
 
-  /** Removes currently filtered treasure articles from map treasure article browser storage */
-  clearMapTreasureArticles(): void {}
+  /**
+   * Removes currently filtered treasure articles from map treasure article browser storage
+   *
+   * @param  {TreasureArticle[]} filteredList
+   */
+  clearMapTreasureArticles(filteredList: TreasureArticle[]): void {
+    for (const article of filteredList) {
+      this.dataService.delete(article, this.MAP_TREASURE_ARTICLE);
+    }
+  }
 
   /**
    * Removes a target treasure map entry from local storage.
@@ -106,7 +121,7 @@ export class ConfigureTreasureMapComponent
    * @param  {TreasureArticle} entry
    */
   deleteTreasureMapArticleEntry(entry: TreasureArticle): void {
-    this.dataService.delete(entry, this.PERSISTENCE_TYPES.treasureMapRef);
+    this.dataService.delete(entry, this.MAP_TREASURE_ARTICLE);
   }
 
   /**
@@ -119,6 +134,19 @@ export class ConfigureTreasureMapComponent
     this.treasureArticleForm = buildFormFromObject(
       new TreasureArticle(entry)
     ) as FormGroup;
+  }
+
+  /**
+   * Exports the currently visible list of map treasure articles to the user's device
+   *
+   * @param  {TreasureArticle[]} filteredList
+   */
+  exportMapTreasureArticles(filteredList: TreasureArticle[]): void {
+    this.dataService.exportObject(
+      filteredList,
+      this.treasureMapForm.value.system + '-' + this.treasureMapForm.value.name,
+      this.MAP_TREASURE_ARTICLE.toUpperCase()
+    );
   }
 
   /**
@@ -146,6 +174,21 @@ export class ConfigureTreasureMapComponent
     ) as FormGroup;
   }
 
+  /** Imports map treasure articles from the user's machine and appends to those in browser storage */
+  importMapTreasureArticles(): void {
+    this.importMapArticlesInput.click();
+  }
+
+  /** Handler method for import treasure article event */
+  onImportMapTreasureArticles(): void {
+    if (this.importMapArticlesInput.files?.length) {
+      this.dataService.import<TreasureArticle[]>(
+        this.importMapArticlesInput.files[0],
+        this.MAP_TREASURE_ARTICLE
+      );
+    }
+  }
+
   /** Rebuilds the treasureArticleForm object with a fresh TreasureArticle */
   resetTreasureArticleForm(): void {
     this.treasureArticleForm = buildFormFromObject(
@@ -158,7 +201,7 @@ export class ConfigureTreasureMapComponent
    * adds it to the treasure map under edit.
    */
   saveMapTreasureArticle(): void {
-    this.dataService.persist(this.PERSISTENCE_TYPES.treasureMapRef, {
+    this.dataService.persist(this.MAP_TREASURE_ARTICLE, {
       ...this.treasureArticleForm.value,
       name: this.buildActiveMapTreasureArticleName(),
     });

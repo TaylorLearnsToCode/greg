@@ -1,0 +1,31 @@
+<greg-page-template>
+  <first-content>
+    <ng-contanier *ngIf="hasGenerated; else notYet">
+      <ng-content select="result-display"></ng-content>
+    </ng-contanier>
+    <ng-template #notYet>
+      <p>Click <a>Generate!</a> to generate a result!</p>
+    </ng-template>
+  </first-content>
+
+  <second-content>
+    <label>
+      {{ persistenceTitle }}
+    </label>
+    <section
+      class="rollable-table-list"
+      *ngIf="rollableTableList$ | async as rollableTableList"
+    >
+      <ng-container *ngIf="rollableTableList.length; else noList">
+        <div *ngFor="let table of rollableTableList">
+          <span>&bull;</span>
+          <span>{{ table.name }} ( {{ table.system }} )</span>
+          <span><a (click)="generate(table)">Generate!</a></span>
+        </div>
+      </ng-container>
+      <ng-template #noList>
+        <p>No tables have been configured from which to generate.</p>
+      </ng-template>
+    </section>
+  </second-content>
+</greg-page-template>
