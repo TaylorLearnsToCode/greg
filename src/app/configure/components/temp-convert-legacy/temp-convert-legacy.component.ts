@@ -1,9 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { LAbstractTable } from '@configure/model/TEMP/legacy-abstract-table.model';
 import { LMagicItemTable } from '@configure/model/TEMP/legacy-magic-item-table.model';
 import { LMagicItem } from '@configure/model/TEMP/legacy-magic-item.model';
+import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
@@ -18,11 +19,12 @@ import { Observable } from 'rxjs';
   styleUrls: ['./temp-convert-legacy.component.scss'],
 })
 /* NEXT GOAL: convert the old magic item lists to the new format */
-export class TempConvertLegacyComponent {
+export class TempConvertLegacyComponent implements OnInit {
   @ViewChild('importInput') importInputRef: ElementRef;
 
   readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
+  dataState$: Observable<DataState>;
   get importInput(): HTMLInputElement {
     return this.importInputRef.nativeElement as HTMLInputElement;
   }
@@ -32,6 +34,10 @@ export class TempConvertLegacyComponent {
 
   constructor(private dataService: DataManagerService) {}
 
+  ngOnInit(): void {
+    this.dataState$ = this.dataService.dataState$;
+  }
+
   convert(): void {
     this.reset();
     this.deriveItems(this.legacyItemTable);
@@ -40,6 +46,10 @@ export class TempConvertLegacyComponent {
 
   import(): void {
     this.importInput.click();
+  }
+
+  indicateSaved(itemName: string, namedItems: any[]): string {
+    return namedItems.findIndex((i) => i.name === itemName) !== -1 ? '*' : '';
   }
 
   onImport(): void {
