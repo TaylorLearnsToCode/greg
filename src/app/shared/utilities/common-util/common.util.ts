@@ -56,6 +56,21 @@ export function doesExist(object: any): boolean {
 }
 
 /**
+ * Converts a provided camelCase string into a human-friendly one. E.G. -
+ * loremIpsum2001 would output Lorem Ipsum 2001.
+ *
+ * @param  {string} camelCase
+ */
+export function fromCamelCase(camelCase: string): string {
+  let humanCase = camelCase.replace(/([a-z])([A-Z])/g, '$1 $2');
+  humanCase = humanCase.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2');
+  if (humanCase.charAt(0).match(/([a-z])/g)) {
+    humanCase = humanCase.charAt(0).toUpperCase() + humanCase.substring(1);
+  }
+  return humanCase;
+}
+
+/**
  * If the provided item is found in the provided collection, matched by the
  * provided identifier, the item will update itself, replacing the old index.
  * Otherwise, the item will be pushed to the end of the collection.

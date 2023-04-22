@@ -1,4 +1,13 @@
-<greg-page-template>
-  <first-content>First</first-content>
-  <second-content>Second</second-content>
+<greg-page-template [pageDisplayMode]="pageDisplayMode">
+  <first-content *ngIf="dataState$ | async as dataState">
+    <section *ngFor="let stateKey of dataStateKeys">
+      <label>{{ stateKey | fromCamelCase }}</label>
+      <div>
+        <greg-print-list
+          [list]="getStateValue(dataState, stateKey)"
+          [includeProperties]="includeProperties(stateKey)"
+        ></greg-print-list>
+      </div>
+    </section>
+  </first-content>
 </greg-page-template>
