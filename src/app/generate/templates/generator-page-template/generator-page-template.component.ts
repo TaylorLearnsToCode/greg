@@ -55,19 +55,6 @@ export class GeneratorPageTemplateComponent implements OnInit {
         break;
       }
     }
-    this.persistenceTitle = this.persistenceTitle.replace(
-      /([a-z])([A-Z])/g,
-      '$1 $2'
-    );
-    this.persistenceTitle = this.persistenceTitle.replace(
-      /([A-Z])([A-Z][a-z])/g,
-      '$1 $2'
-    );
-    if (this.persistenceTitle.charAt(0).match(/([a-z])/g)) {
-      this.persistenceTitle =
-        this.persistenceTitle.charAt(0).toUpperCase() +
-        this.persistenceTitle.substring(1);
-    }
   }
 
   /**

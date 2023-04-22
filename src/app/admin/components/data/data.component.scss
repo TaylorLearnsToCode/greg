@@ -1,0 +1,12 @@
+@import '/src/assets/variables';
+
+first-content {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+
+section > div {
+  height: 10em;
+  overflow-y: scroll;
+}

@@ -1,0 +1,14 @@
+<ng-container *ngIf="list.length; else noItems">
+  <div *ngFor="let item of list">
+    <span>&bull;</span>
+    <span>
+      <ng-container
+        *ngFor="let prop of itemProps; first as isFirst; last as isLast"
+      >
+        {{ getValue(item, prop) }}
+      </ng-container>
+    </span>
+  </div>
+</ng-container>
+
+<ng-template #noItems> ~ </ng-template>
