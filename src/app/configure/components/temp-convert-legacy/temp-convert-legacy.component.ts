@@ -60,6 +60,15 @@ export class TempConvertLegacyComponent {
     this.magicItemLists = [];
   }
 
+  saveAll(): void {
+    for (const item of this.magicItems) {
+      this.dataService.persist(this.PERSISTENCE_TYPES.magicItem, item);
+    }
+    for (const list of this.magicItemLists) {
+      this.dataService.persist(this.PERSISTENCE_TYPES.magicItemTable, list);
+    }
+  }
+
   showTableCounts(table: ReferenceEntryTable): string {
     return ''.concat(
       'Items: ',

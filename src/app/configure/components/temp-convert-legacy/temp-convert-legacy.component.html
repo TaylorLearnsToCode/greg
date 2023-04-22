@@ -1,14 +1,20 @@
 <greg-page-template>
   <first-content>
-    <a (click)="import()">Import Legacy Magic Item Table</a>
-    <input #importInput (change)="onImport()" type="file" />
+    <section class="controls">
+      <a (click)="import()">Import Legacy Magic Item Table</a>
+      <input #importInput (change)="onImport()" type="file" />
+    </section>
     <div>
       {{ legacyItemTable | json }}
     </div>
   </first-content>
 
   <second-content>
-    <a (click)="convert()">Convert</a>
+    <section class="controls">
+      <a (click)="convert()">Convert</a>
+      <a (click)="saveAll()">Save All</a>
+      <a>Export All</a>
+    </section>
 
     <label>Magic Item Lists</label>
     <div>
@@ -19,8 +25,10 @@
       </section>
     </div>
 
+    <br />
+
+    <label>Magic Items</label>
     <div>
-      <label>Magic Items</label>
       <section *ngIf="magicItems.length; else noItems">
         <span *ngFor="let item of magicItems"> &bull; {{ item.name }} </span>
       </section>
@@ -28,4 +36,4 @@
   </second-content>
 </greg-page-template>
 
-<ng-template #noItems> ... </ng-template>
+<ng-template #noItems> <div>...</div> </ng-template>
