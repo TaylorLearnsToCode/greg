@@ -8,6 +8,7 @@ import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
@@ -97,17 +98,6 @@ export class TempConvertLegacyComponent implements OnInit {
     );
   }
 
-  private buildReferenceEntry(
-    type: LMagicItem | LAbstractTable
-  ): ReferenceEntry {
-    return new ReferenceEntry({
-      reference: type.name,
-      persistenceType: doesExist((type as any).entries)
-        ? this.PERSISTENCE_TYPES.magicItemTable
-        : this.PERSISTENCE_TYPES.magicItem,
-    } as ReferenceEntry);
-  }
-
   private deriveItems(table: LMagicItemTable): void {
     let itemRef: LMagicItem | LAbstractTable;
     for (const entry of table.entries) {
@@ -130,7 +120,15 @@ export class TempConvertLegacyComponent implements OnInit {
     const referenceEntries: ReferenceEntry[] = [];
     for (const entry of table.entries) {
       itemRef = entry.item;
-      referenceEntries.push(this.buildReferenceEntry(itemRef));
+      referenceEntries.push(
+        new ReferenceEntry({
+          chanceOf: new BoundedRange(entry.chanceOf),
+          reference: itemRef.name,
+          persistenceType: doesExist((itemRef as any).entries)
+            ? this.PERSISTENCE_TYPES.magicItemTable
+            : this.PERSISTENCE_TYPES.magicItem,
+        } as ReferenceEntry)
+      );
       if (doesExist((itemRef as any).entries)) {
         this.deriveTables(itemRef as LAbstractTable);
       }
