@@ -8,15 +8,24 @@
   </first-content>
 
   <second-content>
-    <a (click)="convert()">Convert Table</a>
+    <a (click)="convert()">Convert</a>
+
+    <label>Magic Item Lists</label>
+    <div>
+      <section *ngIf="magicItemLists.length; else noItems">
+        <span *ngFor="let list of magicItemLists">
+          &bull; {{ list.name }} ({{ showTableCounts(list) }})
+        </span>
+      </section>
+    </div>
+
     <div>
       <label>Magic Items</label>
-      <section>
-        <ng-container *ngIf="magicItems.length; else noItems">
-          <span *ngFor="let item of magicItems"> &bull; {{ item.name }} </span>
-        </ng-container>
-        <ng-template #noItems> ... </ng-template>
+      <section *ngIf="magicItems.length; else noItems">
+        <span *ngFor="let item of magicItems"> &bull; {{ item.name }} </span>
       </section>
     </div>
   </second-content>
 </greg-page-template>
+
+<ng-template #noItems> ... </ng-template>
