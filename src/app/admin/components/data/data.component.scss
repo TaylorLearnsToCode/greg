@@ -1,6 +1,6 @@
 @import '/src/assets/variables';
 
-first-content {
+first-content > div {
   @include baseDisplayGrid();
   grid-template-columns: repeat(3, 1fr);
   gap: 1em;
@@ -9,4 +9,11 @@ first-content {
 section > div {
   height: 10em;
   overflow-y: scroll;
+}
+
+.controls {
+  text-align: center;
+}
+.controls a {
+  margin: 0em 2em;
 }

@@ -1,13 +1,22 @@
 <greg-page-template [pageDisplayMode]="pageDisplayMode">
   <first-content *ngIf="dataState$ | async as dataState">
-    <section *ngFor="let stateKey of dataStateKeys">
-      <label>{{ stateKey | fromCamelCase }}</label>
-      <div>
-        <greg-print-list
-          [list]="getStateValue(dataState, stateKey)"
-          [includeProperties]="includeProperties(stateKey)"
-        ></greg-print-list>
-      </div>
+    <section class="controls">
+      <!-- Do this next -->
+      <a>Import</a>
+      <a>Export</a>
+      <a>Clear</a>
     </section>
+    <hr />
+    <div>
+      <section *ngFor="let stateKey of dataStateKeys">
+        <label>{{ stateKey | fromCamelCase }}</label>
+        <div>
+          <greg-print-list
+            [list]="getStateValue(dataState, stateKey)"
+            [includeProperties]="includeProperties(stateKey)"
+          ></greg-print-list>
+        </div>
+      </section>
+    </div>
   </first-content>
 </greg-page-template>
