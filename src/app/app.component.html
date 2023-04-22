@@ -3,7 +3,7 @@
   *ngIf="appComponentViewState$ | async as state; else stillLoading"
 >
   <!-- Application Header -->
-  <header>
+  <header #header>
     <h1>{{ state.headerText }}</h1>
     <div *ngIf="hasSubtext">
       {{ state.headerSubtext }}
@@ -11,7 +11,7 @@
   </header>
 
   <!-- Navigation Menu Bar -->
-  <nav>
+  <nav #nav>
     <ng-container *ngFor="let navRoute of state.navRoutes">
       <section
         (mouseenter)="toggleCollapse(navRoute.menuLabel)"
@@ -39,7 +39,7 @@
   </nav>
 
   <!-- Route Content -->
-  <main>
+  <main [ngStyle]="mainStyles">
     <router-outlet></router-outlet>
   </main>
 </div>

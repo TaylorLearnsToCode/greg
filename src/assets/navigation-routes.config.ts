@@ -54,4 +54,9 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
     menuLabel: 'Generate',
     routePath: 'generate',
   } as NavRoute,
+  {
+    import: true,
+    menuLabel: 'Data',
+    routePath: 'admin',
+  } as NavRoute,
 ];

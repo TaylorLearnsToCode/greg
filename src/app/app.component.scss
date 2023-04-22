@@ -21,6 +21,7 @@ header div {
 
 main {
   @extend %dark-background;
+  overflow-y: scroll;
 }
 
 nav {

@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@admin/*": ["src/app/admin/*"],
       "@assets/*": ["src/assets/*"],
       "@configure/*": ["src/app/configure/*"],
       "@generate/*": ["src/app/generate/*"],
