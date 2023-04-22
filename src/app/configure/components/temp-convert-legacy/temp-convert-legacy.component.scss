@@ -1,0 +1,17 @@
+@import '/src/assets/variables';
+
+@include hideFileInputs();
+
+a {
+  @include indent();
+}
+
+div {
+  margin-top: 0.5em;
+}
+
+div > section {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1em;
+}

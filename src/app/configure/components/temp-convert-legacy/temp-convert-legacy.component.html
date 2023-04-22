@@ -1,1 +1,22 @@
-<p>temp-convert-legacy works!</p>
+<greg-page-template>
+  <first-content>
+    <a (click)="import()">Import Legacy Magic Item Table</a>
+    <input #importInput (change)="onImport()" type="file" />
+    <div>
+      {{ legacyItemTable | json }}
+    </div>
+  </first-content>
+
+  <second-content>
+    <a (click)="convert()">Convert Table</a>
+    <div>
+      <label>Magic Items</label>
+      <section>
+        <ng-container *ngIf="magicItems.length; else noItems">
+          <span *ngFor="let item of magicItems"> &bull; {{ item.name }} </span>
+        </ng-container>
+        <ng-template #noItems> ... </ng-template>
+      </section>
+    </div>
+  </second-content>
+</greg-page-template>

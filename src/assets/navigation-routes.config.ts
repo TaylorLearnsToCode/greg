@@ -32,7 +32,7 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         routePath: 'treasure-type-table',
       } as NavRoute,
       {
-        menuLabel: 'TEMP: Convery Legacy',
+        menuLabel: 'TEMP: Convert Legacy',
         routePath: 'TEMP-convert-legacy',
       } as NavRoute,
     ],
