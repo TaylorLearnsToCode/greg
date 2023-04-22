@@ -2,10 +2,6 @@
 
 @include hideFileInputs();
 
-a {
-  @include indent();
-}
-
 div {
   margin-top: 0.5em;
 }
@@ -16,7 +12,9 @@ div > section {
   grid-template-columns: repeat(3, 1fr);
 }
 
-label {
-  display: block;
-  margin-top: 0.5em;
+section.controls {
+  text-align: center;
+}
+section.controls a {
+  margin: 0em 2em;
 }
