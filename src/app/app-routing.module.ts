@@ -47,6 +47,13 @@ function buildRoute(navRoute: NavRoute): Route {
             import('@generate/generate.module').then((m) => m.GenerateModule),
         };
         break;
+      case 'Data':
+        route = {
+          ...route,
+          loadChildren: () =>
+            import('@admin/admin.module').then((m) => m.AdminModule),
+        };
+        break;
       default:
         throw new Error(
           `Module ${navRoute.menuLabel} has not yet been enabled in the application routing.`

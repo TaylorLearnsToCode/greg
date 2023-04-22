@@ -41,6 +41,11 @@ second-content label {
   @include indent();
 }
 
+section.magic-items {
+  @include twoColumnLayout();
+  max-height: 40vh;
+  overflow-y: scroll;
+}
 section.magic-items div {
   @include baseDisplayGrid();
   grid-template-columns: 1em 1fr;
@@ -48,7 +53,8 @@ section.magic-items div {
 }
 
 section.magic-item-tables {
-  @include twoColumnLayout();
+  max-height: 40vh;
+  overflow-y: scroll;
 }
 section.magic-item-tables div {
   @include baseDisplayGrid();
@@ -59,7 +65,14 @@ section.magic-item-tables div .edit-pencil {
   transform: translate(0, -0.2em);
 }
 section.magic-item-tables .controls {
-  @include oneColumnLayout();
+  text-align: center;
+}
+section.magic-item-tables .controls a {
+  margin: 0em 2em;
+}
+section.magic-item-tables .list {
+  @include twoColumnLayout();
+  column-gap: 1em;
 }
 
 section.table-controls {

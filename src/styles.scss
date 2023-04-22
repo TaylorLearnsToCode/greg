@@ -22,6 +22,8 @@ a {
 body {
   background-color: $background-black;
   color: $text-white;
+  margin: 4px;
+  overflow-y: hidden;
 }
 
 hr {

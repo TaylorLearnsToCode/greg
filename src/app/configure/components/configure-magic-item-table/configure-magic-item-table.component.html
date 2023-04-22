@@ -92,7 +92,7 @@
       class="magic-item-tables"
       *ngIf="magicItemTables$ | async as magicItemTables"
     >
-      <section *ngIf="magicItemTables.length; else noneLoaded">
+      <section class="list" *ngIf="magicItemTables.length; else noneLoaded">
         <ng-container
           *ngFor="let magicItemTable of magicItemTables; index as i"
         >
