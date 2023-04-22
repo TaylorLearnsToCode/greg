@@ -1,4 +1,4 @@
-<greg-page-template>
+<greg-page-template *ngIf="dataState$ | async as dataState">
   <first-content>
     <section class="controls">
       <a (click)="import()">Import Legacy Magic Item Table</a>
@@ -20,7 +20,10 @@
     <div>
       <section *ngIf="magicItemLists.length; else noItems">
         <span *ngFor="let list of magicItemLists">
-          &bull; {{ list.name }} ({{ showTableCounts(list) }})
+          &bull;
+          {{ list.name }}
+          ({{ showTableCounts(list) }})
+          {{ indicateSaved(list.name, dataState.magicItemTables) }}
         </span>
       </section>
     </div>
@@ -30,7 +33,11 @@
     <label>Magic Items</label>
     <div>
       <section *ngIf="magicItems.length; else noItems">
-        <span *ngFor="let item of magicItems"> &bull; {{ item.name }} </span>
+        <span *ngFor="let item of magicItems">
+          &bull;
+          {{ item.name }}
+          {{ indicateSaved(item.name, dataState.magicItems) }}
+        </span>
       </section>
     </div>
   </second-content>
