@@ -105,7 +105,7 @@ export class TempConvertLegacyComponent implements OnInit {
       if (!doesExist((itemRef as any).entries)) {
         this.magicItems.push(
           new MagicItem({
-            name: itemRef.name,
+            name: this.deriveItemName(itemRef),
             quantity: 1,
           } as MagicItem)
         );
@@ -123,7 +123,9 @@ export class TempConvertLegacyComponent implements OnInit {
       referenceEntries.push(
         new ReferenceEntry({
           chanceOf: new BoundedRange(entry.chanceOf),
-          reference: itemRef.name,
+          reference: doesExist((itemRef as any).entries)
+            ? itemRef.name
+            : this.deriveItemName(itemRef),
           persistenceType: doesExist((itemRef as any).entries)
             ? this.PERSISTENCE_TYPES.magicItemTable
             : this.PERSISTENCE_TYPES.magicItem,
@@ -140,5 +142,9 @@ export class TempConvertLegacyComponent implements OnInit {
       entries: referenceEntries,
     } as ReferenceEntryTable);
     this.magicItemLists.push(newTable);
+  }
+
+  private deriveItemName(ref: any): string {
+    return ref.name;
   }
 }
