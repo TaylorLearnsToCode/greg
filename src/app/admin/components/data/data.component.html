@@ -2,9 +2,15 @@
   <first-content *ngIf="dataState$ | async as dataState">
     <section class="controls">
       <!-- Do this next -->
-      <a>Import</a>
-      <a>Export</a>
-      <a>Clear</a>
+      <a (click)="importDataState()">Import</a>
+      <input
+        #importDataStateInput
+        accept=".GREG-MASTER-CONFIG"
+        (change)="onImportDataState()"
+        type="file"
+      />
+      <a (click)="exportDataState()">Export</a>
+      <a (click)="clearDataState()">Clear All</a>
     </section>
     <hr />
     <div>
