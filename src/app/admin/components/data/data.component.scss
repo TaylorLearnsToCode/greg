@@ -1,5 +1,7 @@
 @import '/src/assets/variables';
 
+@include hideFileInputs();
+
 first-content > div {
   @include baseDisplayGrid();
   grid-template-columns: repeat(3, 1fr);
