@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
@@ -26,10 +25,7 @@ export class DataManagerService {
 
   private dataStateSource = new BehaviorSubject<DataState>(new DataState());
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private importExportService: ImportExportService
-  ) {
+  constructor(private importExportService: ImportExportService) {
     this.dataState$ = this.dataStateSource.asObservable();
     this.refreshDataState();
   }
@@ -42,6 +38,11 @@ export class DataManagerService {
   clear(key: string): void {
     localStorage.removeItem(key);
     this.refreshDataState();
+  }
+
+  /** Removes all  */
+  clearAll(): void {
+    Object.values(this.PERSISTENCE_TYPES).forEach((key) => this.clear(key));
   }
 
   /**
@@ -68,6 +69,15 @@ export class DataManagerService {
         );
         this.deleteSavedItem(object, fromKey);
     }
+  }
+
+  /** Exports all saved state into a singular file */
+  exportAll(): void {
+    this.importExportService.exportObject(
+      this.dataStateSource.value,
+      'greg-master-state',
+      'GREG-MASTER-CONFIG'
+    );
   }
 
   /**
@@ -150,6 +160,9 @@ export class DataManagerService {
         break;
       case this.PERSISTENCE_TYPES.treasureType:
         this.persistTreasureType(object as TreasureType);
+        break;
+      case 'master':
+        this.persisteMasterDataConfig(object as DataState);
         break;
       default:
         throw new Error(`Data type ${key} not currently supported.`);
@@ -310,6 +323,23 @@ export class DataManagerService {
       this.PERSISTENCE_TYPES.magicItemTable,
       JSON.stringify(tables)
     );
+  }
+
+  /**
+   * Resets local browser storage to the provided master config.
+   *
+   * @param  {DataState} config
+   */
+  private persisteMasterDataConfig(config: DataState): void {
+    let configKey: string;
+    for (const key of Object.keys(config)) {
+      configKey = (this.PERSISTENCE_TYPES as any)[
+        key.substring(0, key.length - 1)
+      ];
+      for (const item of (config as any)[key]) {
+        this.persist(configKey, item);
+      }
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { PageDisplayMode } from '@shared/model/ui/page-display-mode.enum';
@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./data.component.scss'],
 })
 export class DataComponent implements OnInit {
+  @ViewChild('importDataStateInput') importDataStateInputRef: ElementRef;
+
   readonly pageDisplayMode = PageDisplayMode.SINGLE;
   readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
@@ -22,6 +24,10 @@ export class DataComponent implements OnInit {
       : 'name';
   }
 
+  private get importDataStateInput(): HTMLInputElement {
+    return this.importDataStateInputRef.nativeElement as HTMLInputElement;
+  }
+
   constructor(private dataService: DataManagerService) {}
 
   ngOnInit(): void {
@@ -29,7 +35,26 @@ export class DataComponent implements OnInit {
     this.dataState$ = this.dataService.dataState$;
   }
 
+  clearDataState(): void {
+    this.dataService.clearAll();
+  }
+
+  exportDataState(): void {
+    this.dataService.exportAll();
+  }
+
   getStateValue(state: DataState, key: string): any[] {
     return (state as any)[key];
+  }
+
+  importDataState(): void {
+    this.importDataStateInput.click();
+  }
+
+  onImportDataState(): void {
+    if (this.importDataStateInput.files?.length) {
+      this.dataService.import(this.importDataStateInput.files[0], 'master');
+      this.importDataStateInput.value = '';
+    }
   }
 }
