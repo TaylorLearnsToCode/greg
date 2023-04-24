@@ -174,6 +174,21 @@ export class ConfigureTreasureMapComponent
     ) as FormGroup;
   }
 
+  /**
+   * Adds a provided treasure map as a nested entry in the active map under edit.
+   * @param  {TreasureMap} event
+   */
+  handleNestSavedTable(event: TreasureMap): void {
+    (this.treasureMapForm.get('entries') as FormArray).push(
+      buildFormFromObject(
+        new ReferenceEntry({
+          reference: event.name,
+          persistenceType: this.PERSISTENCE_TYPES.treasureMap,
+        } as ReferenceEntry)
+      )
+    );
+  }
+
   /** Imports map treasure articles from the user's machine and appends to those in browser storage */
   importMapTreasureArticles(): void {
     this.importMapArticlesInput.click();

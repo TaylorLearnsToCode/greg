@@ -85,7 +85,7 @@
 
     <label>Saved Tables</label>
     <section
-      class="saved-tables"
+      [ngClass]="savedTableClasses"
       *ngIf="savedTableList$ | async as savedTableList"
     >
       <ng-container *ngIf="savedTableList.length; else noTables">
@@ -93,6 +93,7 @@
           class="saved-entry"
           *ngFor="let table of savedTableList; index as i"
         >
+          <a (click)="nestTable(table)">+Add</a>
           <span class="shift-entry">
             <a (click)="shiftTable(i, 'up')">&uArr;</a>
             <a (click)="shiftTable(i, 'down')">&dArr;</a>

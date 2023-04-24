@@ -65,10 +65,16 @@ section.form-head {
 
 section.saved-tables div.saved-entry {
   @include baseDisplayGrid();
-  grid-template-columns: 1.5em 1fr 1.5em 1.5em;
   margin-bottom: 0.25em;
   margin-top: 0.25em;
 }
+section.nestable div.saved-entry {
+ grid-template-columns: 2.5em 1.5em 1fr 1.5em 1.5em;
+}
+section.not-nestable div.saved-entry {
+  grid-template-columns: 1.5em 1fr 1.5em 1.5em;
+}
+
 section.saved-tables div.saved-table-controls {
   text-align: center;
 }
