@@ -3,8 +3,8 @@ import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-gen
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class GenerateWwwTreasureService
   generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
     throw new Error('Method not implemented.');
   }
-  generateTreasureMap(map: TreasureMap): TreasureMapResult | null {
+  generateTreasureMap(map: ReferenceEntryTable): TreasureMapResult | null {
     throw new Error('Method not implemented.');
   }
   constructor() {

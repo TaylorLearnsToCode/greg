@@ -4,7 +4,6 @@ import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import {
   doesExist,
@@ -153,7 +152,7 @@ export class DataManagerService {
         this.persistTreasureArticle(object as TreasureArticle);
         break;
       case this.PERSISTENCE_TYPES.treasureMap:
-        this.persistTreasureMap(object as TreasureMap);
+        this.persistTreasureMap(object as ReferenceEntryTable);
         break;
       case this.PERSISTENCE_TYPES.treasureMapRef:
         this.persistTreasureMapReference(object as TreasureArticle);
@@ -361,14 +360,14 @@ export class DataManagerService {
   }
 
   /**
-   * Persists a provided TreasureMap to local storage on the user's machine.
+   * Persists a provided ReferenceEntryTable to local storage on the user's machine.
    * If the specified map - by name and system - already exists in local storage,
    * will update the value instead.
    *
-   * @param  {TreasureMap} map
+   * @param  {ReferenceEntryTable} map
    */
-  private persistTreasureMap(map: TreasureMap): void {
-    const maps: TreasureMap[] = this.retrieve<TreasureMap[]>(
+  private persistTreasureMap(map: ReferenceEntryTable): void {
+    const maps: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
       this.PERSISTENCE_TYPES.treasureMap
     );
     insertOrReplace(map, maps, 'name,system');
@@ -430,7 +429,7 @@ export class DataManagerService {
         treasureMapRefs: this.retrieve<TreasureArticle[]>(
           this.PERSISTENCE_TYPES.treasureMapRef
         ),
-        treasureMaps: this.retrieve<TreasureMap[]>(
+        treasureMaps: this.retrieve<ReferenceEntryTable[]>(
           this.PERSISTENCE_TYPES.treasureMap
         ),
         treasureTypes: this.retrieve<TreasureType[]>(

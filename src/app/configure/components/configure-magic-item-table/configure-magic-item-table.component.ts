@@ -62,7 +62,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.magicItemTables$ = this.dataService.dataState$.pipe(
-      map((state) => state.magicItemTables)
+      map((state) => [...state.magicItemTables, ...state.treasureMaps])
     );
     this.magicItems$ = this.dataService.dataState$.pipe(
       map((state) => state.magicItems)

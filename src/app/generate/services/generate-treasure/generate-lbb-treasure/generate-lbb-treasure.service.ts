@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
+import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-generator.model';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { isBetween } from '@shared/utilities/common-util/common.util';
+import {
+  doesExist,
+  isBetween,
+} from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
@@ -54,6 +59,8 @@ export class GenerateLbbTreasureService
       } as DiceRolled),
     ],
   ]);
+
+  private readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES;
 
   /** The number of gems sequentially eligible for a "bump" - expressed as the Nth gem processed */
   private bumpEvery: number;
@@ -115,22 +122,37 @@ export class GenerateLbbTreasureService
   }
 
   /**
-   * Returns a TreasureMapResult, as rolled on a provided TreasureMap.
+   * Returns a TreasureMapResult, as rolled on a provided ReferenceEntryTable.
    *
-   * @param  {TreasureMap} map
+   * @param  {ReferenceEntryTable} map
    */
-  generateTreasureMap(map: TreasureMap): TreasureMapResult | null {
+  generateTreasureMap(map: ReferenceEntryTable): TreasureMapResult | null {
     const result: TreasureMapResult = new TreasureMapResult({ name: map.name });
     const roll: number = rollDice(map.diceToRoll);
 
-    let article: TreasureArticle;
+    let article: TreasureArticle | ReferenceEntryTable;
     for (const entry of map.entries) {
       if (isBetween(roll, entry.chanceOf)) {
         article = this.dataService.retrieveReference(
           entry.reference,
           entry.persistenceType
         );
-        result.results.push(...this.generateTreasureByArticleType(article));
+        if (entry.persistenceType === this.PERSISTENCE_TYPE.magicItemTable) {
+          const treasureMapContent = this.generateTreasureMap(
+            article as ReferenceEntryTable
+          );
+          if (doesExist(treasureMapContent) && treasureMapContent?.results) {
+            result.results.push(...treasureMapContent.results);
+          }
+        } else {
+          if (entry.persistenceType === this.PERSISTENCE_TYPE.magicItem) {
+            (article as TreasureArticle).type =
+              'MAGIC_ITEM' as TREASURE_ARTICLE_TYPES;
+          }
+          result.results.push(
+            ...this.generateTreasureByArticleType(article as TreasureArticle)
+          );
+        }
       }
     }
 
