@@ -30,6 +30,16 @@ export class RollableTableTemplateComponent implements OnInit {
   get entryIdentifier(): string {
     return doesExist(this._entryIdentifier) ? this._entryIdentifier : 'name';
   }
+  /**
+   * Whether the entries provided to the saved tables element are nestable
+   * in the main form; default true
+   */
+  @Input() set entriesNestable(add: boolean) {
+    this._entriesNestable = add;
+  }
+  get entriesNestable(): boolean {
+    return doesExist(this._entriesNestable) ? this._entriesNestable : true;
+  }
   /** The supported persistence type to be associated with an exported version of the parent form */
   @Input() persistenceType: string;
   /**
@@ -42,6 +52,8 @@ export class RollableTableTemplateComponent implements OnInit {
   @Output() importEvent = new EventEmitter();
   /** Event emitter to signal an inbound  */
   @Output() editSavedTableEvent = new EventEmitter();
+  /** Event emitter to send a nested reference up for adding to entries */
+  @Output() nestSavedTable = new EventEmitter();
 
   @ViewChild('importTableInput') importTableInputRef: ElementRef;
 
@@ -71,6 +83,10 @@ export class RollableTableTemplateComponent implements OnInit {
   entryName(index: number): string {
     return (this.entriesFormArray.value[index] as any)[this.entryIdentifier];
   }
+  /** Style classes for the saved table container */
+  get savedTableClasses(): string[] {
+    return ['saved-tables', this.entriesNestable ? 'nestable' : 'not-nestable'];
+  }
   /** Observable representation of tables saved to browser storage */
   savedTableList$: Observable<any>;
   /**
@@ -90,6 +106,7 @@ export class RollableTableTemplateComponent implements OnInit {
   private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
+  private _entriesNestable: boolean;
   private _entryIdentifier: string;
   private get importTableInput(): HTMLInputElement {
     return this.importTableInputRef.nativeElement as HTMLInputElement;
@@ -144,6 +161,14 @@ export class RollableTableTemplateComponent implements OnInit {
    */
   importFile(): void {
     this.importTableInput.click();
+  }
+
+  /**
+   * Emits a target table, delegating its addition to the
+   * @param  {AbstractRollableTable} table
+   */
+  nestTable(table: AbstractRollableTable): void {
+    this.nestSavedTable.emit(table);
   }
 
   /** Handler method for file import event */
