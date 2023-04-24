@@ -248,11 +248,7 @@ export class ConfigureTreasureMapComponent
   }
 
   /**
-   * Returns true if:
-   * * The current map does not contain a Name or System
-   * * The current map contains a name or system and the article references either or both in its name
-   *
-   * Returns false otherwise.
+   * Returns true if the current map contains a system and the article references it in its name
    *
    * @param  {TreasureArticle} article
    * @param  {TreasureMap} currentMap
@@ -261,24 +257,8 @@ export class ConfigureTreasureMapComponent
     article: TreasureArticle,
     currentMap: TreasureMap
   ): boolean {
-    console.warn(currentMap);
-    const nameIsEmpty = isEmpty(currentMap.name);
-    const systemIsEmpty = isEmpty(currentMap.system);
-    if (
-      (nameIsEmpty && systemIsEmpty) ||
-      (!nameIsEmpty &&
-        systemIsEmpty &&
-        article.name.includes(currentMap.name)) ||
-      (nameIsEmpty &&
-        !systemIsEmpty &&
-        article.name.includes(currentMap.system)) ||
-      (!nameIsEmpty &&
-        !systemIsEmpty &&
-        article.name.includes(currentMap.name) &&
-        article.name.includes(currentMap.system))
-    ) {
-      return true;
-    }
-    return false;
+    return (
+      isEmpty(currentMap.system) || article.name.includes(currentMap.system)
+    );
   }
 }
