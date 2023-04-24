@@ -3,7 +3,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { TreasureResult } from '@generate/model/treasure-result.model';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { GenerateBxTreasureService } from './generate-bx-treasure/generate-bx-treasure.service';
@@ -29,7 +29,7 @@ export class GenerateTreasureService {
     return this.generatorService.generateTreasureByTreasureType(treasureType);
   }
 
-  generateTreasureFromTreasureMap(map: TreasureMap): TreasureMapResult {
+  generateTreasureFromTreasureMap(map: ReferenceEntryTable): TreasureMapResult {
     /* TODO add magic item support */
     this.checkAndSetGeneratorService(map.system);
     const returnMap = this.generatorService.generateTreasureMap(map);

@@ -3,7 +3,7 @@ import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { GeneratorComponent } from '@generate/model/generator-component.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { GenerateTreasureService } from '@generate/services/generate-treasure/generate-treasure.service';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 
 @Component({
   selector: 'greg-generate-treasure-map',
@@ -17,12 +17,12 @@ export class GenerateTreasureMapComponent implements GeneratorComponent {
     const articleArray: string[] = articleName.split('-');
     return articleArray[articleArray.length - 1];
   }
-  targetMap: TreasureMap;
+  targetMap: ReferenceEntryTable;
   treasureMapResult: TreasureMapResult;
 
   constructor(private treasureService: GenerateTreasureService) {}
 
-  handleGenerate(rollableTable: TreasureMap): void {
+  handleGenerate(rollableTable: ReferenceEntryTable): void {
     this.targetMap = rollableTable;
     this.treasureMapResult =
       this.treasureService.generateTreasureFromTreasureMap(rollableTable);

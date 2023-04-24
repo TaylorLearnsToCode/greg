@@ -6,7 +6,6 @@ import { RollableTableComponent } from '@configure/model/rollable-table-componen
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
-import { TreasureMap } from '@shared/model/treasure/treasure-map.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { isEmpty } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -36,7 +35,7 @@ export class ConfigureTreasureMapComponent
     return (this.TREASURE_ARTICLE_TYPES as any)[key];
   }
   treasureMapForm: FormGroup;
-  treasureMapList$: Observable<TreasureMap[]>;
+  treasureMapList$: Observable<ReferenceEntryTable[]>;
   treasureMapRefList$: Observable<TreasureArticle[]>;
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
@@ -49,7 +48,9 @@ export class ConfigureTreasureMapComponent
   constructor(private dataService: DataManagerService) {}
 
   ngOnInit(): void {
-    this.treasureMapForm = buildFormFromObject(new TreasureMap()) as FormGroup;
+    this.treasureMapForm = buildFormFromObject(
+      new ReferenceEntryTable()
+    ) as FormGroup;
     this.magicItemTableList$ = this.dataService.dataState$.pipe(
       map((state) => state.magicItemTables)
     );
@@ -65,7 +66,10 @@ export class ConfigureTreasureMapComponent
     ]).pipe(
       map(([treasureArticles, formMap]) =>
         treasureArticles.filter((article) =>
-          this.filterMapRefListPredicate(article, new TreasureMap(formMap))
+          this.filterMapRefListPredicate(
+            article,
+            new ReferenceEntryTable(formMap)
+          )
         )
       )
     );
@@ -152,33 +156,33 @@ export class ConfigureTreasureMapComponent
   /**
    * When an edit event is received, replace the active form.
    *
-   * @param  {TreasureMap} treasureMap
+   * @param  {ReferenceEntryTable} treasureMap
    */
-  handleEditSavedTable(treasureMap: TreasureMap): void {
+  handleEditSavedTable(treasureMap: ReferenceEntryTable): void {
     this.treasureMapForm = buildFormFromObject(
-      new TreasureMap(treasureMap)
+      new ReferenceEntryTable(treasureMap)
     ) as FormGroup;
   }
 
   /**
    * When a file import event occurs from the template, the inbound event
-   * assumed to be a TreasureMap, inserts the new event into the active form.
+   * assumed to be a ReferenceEntryTable, inserts the new event into the active form.
    *
    * Unsaved changes are lost.
    *
-   * @param  {TreasureMap} event
+   * @param  {ReferenceEntryTable} event
    */
-  handleImport(event: TreasureMap): void {
+  handleImport(event: ReferenceEntryTable): void {
     this.treasureMapForm = buildFormFromObject(
-      new TreasureMap(event)
+      new ReferenceEntryTable(event)
     ) as FormGroup;
   }
 
   /**
    * Adds a provided treasure map as a nested entry in the active map under edit.
-   * @param  {TreasureMap} event
+   * @param  {ReferenceEntryTable} event
    */
-  handleNestSavedTable(event: TreasureMap): void {
+  handleNestSavedTable(event: ReferenceEntryTable): void {
     (this.treasureMapForm.get('entries') as FormArray).push(
       buildFormFromObject(
         new ReferenceEntry({
@@ -251,11 +255,11 @@ export class ConfigureTreasureMapComponent
    * Returns true if the current map contains a system and the article references it in its name
    *
    * @param  {TreasureArticle} article
-   * @param  {TreasureMap} currentMap
+   * @param  {ReferenceEntryTable} currentMap
    */
   private filterMapRefListPredicate(
     article: TreasureArticle,
-    currentMap: TreasureMap
+    currentMap: ReferenceEntryTable
   ): boolean {
     return (
       isEmpty(currentMap.system) || article.name.includes(currentMap.system)
