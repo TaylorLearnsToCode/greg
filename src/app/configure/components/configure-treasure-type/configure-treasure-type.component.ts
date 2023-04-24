@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -33,6 +34,7 @@ export class ConfigureTreasureTypeComponent implements OnInit {
   get articlesFormArray(): FormArray<FormGroup> {
     return this.treasureTypeForm.get('entries') as FormArray<FormGroup>;
   }
+  magicItemTableList$: Observable<ReferenceEntryTable[]>;
   supportedSystem(key: string): string {
     return (SUPPORTED_SYSTEMS as any)[key];
   }
@@ -55,8 +57,31 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     this.treasureTypeForm = buildFormFromObject(
       new TreasureType()
     ) as FormGroup;
+    this.magicItemTableList$ = this.dataService.dataState$.pipe(
+      map((dataState) => [
+        ...dataState.magicItemTables,
+        ...dataState.treasureMaps,
+      ])
+    );
     this.treasureTypes$ = this.dataService.dataState$.pipe(
       map((dataState) => dataState.treasureTypes)
+    );
+  }
+
+  /**
+   * Adds a configured ReferenceEntryTable as a TreasureArticle to the Treasure Type
+   * under edit.
+   *
+   * @param  {ReferenceEntryTable} table
+   */
+  addReferenceTable(table: ReferenceEntryTable): void {
+    this.articlesFormArray.push(
+      buildFormFromObject(
+        new TreasureArticle({
+          name: table.name,
+          quantity: 1,
+        } as TreasureArticle)
+      ) as FormGroup
     );
   }
 

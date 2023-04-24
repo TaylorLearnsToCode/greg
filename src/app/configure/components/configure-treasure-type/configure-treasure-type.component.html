@@ -94,29 +94,44 @@
   </first-content>
 
   <second-content>
+    <label>Magic Item Tables</label>
+    <section
+      class="magic-item-tables"
+      *ngIf="magicItemTableList$ | async as magicItemTableList"
+    >
+      <ng-container *ngIf="magicItemTableList.length; else noneSaved">
+        <div *ngFor="let table of magicItemTableList">
+          <a (click)="addReferenceTable(table)">+Add</a>
+          <span>{{ table.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+
+    <label>Saved Types</label>
     <section *ngIf="treasureTypes$ | async as treasureTypes">
-      <ng-container *ngIf="treasureTypes.length; else noTreasureTypes">
+      <ng-container *ngIf="treasureTypes.length; else noneSaved">
         <div class="treasure-list" *ngFor="let type of treasureTypes">
           <a (click)="editTreasureType(type)">&#x270E;</a>
           <span>{{ type.type }} ( {{ type.system }} )</span>
           <a (click)="deleteTreasureType(type)">X</a>
         </div>
       </ng-container>
-
-      <section class="type-controls">
-        <a (click)="importTreasureTypeList()">Import List</a>
-        <input
-          #treasureTypeListImport
-          accept=".GREG-CONFIG"
-          (change)="onTreasureTypeListImport()"
-          type="file"
-        />
-        <a (click)="exportTreasureTypeList()">Export List</a>
-        <a (click)="clearTreasureTypeList()">Clear List</a>
-      </section>
     </section>
-    <ng-template #noTreasureTypes>
-      <p>No treasure types currently saved.</p>
-    </ng-template>
+
+    <section class="type-controls">
+      <a (click)="importTreasureTypeList()">Import List</a>
+      <input
+        #treasureTypeListImport
+        accept=".GREG-CONFIG"
+        (change)="onTreasureTypeListImport()"
+        type="file"
+      />
+      <a (click)="exportTreasureTypeList()">Export List</a>
+      <a (click)="clearTreasureTypeList()">Clear List</a>
+    </section>
   </second-content>
 </greg-page-template>
+
+<ng-template #noneSaved>
+  <p>None currently configured.</p>
+</ng-template>

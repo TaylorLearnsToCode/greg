@@ -31,10 +31,26 @@ label.articles {
   @include indent();
 }
 
+second-content label {
+  @include indent();
+}
+
+second-content > section {
+  margin-bottom: 1em;
+}
+
 section.articles {
   display: grid;
   grid-template-columns: 1em 1fr 1em;
   margin: 0.5em 0em;
+}
+
+section.magic-item-tables {
+  @include twoColumnLayout();
+}
+section.magic-item-tables div {
+  @include baseDisplayGrid();
+  grid-template-columns: 3em 1fr;
 }
 
 section.type-controls {
