@@ -156,16 +156,6 @@ export class GenerateLbbTreasureService
     return null;
   }
 
-  private prettyPrintTreasureResult(result: TreasureResult): string {
-    return ''.concat(
-      `${this.decimalPipe.transform(result.quantity, '1.0')}`,
-      ' ',
-      result.name.includes('-')
-        ? result.name.split('-')[result.name.split('-').length - 1]
-        : result.name
-    );
-  }
-
   /**
    * Returns a TreasureMapResult, as rolled on a provided ReferenceEntryTable, assumed to
    * be a treasure map or nested treasure map.
@@ -407,5 +397,21 @@ export class GenerateLbbTreasureService
       }
     }
     return result;
+  }
+
+  /**
+   * Prints the provided result in a human-happy way.
+   * @TODO - Move this to a .toString() override?
+   *
+   * @param  {TreasureResult} result
+   */
+  private prettyPrintTreasureResult(result: TreasureResult): string {
+    return ''.concat(
+      `${this.decimalPipe.transform(result.quantity, '1.0')}`,
+      ' ',
+      result.name.includes('-')
+        ? result.name.split('-')[result.name.split('-').length - 1]
+        : result.name
+    );
   }
 }
