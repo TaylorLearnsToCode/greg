@@ -18,6 +18,9 @@ export abstract class AbstractTreasureGenerator {
   abstract generateGems(article: TreasureArticle): ValueablesResult[] | null;
   abstract generateJewelry(article: TreasureArticle): ValueablesResult[] | null;
   abstract generateTreasureMap(
+    article: TreasureArticle
+  ): TreasureResult[] | null;
+  abstract generateTreasureMapResult(
     map: ReferenceEntryTable
   ): TreasureMapResult | null;
 
@@ -79,9 +82,7 @@ export abstract class AbstractTreasureGenerator {
         this.pushToResults(this.generateSpecie(article));
         break;
       case this.TREASURE_ARTICLE_TYPES.TREASURE_MAP:
-        this.pushToResults(
-          this.generateTreasureMap(article as any as ReferenceEntryTable)
-        );
+        this.pushToResults(this.generateTreasureMap(article));
         break;
       default:
         throw new Error(`Unsupported type ${article.type}`);

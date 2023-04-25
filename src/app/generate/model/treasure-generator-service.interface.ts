@@ -6,7 +6,7 @@ import { TreasureMapResult } from './treasure-map-result.model';
 /** Interface contract for services which provide treasure result generation */
 export interface TreasureGeneratorService {
   generateTreasureByTreasureType(treasureType: TreasureType): TreasureResult[];
-  generateTreasureMap(
+  generateTreasureMapResult(
     treasureMap: ReferenceEntryTable
   ): TreasureMapResult | null;
 }
