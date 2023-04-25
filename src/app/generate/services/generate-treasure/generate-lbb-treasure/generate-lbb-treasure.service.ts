@@ -14,6 +14,7 @@ import { DataManagerService } from '@shared/services/data-manager/data-manager.s
 import {
   doesExist,
   isBetween,
+  isEmpty,
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
@@ -133,27 +134,31 @@ export class GenerateLbbTreasureService
    * @param  {TreasureArticle} article
    */
   generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
+    let map: ReferenceEntryTable;
+    let mapResult: TreasureMapResult | null;
+
+    const results: TreasureResult[] = [];
     const noMaps: number = (article.quantity as DiceRolled).pips
       ? rollDice(article.quantity as DiceRolled)
       : (article.quantity as number);
-    const map: ReferenceEntryTable =
-      this.dataService.retrieveReference<ReferenceEntryTable>(
+    for (let i = 0; i < noMaps; i++) {
+      map = this.dataService.retrieveReference<ReferenceEntryTable>(
         article.name,
         this.PERSISTENCE_TYPES.treasureMap
       );
-    const mapResult: TreasureMapResult | null =
-      this.generateTreasureMapResult(map);
-    if (doesExist(mapResult) && mapResult?.results) {
-      return [
-        new TreasureResult({
-          name: `Map to ${mapResult.results
-            .map((result) => this.prettyPrintTreasureResult(result))
-            .join(', ')}`,
-          quantity: 1,
-        } as TreasureResult),
-      ];
+      mapResult = this.generateTreasureMapResult(map);
+      if (doesExist(mapResult) && mapResult?.results) {
+        results.push(
+          new TreasureResult({
+            name: `Map to ${mapResult.results
+              .map((result) => this.prettyPrintTreasureResult(result))
+              .join(', ')}`,
+            quantity: 1,
+          } as TreasureResult)
+        );
+      }
     }
-    return null;
+    return isEmpty(results) ? null : results;
   }
 
   /**
