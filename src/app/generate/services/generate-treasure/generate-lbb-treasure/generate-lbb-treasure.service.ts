@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-generator.model';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
+import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -60,7 +61,7 @@ export class GenerateLbbTreasureService
     ],
   ]);
 
-  private readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES;
+  private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   /** The number of gems sequentially eligible for a "bump" - expressed as the Nth gem processed */
   private bumpEvery: number;
@@ -137,25 +138,78 @@ export class GenerateLbbTreasureService
           entry.reference,
           entry.persistenceType
         );
-        if (entry.persistenceType === this.PERSISTENCE_TYPE.magicItemTable) {
-          const treasureMapContent = this.generateTreasureMap(
-            article as ReferenceEntryTable
-          );
-          if (doesExist(treasureMapContent) && treasureMapContent?.results) {
-            result.results.push(...treasureMapContent.results);
-          }
-        } else {
-          if (entry.persistenceType === this.PERSISTENCE_TYPE.magicItem) {
-            (article as TreasureArticle).type =
-              'MAGIC_ITEM' as TREASURE_ARTICLE_TYPES;
-          }
-          result.results.push(
-            ...this.generateTreasureByArticleType(article as TreasureArticle)
-          );
+
+        switch (entry.persistenceType) {
+          case this.PERSISTENCE_TYPES.magicItemTable:
+            result.results.push(
+              ...this.generateMagicItemFromTable(
+                article as ReferenceEntryTable
+              ).map(
+                (magicItem) =>
+                  new TreasureResult({
+                    name: magicItem.name,
+                    quantity: (magicItem.quantity as DiceRolled).pips
+                      ? rollDice(magicItem.quantity as DiceRolled)
+                      : (magicItem.quantity as number),
+                  } as TreasureResult)
+              )
+            );
+            break;
+          case this.PERSISTENCE_TYPES.treasureArticle:
+            console.warn(`${entry.persistenceType} Encountered`);
+            break;
+          case this.PERSISTENCE_TYPES.treasureMap:
+            const treasureMapResult: TreasureMapResult | null =
+              this.generateTreasureMap(article as ReferenceEntryTable);
+            if (doesExist(treasureMapResult) && treasureMapResult?.results) {
+              result.results.push(...treasureMapResult.results);
+            }
+            console.warn(`${entry.persistenceType} Encountered`);
+            break;
+          case this.PERSISTENCE_TYPES.treasureMapRef:
+            result.results.push(
+              ...this.generateTreasureByArticleType(article as TreasureArticle)
+            );
+            break;
+          default:
+            throw new Error(
+              `Unsupported type ${entry.persistenceType} encountered.`
+            );
         }
       }
     }
 
+    return result;
+  }
+
+  private generateMagicItemFromTable(
+    magicItemTable: ReferenceEntryTable
+  ): MagicItem[] {
+    const roll: number = rollDice(magicItemTable.diceToRoll);
+    let result: MagicItem[] = [];
+    let item: MagicItem | ReferenceEntryTable;
+    for (const entry of magicItemTable.entries) {
+      if (isBetween(roll, entry.chanceOf)) {
+        item = this.dataService.retrieveReference(
+          entry.reference,
+          entry.persistenceType
+        );
+        switch (entry.persistenceType) {
+          case this.PERSISTENCE_TYPES.magicItemTable:
+            result.push(
+              ...this.generateMagicItemFromTable(item as ReferenceEntryTable)
+            );
+            break;
+          case this.PERSISTENCE_TYPES.magicItem:
+            result.push(item as MagicItem);
+            break;
+          default:
+            throw new Error(
+              `Unsupported item type ${entry.persistenceType} encountered.`
+            );
+        }
+      }
+    }
     return result;
   }
 
