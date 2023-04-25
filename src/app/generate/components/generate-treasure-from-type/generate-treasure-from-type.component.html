@@ -1,7 +1,6 @@
 <greg-page-template>
   <first-content>
     <ng-container *ngIf="hoard$ | async as hoard; else noHoard">
-      <p>{{ hoard | json }}</p>
       <ul *ngIf="hoard.length; else noHoard">
         <li *ngFor="let treasureResult of hoard">
           {{ treasureResult.quantity }} {{ treasureResult.name }}
