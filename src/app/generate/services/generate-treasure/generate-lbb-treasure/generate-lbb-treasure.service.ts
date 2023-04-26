@@ -127,6 +127,53 @@ export class GenerateLbbTreasureService
   }
 
   /**
+   * From a reference TreasureArticle, produces a magic item as TreasureResult, digging
+   * through nested tables, as necessary.
+   *
+   * @param  {TreasureArticle} item
+   */
+  generateMagicItem(item: TreasureArticle): TreasureResult[] | null {
+    let targetItem: MagicItem | ReferenceEntryTable;
+
+    const results: TreasureResult[] = [];
+    const noItems: number = this.rollArticleQuantity(item);
+    for (let i = 0; i < noItems; i++) {
+      targetItem = this.dataService.retrieveReference(
+        item.name,
+        this.PERSISTENCE_TYPES.magicItemTable
+      );
+      if (!doesExist(targetItem)) {
+        targetItem = this.dataService.retrieveReference(
+          item.name,
+          this.PERSISTENCE_TYPES.magicItem
+        );
+      }
+      if (doesExist((targetItem as ReferenceEntryTable).entries)) {
+        results.push(
+          ...this.generateMagicItemFromTable(
+            targetItem as ReferenceEntryTable
+          ).map(
+            (magicItem) =>
+              new TreasureResult({
+                name: magicItem.name,
+                quantity: this.rollArticleQuantity(magicItem),
+              } as TreasureResult)
+          )
+        );
+      } else {
+        results.push(
+          new TreasureResult({
+            name: targetItem.name,
+            quantity: this.rollArticleQuantity(targetItem as MagicItem),
+          } as TreasureResult)
+        );
+      }
+    }
+
+    return isEmpty(results) ? null : results;
+  }
+
+  /**
    * For a treasure map included as part of a treasure - i.e. a TreasureArticle - rolls the result
    * of that treasure map and returns a ValueablesResult containing the contents to be found at the
    * map's destination.
@@ -138,9 +185,7 @@ export class GenerateLbbTreasureService
     let mapResult: TreasureMapResult | null;
 
     const results: TreasureResult[] = [];
-    const noMaps: number = (article.quantity as DiceRolled).pips
-      ? rollDice(article.quantity as DiceRolled)
-      : (article.quantity as number);
+    const noMaps: number = this.rollArticleQuantity(article);
     for (let i = 0; i < noMaps; i++) {
       map = this.dataService.retrieveReference<ReferenceEntryTable>(
         article.name,
@@ -206,7 +251,6 @@ export class GenerateLbbTreasureService
             if (doesExist(treasureMapResult) && treasureMapResult?.results) {
               result.results.push(...treasureMapResult.results);
             }
-            console.warn(`${entry.persistenceType} Encountered`);
             break;
           case this.PERSISTENCE_TYPES.treasureMapRef:
             result.results.push(
@@ -385,6 +429,20 @@ export class GenerateLbbTreasureService
           entry.reference,
           entry.persistenceType
         );
+        if (
+          !doesExist(item) &&
+          entry.persistenceType === this.PERSISTENCE_TYPES.magicItemTable
+        ) {
+          item = this.dataService.retrieveReference(
+            entry.reference,
+            this.PERSISTENCE_TYPES.treasureMap
+          );
+        }
+        if (!doesExist(item)) {
+          throw new Error(
+            `Unable to find reference for ${entry.reference}, type ${entry.persistenceType}`
+          );
+        }
         switch (entry.persistenceType) {
           case this.PERSISTENCE_TYPES.magicItemTable:
             result.push(
@@ -393,6 +451,21 @@ export class GenerateLbbTreasureService
             break;
           case this.PERSISTENCE_TYPES.magicItem:
             result.push(item as MagicItem);
+            break;
+          case this.PERSISTENCE_TYPES.treasureMap:
+            const mapResults: TreasureResult[] | null =
+              this.generateTreasureMap(item as TreasureArticle);
+            if (mapResults) {
+              result.push(
+                ...mapResults.map(
+                  (result) =>
+                    new MagicItem({
+                      name: result.name,
+                      quantity: result.quantity,
+                    } as MagicItem)
+                )
+              );
+            }
             break;
           default:
             throw new Error(
@@ -418,5 +491,21 @@ export class GenerateLbbTreasureService
         ? result.name.split('-')[result.name.split('-').length - 1]
         : result.name
     );
+  }
+
+  /**
+   * Returns the quantity of a given TreasureArticle, guaranteed a number, rolled
+   * if dice are provided.
+   * @TODO - extract into a utility function?
+   *
+   * @param  {TreasureArticle} article
+   */
+  private rollArticleQuantity(article: TreasureArticle): number {
+    if (!doesExist(article) || !doesExist(article.quantity)) {
+      return 1;
+    }
+    return doesExist((article.quantity as DiceRolled).pips)
+      ? rollDice(article.quantity as DiceRolled)
+      : (article.quantity as number);
   }
 }

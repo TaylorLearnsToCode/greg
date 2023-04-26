@@ -20,6 +20,9 @@ export class GenerateWwwTreasureService
   generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
     throw new Error('Method not implemented.');
   }
+  generateMagicItem(item: TreasureArticle): TreasureResult[] | null {
+    throw new Error('Method not implemented.');
+  }
   generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
     throw new Error('Method not implemented.');
   }
