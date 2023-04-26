@@ -183,10 +183,7 @@ export class DataManagerService {
         result = item;
       }
     }
-    if (doesExist(result)) {
-      return result;
-    }
-    throw new Error(`Reference ${reference} not found under key ${key}.`);
+    return result;
   }
 
   /**

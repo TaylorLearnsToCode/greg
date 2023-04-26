@@ -1,7 +1,6 @@
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
-import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
@@ -17,24 +16,13 @@ export abstract class AbstractTreasureGenerator {
 
   abstract generateGems(article: TreasureArticle): ValueablesResult[] | null;
   abstract generateJewelry(article: TreasureArticle): ValueablesResult[] | null;
+  abstract generateMagicItem(item: TreasureArticle): TreasureResult[] | null;
   abstract generateTreasureMap(
     article: TreasureArticle
   ): TreasureResult[] | null;
   abstract generateTreasureMapResult(
     map: ReferenceEntryTable
   ): TreasureMapResult | null;
-
-  generateMagicItem(item: MagicItem): TreasureResult | null {
-    if (rollDice(this.d100) <= item.chanceOf) {
-      return new TreasureResult({
-        name: item.name,
-        quantity: (item.quantity as DiceRolled).pips
-          ? rollDice(item.quantity as DiceRolled)
-          : (item.quantity as number),
-      } as TreasureResult);
-    }
-    return null;
-  }
 
   /**
    * For a given specie type treasure article, returns the appropriate treasure result.
@@ -76,7 +64,7 @@ export abstract class AbstractTreasureGenerator {
         this.pushToResults(this.generateJewelry(article));
         break;
       case this.TREASURE_ARTICLE_TYPES.MAGIC_ITEM:
-        this.pushToResults(this.generateMagicItem(article as MagicItem));
+        this.pushToResults(this.generateMagicItem(article));
         break;
       case this.TREASURE_ARTICLE_TYPES.SPECIE:
         this.pushToResults(this.generateSpecie(article));
