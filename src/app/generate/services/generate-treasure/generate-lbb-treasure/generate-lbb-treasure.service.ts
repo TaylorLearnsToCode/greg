@@ -28,6 +28,8 @@ export class GenerateLbbTreasureService
 {
   /** One six sided die */
   private readonly d6 = new DiceRolled();
+  /** One twelve sided die */
+  private readonly d12 = new DiceRolled({ pips: 12 });
   /** The values of gems, presented least to most */
   private readonly GEM_SEQUENTIAL_VALUE: number[] = [
     10, 50, 100, 500, 1000, 5000, 10000, 25000, 50000, 100000, 500000,
@@ -302,9 +304,9 @@ export class GenerateLbbTreasureService
   private appendSwordIntelligence(name: string): string {
     let newName: string = name;
 
-    if (newName.includes('Sword')) {
+    if (newName.includes('Sword') && !newName.includes('Map to')) {
       let alignment: string = '';
-      let roll: number = rollDice(this.d100);
+      const roll: number = rollDice(this.d100);
       for (const swordAlignment of this.SWORD_ALIGNMENTS.keys()) {
         if (isBetween(roll, swordAlignment)) {
           alignment = this.SWORD_ALIGNMENTS.get(swordAlignment) as string;
@@ -312,9 +314,14 @@ export class GenerateLbbTreasureService
         }
       }
 
-      // next - configure sword powers as persisted rollable table entry
+      // @TODO next - configure sword powers as persisted rollable table entry
+      let swordIntelligence = rollDice(this.d12);
 
-      newName += ` (Alignment: ${alignment})`;
+      newName += ''.concat(
+        ` (Alignment: ${alignment}`,
+        swordIntelligence > 6 ? `, Intelligence: ${swordIntelligence}` : '',
+        ')'
+      );
     }
     return newName;
   }
