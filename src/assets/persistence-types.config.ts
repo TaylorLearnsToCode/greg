@@ -1,10 +1,17 @@
 /** Types of files supported by the data manager service */
 export const PERSISTENCE_TYPES = {
+  /** Individual magic items */
   magicItem: 'greg-magic-item',
+  /** Rollable lists of magic items */
   magicItemTable: 'greg-magic-item-table',
+  /** Configurable lists of weapon powers: notably Sword-only in TSR editions */
+  magicWeaponPower: 'greg-weapon-power',
+  /** Treasure article entries for use in Treasure Types */
   treasureArticle: 'greg-treasure-article',
+  /** Configurations for generating treasure maps: including maps to magic items */
   treasureMap: 'greg-treasure-map',
   /** Reference entries specific to a treasure map: gold, silver, etc. */
   treasureMapRef: 'greg-treasure-map-ref',
+  /** Groupings of treasure articles and references to be associated with monsters or hoards */
   treasureType: 'greg-treasure-type',
 };

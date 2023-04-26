@@ -9,6 +9,7 @@ import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import {
@@ -62,8 +63,14 @@ export class GenerateLbbTreasureService
       } as DiceRolled),
     ],
   ]);
-
+  /** Persisted data types supported by GREG */
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+  /** Alignment map for swords */
+  private readonly SWORD_ALIGNMENTS: Map<BoundedRange, string> = new Map([
+    [new BoundedRange({ low: 1, high: 65 }), 'Lawful'],
+    [new BoundedRange({ low: 66, high: 90 }), 'Neutral'],
+    [new BoundedRange({ low: 91, high: 100 }), 'Chaotic'],
+  ]);
 
   /** The number of gems sequentially eligible for a "bump" - expressed as the Nth gem processed */
   private bumpEvery: number;
@@ -152,21 +159,10 @@ export class GenerateLbbTreasureService
         results.push(
           ...this.generateMagicItemFromTable(
             targetItem as ReferenceEntryTable
-          ).map(
-            (magicItem) =>
-              new TreasureResult({
-                name: magicItem.name,
-                quantity: this.rollArticleQuantity(magicItem),
-              } as TreasureResult)
-          )
+          ).map((magicItem) => this.convertNamedItemToTreasureResult(magicItem))
         );
       } else {
-        results.push(
-          new TreasureResult({
-            name: targetItem.name,
-            quantity: this.rollArticleQuantity(targetItem as MagicItem),
-          } as TreasureResult)
-        );
+        results.push(this.convertNamedItemToTreasureResult(targetItem));
       }
     }
 
@@ -231,14 +227,8 @@ export class GenerateLbbTreasureService
             result.results.push(
               ...this.generateMagicItemFromTable(
                 article as ReferenceEntryTable
-              ).map(
-                (magicItem) =>
-                  new TreasureResult({
-                    name: magicItem.name,
-                    quantity: (magicItem.quantity as DiceRolled).pips
-                      ? rollDice(magicItem.quantity as DiceRolled)
-                      : (magicItem.quantity as number),
-                  } as TreasureResult)
+              ).map((magicItem) =>
+                this.convertNamedItemToTreasureResult(magicItem)
               )
             );
             break;
@@ -303,6 +293,33 @@ export class GenerateLbbTreasureService
   }
 
   /**
+   * If a provided string name contains the text "Sword" - case sensitive - will generate
+   * and append in (parentheses) intelligent qualities for the sword, returning the
+   * combined result.
+   *
+   * @param  {string} name
+   */
+  private appendSwordIntelligence(name: string): string {
+    let newName: string = name;
+
+    if (newName.includes('Sword')) {
+      let alignment: string = '';
+      let roll: number = rollDice(this.d100);
+      for (const swordAlignment of this.SWORD_ALIGNMENTS.keys()) {
+        if (isBetween(roll, swordAlignment)) {
+          alignment = this.SWORD_ALIGNMENTS.get(swordAlignment) as string;
+          break;
+        }
+      }
+
+      // next - configure sword powers as persisted rollable table entry
+
+      newName += ` (Alignment: ${alignment})`;
+    }
+    return newName;
+  }
+
+  /**
    * Recursively potentially bumps the gem up to a maximum value as configured in the
    * GEM_SEQUENTIAL_VALUE instance property
    *
@@ -337,6 +354,24 @@ export class GenerateLbbTreasureService
       nextValue = this.bumpGemValue(nextValue);
     }
     return nextValue;
+  }
+
+  /**
+   * For any object with a "name" or, optionally, "quantity" property, converts said object
+   * into a TreasureResult.
+   *
+   * @param  {any} namedItem
+   */
+  private convertNamedItemToTreasureResult(namedItem: any): TreasureResult {
+    const treasureResult = new TreasureResult({
+      name: this.appendSwordIntelligence(namedItem.name),
+    });
+    if (doesExist(namedItem.quantity)) {
+      treasureResult.quantity = (namedItem.quantity as DiceRolled).pips
+        ? rollDice(namedItem.quantity as DiceRolled)
+        : (namedItem.quantity as number);
+    }
+    return treasureResult;
   }
 
   /**
@@ -484,13 +519,14 @@ export class GenerateLbbTreasureService
    * @param  {TreasureResult} result
    */
   private prettyPrintTreasureResult(result: TreasureResult): string {
-    return ''.concat(
+    const response = ''.concat(
       `${this.decimalPipe.transform(result.quantity, '1.0')}`,
       ' ',
       result.name.includes('-')
         ? result.name.split('-')[result.name.split('-').length - 1]
         : result.name
     );
+    return response;
   }
 
   /**
