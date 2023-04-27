@@ -11,6 +11,12 @@ import {
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
+enum Alignment {
+  LAW,
+  NEUTRALITY,
+  CHAOS,
+}
+
 /** Handles the fine details of determining a magic sword's extra characteristics using the LBB ruleset. */
 @Injectable({
   providedIn: 'root',
@@ -21,10 +27,10 @@ export class LbbSwordService {
   private readonly d100 = new DiceRolled({ pips: 100 });
 
   /** Alignment map for swords */
-  private readonly SWORD_ALIGNMENTS: Map<BoundedRange, string> = new Map([
-    [new BoundedRange({ low: 1, high: 65 }), 'Lawful'],
-    [new BoundedRange({ low: 66, high: 90 }), 'Neutral'],
-    [new BoundedRange({ low: 91, high: 100 }), 'Chaotic'],
+  private readonly SWORD_ALIGNMENTS: Map<BoundedRange, Alignment> = new Map([
+    [new BoundedRange({ low: 1, high: 65 }), Alignment.LAW],
+    [new BoundedRange({ low: 66, high: 90 }), Alignment.NEUTRALITY],
+    [new BoundedRange({ low: 91, high: 100 }), Alignment.CHAOS],
   ]);
 
   /** Modes by which magic swords communicate */
@@ -45,10 +51,21 @@ export class LbbSwordService {
     [new BoundedRange({ low: 86, high: 95 }), 4],
     [new BoundedRange({ low: 96, high: 99 }), 5],
   ]);
+  /** Special purposes for which a sword might have been forged */
+  private readonly SWORD_SPECIAL_PURPOSES: string[] = [
+    'Slay Magic-Users',
+    'Slay Fighting-Men',
+    'Defeat Law',
+    'Slay Clerics',
+    'Slay Monsters',
+    'Defeat Chaos',
+  ];
 
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
+  private swordAlignment: Alignment;
   private swordIntelligence: number;
+  private isSpecialPurpose: boolean;
 
   constructor(private dataService: DataManagerService) {}
 
@@ -63,10 +80,12 @@ export class LbbSwordService {
     let newName: string = name;
 
     if (newName.includes('Sword') && !newName.includes('Map to')) {
-      this.swordIntelligence = rollDice(this.d12);
+      this.isSpecialPurpose = rollDice(this.d100) > 90;
+      this.swordIntelligence = this.isSpecialPurpose ? 12 : rollDice(this.d12);
 
       newName += ''.concat(
         this.appendAlignment(),
+        this.appendSpecialPurpose(),
         this.appendIntelligence(),
         this.appendEgoism(),
         this.appendCommunicationMode(),
@@ -75,8 +94,8 @@ export class LbbSwordService {
         ')'
       );
     }
-    return newName;
 
+    return newName;
     // TODO - next: special purposes
   }
 
@@ -86,7 +105,26 @@ export class LbbSwordService {
     const roll: number = rollDice(this.d100);
     for (const swordAlignment of this.SWORD_ALIGNMENTS.keys()) {
       if (isBetween(roll, swordAlignment)) {
-        alignment = this.SWORD_ALIGNMENTS.get(swordAlignment) as string;
+        this.swordAlignment = this.SWORD_ALIGNMENTS.get(
+          swordAlignment
+        ) as Alignment;
+        switch (this.SWORD_ALIGNMENTS.get(swordAlignment)) {
+          case Alignment.LAW:
+            alignment = 'Lawful';
+            break;
+          case Alignment.NEUTRALITY:
+            alignment = 'Neutral';
+            break;
+          case Alignment.CHAOS:
+            alignment = 'Chaotic';
+            break;
+          default:
+            throw new Error(
+              `Unsupported alignment ${this.SWORD_ALIGNMENTS.get(
+                swordAlignment
+              )?.toString()} encountered`
+            );
+        }
         break;
       }
     }
@@ -117,7 +155,9 @@ export class LbbSwordService {
    */
   private appendEgoism(): string {
     let ego: string = '';
-    if (this.swordIntelligence > 6) {
+    if (this.isSpecialPurpose) {
+      ego = '12';
+    } else if (this.swordIntelligence > 6) {
       ego = rollDice(this.d12).toString();
     }
     return isEmpty(ego) ? '' : `; Egoism: ${ego}`;
@@ -195,6 +235,44 @@ export class LbbSwordService {
     powers.push(...this.rollOnWeaponPowerTable(primaryPowers, noPowers));
 
     return powers.length ? `; Special Powers: ${powers.join(', ')}` : '';
+  }
+
+  /**
+   * For swords deemed special purpose, generates that special purpose based on alignment
+   * and returns a string indicating as such.
+   */
+  private appendSpecialPurpose(): string {
+    if (this.isSpecialPurpose) {
+      const specialPurpose: string =
+        this.SWORD_SPECIAL_PURPOSES[
+          rollDice(
+            new DiceRolled({
+              pips: this.SWORD_SPECIAL_PURPOSES.length,
+              modifier: -1,
+            })
+          )
+        ];
+
+      let specialAbility: string;
+      switch (this.swordAlignment) {
+        case Alignment.LAW:
+          specialAbility = 'Paralyze Chaotic Opponents';
+          break;
+        case Alignment.NEUTRALITY:
+          specialAbility = '+1 to All Saving Throws';
+          break;
+        case Alignment.CHAOS:
+          specialAbility = 'Disintegrate Lawful Opponents';
+          break;
+        default:
+          throw new Error(
+            `Unsupported alignment ${this.swordAlignment} encountered`
+          );
+      }
+
+      return `; Special Purpose: ${specialPurpose} (${specialAbility})`;
+    }
+    return '';
   }
 
   /**
