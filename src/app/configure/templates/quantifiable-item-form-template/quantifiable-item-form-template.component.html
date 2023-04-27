@@ -40,7 +40,13 @@
 
       <section class="saved-items-controls">
         <a (click)="importSavedItems()">Import</a>
-        <a (click)="exportSavedItems()">Export</a>
+        <input
+          #savedItemsImportInput
+          accept=".{{ persistenceType }}"
+          (change)="onSavedItemImport()"
+          type="file"
+        />
+        <a (click)="exportSavedItems(savedItems)">Export</a>
         <a (click)="clearSavedItems()">Clear All</a>
       </section>
     </section>

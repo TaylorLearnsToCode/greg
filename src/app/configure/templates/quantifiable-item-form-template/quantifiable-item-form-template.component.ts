@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AbstractQuantifiableItem } from '@shared/model/framework/abstract-quantifiable-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -28,6 +36,8 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
 
   @Output() editSavedItemEvent = new EventEmitter();
 
+  @ViewChild('savedItemsImportInput') savedItemsImportInputRef: ElementRef;
+
   savedItem$: Observable<AbstractQuantifiableItem[]>;
   get quantityForm(): FormGroup {
     return this.itemForm.get('quantity') as FormGroup;
@@ -35,6 +45,9 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
 
   private _itemIdentifiers: string;
   private _quantityLabel: string;
+  private get savedItemsImportInput(): HTMLInputElement {
+    return this.savedItemsImportInputRef.nativeElement as HTMLInputElement;
+  }
 
   constructor(private dataService: DataManagerService) {}
 
@@ -64,13 +77,28 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
   }
 
   /** Exports current items stored in local storage */
-  exportSavedItems(): void {
-    this.dataService.exportFromStorage(this.persistenceType);
+  exportSavedItems(items: AbstractQuantifiableItem[]): void {
+    this.dataService.exportObject(
+      items,
+      this.persistenceType + 's',
+      this.persistenceType.toUpperCase()
+    );
   }
 
   /** Imports a list of saved entries of the configured type into local storage */
   importSavedItems(): void {
-    alert('Do this next!');
+    this.savedItemsImportInput.click();
+  }
+
+  /** Handler for import event */
+  onSavedItemImport(): void {
+    if (this.savedItemsImportInput.files) {
+      this.dataService.import(
+        this.savedItemsImportInput.files[0],
+        this.persistenceType
+      );
+      this.savedItemsImportInput.value = '';
+    }
   }
 
   /** Persists the current form item into browser storage */
