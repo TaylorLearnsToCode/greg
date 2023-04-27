@@ -4,8 +4,10 @@ export const PERSISTENCE_TYPES = {
   magicItem: 'greg-magic-item',
   /** Rollable lists of magic items */
   magicItemTable: 'greg-magic-item-table',
-  /** Configurable lists of weapon powers: notably Sword-only in TSR editions */
+  /** A singular reference to a weapon power */
   magicWeaponPower: 'greg-weapon-power',
+  /** Configurable lists of weapon powers: notably Sword-only in TSR editions */
+  magicWeaponPowerTable: 'greg-weapon-power-table',
   /** Treasure article entries for use in Treasure Types */
   treasureArticle: 'greg-treasure-article',
   /** Configurations for generating treasure maps: including maps to magic items */

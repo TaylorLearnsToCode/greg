@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
@@ -108,6 +108,9 @@ export class RollableTableTemplateComponent implements OnInit {
 
   private _entriesNestable: boolean;
   private _entryIdentifier: string;
+  private chanceOfForm(index: number): FormGroup {
+    return this.entriesFormArray.controls[index].get('chanceOf') as FormGroup;
+  }
   private get importTableInput(): HTMLInputElement {
     return this.importTableInputRef.nativeElement as HTMLInputElement;
   }
@@ -153,6 +156,43 @@ export class RollableTableTemplateComponent implements OnInit {
       `${this.tableForm.value.system}-${this.tableForm.value.name}`,
       this.persistenceType.toUpperCase()
     );
+  }
+
+  /**
+   *
+   *
+   * @param  {string} side Accepts "high" or "low", case sensitive
+   */
+  fillChanceOf(side: string): void {
+    if (side !== 'low' && side !== 'high') {
+      throw new Error(`Invalid chance of side ${side} specified.`);
+    }
+
+    let constantSide: FormControl;
+    let targetSide: FormControl;
+    for (let i = 0; i < this.entriesFormArray.controls.length; i++) {
+      if (side === 'low' && i === 0) {
+        this.chanceOfForm(i).get(side)?.setValue(1);
+        continue;
+      } else if (
+        side === 'high' &&
+        i == this.entriesFormArray.controls.length - 1
+      ) {
+        const max = this.entriesFormArray.value.diceRolled.pips;
+        this.chanceOfForm(i).get(side)?.setValue(max);
+        continue;
+      }
+
+      targetSide = this.chanceOfForm(i).get(side) as FormControl;
+      constantSide =
+        side === 'low'
+          ? (this.chanceOfForm(i - 1).get('high') as FormControl)
+          : (this.chanceOfForm(i + 1).get('low') as FormControl);
+
+      targetSide.setValue(
+        side === 'low' ? constantSide.value + 1 : constantSide.value - 1
+      );
+    }
   }
 
   /**

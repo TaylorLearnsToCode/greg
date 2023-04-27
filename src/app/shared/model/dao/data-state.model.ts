@@ -7,6 +7,8 @@ import { TreasureType } from '../treasure/treasure-type.model';
 export class DataState {
   magicItems: MagicItem[] = [];
   magicItemTables: ReferenceEntryTable[] = [];
+  magicWeaponPowers: ReferenceEntryTable[] = [];
+  magicWeaponPowerTables: ReferenceEntryTable[] = [];
   treasureArticles: TreasureArticle[] = [];
   treasureMapRefs: TreasureArticle[] = [];
   treasureMaps: ReferenceEntryTable[] = [];
