@@ -5,6 +5,7 @@ import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-tab
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
+import { WeaponPowerTable } from '@shared/model/treasure/weapon-power-table.model';
 import {
   doesExist,
   insertOrReplace,
@@ -147,6 +148,9 @@ export class DataManagerService {
         break;
       case this.PERSISTENCE_TYPES.magicItemTable:
         this.persistMagicItemTable(object as ReferenceEntryTable);
+        break;
+      case this.PERSISTENCE_TYPES.magicWeaponPowerTable:
+        this.persistMagicWeaponPowerTable(object as WeaponPowerTable);
         break;
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
@@ -322,6 +326,24 @@ export class DataManagerService {
   }
 
   /**
+   * Persists a provided WeaponPowerTable to local storage.
+   * If the specified table - by name and system - already exists in local storage,
+   * will update the value instead.
+   *
+   * @param  {WeaponPowerTable} table
+   */
+  private persistMagicWeaponPowerTable(table: WeaponPowerTable): void {
+    const tables: WeaponPowerTable[] = this.retrieve<WeaponPowerTable[]>(
+      this.PERSISTENCE_TYPES.magicWeaponPowerTable
+    );
+    insertOrReplace<WeaponPowerTable>(table, tables, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.magicWeaponPowerTable,
+      JSON.stringify(tables)
+    );
+  }
+
+  /**
    * Resets local browser storage to the provided master config.
    *
    * @param  {DataState} config
@@ -419,6 +441,12 @@ export class DataManagerService {
         ),
         magicItemTables: this.retrieve<ReferenceEntryTable[]>(
           this.PERSISTENCE_TYPES.magicItemTable
+        ),
+        magicWeaponPowers: this.retrieve<ReferenceEntryTable[]>(
+          this.PERSISTENCE_TYPES.magicWeaponPower
+        ),
+        magicWeaponPowerTables: this.retrieve<ReferenceEntryTable[]>(
+          this.PERSISTENCE_TYPES.magicWeaponPowerTable
         ),
         treasureArticles: this.retrieve<TreasureArticle[]>(
           this.PERSISTENCE_TYPES.treasureArticle

@@ -32,6 +32,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         routePath: 'treasure-type-table',
       } as NavRoute,
       {
+        menuLabel: 'Configure Weapon Powers',
+        routePath: 'weapon-power',
+      } as NavRoute,
+      {
         menuLabel: 'TEMP: Convert Legacy',
         routePath: 'TEMP-convert-legacy',
       } as NavRoute,

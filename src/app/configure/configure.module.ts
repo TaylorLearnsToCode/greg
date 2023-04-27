@@ -8,6 +8,7 @@ import { ConfigureMagicItemComponent } from './components/configure-magic-item/c
 import { ConfigureTreasureMapComponent } from './components/configure-treasure-map/configure-treasure-map.component';
 import { ConfigureTreasureTypeTableComponent } from './components/configure-treasure-type-table/configure-treasure-type-table.component';
 import { ConfigureTreasureTypeComponent } from './components/configure-treasure-type/configure-treasure-type.component';
+import { ConfigureWeaponPowerComponent } from './components/configure-weapon-power/configure-weapon-power.component';
 import { TempConvertLegacyComponent } from './components/temp-convert-legacy/temp-convert-legacy.component';
 import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounded-range-form.component';
 import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
@@ -42,6 +43,10 @@ const routes: Routes = [
     path: 'TEMP-convert-legacy',
     component: TempConvertLegacyComponent,
   },
+  {
+    path: 'weapon-power',
+    component: ConfigureWeaponPowerComponent,
+  },
 ];
 
 /** Module to configure system, environment, and inputs for the generation of encounter data. */
@@ -57,6 +62,7 @@ const routes: Routes = [
     BoundedRangeFormComponent,
     TempConvertLegacyComponent,
     RollableTableTemplateComponent,
+    ConfigureWeaponPowerComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
