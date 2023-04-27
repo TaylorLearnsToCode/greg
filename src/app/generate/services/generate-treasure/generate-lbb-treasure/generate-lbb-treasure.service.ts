@@ -9,8 +9,6 @@ import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
-import { WeaponPowerTable } from '@shared/model/treasure/weapon-power-table.model';
-import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import {
@@ -19,6 +17,7 @@ import {
   isEmpty,
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
+import { LbbSwordService } from './lbb-sword/lbb-sword.service';
 
 @Injectable({
   providedIn: 'root',
@@ -68,29 +67,6 @@ export class GenerateLbbTreasureService
   ]);
   /** Persisted data types supported by GREG */
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
-  /** Alignment map for swords */
-  private readonly SWORD_ALIGNMENTS: Map<BoundedRange, string> = new Map([
-    [new BoundedRange({ low: 1, high: 65 }), 'Lawful'],
-    [new BoundedRange({ low: 66, high: 90 }), 'Neutral'],
-    [new BoundedRange({ low: 91, high: 100 }), 'Chaotic'],
-  ]);
-  /** Modes by which magic swords communicate */
-  private readonly SWORD_COMMUNICATION_MODES: Map<BoundedRange, string> =
-    new Map([
-      [new BoundedRange({ low: 1, high: 6 }), 'None'],
-      [new BoundedRange({ low: 7, high: 9 }), 'Empathy'],
-      [new BoundedRange({ low: 10, high: 11 }), 'Speech'],
-      [new BoundedRange({ low: 12, high: 12 }), 'Telepathy'],
-    ]);
-  /** Map by dice rolled how many languages a magic sword will know */
-  private readonly SWORD_LANGUAGES_KNOWN: Map<BoundedRange, number> = new Map([
-    [new BoundedRange({ low: 0, high: 0 }), 0],
-    [new BoundedRange({ low: 1, high: 50 }), 1],
-    [new BoundedRange({ low: 51, high: 70 }), 2],
-    [new BoundedRange({ low: 71, high: 85 }), 3],
-    [new BoundedRange({ low: 86, high: 95 }), 4],
-    [new BoundedRange({ low: 96, high: 99 }), 5],
-  ]);
 
   /** The number of gems sequentially eligible for a "bump" - expressed as the Nth gem processed */
   private bumpEvery: number;
@@ -103,7 +79,10 @@ export class GenerateLbbTreasureService
   /** The Nth gem under processing: one greater than the index of the current gem in the gem iterator */
   private nthGem: number;
 
-  constructor(private dataService: DataManagerService) {
+  constructor(
+    private dataService: DataManagerService,
+    private swordService: LbbSwordService
+  ) {
     super();
   }
 
@@ -313,168 +292,6 @@ export class GenerateLbbTreasureService
   }
 
   /**
-   * If a provided string name contains the text "Sword" - case sensitive - will generate
-   * and append in (parentheses) intelligent qualities for the sword, returning the
-   * combined result.
-   *
-   * @param  {string} name
-   */
-  private appendSwordIntelligence(name: string): string {
-    let newName: string = name;
-
-    if (newName.includes('Sword') && !newName.includes('Map to')) {
-      let alignment: string = '';
-      const roll: number = rollDice(this.d100);
-      for (const swordAlignment of this.SWORD_ALIGNMENTS.keys()) {
-        if (isBetween(roll, swordAlignment)) {
-          alignment = this.SWORD_ALIGNMENTS.get(swordAlignment) as string;
-          break;
-        }
-      }
-
-      // @TODO next - configure sword powers as persisted rollable table entry
-      const swordIntelligence = rollDice(this.d12);
-      let communicationMode: string = '';
-      for (const mode of this.SWORD_COMMUNICATION_MODES.keys()) {
-        if (isBetween(swordIntelligence, mode)) {
-          communicationMode = this.SWORD_COMMUNICATION_MODES.get(
-            mode
-          ) as string;
-          break;
-        }
-      }
-
-      newName += ''.concat(
-        ` (Alignment: ${alignment}`,
-        swordIntelligence > 6 ? `; Intelligence: ${swordIntelligence}` : '',
-        swordIntelligence > 6
-          ? `; Communication Mode: ${communicationMode}`
-          : '',
-        this.appendSwordLanguages(swordIntelligence),
-        this.appendSwordPowers(swordIntelligence),
-        ')'
-      );
-    }
-    return newName;
-  }
-
-  /**
-   * Generates the number of languages a sword should know and returns a string
-   * indicating as such.
-   *
-   * @param  {number} intelligence
-   */
-  private appendSwordLanguages(intelligence: number): string {
-    if (intelligence < 10) {
-      return '';
-    }
-    let noLanguages = this.determineSwordLanguages();
-    if (noLanguages === -1) {
-      noLanguages++;
-      for (let i = 0; i < 2; i++) {
-        noLanguages += this.determineSwordLanguages(
-          new DiceRolled({ pips: 100, modifier: -1 })
-        );
-      }
-    }
-    return `; Languages Spoken: ${noLanguages}`;
-  }
-
-  /**
-   * Based on provided intelligence, returns a joined list of special sword powers.
-   *
-   * @param  {number} swordIntelligence
-   */
-  private appendSwordPowers(swordIntelligence: number): string {
-    const powers: string[] = [];
-
-    const primaryPowers: WeaponPowerTable =
-      this.dataService.retrieveReference<WeaponPowerTable>(
-        'Primary Powers',
-        this.PERSISTENCE_TYPES.magicWeaponPowerTable
-      );
-    const extraordinaryPowers: WeaponPowerTable =
-      this.dataService.retrieveReference<WeaponPowerTable>(
-        'Extraordinary Ability Table',
-        this.PERSISTENCE_TYPES.magicWeaponPowerTable
-      );
-
-    let noPowers: number = 0;
-    switch (swordIntelligence) {
-      case 12:
-        noPowers = 3;
-        powers.push(...this.rollOnWeaponPowerTable(extraordinaryPowers));
-        break;
-      case 11:
-        noPowers = 3;
-        powers.push('Read Magic');
-        break;
-      case 10:
-        noPowers = 3;
-        break;
-      case 9:
-        noPowers = 3;
-        break;
-      case 8:
-        noPowers = 2;
-        break;
-      case 7:
-        noPowers = 1;
-        break;
-      default:
-        break;
-    }
-    powers.push(...this.rollOnWeaponPowerTable(primaryPowers, noPowers));
-
-    return powers.length ? `; Special Powers: ${powers.join(', ')}` : '';
-  }
-
-  /**
-   * Rolls on a provided WeaponPowerTable a provided number of times, returning a collection
-   * of the references generated in the process.
-   *
-   * @param  {WeaponPowerTable} table
-   * @param  {number} times Optional - default 1
-   */
-  private rollOnWeaponPowerTable(
-    table: WeaponPowerTable,
-    times?: number
-  ): string[] {
-    times = doesExist(times) ? times : 1;
-    const response: string[] = [];
-
-    let roll: number;
-    for (let i = 0; i < (times as number); i++) {
-      roll = rollDice(table.diceToRoll);
-      for (const entry of table.entries) {
-        if (isBetween(roll, entry.chanceOf)) {
-          switch (entry.persistenceType) {
-            case this.PERSISTENCE_TYPES.magicWeaponPower:
-              response.push(entry.reference);
-              break;
-            case this.PERSISTENCE_TYPES.magicWeaponPowerTable:
-              response.push(
-                ...this.rollOnWeaponPowerTable(
-                  this.dataService.retrieveReference<WeaponPowerTable>(
-                    entry.reference,
-                    entry.persistenceType
-                  )
-                )
-              );
-              break;
-            default:
-              throw new Error(
-                `Unsupported persistence type ${entry.persistenceType} encountered`
-              );
-          }
-        }
-      }
-    }
-
-    return response;
-  }
-
-  /**
    * Recursively potentially bumps the gem up to a maximum value as configured in the
    * GEM_SEQUENTIAL_VALUE instance property
    *
@@ -519,7 +336,7 @@ export class GenerateLbbTreasureService
    */
   private convertNamedItemToTreasureResult(namedItem: any): TreasureResult {
     const treasureResult = new TreasureResult({
-      name: this.appendSwordIntelligence(namedItem.name),
+      name: this.swordService.appendSwordCharacteristics(namedItem.name),
     });
     if (doesExist(namedItem.quantity)) {
       treasureResult.quantity = (namedItem.quantity as DiceRolled).pips
@@ -543,24 +360,6 @@ export class GenerateLbbTreasureService
     } else {
       this.bumpEvery = 1;
     }
-  }
-
-  /**
-   * Rolls a number of languages, as configured, for a sword to know.
-   * Returns -1 if no number is found to correspond with the die roll.
-   *
-   * @param  {DiceRolled} die Optional - default 1d%
-   */
-  private determineSwordLanguages(die?: DiceRolled): number {
-    const roll: number = rollDice(die ? die : this.d100);
-    let languages: number = -1;
-    for (const no of this.SWORD_LANGUAGES_KNOWN.keys()) {
-      if (isBetween(roll, no)) {
-        languages = this.SWORD_LANGUAGES_KNOWN.get(no) as number;
-        break;
-      }
-    }
-    return languages;
   }
 
   /** Generates a new gem with calculated value */
