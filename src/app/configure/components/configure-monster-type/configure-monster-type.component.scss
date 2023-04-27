@@ -1,0 +1,10 @@
+@import '/src/assets/variables';
+
+@include smallNumberInputs();
+
+supplemental-fields-form form {
+  @include baseDisplayGrid();
+  column-gap: 1em;
+  grid-template-columns: repeat(2, 1fr 2fr);
+  margin-top: 0.25em;
+}

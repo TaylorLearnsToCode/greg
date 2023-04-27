@@ -50,8 +50,9 @@ export class DataManagerService {
    *
    * @param  {any} object
    * @param  {string} fromKey
+   * @param  {string} identifier Optional - default "name"
    */
-  delete(object: any, fromKey: string): void {
+  delete(object: any, fromKey: string, identifier?: string): void {
     // TODO - genericize this. These methods are all the same logic with different variable names!
     switch (fromKey) {
       case this.PERSISTENCE_TYPES.magicItem:
@@ -67,7 +68,7 @@ export class DataManagerService {
         console.warn(
           `Data type ${fromKey} not currently supported: defaulting to generic approach.`
         );
-        this.deleteSavedItem(object, fromKey);
+        this.deleteSavedItem(object, fromKey, identifier);
     }
   }
 
@@ -168,7 +169,8 @@ export class DataManagerService {
         this.persisteMasterDataConfig(object as DataState);
         break;
       default:
-        throw new Error(`Data type ${key} not currently supported.`);
+        console.warn('Using default persistence function!');
+        this.defaultPersistObject(object, key);
     }
     this.refreshDataState();
   }
@@ -194,8 +196,8 @@ export class DataManagerService {
    * For the list of items saved to browser storage identified by a provided key,
    * moves the item at the specified index one step in the indicated direction
    *
-   * @param  {string} key
-   * @param  {number} index
+   * @param  {string} key The persistence key of the list to which the target belongs
+   * @param  {number} index The index of the item to be shifted
    * @param  {string} direction Accepts "up" or "down"
    */
   shiftListEntry(key: string, index: number, direction: string): void {
@@ -214,12 +216,25 @@ export class DataManagerService {
     if (newIndex === -1 || newIndex === savedList.length) {
       return;
     }
-    const targetItem = savedList.splice(index, 1);
+    const targetItem = savedList.splice(index, 1)[0];
     savedList.splice(newIndex, 0, targetItem);
     this.clear(key);
     for (const item of savedList) {
       this.persist(key, item);
     }
+  }
+
+  /**
+   * Attempts to upsert a provided object into the stored data array of the provided
+   * persistence type key.
+   *
+   * @param  {any} object
+   * @param  {string} key
+   */
+  private defaultPersistObject(object: any, key: string): void {
+    const objects: any[] = this.retrieve(key);
+    insertOrReplace(object, objects);
+    localStorage.setItem(key, JSON.stringify(objects));
   }
 
   /**
@@ -434,34 +449,15 @@ export class DataManagerService {
 
   /** Synchronizes current data state observable with fresh values from local storage */
   private refreshDataState() {
-    this.dataStateSource.next(
-      new DataState({
-        magicItems: this.retrieve<MagicItem[]>(
-          this.PERSISTENCE_TYPES.magicItem
-        ),
-        magicItemTables: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicItemTable
-        ),
-        magicWeaponPowers: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicWeaponPower
-        ),
-        magicWeaponPowerTables: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicWeaponPowerTable
-        ),
-        treasureArticles: this.retrieve<TreasureArticle[]>(
-          this.PERSISTENCE_TYPES.treasureArticle
-        ),
-        treasureMapRefs: this.retrieve<TreasureArticle[]>(
-          this.PERSISTENCE_TYPES.treasureMapRef
-        ),
-        treasureMaps: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.treasureMap
-        ),
-        treasureTypes: this.retrieve<TreasureType[]>(
-          this.PERSISTENCE_TYPES.treasureType
-        ),
-      } as DataState)
-    );
+    const dataState: DataState = new DataState();
+
+    for (const key of Object.keys(this.PERSISTENCE_TYPES)) {
+      (dataState as any)[`${key}s`] = this.retrieve(
+        (this.PERSISTENCE_TYPES as any)[key]
+      );
+    }
+
+    this.dataStateSource.next(dataState);
   }
 
   /**
