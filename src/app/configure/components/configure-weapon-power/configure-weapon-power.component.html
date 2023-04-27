@@ -1,0 +1,31 @@
+<greg-rollable-table-template
+  (editSavedTableEvent)="handleEditSavedTable($event)"
+  entryIdentifier="reference"
+  (importEvent)="handleImport($event)"
+  (nestSavedTable)="handleNestSavedTable($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+  [tableForm]="weaponPowerForm"
+>
+  <add-entry-form>
+    <form [formGroup]="weaponPowerEntryForm">
+      <span>
+        <label>Power Description:</label>
+        <input formControlName="reference" type="text" />
+      </span>
+      <div>
+        <a (click)="addEntry()">+Add</a>
+        <a (click)="resetWeaponPowerEntryForm()">Clear</a>
+      </div>
+    </form>
+
+    <hr />
+
+    <label class="indented">Saved Entries</label>
+    <section>
+      <p>Entries</p>
+      <div class="entry-commands">
+        <a (click)="addEntry()">+Add Entry</a>
+      </div>
+    </section>
+  </add-entry-form>
+</greg-rollable-table-template>

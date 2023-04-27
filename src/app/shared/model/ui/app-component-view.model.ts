@@ -1,5 +1,5 @@
 import { constructInstance } from '@shared/utilities/common-util/common.util';
-import { NavRoute } from './nav-route.interface';
+import { NavRoute } from '@shared/model/ui/nav-route.interface';
 
 export class AppComponentViewModel {
   headerSubtext: string = '';

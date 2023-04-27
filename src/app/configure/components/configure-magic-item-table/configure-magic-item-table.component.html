@@ -1,0 +1,126 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="magicItemTableForm">
+      <section class="table-metadata">
+        <label>Name:</label>
+        <input formControlName="name" type="text" />
+
+        <label>System:</label>
+        <select formControlName="system">
+          <option disabled value="">-- Select --</option>
+          <option
+            *ngFor="let systemKey of supportedSystemKeys"
+            [ngValue]="systemKey"
+          >
+            {{ supportedSystem(systemKey) }}
+          </option>
+        </select>
+
+        <label>Dice to Roll:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="diceToRollForm"
+        ></greg-dice-rolled-form>
+      </section>
+
+      <ng-container *ngIf="hasEntries(); else noEntries">
+        <section class="table-entries" formArrayName="entries">
+          <div
+            *ngFor="let entry of magicItemEntriesFormArray.controls; index as i"
+          >
+            <ng-container [formGroupName]="i">
+              <div class="reposition">
+                <a (click)="shiftArticle(i, 'up')">&uArr;</a>
+                <a (click)="shiftArticle(i, 'down')">&dArr;</a>
+              </div>
+              <greg-bounded-range-form
+                [boundedRangeForm]="chanceOfForm(i)"
+              ></greg-bounded-range-form>
+              <span>
+                <input formControlName="reference" type="text" />
+              </span>
+              <a (click)="removeReference(i)">X</a>
+            </ng-container>
+          </div>
+        </section>
+      </ng-container>
+
+      <ng-template #noEntries>
+        <div class="table-entries">
+          <p>No entries assigned.</p>
+          <p>
+            Click <a>+</a> on available items to add them as an entry result to
+            this table.
+          </p>
+        </div>
+      </ng-template>
+
+      <section class="table-controls">
+        <div>
+          <a (click)="saveTable()">Save Table</a>
+          <a (click)="importMagicItemTable()">Import Table</a>
+          <input
+            #magicItemTableImport
+            accept=".{{ MAGIC_ITEM_TABLE }}"
+            (change)="onMagicItemTableImport()"
+            type="file"
+          />
+          <a (click)="exportMagicItemTable()">Export Table</a>
+          <a (click)="clearForm()">Clear</a>
+          <ng-container *ngIf="hasEntries()">
+            <hr />
+            <a (click)="fillChanceOf('high')">Fill High</a>
+            <a (click)="fillChanceOf('low')">Fill Low</a>
+          </ng-container>
+        </div>
+      </section>
+    </form>
+  </first-content>
+
+  <second-content>
+    <label>Magic Items</label>
+    <section class="magic-items" *ngIf="magicItems$ | async as magicItems">
+      <ng-container *ngIf="magicItems.length; else noneLoaded">
+        <div *ngFor="let magicItem of magicItems; index as i">
+          <a (click)="addToForm(magicItem)">+</a>
+          <span>{{ magicItem.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+
+    <label>Saved Tables</label>
+    <section
+      class="magic-item-tables"
+      *ngIf="magicItemTables$ | async as magicItemTables"
+    >
+      <section class="list" *ngIf="magicItemTables.length; else noneLoaded">
+        <ng-container
+          *ngFor="let magicItemTable of magicItemTables; index as i"
+        >
+          <div [ngClass]="isNestable(magicItemTable)">
+            <a (click)="addToForm(magicItemTable)">+</a>
+            <span>{{ magicItemTable.name }}</span>
+            <a class="edit-pencil" (click)="editTable(magicItemTable)"
+              >&#x270E;</a
+            >
+            <a (click)="deleteTable(magicItemTable)">X</a>
+          </div>
+        </ng-container>
+      </section>
+      <section class="controls">
+        <a (click)="importTables()">Import List</a>
+        <input
+          #magicItemTableListImport
+          (change)="onMagicItemTableListImport()"
+          accept=".GREG-CONFIG"
+          type="file"
+        />
+        <a (click)="exportTables()">Export List</a>
+        <a (click)="clearTables()">Clear List</a>
+      </section>
+    </section>
+
+    <ng-template #noneLoaded>
+      <p>None loaded.</p>
+    </ng-template>
+  </second-content>
+</greg-page-template>

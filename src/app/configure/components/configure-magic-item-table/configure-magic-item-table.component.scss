@@ -1,0 +1,94 @@
+@import '/src/assets/variables';
+
+@include smallNumberInputs();
+@include hideFileInputs();
+
+div.not-nestable a {
+  visibility: hidden;
+}
+div.not-nestable span {
+  font-style: italic;
+}
+
+div.reposition {
+  @include oneColumnLayout();
+  transform: translate(0, 0.3em);
+}
+div.reposition a {
+  line-height: 0;
+}
+
+first-content form {
+  @include baseDisplayGrid();
+  grid-template-areas: 
+    "meta meta"
+    "list controls";
+  padding-bottom: 0.5em;
+}
+
+form section.table-metadata {
+  @include baseDisplayGrid();
+  grid-area: meta;
+  grid-template-columns: repeat(2, 1fr 2fr);
+  column-gap: 1em;
+  margin: 0.5em 0em;
+}
+
+second-content section {
+  margin-bottom: 1em;
+}
+second-content label {
+  @include indent();
+}
+
+section.magic-items {
+  @include twoColumnLayout();
+  max-height: 40vh;
+  overflow-y: scroll;
+}
+section.magic-items div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr;
+  margin-top: 0.3em;
+}
+
+section.magic-item-tables {
+  max-height: 40vh;
+  overflow-y: scroll;
+}
+section.magic-item-tables div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr 1.5em 1.5em;
+  margin-top: 0.3em;
+}
+section.magic-item-tables div .edit-pencil {
+  transform: translate(0, -0.2em);
+}
+section.magic-item-tables .controls {
+  text-align: center;
+}
+section.magic-item-tables .controls a {
+  margin: 0em 2em;
+}
+section.magic-item-tables .list {
+  @include twoColumnLayout();
+  column-gap: 1em;
+}
+
+section.table-controls {
+  grid-area: controls;
+  text-align: center;
+}
+section.table-controls div {
+  @include oneColumnLayout();
+}
+
+section.table-entries > div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 6em 1fr 1em;
+  padding: 0.3em 0em;
+}
+
+.table-entries {
+  grid-area: list;
+}

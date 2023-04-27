@@ -1,0 +1,88 @@
+<greg-rollable-table-template
+  (editSavedTableEvent)="handleEditSavedTable($event)"
+  entryIdentifier="reference"
+  (importEvent)="handleImport($event)"
+  (nestSavedTable)="handleNestSavedTable($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+  [tableForm]="treasureMapForm"
+>
+  <add-entry-form>
+    <label>Add Treasure Article</label>
+    <section class="add-treasure-article">
+      <form [formGroup]="treasureArticleForm">
+        <label>Number</label>
+        <label>Article</label>
+        <label>Article Type</label>
+        <greg-dice-rolled-form
+          [fromParentForm]="treasureArticleForm"
+          identifier="quantity"
+        ></greg-dice-rolled-form>
+        <input formControlName="name" type="text" />
+        <span>
+          <select formControlName="type">
+            <ng-container *ngFor="let key of treasureArticleTypeKeys">
+              <option [value]="key">
+                {{ treasureArticleType(key) }}
+              </option>
+            </ng-container>
+          </select>
+        </span>
+      </form>
+
+      <div class="map-articles-controls">
+        <a (click)="saveMapTreasureArticle()">+Add</a>
+        <a (click)="resetTreasureArticleForm()">Reset</a>
+      </div>
+
+      <ng-container *ngIf="treasureMapRefList$ | async as treasureMapRefList">
+        <div class="map-articles-list">
+          <ng-container *ngFor="let ref of treasureMapRefList; index as i">
+            <a (click)="addSavedMapTreasureReference(ref)">+</a>
+            <span>
+              {{ ref.name }} ( {{ treasureArticleType(ref.type) }} )
+            </span>
+            <a class="edit-pencil" (click)="editTreasureMapArticleEntry(ref)"
+              >&#x270E;</a
+            >
+            <a (click)="deleteTreasureMapArticleEntry(ref)">X</a>
+          </ng-container>
+        </div>
+
+        <div class="map-articles-controls">
+          <!-- Do these next -->
+          <a (click)="importMapTreasureArticles()">Import</a>
+          <input
+            #importMapArticlesInput
+            accept=".{{ MAP_TREASURE_ARTICLE }}"
+            (change)="onImportMapTreasureArticles()"
+            type="file"
+          />
+          <a (click)="exportMapTreasureArticles(treasureMapRefList)">Export</a>
+          <a (click)="clearMapTreasureArticles(treasureMapRefList)">Clear</a>
+        </div>
+      </ng-container>
+    </section>
+
+    <hr />
+
+    <label>Add Magic Item Table</label>
+    <section
+      *ngIf="magicItemTableList$ | async as magicItemTableList"
+      class="add-magic-item"
+    >
+      <ng-container *ngIf="magicItemTableList.length; else noItems">
+        <div *ngFor="let magicItemTable of magicItemTableList; index as i">
+          <a (click)="addMagicItemTable(magicItemTable)">+Add</a>
+          <span class="shift-entry">
+            <a (click)="shiftMagicItemTable(i, 'up')">&uArr;</a>
+            <a (click)="shiftMagicItemTable(i, 'down')">&dArr;</a>
+          </span>
+          {{ magicItemTable.name }}
+        </div>
+      </ng-container>
+      <ng-template #noItems>
+        <p>No magic items configured.</p>
+      </ng-template>
+    </section>
+  </add-entry-form>
+</greg-rollable-table-template>

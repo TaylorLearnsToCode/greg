@@ -1,0 +1,137 @@
+<greg-page-template>
+  <first-content>
+    <!-- Form -->
+    <form [formGroup]="treasureTypeForm">
+      <section class="type-definition">
+        <span>
+          <label>Type:</label>
+          <input formControlName="type" type="text" />
+        </span>
+
+        <span>
+          <label>System:</label>
+          <select formControlName="system">
+            <option disabled value="">-- Select --</option>
+            <ng-container *ngIf="supportedSystems">
+              <option
+                *ngFor="let systemKey of supportedSystems"
+                [ngValue]="systemKey"
+              >
+                {{ supportedSystem(systemKey) }}
+              </option>
+            </ng-container>
+          </select>
+        </span>
+      </section>
+
+      <label class="articles">Articles</label>
+      <ng-container formArrayName="entries">
+        <section
+          class="articles"
+          *ngFor="let treasureArticle of articlesFormArray.controls; index as i"
+        >
+          <ng-container [formGroupName]="i">
+            <div class="reposition">
+              <a (click)="shiftArticle(i, 'up')">&uArr;</a>
+              <a (click)="shiftArticle(i, 'down')">&dArr;</a>
+            </div>
+            <div class="type-content">
+              <label>Name:</label>
+              <input formControlName="name" type="text" />
+
+              <label>Quantity:</label>
+              <greg-dice-rolled-form
+                [fromParentForm]="treasureArticle"
+                identifier="quantity"
+              ></greg-dice-rolled-form>
+
+              <label>Chance Of:</label>
+              <input formControlName="chanceOf" type="number" />
+
+              <label>...on:</label>
+              <greg-dice-rolled-form
+                [fromParentForm]="treasureArticle"
+                identifier="diceRolled"
+              ></greg-dice-rolled-form>
+
+              <label>Type:</label>
+              <span>
+                <select formControlName="type">
+                  <option disabled value="">-- Select --</option>
+                  <ng-container *ngIf="articleTypeKeys">
+                    <option
+                      *ngFor="let articleKey of articleTypeKeys"
+                      [ngValue]="articleKey"
+                    >
+                      {{ articleValue(articleKey) }}
+                    </option>
+                  </ng-container>
+                </select>
+              </span>
+            </div>
+            <div>
+              <a (click)="removeArticle(i)">X</a>
+            </div>
+          </ng-container>
+        </section>
+      </ng-container>
+    </form>
+
+    <section class="type-controls">
+      <a (click)="addTreasureArticle()">+ Add Treasure Article</a>
+      <hr />
+      <a (click)="saveTreasureType()">Save Treasure Type</a>
+      <a (click)="importTreasureType()">Import Treasure Type</a>
+      <input
+        #treasureTypeImport
+        accept=".{{ TREASURE_TYPE }}"
+        (change)="onTreasureTypeImport()"
+        type="file"
+      />
+      <a (click)="exportTreasureType()">Export Treasure Type</a>
+      <a (click)="clearTreasureTypeForm()">Clear Form</a>
+    </section>
+  </first-content>
+
+  <second-content>
+    <label>Magic Item Tables</label>
+    <section
+      class="magic-item-tables"
+      *ngIf="magicItemTableList$ | async as magicItemTableList"
+    >
+      <ng-container *ngIf="magicItemTableList.length; else noneSaved">
+        <div *ngFor="let table of magicItemTableList">
+          <a (click)="addReferenceTable(table)">+Add</a>
+          <span>{{ table.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+
+    <label>Saved Types</label>
+    <section *ngIf="treasureTypes$ | async as treasureTypes">
+      <ng-container *ngIf="treasureTypes.length; else noneSaved">
+        <div class="treasure-list" *ngFor="let type of treasureTypes">
+          <a (click)="editTreasureType(type)">&#x270E;</a>
+          <span>{{ type.type }} ( {{ type.system }} )</span>
+          <a (click)="deleteTreasureType(type)">X</a>
+        </div>
+      </ng-container>
+    </section>
+
+    <section class="type-controls">
+      <a (click)="importTreasureTypeList()">Import List</a>
+      <input
+        #treasureTypeListImport
+        accept=".GREG-CONFIG"
+        (change)="onTreasureTypeListImport()"
+        type="file"
+      />
+      <a (click)="exportTreasureTypeList()">Export List</a>
+      <a (click)="clearTreasureTypeList()">Clear List</a>
+    </section>
+  </second-content>
+</greg-page-template>
+
+<ng-template #noneSaved>
+  <p>None currently configured.</p>
+</ng-template>

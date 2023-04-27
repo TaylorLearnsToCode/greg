@@ -1,0 +1,20 @@
+@import '/src/assets/variables';
+
+@include hideFileInputs();
+
+div {
+  margin-top: 0.5em;
+}
+
+div > section {
+  @include baseDisplayGrid();
+  column-gap: 1em;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+section.controls {
+  text-align: center;
+}
+section.controls a {
+  margin: 0em 2em;
+}

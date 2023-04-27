@@ -1,0 +1,13 @@
+<greg-generator-page-template
+  (generateEvent)="handleGenerate($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+>
+  <result-display *ngIf="treasureMapResult">
+    <label>{{ treasureMapResult.name }}</label>
+    <ul>
+      <li *ngFor="let result of treasureMapResult.results">
+        {{ result.quantity | number : "1.0" }} {{ prettyName(result.name) }}
+      </li>
+    </ul>
+  </result-display>
+</greg-generator-page-template>

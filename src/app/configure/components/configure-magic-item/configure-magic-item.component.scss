@@ -1,0 +1,41 @@
+@import '/src/assets/variables';
+
+@include smallNumberInputs();
+@include hideFileInputs();
+
+div.item-list {
+  align-items: center;
+  column-gap: 1em;
+  display: grid;
+  grid-template-columns: 1em 1fr 1em;
+}
+
+form {
+  padding: 0.5em 0em;
+}
+form div {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(2, 1fr 2fr);
+  margin-bottom: 0.3em;
+  row-gap: 0.3em;
+}
+form section {
+  @include twoColumnLayout();
+}
+form textarea {
+  display: block;
+  width: 90%;
+}
+
+section.list-controls {
+  @include oneColumnLayout();
+}
+
+section.magic-items {
+  margin-top: 0.5em;
+}
+
+span.form-controls {
+  @include oneColumnLayout();
+  padding-top: 1em;
+}

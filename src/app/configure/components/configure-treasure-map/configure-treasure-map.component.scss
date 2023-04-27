@@ -1,0 +1,36 @@
+@import '/src/assets/variables';
+
+@include hideFileInputs();
+@include smallNumberInputs();
+
+add-entry-form > hr {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+add-entry-form > label {
+  @include indent();
+}
+
+section.add-magic-item > div {
+  @include baseDisplayGrid();
+  grid-template-columns: 2.5em 1.5em 1fr;
+  margin-bottom: 0.5em;
+}
+
+section.add-treasure-article div.map-articles-controls {
+  text-align: center;
+}
+section.add-treasure-article div.map-articles-controls a {
+  margin: 0em 2em;
+}
+section.add-treasure-article div.map-articles-list {
+  @include baseDisplayGrid();
+  grid-template-columns: 1.5em 1fr 1.5em 1.5em;
+}
+section.add-treasure-article form {
+  @include baseDisplayGrid();
+  grid-template-columns: 1fr 1.5fr 1fr;
+  column-gap: 0.5em;
+  margin-bottom: 0.5em;
+}

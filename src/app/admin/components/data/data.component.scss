@@ -1,0 +1,21 @@
+@import '/src/assets/variables';
+
+@include hideFileInputs();
+
+first-content > div {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+
+section > div {
+  height: 10em;
+  overflow-y: scroll;
+}
+
+.controls {
+  text-align: center;
+}
+.controls a {
+  margin: 0em 2em;
+}

@@ -1,0 +1,32 @@
+<greg-page-template>
+  <first-content>
+    <ng-container *ngIf="hoard$ | async as hoard; else noHoard">
+      <ul *ngIf="hoard.length; else noHoard">
+        <li *ngFor="let treasureResult of hoard">
+          {{ treasureResult.quantity }} {{ treasureResult.name }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #noHoard>
+      <p class="centered">Click <a>Generate</a> to roll a treasure hoard.</p>
+    </ng-template>
+  </first-content>
+
+  <second-content>
+    <section class="treasure-type-list">
+      <label>Treasure Types</label>
+      <ng-container
+        *ngIf="treasureTypeList$ | async as treasureTypes; else noTypes"
+      >
+        <article *ngFor="let type of treasureTypes">
+          <span class="centered">&bull;</span>
+          <span>{{ type.system }}: {{ type.type }}</span>
+          <a (click)="generateTreasure(type)">Generate</a>
+        </article>
+      </ng-container>
+      <ng-template #noTypes>
+        <p>No treasure types configured.</p>
+      </ng-template>
+    </section>
+  </second-content>
+</greg-page-template>

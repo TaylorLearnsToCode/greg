@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PageDisplayMode } from '@shared/model/page-display-mode.enum';
+import { PageDisplayMode } from '@shared/model/ui/page-display-mode.enum';
 import { cloneObject } from '@shared/utilities/common-util/common.util';
 
 @Component({

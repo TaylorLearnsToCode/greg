@@ -1,0 +1,19 @@
+@import '/src/assets/variables';
+
+add-entry-form form {
+  @include oneColumnLayout();
+}
+add-entry-form form div {
+  text-align: center
+}
+add-entry-form form div a {
+  margin: 0em 2em;
+}
+add-entry-form form span {
+  @include baseDisplayGrid();
+  grid-template-columns: 10em 1fr;
+}
+
+.indented {
+  @include indent();
+}

@@ -21,6 +21,7 @@ header div {
 
 main {
   @extend %dark-background;
+  overflow-y: scroll;
 }
 
 nav {
@@ -43,4 +44,11 @@ nav span:hover {
   background-color: $header-orange;
   color: $background-dark;
   cursor: pointer;
+}
+.child-options {
+  position: absolute;
+  z-index: 1;
+}
+.child-options > * {
+  display: block;
 }

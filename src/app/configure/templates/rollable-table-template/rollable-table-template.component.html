@@ -1,0 +1,121 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="tableForm">
+      <section class="form-head">
+        <label>Name:</label>
+        <span>
+          <input formControlName="name" type="text" />
+        </span>
+
+        <label>System:</label>
+        <span>
+          <select formControlName="system">
+            <option disabled value="">-- Select --</option>
+            <option
+              *ngFor="let systemKey of supportedSystemKeys"
+              [ngValue]="systemKey"
+            >
+              {{ supportedSystem(systemKey) }}
+            </option>
+          </select>
+        </span>
+
+        <label>Dice Pool:</label>
+        <greg-dice-rolled-form
+          [fromParentForm]="tableForm"
+          identifier="diceToRoll"
+        ></greg-dice-rolled-form>
+      </section>
+
+      <section class="form-entries">
+        <label>Entries</label>
+        <ng-container *ngIf="entriesFormArray.controls.length; else noEntries">
+          <div *ngFor="let entry of entriesFormArray.controls; index as i">
+            <span class="shift-entry">
+              <a (click)="shiftEntry(i, 'up')">&uArr;</a>
+              <a (click)="shiftEntry(i, 'down')">&dArr;</a>
+            </span>
+            <greg-bounded-range-form
+              [boundedRangeForm]="boundedRangeForm(i)"
+            ></greg-bounded-range-form>
+            {{ entryName(i) }}
+            <a (click)="removeEntry(i)">X</a>
+          </div>
+          <p>
+            To assign multiple results, assign those multiple rows the same
+            Chance Of range.
+          </p>
+        </ng-container>
+
+        <ng-template #noEntries>
+          <p>No rollable entries configured.</p>
+        </ng-template>
+      </section>
+
+      <section class="form-controls">
+        <label>Controls</label>
+        <ul>
+          <li>
+            <a (click)="importFile()">Import</a>
+          </li>
+          <li style="padding-bottom: 0.5em">
+            <a (click)="exportFile()">Export</a>
+          </li>
+          <li>
+            <a (click)="fillChanceOf('high')">Fill High</a>
+          </li>
+          <li style="padding-bottom: 0.5em">
+            <a (click)="fillChanceOf('low')">Fill low</a>
+          </li>
+          <li>
+            <a (click)="saveTableForm()">Save</a>
+          </li>
+          <li>
+            <a (click)="clearTableForm()">Clear</a>
+          </li>
+        </ul>
+        <input
+          #importTableInput
+          [accept]="acceptFileType"
+          (change)="onImportFile()"
+          type="file"
+        />
+      </section>
+    </form>
+  </first-content>
+
+  <second-content>
+    <ng-content select="add-entry-form"></ng-content>
+
+    <hr />
+
+    <label>Saved Tables</label>
+    <section
+      [ngClass]="savedTableClasses"
+      *ngIf="savedTableList$ | async as savedTableList"
+    >
+      <ng-container *ngIf="savedTableList.length; else noTables">
+        <div
+          class="saved-entry"
+          *ngFor="let table of savedTableList; index as i"
+        >
+          <a (click)="nestTable(table)">+Add</a>
+          <span class="shift-entry">
+            <a (click)="shiftTable(i, 'up')">&uArr;</a>
+            <a (click)="shiftTable(i, 'down')">&dArr;</a>
+          </span>
+          <span> {{ table.name }} ( {{ table.system }} ) </span>
+          <a class="edit-pencil" (click)="editSavedTable(table)">&#x270E;</a>
+          <a (click)="deleteSavedTable(table)">X</a>
+        </div>
+      </ng-container>
+
+      <div class="saved-table-controls">
+        <a (click)="clearSavedTables()">Clear</a>
+      </div>
+    </section>
+    <ng-template #noTables>
+      <p>No tables currently configured.</p>
+    </ng-template>
+  </second-content>
+</greg-page-template>

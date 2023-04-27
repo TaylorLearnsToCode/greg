@@ -1,0 +1,83 @@
+@import '/src/assets/variables';
+
+@include hideFileInputs();
+
+first-content form {
+  @include baseDisplayGrid();
+  grid-template-areas: 
+    "top top"
+    "left right";
+  grid-template-columns: repeat(2, 1fr);
+}
+
+first-content label {
+  padding: 0em 0.5em;
+}
+
+hr {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+second-content label {
+  @include indent();
+}
+
+section.form-controls {
+  @include oneColumnLayout();
+  grid-area: right;
+}
+section.form-controls label {
+  padding: 0;
+}
+section.form-controls ul {
+  justify-self: center;
+  margin: 0;
+  padding: 0;
+}
+section.form-controls ul a {
+  margin-left: 1em;
+}
+
+section.form-entries {
+  grid-area: left;
+}
+section.form-entries div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 6em 1fr 1em;
+  margin: 0.3em 0em;
+}
+section.form-entries label {
+  @include indent();
+}
+section.form-entries p {
+  font-size: small;
+  font-style: italic;
+  text-align: center;
+}
+
+section.form-head {
+  @include baseDisplayGrid();
+  grid-area: top;
+  grid-template-columns: repeat(2, 1fr 2fr);
+  margin-bottom: 1em;
+}
+
+section.saved-tables div.saved-entry {
+  @include baseDisplayGrid();
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+}
+section.nestable div.saved-entry {
+ grid-template-columns: 2.5em 1.5em 1fr 1.5em 1.5em;
+}
+section.not-nestable div.saved-entry {
+  grid-template-columns: 1.5em 1fr 1.5em 1.5em;
+}
+
+section.saved-tables div.saved-table-controls {
+  text-align: center;
+}
+section.saved-tables div.saved-table-controls a {
+  margin: 0em 2em;
+}

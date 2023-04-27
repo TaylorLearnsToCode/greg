@@ -1,0 +1,74 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="magicItemForm">
+      <div>
+        <label>Name:</label>
+        <span>
+          <input formControlName="name" type="text" />
+        </span>
+
+        <label>Quantity:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="quantityForm"
+        ></greg-dice-rolled-form>
+
+        <label>Chance Of:</label>
+        <input formControlName="chanceOf" type="number" />
+
+        <label>...on:</label>
+        <greg-dice-rolled-form
+          [diceRolledForm]="diceRolledForm"
+        ></greg-dice-rolled-form>
+      </div>
+
+      <section>
+        <span>
+          <label>Notes, Function, or Description:</label>
+          <textarea formControlName="notes"></textarea>
+        </span>
+
+        <span class="form-controls">
+          <a (click)="saveItem()">Save Magic Item</a>
+          <a (click)="importMagicItem()">Import Magic Item</a>
+          <input
+            #magicItemImport
+            accept=".{{ MAGIC_ITEM }}"
+            (change)="onMagicItemImport()"
+            type="file"
+          />
+          <a (click)="exportMagicItem()">Export Magic Item</a>
+          <a (click)="clearForm()">Clear Form</a>
+        </span>
+      </section>
+    </form>
+  </first-content>
+
+  <second-content>
+    <section
+      class="magic-items"
+      *ngIf="magicItemList$ | async as magicItemList"
+    >
+      <ng-container *ngIf="magicItemList.length; else noItems">
+        <div class="item-list" *ngFor="let item of magicItemList">
+          <a (click)="editMagicItem(item)">&#x270E;</a>
+          <span>{{ item.name }}</span>
+          <a (click)="deleteMagicItem(item)">X</a>
+        </div>
+      </ng-container>
+      <ng-template #noItems>
+        <p>No magic items have been configured.</p>
+      </ng-template>
+    </section>
+    <section class="list-controls">
+      <a (click)="importMagicItemList()">Import List</a>
+      <input
+        #magicItemListImport
+        accept=".GREG-CONFIG"
+        (change)="onMagicItemListImport()"
+        type="file"
+      />
+      <a (click)="exportMagicItemList()">Export List</a>
+      <a (click)="clearMagicItemList()">Clear List</a>
+    </section>
+  </second-content>
+</greg-page-template>

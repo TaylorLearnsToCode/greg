@@ -2,7 +2,7 @@
 
 article {
   background-color: $background-light;
-  padding: 0em 0.5em;
+  padding: 0.5em;
 }
 article.first-content {
   grid-area: first;
@@ -27,4 +27,5 @@ section.page-template--stacked {
 section.page-template--double {
   grid-template-areas:
     "first second";
+  grid-template-columns: repeat(2, 1fr);
 }
