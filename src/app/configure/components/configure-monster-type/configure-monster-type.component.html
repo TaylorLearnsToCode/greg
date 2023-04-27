@@ -1,0 +1,19 @@
+<greg-quantifiable-item-form-template
+  (editSavedItemEvent)="handleEditItemEvent($event)"
+  [itemForm]="monsterTypeForm"
+  [persistenceType]="PERSISTENCE_TYPE"
+  quantityLabel="No. Appearing"
+>
+  <supplemental-fields-form>
+    <form [formGroup]="monsterTypeForm">
+      <label>Treasure Type:</label>
+      <input formControlName="treasureType" type="string" />
+
+      <label>Chance in Lair:</label>
+      <span>
+        <input formControlName="pctInLair" type="number" />
+        %
+      </span>
+    </form>
+  </supplemental-fields-form>
+</greg-quantifiable-item-form-template>

@@ -1,0 +1,51 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="itemForm">
+      <label>Name:</label>
+      <input formControlName="name" type="text" />
+
+      <label>{{ quantityLabel }}:</label>
+      <greg-dice-rolled-form
+        [diceRolledForm]="quantityForm"
+      ></greg-dice-rolled-form>
+    </form>
+
+    <ng-content select="supplemental-fields-form"></ng-content>
+
+    <hr />
+
+    <section class="item-form-controls">
+      <a (click)="saveItem()">Save</a>
+      <a (click)="clearItemForm()">Clear</a>
+    </section>
+  </first-content>
+
+  <second-content>
+    <section class="saved-items-list" *ngIf="savedItem$ | async as savedItems">
+      <label>Saved Items</label>
+
+      <ng-container *ngIf="savedItems.length; else noItems">
+        <div *ngFor="let item of savedItems; index as i">
+          <span class="shift-entry">
+            <a (click)="shiftEntry(i, 'up')">&uArr;</a>
+            <a (click)="shiftEntry(i, 'down')">&dArr;</a>
+          </span>
+          <span>
+            {{ item.name }}
+          </span>
+          <a class="edit-pencil" (click)="editSavedItem(item)">&#x270E;</a>
+          <a (click)="removeEntry(item)">X</a>
+        </div>
+      </ng-container>
+
+      <section class="saved-items-controls">
+        <a (click)="importSavedItems()">Import</a>
+        <a (click)="exportSavedItems()">Export</a>
+        <a (click)="clearSavedItems()">Clear All</a>
+      </section>
+    </section>
+    <ng-template #noItems>
+      <p>None currently saved.</p>
+    </ng-template>
+  </second-content>
+</greg-page-template>
