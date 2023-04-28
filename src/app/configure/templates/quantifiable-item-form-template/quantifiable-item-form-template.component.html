@@ -8,6 +8,14 @@
       <greg-dice-rolled-form
         [diceRolledForm]="quantityForm"
       ></greg-dice-rolled-form>
+
+      <label>System:</label>
+      <select formControlName="system">
+        <option disabled value="">-- Select --</option>
+        <option [value]="key" *ngFor="let key of supportedSystemKeys">
+          {{ supportedSystem(key) }}
+        </option>
+      </select>
     </form>
 
     <ng-content select="supplemental-fields-form"></ng-content>
@@ -30,9 +38,7 @@
             <a (click)="shiftEntry(i, 'up')">&uArr;</a>
             <a (click)="shiftEntry(i, 'down')">&dArr;</a>
           </span>
-          <span>
-            {{ item.name }}
-          </span>
+          <span> {{ item.name }} ({{ item.system }}) </span>
           <a class="edit-pencil" (click)="editSavedItem(item)">&#x270E;</a>
           <a (click)="removeEntry(item)">X</a>
         </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -152,6 +153,9 @@ export class DataManagerService {
         break;
       case this.PERSISTENCE_TYPES.magicWeaponPowerTable:
         this.persistMagicWeaponPowerTable(object as WeaponPowerTable);
+        break;
+      case this.PERSISTENCE_TYPES.monsterType:
+        this.persistMonsterType(object as MonsterType);
         break;
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
@@ -373,6 +377,17 @@ export class DataManagerService {
         this.persist(configKey, item);
       }
     }
+  }
+
+  private persistMonsterType(type: MonsterType): void {
+    const monsters: MonsterType[] = this.retrieve<MonsterType[]>(
+      this.PERSISTENCE_TYPES.monsterType
+    );
+    insertOrReplace(type, monsters, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.monsterType,
+      JSON.stringify(monsters)
+    );
   }
 
   /**

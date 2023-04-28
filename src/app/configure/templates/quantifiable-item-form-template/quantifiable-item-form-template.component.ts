@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractQuantifiableItem } from '@shared/model/framework/abstract-quantifiable-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
@@ -23,7 +24,10 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
     this._itemIdentifiers = identifiers;
   }
   get itemIdentifiers(): string {
-    return doesExist(this._itemIdentifiers) ? this._itemIdentifiers : 'name';
+    return ''.concat(
+      'system',
+      doesExist(this._itemIdentifiers) ? `,${this._itemIdentifiers}` : ',name'
+    );
   }
   @Input() itemForm: FormGroup;
   @Input() persistenceType: string;
@@ -39,9 +43,18 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
   @ViewChild('savedItemsImportInput') savedItemsImportInputRef: ElementRef;
 
   savedItem$: Observable<AbstractQuantifiableItem[]>;
+  selectedSystem: SUPPORTED_SYSTEMS;
+  get supportedSystemKeys(): string[] {
+    return Object.keys(this.SUPPORTED_SYSTEMS);
+  }
+  supportedSystem(key: string): string {
+    return (this.SUPPORTED_SYSTEMS as any)[key];
+  }
   get quantityForm(): FormGroup {
     return this.itemForm.get('quantity') as FormGroup;
   }
+
+  private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
   private _itemIdentifiers: string;
   private _quantityLabel: string;
@@ -55,6 +68,7 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
     this.savedItem$ = this.dataService.dataState$.pipe(
       map((state) => state.monsterTypes)
     );
+    this.selectedSystem = '' as SUPPORTED_SYSTEMS;
   }
 
   /** Resets the parent item form via the edit handler */
