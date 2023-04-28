@@ -34,6 +34,12 @@
               <ng-container [formGroupName]="i">
                 <span>&bull;</span>
 
+                <label>Chance</label>
+                <span>
+                  <input formControlName="pctChance" type="number" />
+                  %
+                </span>
+
                 <label>No.</label>
                 <greg-dice-rolled-form
                   [diceRolledForm]="consortQuantityForm(i)"

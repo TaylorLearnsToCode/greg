@@ -19,5 +19,15 @@ export class MonsterType extends AbstractQuantifiableItem {
   constructor(type?: any) {
     super();
     constructInstance(this, type);
+    this.handleConsorts();
+    this.handleRetinue();
+  }
+
+  private handleConsorts() {
+    this.consorts = this.consorts.map((c) => new MonsterConsort(c));
+  }
+
+  private handleRetinue() {
+    this.retinue = this.retinue.map((r) => new MonsterType(r));
   }
 }
