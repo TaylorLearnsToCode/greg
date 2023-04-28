@@ -2,9 +2,32 @@
 
 @include smallNumberInputs();
 
-supplemental-fields-form form {
+hr {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+section.consorts div {
+  @include baseDisplayGrid();
+  column-gap: 1em;
+  grid-template-columns: 1em 1em 1fr 3em 1fr 4em 4em 1em;
+  margin-bottom: 0.25em;
+}
+
+section.monster-form {
   @include baseDisplayGrid();
   column-gap: 1em;
   grid-template-columns: repeat(2, 1fr 2fr);
   margin-top: 0.25em;
+}
+
+section.monster-entourage > section {
+  text-align: center;
+}
+
+section.retinue div {
+  @include baseDisplayGrid();
+  column-gap: 1em;
+  grid-template-columns: 1em 3em 1fr 1em 1fr 1em;
+  margin-bottom: 0.25em;
 }

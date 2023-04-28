@@ -6,22 +6,81 @@
 >
   <supplemental-fields-form>
     <form [formGroup]="monsterTypeForm">
-      <label>Treasure Type:</label>
-      <select
-        formControlName="treasureType"
-        *ngIf="treasureType$ | async as treasureTypes"
-      >
-        <option disabled value="">-- Select --</option>
-        <option *ngFor="let type of treasureTypes" [value]="type.type">
-          {{ type.type }} ({{ type.system }})
-        </option>
-      </select>
+      <section class="monster-form">
+        <label>Treasure Type:</label>
+        <select
+          formControlName="treasureType"
+          *ngIf="treasureType$ | async as treasureTypes"
+        >
+          <option disabled value="">-- Select --</option>
+          <option *ngFor="let type of treasureTypes" [value]="type.type">
+            {{ type.type }} ({{ type.system }})
+          </option>
+        </select>
 
-      <label>Chance in Lair:</label>
-      <span>
-        <input formControlName="pctInLair" type="number" />
-        %
-      </span>
+        <label>Chance in Lair:</label>
+        <span>
+          <input formControlName="pctInLair" type="number" />
+          %
+        </span>
+      </section>
+
+      <hr />
+
+      <section class="monster-entourage">
+        <section class="consorts" formArrayName="consorts">
+          <ng-container *ngIf="consortsFormArray.controls.length; else nil">
+            <div *ngFor="let consort of consortsFormArray.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <span>&bull;</span>
+
+                <label>No.</label>
+                <greg-dice-rolled-form
+                  [diceRolledForm]="consortQuantityForm(i)"
+                ></greg-dice-rolled-form>
+
+                <label>Name:</label>
+                <input formControlName="name" type="text" />
+
+                <label>Every...</label>
+                <input formControlName="every" type="number" />
+
+                <a (click)="removeConsort(i)">X</a>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <a (click)="addConsort()">+Add Consort</a>
+        </section>
+
+        <hr />
+
+        <section class="retinue" formArrayName="retinue">
+          <ng-container *ngIf="retinueFormArray.controls.length; else nil">
+            <div *ngFor="let entry of retinueFormArray.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <span>&bull;</span>
+
+                <label>Name:</label>
+                <input formControlName="name" type="text" />
+
+                <label>No.</label>
+                <greg-dice-rolled-form
+                  [diceRolledForm]="retinueQuantityForm(i)"
+                ></greg-dice-rolled-form>
+
+                <a (click)="removeRetinue(i)">X</a>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <a (click)="addRetinue()">+Add Retinue</a>
+        </section>
+      </section>
     </form>
   </supplemental-fields-form>
 </greg-quantifiable-item-form-template>
+
+<ng-template #nil>
+  <section>~</section>
+</ng-template>
