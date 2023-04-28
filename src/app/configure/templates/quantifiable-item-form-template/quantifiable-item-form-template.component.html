@@ -29,6 +29,19 @@
   </first-content>
 
   <second-content>
+    <section class="default-system">
+      <label>Default System:</label>
+      <select
+        (change)="onDefaultSystemSelect($event)"
+        [ngModel]="selectedSystem"
+      >
+        <option disabled value="">-- Select --</option>
+        <option [value]="key" *ngFor="let key of supportedSystemKeys">
+          {{ supportedSystem(key) }}
+        </option>
+      </select>
+    </section>
+
     <section class="saved-items-list" *ngIf="savedItem$ | async as savedItems">
       <label>Saved Items</label>
 
