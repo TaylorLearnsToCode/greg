@@ -24,6 +24,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         routePath: 'monster-entry',
       } as NavRoute,
       {
+        menuLabel: 'Configure Monster Encounter List',
+        routePath: 'monster-encounter-list',
+      } as NavRoute,
+      {
         menuLabel: 'Configure Treasure Map',
         routePath: 'treasure-map',
       } as NavRoute,

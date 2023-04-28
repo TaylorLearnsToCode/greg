@@ -1,0 +1,14 @@
+@import '/src/assets/variables';
+
+add-entry-form label {
+  @include indent();
+}
+
+add-entry-form section.saved-monsters {
+  @include twoColumnLayout();
+}
+add-entry-form section.saved-monsters div {
+  @include baseDisplayGrid();
+  column-gap: 0.5em;
+  grid-template-columns: 3em 1fr;
+}
