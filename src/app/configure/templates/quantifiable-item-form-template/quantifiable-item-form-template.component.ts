@@ -73,7 +73,9 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
 
   /** Resets the parent item form via the edit handler */
   clearItemForm(): void {
-    this.editSavedItem({} as AbstractQuantifiableItem);
+    this.editSavedItem({
+      system: this.selectedSystem,
+    } as AbstractQuantifiableItem);
   }
 
   /** Removes all configured items from local storage */
@@ -102,6 +104,12 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
   /** Imports a list of saved entries of the configured type into local storage */
   importSavedItems(): void {
     this.savedItemsImportInput.click();
+  }
+
+  /** When the default system is changed from the UI, update the item form */
+  onDefaultSystemSelect(event: any): void {
+    this.selectedSystem = event.target.value;
+    this.itemForm.get('system')?.setValue(this.selectedSystem);
   }
 
   /** Handler for import event */
