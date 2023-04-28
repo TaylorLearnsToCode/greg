@@ -10,6 +10,8 @@ export const PERSISTENCE_TYPES = {
   magicWeaponPowerTable: 'greg-weapon-power-table',
   /** A singular monster entity */
   monsterType: 'greg-monster-type',
+  /** A collection of monsters encounterable at random and rollable to generate */
+  monsterEncounterList: 'greg-monster-encounter-list',
   /** Treasure article entries for use in Treasure Types */
   treasureArticle: 'greg-treasure-article',
   /** Configurations for generating treasure maps: including maps to magic items */
