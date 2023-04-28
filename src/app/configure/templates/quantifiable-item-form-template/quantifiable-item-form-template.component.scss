@@ -17,6 +17,13 @@ second-content label {
   @include indent();
 }
 
+section.default-system {
+  float: right;
+}
+section.default-system label {
+  margin-right: 0.5em;
+}
+
 section.item-form-controls,
 section.saved-items-controls {
   text-align: center;
