@@ -7,7 +7,15 @@
   <supplemental-fields-form>
     <form [formGroup]="monsterTypeForm">
       <label>Treasure Type:</label>
-      <input formControlName="treasureType" type="string" />
+      <select
+        formControlName="treasureType"
+        *ngIf="treasureType$ | async as treasureTypes"
+      >
+        <option disabled value="">-- Select --</option>
+        <option *ngFor="let type of treasureTypes" [value]="type.type">
+          {{ type.type }} ({{ type.system }})
+        </option>
+      </select>
 
       <label>Chance in Lair:</label>
       <span>
