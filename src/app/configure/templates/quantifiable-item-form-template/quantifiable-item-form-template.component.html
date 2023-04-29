@@ -28,7 +28,7 @@
     </section>
   </first-content>
 
-  <second-content>
+  <second-content *ngIf="savedItem$ | async as savedItems">
     <section class="default-system">
       <label>Default System:</label>
       <select
@@ -42,9 +42,8 @@
       </select>
     </section>
 
-    <section class="saved-items-list" *ngIf="savedItem$ | async as savedItems">
-      <label>Saved Items</label>
-
+    <label class="saved-items-label">Saved Items</label>
+    <section class="saved-items-list">
       <ng-container *ngIf="savedItems.length; else noItems">
         <div *ngFor="let item of savedItems; index as i">
           <span class="shift-entry">
@@ -56,19 +55,20 @@
           <a (click)="removeEntry(item)">X</a>
         </div>
       </ng-container>
-
-      <section class="saved-items-controls">
-        <a (click)="importSavedItems()">Import</a>
-        <input
-          #savedItemsImportInput
-          accept=".{{ persistenceType }}"
-          (change)="onSavedItemImport()"
-          type="file"
-        />
-        <a (click)="exportSavedItems(savedItems)">Export</a>
-        <a (click)="clearSavedItems()">Clear All</a>
-      </section>
     </section>
+
+    <section class="saved-items-controls">
+      <a (click)="importSavedItems()">Import</a>
+      <input
+        #savedItemsImportInput
+        accept=".{{ persistenceType }}"
+        (change)="onSavedItemImport()"
+        type="file"
+      />
+      <a (click)="exportSavedItems(savedItems)">Export</a>
+      <a (click)="clearSavedItems()">Clear All</a>
+    </section>
+
     <ng-template #noItems>
       <p>None currently saved.</p>
     </ng-template>
