@@ -13,12 +13,24 @@ hr {
   margin-top: 1em;
 }
 
+second-content {
+  @include baseDisplayGrid();
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "left right"
+    "items items"
+    "controls controls";
+}
+
 second-content label {
   @include indent();
 }
+second-content label.saved-items-label {
+  grid-area: left;
+}
 
 section.default-system {
-  float: right;
+  grid-area: right;
 }
 section.default-system label {
   margin-right: 0.5em;
@@ -33,8 +45,18 @@ section.saved-items-controls a {
   margin: 0em 2em;
 }
 
+section.saved-items-controls {
+  grid-area: controls;
+}
+
+section.saved-items-list{
+  @include twoColumnLayout();
+  column-gap: 0.5em;
+  grid-area: items;
+  row-gap: 0;
+}
 section.saved-items-list div {
   @include baseDisplayGrid();
   grid-template-columns: 1.5em 1fr 1.5em 1.5em;
-  margin: 0.5em 0em;
+  margin: 0.25em 0em;
 }
