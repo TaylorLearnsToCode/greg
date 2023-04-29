@@ -15,6 +15,7 @@ import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounde
 import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
 import { QuantifiableItemFormTemplateComponent } from './templates/quantifiable-item-form-template/quantifiable-item-form-template.component';
 import { RollableTableTemplateComponent } from './templates/rollable-table-template/rollable-table-template.component';
+import { TreasureArticleFormComponent } from './templates/treasure-article-form/treasure-article-form.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,7 @@ const routes: Routes = [
     ConfigureMonsterTypeComponent,
     QuantifiableItemFormTemplateComponent,
     ConfigureMonsterEncounterListComponent,
+    TreasureArticleFormComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
