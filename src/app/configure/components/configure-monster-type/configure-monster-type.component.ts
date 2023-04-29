@@ -71,11 +71,24 @@ export class ConfigureMonsterTypeComponent
   }
 
   addTreasurePerCap(): void {
-    this.treasurePerCapFormArray.push(
-      buildFormFromObject(
-        new TreasureArticle(this.treasurePerCapForm.value)
-      ) as FormControl
-    );
+    const index: number = (
+      this.treasurePerCapFormArray.value as TreasureArticle[]
+    ).findIndex((val) => val.name === this.treasurePerCapForm.value.name);
+    if (index !== -1) {
+      this.treasurePerCapFormArray
+        .at(index)
+        .patchValue(
+          buildFormFromObject(
+            new TreasureArticle(this.treasurePerCapForm.value)
+          ).value
+        );
+    } else {
+      this.treasurePerCapFormArray.push(
+        buildFormFromObject(
+          new TreasureArticle(this.treasurePerCapForm.value)
+        ) as FormControl
+      );
+    }
     this.resetTreasurePerCapForm();
   }
 
@@ -99,15 +112,19 @@ export class ConfigureMonsterTypeComponent
     this.retinueFormArray.removeAt(index);
   }
 
+  removeTreasurePerCap(index: number): void {
+    this.treasurePerCapFormArray.removeAt(index);
+  }
+
   resetForm(monster?: MonsterType): void {
     this.monsterTypeForm = buildFormFromObject(
       new MonsterType(monster)
     ) as FormGroup;
   }
 
-  resetTreasurePerCapForm(): void {
+  resetTreasurePerCapForm(treasure?: TreasureArticle): void {
     this.treasurePerCapForm = buildFormFromObject(
-      new TreasureArticle()
+      new TreasureArticle(treasure)
     ) as FormGroup;
   }
 }
