@@ -31,47 +31,11 @@
           *ngFor="let treasureArticle of articlesFormArray.controls; index as i"
         >
           <ng-container [formGroupName]="i">
-            <div class="reposition">
-              <a (click)="shiftArticle(i, 'up')">&uArr;</a>
-              <a (click)="shiftArticle(i, 'down')">&dArr;</a>
-            </div>
-            <div class="type-content">
-              <label>Name:</label>
-              <input formControlName="name" type="text" />
-
-              <label>Quantity:</label>
-              <greg-dice-rolled-form
-                [fromParentForm]="treasureArticle"
-                identifier="quantity"
-              ></greg-dice-rolled-form>
-
-              <label>Chance Of:</label>
-              <input formControlName="chanceOf" type="number" />
-
-              <label>...on:</label>
-              <greg-dice-rolled-form
-                [fromParentForm]="treasureArticle"
-                identifier="diceRolled"
-              ></greg-dice-rolled-form>
-
-              <label>Type:</label>
-              <span>
-                <select formControlName="type">
-                  <option disabled value="">-- Select --</option>
-                  <ng-container *ngIf="articleTypeKeys">
-                    <option
-                      *ngFor="let articleKey of articleTypeKeys"
-                      [ngValue]="articleKey"
-                    >
-                      {{ articleValue(articleKey) }}
-                    </option>
-                  </ng-container>
-                </select>
-              </span>
-            </div>
-            <div>
-              <a (click)="removeArticle(i)">X</a>
-            </div>
+            <greg-treasure-article-form
+              [articleForm]="treasureArticle"
+              (removeArticleEvent)="removeArticle(i)"
+              (shiftArticleEvent)="shiftArticle(i, $event)"
+            ></greg-treasure-article-form>
           </ng-container>
         </section>
       </ng-container>
