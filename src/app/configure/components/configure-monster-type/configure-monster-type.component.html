@@ -33,13 +33,20 @@
           >
             <div
               class="treasure-per-cap-entries"
-              *ngFor="let control of treasurePerCapFormArray.controls"
+              *ngFor="
+                let control of treasurePerCapFormArray.controls;
+                index as i
+              "
             >
               <span>&bull;</span>
               <span>{{ control.value.name }}</span>
               <!-- TODO Do these next -->
-              <a class="edit-pencil">&#x270E;</a>
-              <a>X</a>
+              <a
+                class="edit-pencil"
+                (click)="resetTreasurePerCapForm(control.value)"
+                >&#x270E;</a
+              >
+              <a (click)="removeTreasurePerCap(i)">X</a>
             </div>
           </ng-container>
         </div>

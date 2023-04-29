@@ -29,6 +29,16 @@
   </first-content>
 
   <second-content *ngIf="savedItem$ | async as savedItems">
+    <div
+      class="supplemental-lists"
+      *ngIf="includeSupplementalList"
+      [ngStyle]="listContainerStyles"
+    >
+      <ng-content select="supplemental-lists-form"></ng-content>
+    </div>
+
+    <hr *ngIf="includeSupplementalList" />
+
     <div class="common-list">
       <section class="default-system">
         <label>Default System:</label>
@@ -69,15 +79,6 @@
         <a (click)="exportSavedItems(savedItems)">Export</a>
         <a (click)="clearSavedItems()">Clear All</a>
       </section>
-    </div>
-
-    <div
-      class="supplemental-lists"
-      *ngIf="includeSupplementalList"
-      [ngStyle]="listContainerStyles"
-    >
-      <hr />
-      <ng-content select="supplemental-lists-form"></ng-content>
     </div>
   </second-content>
 </greg-page-template>
