@@ -30,7 +30,6 @@ export class GenerateTreasureService {
   }
 
   generateTreasureFromTreasureMap(map: ReferenceEntryTable): TreasureMapResult {
-    /* TODO add magic item support */
     this.checkAndSetGeneratorService(map.system);
     const returnMap = this.generatorService.generateTreasureMapResult(map);
     return doesExist(returnMap)
