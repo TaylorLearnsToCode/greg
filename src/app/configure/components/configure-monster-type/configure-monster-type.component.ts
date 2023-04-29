@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { QuantifiableItemComponent } from '@configure/model/quantifiable-item-component.interface';
+import { TreasureArticleForm } from '@configure/model/treasure-article-form.interface';
 import { MonsterConsort } from '@shared/model/monster/monster-consort.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
+import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
@@ -15,7 +17,7 @@ import { Observable, map } from 'rxjs';
   styleUrls: ['./configure-monster-type.component.scss'],
 })
 export class ConfigureMonsterTypeComponent
-  implements OnInit, QuantifiableItemComponent
+  implements OnInit, QuantifiableItemComponent, TreasureArticleForm
 {
   readonly PERSISTENCE_TYPE = PERSISTENCE_TYPES.monsterType;
 
@@ -32,6 +34,10 @@ export class ConfigureMonsterTypeComponent
   retinueQuantityForm(index: number): FormGroup {
     return this.retinueFormArray.at(index).get('quantity') as FormGroup;
   }
+  treasurePerCapForm: FormGroup;
+  get treasurePerCapFormArray(): FormArray {
+    return this.monsterTypeForm.get('treasurePerCap') as FormArray;
+  }
   treasureType$: Observable<TreasureType[]>;
 
   constructor(private dataService: DataManagerService) {}
@@ -41,6 +47,7 @@ export class ConfigureMonsterTypeComponent
       map((state) => state.treasureTypes)
     );
     this.resetForm();
+    this.resetTreasurePerCapForm();
   }
 
   addConsort(): void {
@@ -63,8 +70,25 @@ export class ConfigureMonsterTypeComponent
     );
   }
 
+  addTreasurePerCap(): void {
+    this.treasurePerCapFormArray.push(
+      buildFormFromObject(
+        new TreasureArticle(this.treasurePerCapForm.value)
+      ) as FormControl
+    );
+    this.resetTreasurePerCapForm();
+  }
+
   handleEditItemEvent(monster: MonsterType): void {
     this.resetForm(monster);
+  }
+
+  handleRemoveArticle(identifier: any): void {
+    throw new Error('Method not implemented.');
+  }
+
+  handleShiftArticle(identifier: any, direction: string): void {
+    throw new Error('Method not implemented.');
   }
 
   removeConsort(index: number): void {
@@ -78,6 +102,12 @@ export class ConfigureMonsterTypeComponent
   resetForm(monster?: MonsterType): void {
     this.monsterTypeForm = buildFormFromObject(
       new MonsterType(monster)
+    ) as FormGroup;
+  }
+
+  resetTreasurePerCapForm(): void {
+    this.treasurePerCapForm = buildFormFromObject(
+      new TreasureArticle()
     ) as FormGroup;
   }
 }

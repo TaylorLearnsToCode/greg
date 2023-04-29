@@ -1,6 +1,7 @@
 <greg-quantifiable-item-form-template
   (editSavedItemEvent)="handleEditItemEvent($event)"
   [itemForm]="monsterTypeForm"
+  [includeSupplementalList]="true"
   [persistenceType]="PERSISTENCE_TYPE"
   quantityLabel="No. Appearing"
 >
@@ -24,6 +25,24 @@
           <input formControlName="pctInLair" type="number" />
           %
         </span>
+
+        <label>Per Cap:</label>
+        <div>
+          <ng-container
+            *ngIf="treasurePerCapFormArray.controls.length; else nil"
+          >
+            <div
+              class="treasure-per-cap-entries"
+              *ngFor="let control of treasurePerCapFormArray.controls"
+            >
+              <span>&bull;</span>
+              <span>{{ control.value.name }}</span>
+              <!-- TODO Do these next -->
+              <a class="edit-pencil">&#x270E;</a>
+              <a>X</a>
+            </div>
+          </ng-container>
+        </div>
       </section>
 
       <hr />
@@ -86,6 +105,21 @@
       </section>
     </form>
   </supplemental-fields-form>
+
+  <supplemental-lists-form>
+    <label class="indent">Add Treasure Per Capita</label>
+    <form class="per-cap-treasure-form">
+      <greg-treasure-article-form
+        [articleForm]="treasurePerCapForm"
+        (removeArticleEvent)="handleRemoveArticle(0)"
+        (shiftArticleEvent)="handleShiftArticle(0, $event)"
+      ></greg-treasure-article-form>
+    </form>
+    <section class="per-cap-form-controls">
+      <a (click)="addTreasurePerCap()">+Add</a>
+      <a (click)="resetTreasurePerCapForm()">Reset</a>
+    </section>
+  </supplemental-lists-form>
 </greg-quantifiable-item-form-template>
 
 <ng-template #nil>

@@ -4,27 +4,29 @@ import { TreasureArticle } from '../treasure/treasure-article.model';
 import { MonsterConsort } from './monster-consort.model';
 
 export class MonsterType extends AbstractQuantifiableItem {
-  pctInLair: number = 0;
-  /** The configured type of treasure found in the creature's lair */
-  treasureType: string = '';
-  /** The treasure that the monster carries with it outside the lair */
-  treasurePerCap: TreasureArticle[] = [];
   /**
    * Leaders, bruisers, special units which will occur proportionally to the size of the
    * monster encounter. E.G. - "One sargeant per ten soldiers"
    */
   consorts: MonsterConsort[] = [];
+  /** The percent chance for the monster to be in its lair when encountered */
+  pctInLair: number = 0;
   /**
    * Static monsters accompanying an encounter. E.G. - "A priest will always be accompanied
    * by 2-12 acolytes"
    */
   retinue: MonsterType[] = [];
+  /** The configured type of treasure found in the creature's lair */
+  treasureType: string = '';
+  /** The treasure that the monster carries with it outside the lair */
+  treasurePerCap: TreasureArticle[] = [];
 
   constructor(type?: any) {
     super();
     constructInstance(this, type);
     this.handleConsorts();
     this.handleRetinue();
+    this.handleTreasurePerCap();
   }
 
   private handleConsorts() {
@@ -33,5 +35,11 @@ export class MonsterType extends AbstractQuantifiableItem {
 
   private handleRetinue() {
     this.retinue = this.retinue.map((r) => new MonsterType(r));
+  }
+
+  private handleTreasurePerCap() {
+    this.treasurePerCap = this.treasurePerCap.map(
+      (t) => new TreasureArticle(t)
+    );
   }
 }

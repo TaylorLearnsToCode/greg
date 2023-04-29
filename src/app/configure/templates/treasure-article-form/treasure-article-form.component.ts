@@ -9,6 +9,8 @@ import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
 })
 export class TreasureArticleFormComponent {
   @Input() articleForm: FormGroup;
+  // @TODO - implement this: if false, don't do shift or delete
+  @Input() isInCollection: boolean;
 
   @Output() removeArticleEvent = new EventEmitter();
   @Output() shiftArticleEvent = new EventEmitter();
