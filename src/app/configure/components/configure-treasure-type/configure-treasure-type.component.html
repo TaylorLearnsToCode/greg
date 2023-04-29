@@ -33,8 +33,8 @@
           <ng-container [formGroupName]="i">
             <greg-treasure-article-form
               [articleForm]="treasureArticle"
-              (removeArticleEvent)="removeArticle(i)"
-              (shiftArticleEvent)="shiftArticle(i, $event)"
+              (removeArticleEvent)="handleRemoveArticle(i)"
+              (shiftArticleEvent)="handleShiftArticle(i, $event)"
             ></greg-treasure-article-form>
           </ng-container>
         </section>

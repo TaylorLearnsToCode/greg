@@ -2,9 +2,22 @@
 
 @include smallNumberInputs();
 
+div.treasure-per-cap-entries {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr repeat(2, 1.5em);
+}
+
 hr {
   margin-bottom: 1em;
   margin-top: 1em;
+}
+
+label.indent {
+  @include indent();
+}
+
+form.per-cap-treasure-form {
+  margin: 0.5em 0em;
 }
 
 section.consorts div {
@@ -23,6 +36,13 @@ section.monster-form {
 
 section.monster-entourage > section {
   text-align: center;
+}
+
+section.per-cap-form-controls {
+  text-align: center;
+}
+section.per-cap-form-controls a {
+  margin: 0em 2em;
 }
 
 section.retinue div {
