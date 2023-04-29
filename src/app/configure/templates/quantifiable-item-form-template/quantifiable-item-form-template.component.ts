@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -10,16 +11,19 @@ import {
 import { FormGroup } from '@angular/forms';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractQuantifiableItem } from '@shared/model/framework/abstract-quantifiable-item.model';
+import { AppComponentManagerService } from '@shared/services/app-component-manager/app-component-manager.service';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'greg-quantifiable-item-form-template',
   templateUrl: './quantifiable-item-form-template.component.html',
   styleUrls: ['./quantifiable-item-form-template.component.scss'],
 })
-export class QuantifiableItemFormTemplateComponent implements OnInit {
+export class QuantifiableItemFormTemplateComponent
+  implements OnDestroy, OnInit
+{
   @Input() set itemIdentifiers(identifiers: string) {
     this._itemIdentifiers = identifiers;
   }
@@ -29,6 +33,7 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
       doesExist(this._itemIdentifiers) ? `,${this._itemIdentifiers}` : ',name'
     );
   }
+  @Input() includeSupplementalList: boolean;
   @Input() itemForm: FormGroup;
   @Input() persistenceType: string;
   @Input() set quantityLabel(label: string) {
@@ -42,6 +47,7 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
 
   @ViewChild('savedItemsImportInput') savedItemsImportInputRef: ElementRef;
 
+  listContainerStyles: object = {};
   savedItem$: Observable<AbstractQuantifiableItem[]>;
   selectedSystem: SUPPORTED_SYSTEMS;
   get supportedSystemKeys(): string[] {
@@ -58,17 +64,26 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
 
   private _itemIdentifiers: string;
   private _quantityLabel: string;
+  private destroySource: Subject<void> = new Subject();
   private get savedItemsImportInput(): HTMLInputElement {
     return this.savedItemsImportInputRef.nativeElement as HTMLInputElement;
   }
 
-  constructor(private dataService: DataManagerService) {}
+  constructor(
+    private appManagerService: AppComponentManagerService,
+    private dataService: DataManagerService
+  ) {}
 
   ngOnInit(): void {
     this.savedItem$ = this.dataService.dataState$.pipe(
       map((state) => state.monsterTypes)
     );
     this.selectedSystem = '' as SUPPORTED_SYSTEMS;
+    this.subscribeListContainerStyles();
+  }
+
+  ngOnDestroy(): void {
+    this.destroySource.next();
   }
 
   /** Resets the parent item form via the edit handler */
@@ -146,5 +161,22 @@ export class QuantifiableItemFormTemplateComponent implements OnInit {
    */
   shiftEntry(index: number, direction: string): void {
     this.dataService.shiftListEntry(this.persistenceType, index, direction);
+  }
+
+  private subscribeListContainerStyles(): void {
+    this.appManagerService.appComponentViewState$
+      .pipe(
+        tap((state) => {
+          if (this.includeSupplementalList) {
+            const maxHeight: string = (state.mainStyles as any)['max-height'];
+            (this.listContainerStyles as any)[
+              'max-height'
+            ] = `calc(${maxHeight} * .4)`;
+            (this.listContainerStyles as any)['overflow-y'] = 'scroll';
+          }
+        }),
+        takeUntil(this.destroySource)
+      )
+      .subscribe();
   }
 }

@@ -22,7 +22,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   appComponentViewState$: Observable<AppComponentViewModel>;
   hasSubtext: boolean;
-  mainStyles = { 'max-height': '100vh' };
 
   constructor(
     private manager: AppComponentManagerService,
@@ -57,8 +56,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       .offsetHeight;
     const navHeight: number = (this.navRef.nativeElement as HTMLElement)
       .offsetHeight;
-    this.mainStyles[
-      'max-height'
-    ] = `calc(100vh - ${headerHeight}px - ${navHeight}px - 8px`;
+    this.manager.setMainHeight(
+      `calc(100vh - ${headerHeight}px - ${navHeight}px - 8px)`
+    );
   }
 }
