@@ -93,8 +93,19 @@
               <ng-container [formGroupName]="i">
                 <span>&bull;</span>
 
+                <label>For Each:</label>
+                <input formControlName="each" type="number" />
+
+                <label>+Chance:</label>
+                <span>
+                  <input formControlName="incChance" type="number" />
+                  %
+                </span>
+
                 <label>Name:</label>
-                <input formControlName="name" type="text" />
+                <span>
+                  <input formControlName="name" type="text" />
+                </span>
 
                 <label>No.</label>
                 <greg-dice-rolled-form
@@ -124,6 +135,22 @@
     <section class="per-cap-form-controls">
       <a (click)="addTreasurePerCap()">+Add</a>
       <a (click)="resetTreasurePerCapForm()">Reset</a>
+    </section>
+
+    <hr />
+
+    <label class="indent">Saved Lists / Tables</label>
+    <section
+      class="saved-encounter-lists"
+      *ngIf="savedMonsterList$ | async as savedMonsterLists"
+    >
+      <ng-container *ngIf="savedMonsterLists.length; else nil">
+        <div *ngFor="let list of savedMonsterLists">
+          <span>{{ list.name }}</span>
+          <a (click)="addConsort(list)">+as Consort</a>
+          <a (click)="addRetinue(list)">+as Retinue</a>
+        </div>
+      </ng-container>
     </section>
   </supplemental-lists-form>
 </greg-quantifiable-item-form-template>

@@ -6,7 +6,7 @@ export class MonsterConsort extends AbstractQuantifiableItem {
   pctChance: number = 100;
   /**
    * The number of parent monsters per which one consort will appear:
-   * "one sargeant <i>every</i> ten soldiers"
+   * e.g. - "One sargeant <i>every</i> ten soldiers"
    */
   every: number = 0;
 

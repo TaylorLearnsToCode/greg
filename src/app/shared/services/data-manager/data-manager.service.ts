@@ -463,7 +463,7 @@ export class DataManagerService {
   }
 
   /** Synchronizes current data state observable with fresh values from local storage */
-  private refreshDataState() {
+  private refreshDataState(): void {
     const dataState: DataState = new DataState();
 
     for (const key of Object.keys(this.PERSISTENCE_TYPES)) {
