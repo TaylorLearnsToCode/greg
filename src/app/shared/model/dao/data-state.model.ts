@@ -10,6 +10,7 @@ export class DataState {
   magicItemTables: ReferenceEntryTable[] = [];
   magicWeaponPowers: ReferenceEntryTable[] = [];
   magicWeaponPowerTables: ReferenceEntryTable[] = [];
+  monsterEncounterLists: ReferenceEntryTable[] = [];
   monsterTypes: MonsterType[] = [];
   treasureArticles: TreasureArticle[] = [];
   treasureMapRefs: TreasureArticle[] = [];

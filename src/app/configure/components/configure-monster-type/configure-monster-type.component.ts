@@ -3,11 +3,14 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { QuantifiableItemComponent } from '@configure/model/quantifiable-item-component.interface';
 import { TreasureArticleForm } from '@configure/model/treasure-article-form.interface';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { MonsterConsort } from '@shared/model/monster/monster-consort.model';
+import { MonsterRetinue } from '@shared/model/monster/monster-retinue.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { Observable, map } from 'rxjs';
 
@@ -34,6 +37,7 @@ export class ConfigureMonsterTypeComponent
   retinueQuantityForm(index: number): FormGroup {
     return this.retinueFormArray.at(index).get('quantity') as FormGroup;
   }
+  savedMonsterList$: Observable<ReferenceEntryTable[]>;
   treasurePerCapForm: FormGroup;
   get treasurePerCapFormArray(): FormArray {
     return this.monsterTypeForm.get('treasurePerCap') as FormArray;
@@ -43,6 +47,9 @@ export class ConfigureMonsterTypeComponent
   constructor(private dataService: DataManagerService) {}
 
   ngOnInit(): void {
+    this.savedMonsterList$ = this.dataService.dataState$.pipe(
+      map((state) => state.monsterEncounterLists)
+    );
     this.treasureType$ = this.dataService.dataState$.pipe(
       map((state) => state.treasureTypes)
     );
@@ -50,24 +57,24 @@ export class ConfigureMonsterTypeComponent
     this.resetTreasurePerCapForm();
   }
 
-  addConsort(): void {
-    this.consortsFormArray.push(
-      buildFormFromObject(
-        new MonsterConsort({
-          system: this.monsterTypeForm.value.system,
-        })
-      ) as FormGroup
-    );
+  addConsort(consort?: any): void {
+    const baseConsort: MonsterConsort = new MonsterConsort({
+      system: this.monsterTypeForm.value.system,
+    });
+    if (doesExist(consort)) {
+      baseConsort.name = consort.name;
+    }
+    this.consortsFormArray.push(buildFormFromObject(baseConsort) as FormGroup);
   }
 
-  addRetinue(): void {
-    this.retinueFormArray.push(
-      buildFormFromObject(
-        new MonsterType({
-          system: this.monsterTypeForm.value.system,
-        })
-      ) as FormGroup
-    );
+  addRetinue(retinue?: any): void {
+    const baseRetinue = new MonsterRetinue({
+      system: this.monsterTypeForm.value.system,
+    });
+    if (doesExist(retinue)) {
+      baseRetinue.name = retinue.name;
+    }
+    this.retinueFormArray.push(buildFormFromObject(baseRetinue) as FormGroup);
   }
 
   addTreasurePerCap(): void {
