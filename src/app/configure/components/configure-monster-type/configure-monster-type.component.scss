@@ -48,6 +48,7 @@ section.per-cap-form-controls a {
 section.retinue div {
   @include baseDisplayGrid();
   column-gap: .7em;
+  // TODO - make this pretty/usable
   grid-template-columns: 0.5em 5em 1em 6em 4em 2em 1fr 1em 13em 1em;
   margin-bottom: 0.25em;
 }

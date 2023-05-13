@@ -2,6 +2,7 @@ import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { AbstractQuantifiableItem } from '../framework/abstract-quantifiable-item.model';
 import { TreasureArticle } from '../treasure/treasure-article.model';
 import { MonsterConsort } from './monster-consort.model';
+import { MonsterRetinue } from './monster-retinue.model';
 
 export class MonsterType extends AbstractQuantifiableItem {
   /**
@@ -15,7 +16,7 @@ export class MonsterType extends AbstractQuantifiableItem {
    * Static monsters accompanying an encounter. E.G. - "A priest will always be accompanied
    * by 2-12 acolytes"
    */
-  retinue: MonsterType[] = [];
+  retinue: MonsterRetinue[] = [];
   /** The configured type of treasure found in the creature's lair */
   treasureType: string = '';
   /** The treasure that the monster carries with it outside the lair */
@@ -34,7 +35,7 @@ export class MonsterType extends AbstractQuantifiableItem {
   }
 
   private handleRetinue() {
-    this.retinue = this.retinue.map((r) => new MonsterType(r));
+    this.retinue = this.retinue.map((r) => new MonsterRetinue(r));
   }
 
   private handleTreasurePerCap() {
