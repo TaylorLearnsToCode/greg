@@ -56,6 +56,40 @@ export function doesExist(object: any): boolean {
 }
 
 /**
+ * Searches a provided collection for an object in the collection which has fields and values
+ * in common with a provided single item. If so, returns the index of that matching entry:
+ * otherwise, returns -1.
+ *
+ * @param  {T} item
+ * @param  {T[]} collection
+ * @param  {string[]} conditions
+ */
+export function findIndexMatchingAllKeys<T>(
+  item: T,
+  collection: T[],
+  conditions: string[]
+): number {
+  let index: number = -1;
+  for (let i = 0; i < collection.length; i++) {
+    const idsMatch: boolean[] = [];
+    let t: T;
+    for (const id of conditions) {
+      t = collection[i];
+      idsMatch.push(
+        doesExist((t as any)[id]) &&
+          doesExist((item as any)[id]) &&
+          (t as any)[id] === (item as any)[id]
+      );
+    }
+    if (!idsMatch.some((matchValue) => !matchValue)) {
+      index = i;
+      break;
+    }
+  }
+  return index;
+}
+
+/**
  * Converts a provided camelCase string into a human-friendly one. E.G. -
  * loremIpsum2001 would output Lorem Ipsum 2001.
  *
@@ -187,40 +221,6 @@ export function removeOrWarn<T>(
   } else {
     console.warn(`Item ${(item as any)[ids[0]]} was not found to remove.`);
   }
-}
-
-/**
- * Searches a provided collection for an object in the collection which has fields and values
- * in common with a provided single item. If so, returns the index of that matching entry:
- * otherwise, returns -1.
- *
- * @param  {T} item
- * @param  {T[]} collection
- * @param  {string[]} conditions
- */
-function findIndexMatchingAllKeys<T>(
-  item: T,
-  collection: T[],
-  conditions: string[]
-): number {
-  let index: number = -1;
-  for (let i = 0; i < collection.length; i++) {
-    const idsMatch: boolean[] = [];
-    let t: T;
-    for (const id of conditions) {
-      t = collection[i];
-      idsMatch.push(
-        doesExist((t as any)[id]) &&
-          doesExist((item as any)[id]) &&
-          (t as any)[id] === (item as any)[id]
-      );
-    }
-    if (!idsMatch.some((matchValue) => !matchValue)) {
-      index = i;
-      break;
-    }
-  }
-  return index;
 }
 
 /**

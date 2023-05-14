@@ -3,10 +3,31 @@
   [persistenceType]="PERSISTENCE_TYPE"
 >
   <result-display>
+    <ng-container *ngIf="encounterResults && encounterResults.length; else nil">
+      <div *ngFor="let result of encounterResults; let first = first">
+        <label>Encountered:</label>
+        <span>{{ result.quantity }} {{ result.name }}</span>
+
+        <ng-container *ngIf="first">
+          <label>Lair?</label>
+          <span>{{ result.isLair ? "Yes" : "No" }}</span>
+        </ng-container>
+
+        <label>Carrying:</label>
+        <span>
+          <ul *ngIf="result.treasure && result.treasure.length; else nil">
+            <li *ngFor="let treasure of result.treasure">
+              {{ treasure.quantity }} {{ treasure.name }}
+            </li>
+          </ul>
+        </span>
+      </div>
+    </ng-container>
+
     <p>{{ encounterResults | json }}</p>
   </result-display>
 </greg-generator-page-template>
 
-<p>
-  {{ TEMP_rollableTable | json }}
-</p>
+<ng-template #nil>
+  <span>~</span>
+</ng-template>

@@ -8,8 +8,13 @@ import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MonsterConsort } from '@shared/model/monster/monster-consort.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { isBetween } from '@shared/utilities/common-util/common.util';
+import {
+  doesExist,
+  findIndexMatchingAllKeys,
+  isBetween,
+} from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
@@ -34,6 +39,7 @@ export class GenerateLbbEncounterService
         this.result.push(this.generateReferenceEncounter(entry));
       }
     }
+    this.squashResult();
     return this.result;
   }
 
@@ -63,7 +69,7 @@ export class GenerateLbbEncounterService
         for (let i = 0; i < numberConsorting; i++) {
           if (rollDice(this.d100) <= consort.pctChance) {
             if (!this.consortHandledAsTable()) {
-              if (!this.consortHandledAsReference()) {
+              if (!this.consortHandledAsReference(consort)) {
                 this.consortHandleAsCustom(consort);
               }
             }
@@ -82,8 +88,25 @@ export class GenerateLbbEncounterService
     );
   }
 
-  private consortHandledAsReference(): boolean {
-    return false;
+  // Find a way to test this: a guaranteed consort that is a monster type
+  private consortHandledAsReference(consort: MonsterConsort): boolean {
+    const consortReference: MonsterType = this.dataService.retrieveReference(
+      consort.name,
+      this.PERSISTENCE_TYPES.monsterType
+    );
+    if (!doesExist(consortReference)) {
+      return false;
+    }
+    this.result.push(
+      this.generateReferenceEncounter(
+        new ReferenceEntry({
+          chanceOf: new BoundedRange({ low: 1, high: 100 }),
+          persistenceType: this.PERSISTENCE_TYPES.monsterType,
+          reference: consortReference.name,
+        })
+      )
+    );
+    return true;
   }
 
   private consortHandledAsTable(): boolean {
@@ -120,5 +143,28 @@ export class GenerateLbbEncounterService
         }
       }
     }
+  }
+
+  private squashResult(): void {
+    const squashedResult: EncounterResult[] = [];
+    let resultIndex: number;
+    for (const result of this.result) {
+      resultIndex = findIndexMatchingAllKeys<EncounterResult>(
+        result,
+        squashedResult,
+        ['name']
+      );
+      if (resultIndex === -1) {
+        squashedResult.push(new EncounterResult(result));
+      } else {
+        squashedResult[resultIndex].quantity += result.quantity;
+        squashedResult[resultIndex].treasure.push(...result.treasure);
+        if (result.isLair && !squashedResult[resultIndex].isLair) {
+          squashedResult[resultIndex].isLair = true;
+        }
+      }
+    }
+    squashedResult.reverse();
+    this.result = squashedResult;
   }
 }
