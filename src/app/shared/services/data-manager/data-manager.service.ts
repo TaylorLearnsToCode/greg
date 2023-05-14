@@ -185,11 +185,13 @@ export class DataManagerService {
    *
    * @param  {string} reference
    * @param  {string} key
+   * @param  {string} identifier Optional - field name for unique identifier of a referenced item; default 'name'
    */
-  retrieveReference<T>(reference: string, key: string): T {
+  retrieveReference<T>(reference: string, key: string, identifier?: string): T {
     let result: T = null as T;
+    const id: string = identifier !== undefined ? identifier : 'name';
     for (const item of this.retrieve<T[]>(key, [])) {
-      if ((item as any).name === reference) {
+      if ((item as any)[id] === reference) {
         result = item;
       }
     }
