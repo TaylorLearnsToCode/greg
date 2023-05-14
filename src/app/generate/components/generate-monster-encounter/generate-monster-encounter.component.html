@@ -1,0 +1,12 @@
+<greg-generator-page-template
+  (generateEvent)="handleGenerate($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+>
+  <result-display>
+    <p>{{ encounterResults | json }}</p>
+  </result-display>
+</greg-generator-page-template>
+
+<p>
+  {{ TEMP_rollableTable | json }}
+</p>
