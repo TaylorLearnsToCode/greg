@@ -31,7 +31,10 @@ export class GenerateLbbEncounterService
     super();
   }
 
-  generateEncounterFromList(list: ReferenceEntryTable): EncounterResult[] {
+  generateEncounterFromList(
+    list: ReferenceEntryTable,
+    noSquash?: boolean
+  ): EncounterResult[] {
     this.result = [];
     const listRoll: number = rollDice(list.diceToRoll);
     for (let entry of list.entries) {
@@ -39,7 +42,9 @@ export class GenerateLbbEncounterService
         this.result.push(this.generateReferenceEncounter(entry));
       }
     }
-    this.squashResult();
+    if (!noSquash) {
+      this.squashResult();
+    }
     return this.result;
   }
 
@@ -68,7 +73,7 @@ export class GenerateLbbEncounterService
         numberConsorting = Math.floor(result.quantity / consort.every);
         for (let i = 0; i < numberConsorting; i++) {
           if (rollDice(this.d100) <= consort.pctChance) {
-            if (!this.consortHandledAsTable()) {
+            if (!this.consortHandledAsTable(consort)) {
               if (!this.consortHandledAsReference(consort)) {
                 this.consortHandleAsCustom(consort);
               }
@@ -109,8 +114,19 @@ export class GenerateLbbEncounterService
     return true;
   }
 
-  private consortHandledAsTable(): boolean {
-    return false;
+  private consortHandledAsTable(consort: MonsterConsort): boolean {
+    const tableReference: ReferenceEntryTable =
+      this.dataService.retrieveReference(
+        consort.name,
+        this.PERSISTENCE_TYPES.monsterEncounterList
+      );
+    if (!doesExist(tableReference)) {
+      return false;
+    }
+    const currentResult: EncounterResult[] = this.result;
+    currentResult.push(...this.generateEncounterFromList(tableReference, true));
+    this.result = currentResult;
+    return true;
   }
 
   /*
