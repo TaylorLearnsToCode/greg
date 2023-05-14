@@ -6,6 +6,7 @@ import { GenerateLbbTreasureService } from '@generate/services/generate-treasure
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MonsterConsort } from '@shared/model/monster/monster-consort.model';
+import { MonsterRetinue } from '@shared/model/monster/monster-retinue.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { BoundedRange } from '@shared/model/utility/bounded-range.model';
@@ -48,43 +49,7 @@ export class GenerateLbbEncounterService
     return this.result;
   }
 
-  private generateReferenceEncounter(ref: ReferenceEntry): EncounterResult {
-    const result = new EncounterResult();
-
-    const monster: MonsterType = this.dataService.retrieveReference(
-      ref.reference,
-      this.PERSISTENCE_TYPES.monsterType
-    );
-
-    result.name = monster.name;
-    result.quantity = rollDice(monster.quantity);
-    result.isLair = rollDice(this.d100) <= monster.pctInLair;
-
-    this.handleTreasure(monster, result);
-    this.handleConsorts(monster, result);
-
-    return result;
-  }
-
-  private handleConsorts(monster: MonsterType, result: EncounterResult): void {
-    if (monster.consorts) {
-      let numberConsorting: number;
-      for (const consort of monster.consorts) {
-        numberConsorting = Math.floor(result.quantity / consort.every);
-        for (let i = 0; i < numberConsorting; i++) {
-          if (rollDice(this.d100) <= consort.pctChance) {
-            if (!this.consortHandledAsTable(consort)) {
-              if (!this.consortHandledAsReference(consort)) {
-                this.consortHandleAsCustom(consort);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private consortHandleAsCustom(consort: MonsterConsort): void {
+  private consortHandledAsCustom(consort: MonsterConsort): void {
     this.result.push(
       new EncounterResult({
         name: consort.name,
@@ -129,10 +94,103 @@ export class GenerateLbbEncounterService
     return true;
   }
 
-  /*
-  Retinue
-  const chanceOf = cohort.pctChance * (result.quantity % cohort.every);
-  */
+  private generateReferenceEncounter(ref: ReferenceEntry): EncounterResult {
+    const result = new EncounterResult();
+
+    const monster: MonsterType = this.dataService.retrieveReference(
+      ref.reference,
+      this.PERSISTENCE_TYPES.monsterType
+    );
+
+    result.name = monster.name;
+    result.quantity = rollDice(monster.quantity);
+    result.isLair = rollDice(this.d100) <= monster.pctInLair;
+
+    this.handleTreasure(monster, result);
+    this.handleConsorts(monster, result);
+    this.handleRetinue(monster, result);
+
+    return result;
+  }
+
+  private handleConsorts(monster: MonsterType, result: EncounterResult): void {
+    if (monster.consorts) {
+      let numberConsorting: number;
+      for (const consort of monster.consorts) {
+        numberConsorting = Math.floor(result.quantity / consort.every);
+        for (let i = 0; i < numberConsorting; i++) {
+          if (rollDice(this.d100) <= consort.pctChance) {
+            if (!this.consortHandledAsTable(consort)) {
+              if (!this.consortHandledAsReference(consort)) {
+                this.consortHandledAsCustom(consort);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private handleRetinue(monster: MonsterType, result: EncounterResult): void {
+    if (monster.retinue) {
+      let chanceOf: number;
+      for (const retinue of monster.retinue) {
+        chanceOf =
+          Math.floor(result.quantity / retinue.each) * retinue.incChance;
+        if (rollDice(this.d100) <= chanceOf) {
+          if (!this.retinueHandledAsTable(retinue)) {
+            if (!this.retinueHandledAsReference(retinue)) {
+              this.retinueHandledAsCustom(retinue);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private retinueHandledAsTable(retinue: MonsterRetinue): boolean {
+    const tableReference: ReferenceEntryTable =
+      this.dataService.retrieveReference(
+        retinue.name,
+        this.PERSISTENCE_TYPES.monsterEncounterList
+      );
+    if (!doesExist(tableReference)) {
+      return false;
+    }
+    const currentResult: EncounterResult[] = this.result;
+    currentResult.push(...this.generateEncounterFromList(tableReference, true));
+    this.result = currentResult;
+    return true;
+  }
+
+  private retinueHandledAsReference(retinue: MonsterRetinue): boolean {
+    const retinueReference: MonsterType = this.dataService.retrieveReference(
+      retinue.name,
+      this.PERSISTENCE_TYPES.monsterType
+    );
+    if (!doesExist(retinueReference)) {
+      return false;
+    }
+    this.result.push(
+      this.generateReferenceEncounter(
+        new ReferenceEntry({
+          chanceOf: new BoundedRange({ low: 1, high: 100 }),
+          persistenceType: this.PERSISTENCE_TYPES.monsterType,
+          reference: retinueReference.name,
+        })
+      )
+    );
+    return true;
+  }
+
+  private retinueHandledAsCustom(retinue: MonsterRetinue): void {
+    this.result.push(
+      new EncounterResult({
+        name: retinue.name,
+        quantity: rollDice(retinue.quantity),
+      })
+    );
+  }
 
   private handleTreasure(monster: MonsterType, result: EncounterResult): void {
     if (result.isLair) {
