@@ -102,20 +102,28 @@ export class GenerateLbbEncounterService
   }
 
   private generateReferenceEncounter(ref: ReferenceEntry): EncounterResult {
-    const result = new EncounterResult();
+    let result = new EncounterResult();
 
     const monster: MonsterType = this.dataService.retrieveReference(
       ref.reference,
       this.PERSISTENCE_TYPES.monsterType
     );
+    if (doesExist(monster)) {
+      result.name = monster.name;
+      result.quantity = rollDice(monster.quantity);
+      result.isLair = rollDice(this.d100) <= monster.pctInLair;
 
-    result.name = monster.name;
-    result.quantity = rollDice(monster.quantity);
-    result.isLair = rollDice(this.d100) <= monster.pctInLair;
-
-    this.handleTreasure(monster, result);
-    this.handleConsorts(monster, result);
-    this.handleRetinue(monster, result);
+      this.handleTreasure(monster, result);
+      this.handleConsorts(monster, result);
+      this.handleRetinue(monster, result);
+    } else {
+      const monsterList: ReferenceEntryTable =
+        this.dataService.retrieveReference(
+          ref.reference,
+          this.PERSISTENCE_TYPES.monsterEncounterList
+        );
+      result = this.generateEncounterFromList(monsterList, true)[0];
+    }
 
     return result;
   }
