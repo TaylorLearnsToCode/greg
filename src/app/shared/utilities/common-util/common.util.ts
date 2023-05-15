@@ -224,6 +224,22 @@ export function removeOrWarn<T>(
 }
 
 /**
+ * Sorts the provided list of objects alphabetically, using a provided field as the property
+ * by which the sort should be performed. _Mutates the argument array!_
+ *
+ * @param  {any[]} list
+ * @param  {string} field Optional - default "name"
+ */
+export function sortByField(list: any[], field?: string): void {
+  const identifier = field !== undefined ? field : 'name';
+  list.sort((a, b) => {
+    if (a[identifier] < b[identifier]) return -1;
+    else if (b[identifier] < a[identifier]) return 1;
+    else return 0;
+  });
+}
+
+/**
  * Returns TRUE if an array a is neither NULL nor UNDEFINED but contains
  * 0 entries within it.
  *
