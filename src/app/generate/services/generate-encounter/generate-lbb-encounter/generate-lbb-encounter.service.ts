@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractEncounterGenerator } from '@generate/model/abstract-encounter-generator.model';
 import { EncounterGeneratorService } from '@generate/model/encounter-generator-service.interface';
 import { EncounterResult } from '@generate/model/encounter-result.model';
+import { TreasureResult } from '@generate/model/treasure-result.model';
 import { GenerateLbbTreasureService } from '@generate/services/generate-treasure/generate-lbb-treasure/generate-lbb-treasure.service';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
@@ -15,6 +16,7 @@ import {
   doesExist,
   findIndexMatchingAllKeys,
   isBetween,
+  isEmpty,
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
@@ -154,7 +156,7 @@ export class GenerateLbbEncounterService
   }
 
   private handleTreasure(monster: MonsterType, result: EncounterResult): void {
-    if (result.isLair) {
+    if (result.isLair && !isEmpty(monster.treasureType)) {
       const type: TreasureType = this.dataService.retrieveReference(
         monster.treasureType,
         this.PERSISTENCE_TYPES.treasureType,
@@ -199,7 +201,29 @@ export class GenerateLbbEncounterService
         }
       }
     }
+
+    let treasureIndex: number;
+    for (const result of squashedResult) {
+      if (!isEmpty(result.treasure)) {
+        const squashedTreasure: TreasureResult[] = [];
+        for (const treasure of result.treasure) {
+          treasureIndex = findIndexMatchingAllKeys<TreasureResult>(
+            treasure,
+            squashedTreasure,
+            ['name']
+          );
+          if (treasureIndex === -1) {
+            squashedTreasure.push(new TreasureResult(treasure));
+          } else {
+            squashedTreasure[treasureIndex].quantity += treasure.quantity;
+          }
+        }
+        result.treasure = squashedTreasure;
+      }
+    }
+
     squashedResult.reverse();
+
     this.result = squashedResult;
   }
 }
