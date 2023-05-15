@@ -51,3 +51,15 @@
     <a (click)="removeArticle()">X</a>
   </div>
 </form>
+
+<section *ngIf="showMagicItemList" class="magic-item-list">
+  <label>Magic Item Lists</label>
+  <section class="saved-magic-items">
+    <ng-container *ngIf="magicItemList$ | async as magicItemLists">
+      <div *ngFor="let list of magicItemLists">
+        <span>&bull;</span>
+        <a (click)="addToArticle(list)">{{ list.name }}</a>
+      </div>
+    </ng-container>
+  </section>
+</section>

@@ -11,9 +11,13 @@ import {
 import { FormGroup } from '@angular/forms';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractQuantifiableItem } from '@shared/model/framework/abstract-quantifiable-item.model';
+import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { AppComponentManagerService } from '@shared/services/app-component-manager/app-component-manager.service';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { doesExist } from '@shared/utilities/common-util/common.util';
+import {
+  doesExist,
+  sortByField,
+} from '@shared/utilities/common-util/common.util';
 import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 @Component({
@@ -76,7 +80,7 @@ export class QuantifiableItemFormTemplateComponent
 
   ngOnInit(): void {
     this.savedItem$ = this.dataService.dataState$.pipe(
-      map((state) => state.monsterTypes)
+      map((state) => this.sortMonsterTypes(state.monsterTypes))
     );
     this.selectedSystem = '' as SUPPORTED_SYSTEMS;
     this.subscribeListContainerStyles();
@@ -161,6 +165,12 @@ export class QuantifiableItemFormTemplateComponent
    */
   shiftEntry(index: number, direction: string): void {
     this.dataService.shiftListEntry(this.persistenceType, index, direction);
+  }
+
+  private sortMonsterTypes(monsterList: MonsterType[]): MonsterType[] {
+    const nextList: MonsterType[] = monsterList.map((m) => new MonsterType(m));
+    sortByField(nextList);
+    return nextList;
   }
 
   private subscribeListContainerStyles(): void {

@@ -15,6 +15,10 @@ div.name-quantity {
   margin-bottom: 0.2em;
 }
 
+div.shift-entry {
+  transform: translate(0, 0.6em);
+}
+
 div label {
   text-align: right;
 }
@@ -25,6 +29,14 @@ form {
   margin-bottom: 1em;
 }
 
-.shift-entry {
-  transform: translate(0, 0.6em);
+section.magic-item-list section.saved-magic-items {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+}
+section.magic-item-list div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr;
+}
+section.magic-item-list label {
+  @include indent();
 }

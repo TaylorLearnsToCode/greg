@@ -1,14 +1,19 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { sortByField } from '@shared/utilities/common-util/common.util';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'greg-treasure-article-form',
   templateUrl: './treasure-article-form.component.html',
   styleUrls: ['./treasure-article-form.component.scss'],
 })
-export class TreasureArticleFormComponent {
+export class TreasureArticleFormComponent implements OnInit {
   @Input() articleForm: FormGroup;
+  @Input() enableMagicItemHint: boolean;
   // @TODO - implement this: if false, don't do shift or delete
   @Input() isInCollection: boolean;
 
@@ -28,10 +33,33 @@ export class TreasureArticleFormComponent {
   articleValue(key: string): string {
     return (TREASURE_ARTICLE_TYPES as any)[key];
   }
+  /** Configured magic item lists */
+  magicItemList$: Observable<ReferenceEntryTable[]>;
+  /** If the type selected is "magic item", the magic item list should be shown below */
+  get showMagicItemList(): boolean {
+    return (
+      this.enableMagicItemHint &&
+      this.articleForm.get('type')?.value == 'MAGIC_ITEM'
+    );
+  }
 
-  private readonly TREASURE_ARTICLE_TYPES = TREASURE_ARTICLE_TYPES;
+  constructor(private dataService: DataManagerService) {}
 
-  constructor() {}
+  ngOnInit(): void {
+    this.magicItemList$ = this.dataService.dataState$.pipe(
+      map((state) => {
+        const magicItemList = state.magicItemTables.map(
+          (t) => new ReferenceEntryTable(t)
+        );
+        sortByField(magicItemList);
+        return magicItemList;
+      })
+    );
+  }
+
+  addToArticle(itemList: ReferenceEntryTable): void {
+    this.articleForm.get('name')?.setValue(itemList.name);
+  }
 
   removeArticle(): void {
     this.removeArticleEvent.emit();
