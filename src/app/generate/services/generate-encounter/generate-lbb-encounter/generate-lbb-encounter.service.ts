@@ -49,19 +49,22 @@ export class GenerateLbbEncounterService
     return this.result;
   }
 
-  private consortHandledAsCustom(consort: MonsterConsort): void {
+  private followingHandledAsCustom(
+    following: MonsterConsort | MonsterRetinue
+  ): void {
     this.result.push(
       new EncounterResult({
-        name: consort.name,
-        quantity: rollDice(consort.quantity),
+        name: following.name,
+        quantity: rollDice(following.quantity),
       } as EncounterResult)
     );
   }
 
-  // Find a way to test this: a guaranteed consort that is a monster type
-  private consortHandledAsReference(consort: MonsterConsort): boolean {
+  private followingHandledAsReference(
+    following: MonsterConsort | MonsterRetinue
+  ): boolean {
     const consortReference: MonsterType = this.dataService.retrieveReference(
-      consort.name,
+      following.name,
       this.PERSISTENCE_TYPES.monsterType
     );
     if (!doesExist(consortReference)) {
@@ -79,10 +82,12 @@ export class GenerateLbbEncounterService
     return true;
   }
 
-  private consortHandledAsTable(consort: MonsterConsort): boolean {
+  private followingHandledAsTable(
+    following: MonsterConsort | MonsterRetinue
+  ): boolean {
     const tableReference: ReferenceEntryTable =
       this.dataService.retrieveReference(
-        consort.name,
+        following.name,
         this.PERSISTENCE_TYPES.monsterEncounterList
       );
     if (!doesExist(tableReference)) {
@@ -120,9 +125,9 @@ export class GenerateLbbEncounterService
         numberConsorting = Math.floor(result.quantity / consort.every);
         for (let i = 0; i < numberConsorting; i++) {
           if (rollDice(this.d100) <= consort.pctChance) {
-            if (!this.consortHandledAsTable(consort)) {
-              if (!this.consortHandledAsReference(consort)) {
-                this.consortHandledAsCustom(consort);
+            if (!this.followingHandledAsTable(consort)) {
+              if (!this.followingHandledAsReference(consort)) {
+                this.followingHandledAsCustom(consort);
               }
             }
           }
@@ -138,58 +143,14 @@ export class GenerateLbbEncounterService
         chanceOf =
           Math.floor(result.quantity / retinue.each) * retinue.incChance;
         if (rollDice(this.d100) <= chanceOf) {
-          if (!this.retinueHandledAsTable(retinue)) {
-            if (!this.retinueHandledAsReference(retinue)) {
-              this.retinueHandledAsCustom(retinue);
+          if (!this.followingHandledAsTable(retinue)) {
+            if (!this.followingHandledAsReference(retinue)) {
+              this.followingHandledAsCustom(retinue);
             }
           }
         }
       }
     }
-  }
-
-  private retinueHandledAsTable(retinue: MonsterRetinue): boolean {
-    const tableReference: ReferenceEntryTable =
-      this.dataService.retrieveReference(
-        retinue.name,
-        this.PERSISTENCE_TYPES.monsterEncounterList
-      );
-    if (!doesExist(tableReference)) {
-      return false;
-    }
-    const currentResult: EncounterResult[] = this.result;
-    currentResult.push(...this.generateEncounterFromList(tableReference, true));
-    this.result = currentResult;
-    return true;
-  }
-
-  private retinueHandledAsReference(retinue: MonsterRetinue): boolean {
-    const retinueReference: MonsterType = this.dataService.retrieveReference(
-      retinue.name,
-      this.PERSISTENCE_TYPES.monsterType
-    );
-    if (!doesExist(retinueReference)) {
-      return false;
-    }
-    this.result.push(
-      this.generateReferenceEncounter(
-        new ReferenceEntry({
-          chanceOf: new BoundedRange({ low: 1, high: 100 }),
-          persistenceType: this.PERSISTENCE_TYPES.monsterType,
-          reference: retinueReference.name,
-        })
-      )
-    );
-    return true;
-  }
-
-  private retinueHandledAsCustom(retinue: MonsterRetinue): void {
-    this.result.push(
-      new EncounterResult({
-        name: retinue.name,
-        quantity: rollDice(retinue.quantity),
-      })
-    );
   }
 
   private handleTreasure(monster: MonsterType, result: EncounterResult): void {
