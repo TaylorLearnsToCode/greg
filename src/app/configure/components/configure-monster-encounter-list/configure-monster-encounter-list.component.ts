@@ -6,6 +6,7 @@ import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-tab
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { sortByField } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
 import { Observable, map } from 'rxjs';
 
@@ -31,7 +32,13 @@ export class ConfigureMonsterEncounterListComponent
   ngOnInit(): void {
     this.resetForm();
     this.savedMonsterList$ = this.dataService.dataState$.pipe(
-      map((state) => state.monsterTypes)
+      map((state) => {
+        const monsterTypes: MonsterType[] = state.monsterTypes.map(
+          (m) => new MonsterType(m)
+        );
+        sortByField(monsterTypes);
+        return monsterTypes;
+      })
     );
   }
 
