@@ -2,6 +2,8 @@
 
 @include hideFileInputs();
 
+$panel-max-height: 36vh;
+
 first-content form {
   @include baseDisplayGrid();
   grid-template-areas: 
@@ -21,6 +23,11 @@ hr {
 
 second-content label {
   @include indent();
+}
+
+section.add-entry-form {
+  max-height: $panel-max-height;
+  overflow-y: scroll;
 }
 
 section.form-controls {
@@ -63,6 +70,10 @@ section.form-head {
   margin-bottom: 1em;
 }
 
+section.saved-tables {
+  max-height: $panel-max-height;
+  overflow-y: scroll;
+}
 section.saved-tables div.saved-entry {
   @include baseDisplayGrid();
   margin-bottom: 0.25em;
