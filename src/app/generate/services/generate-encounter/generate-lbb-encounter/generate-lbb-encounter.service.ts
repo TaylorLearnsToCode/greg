@@ -132,7 +132,11 @@ export class GenerateLbbEncounterService
     if (monster.consorts) {
       let numberConsorting: number;
       for (const consort of monster.consorts) {
-        numberConsorting = Math.floor(result.quantity / consort.every);
+        if (consort.every === 0) {
+          numberConsorting = 1;
+        } else {
+          numberConsorting = Math.floor(result.quantity / consort.every);
+        }
         for (let i = 0; i < numberConsorting; i++) {
           if (rollDice(this.d100) <= consort.pctChance) {
             if (!this.followingHandledAsTable(consort)) {
