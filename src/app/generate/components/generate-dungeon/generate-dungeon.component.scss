@@ -1,5 +1,19 @@
 @import '/src/assets/variables';
 
+div.encounter-lists {
+  @include baseDisplayGrid();
+  @include standardBorder();
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0.25em 0;
+  max-height: 8em;
+  overflow-y: scroll;
+  padding: 0.25em;
+}
+div.encounter-lists div {
+  @include baseDisplayGrid();
+  grid-template-columns: 3em 1fr;
+}
+
 section.config-form {
   @include baseDisplayGrid();
   grid-template-columns: auto 1fr;
@@ -10,6 +24,10 @@ section.config-form label {
 
 section.controls {
   margin-top: 1em;
+  text-align: center;
+}
+
+section.nil {
   text-align: center;
 }
 
