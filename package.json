@@ -1,6 +1,6 @@
 {
   "name": "guided-random-encounter-generator",
-  "version": "0.0.2-dev_#19",
+  "version": "0.0.3-dev_#20",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
