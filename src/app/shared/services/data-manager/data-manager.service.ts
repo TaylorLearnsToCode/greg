@@ -180,6 +180,16 @@ export class DataManagerService {
   }
 
   /**
+   * Searches browser storage, returning the currently configured collection identified by a
+   * provided key string. Returns an empty array if none is found.
+   *
+   * @param  {string} key
+   */
+  retrieveAll<T>(key: string): T[] {
+    return this.retrieve<T[]>(key);
+  }
+
+  /**
    * Searches browser storage for a specific referenced article among a collection
    * grouped under the provided PERSISTENCE_TYPES key.
    *

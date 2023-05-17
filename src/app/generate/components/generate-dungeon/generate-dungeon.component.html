@@ -13,7 +13,7 @@
     <section class="config-form">
       <label>No. Rooms:</label>
       <span>
-        <input [value]="noRooms" type="number" />
+        <input [(ngModel)]="noRooms" type="number" />
       </span>
 
       <label>System:</label>
@@ -26,9 +26,14 @@
         </select>
       </span>
 
-      <label>Stocking Encounter List:</label>
+      <label>Dungeon Level:</label>
       <span>
-        <input [value]="stockingListRef" type="text" />
+        <input [(ngModel)]="dungeonLevel" type="number" />
+      </span>
+
+      <label>Custom Stocking List?</label>
+      <span>
+        <input [(ngModel)]="stockingListRef" type="text" />
       </span>
     </section>
 
