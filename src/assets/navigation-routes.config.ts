@@ -50,6 +50,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
   {
     children: [
       {
+        menuLabel: 'Generate Dungeon',
+        routePath: 'dungeon',
+      } as NavRoute,
+      {
         menuLabel: 'Generate Monster Encounter',
         routePath: 'monster-encounter',
       } as NavRoute,
