@@ -1,5 +1,9 @@
 <greg-page-template>
-  <first-content>First</first-content>
+  <first-content>
+    <section *ngIf="dungeonResult$ | async as dungeonResult; else nil">
+      {{ dungeonResult | json }}
+    </section>
+  </first-content>
 
   <second-content>
     <span class="hang-right">
@@ -12,7 +16,7 @@
         <input [value]="noRooms" type="number" />
       </span>
 
-      <label>System</label>
+      <label>System:</label>
       <span>
         <select (change)="updateSystemSelection($event)" [value]="system">
           <option value="" disabled>-- Select --</option>
@@ -21,10 +25,33 @@
           </ng-container>
         </select>
       </span>
+
+      <label>Stocking Encounter List:</label>
+      <span>
+        <input [value]="stockingListRef" type="text" />
+      </span>
     </section>
+
+    <label>Saved Lists:</label>
+    <div class="encounter-lists">
+      <ng-container
+        *ngIf="monsterEncounterList$ | async as monsterEncounterLists"
+      >
+        <ng-container *ngIf="monsterEncounterLists.length; else nil">
+          <div *ngFor="let list of monsterEncounterLists">
+            <a (click)="useList(list)">+Use</a>
+            <span>{{ list.name }}</span>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
 
     <section class="controls">
       <a (click)="generateDungeon()">Generate!</a>
     </section>
   </second-content>
 </greg-page-template>
+
+<ng-template #nil>
+  <section class="nil">~</section>
+</ng-template>

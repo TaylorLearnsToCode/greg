@@ -34,6 +34,10 @@ $text-white: #cccccc;
   }
 }
 
+@mixin standardBorder() {
+  border: solid 1px $header-orange;
+}
+
 @mixin twoColumnLayout($textAlign: left) {
   @include baseDisplayGrid();
   grid-template-columns: repeat(2, 1fr);

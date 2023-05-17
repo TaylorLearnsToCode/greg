@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
+import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-dungeon.service';
 
 @Injectable({
@@ -10,6 +11,13 @@ export class GenerateDungeonService {
   private generatorService: DungeonGeneratorService;
 
   constructor(private lbbService: GenerateLbbDungeonService) {}
+
+  generateDungeon(noRooms: number, stockingListRef?: string): DungeonResult {
+    alert('Implement this next!');
+    const result = new DungeonResult();
+    // call the generatorService
+    return result;
+  }
 
   setSystemSelection(selectedSystem: string): void {
     const system: string = (SUPPORTED_SYSTEMS as any)[selectedSystem];
