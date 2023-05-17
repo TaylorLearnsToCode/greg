@@ -4,6 +4,7 @@ import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { GenerateDungeonService } from '@generate/services/generate-dungeon/generate-dungeon.service';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { sortByField } from '@shared/utilities/common-util/common.util';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Component({
@@ -12,6 +13,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
   styleUrls: ['./generate-dungeon.component.scss'],
 })
 export class GenerateDungeonComponent implements OnInit {
+  dungeonLevel: number = 1;
   dungeonResult$: Observable<any>;
   monsterEncounterList$: Observable<ReferenceEntryTable[]>;
   noRooms: number = 0;
@@ -34,7 +36,13 @@ export class GenerateDungeonComponent implements OnInit {
   ngOnInit(): void {
     this.dungeonResult$ = this.dungeonResultSource.asObservable();
     this.monsterEncounterList$ = this.dataService.dataState$.pipe(
-      map((state) => state.monsterEncounterLists)
+      map((state) => {
+        const list = state.monsterEncounterLists.map(
+          (t) => new ReferenceEntryTable(t)
+        );
+        sortByField(list);
+        return list;
+      })
     );
   }
 
@@ -44,7 +52,11 @@ export class GenerateDungeonComponent implements OnInit {
 
   generateDungeon(): void {
     this.dungeonResultSource.next(
-      this.dungeonService.generateDungeon(this.noRooms, this.stockingListRef)
+      this.dungeonService.generateDungeon(
+        this.noRooms,
+        this.dungeonLevel,
+        this.stockingListRef
+      )
     );
   }
 

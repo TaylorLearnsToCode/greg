@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
+import { doesExist } from '@shared/utilities/common-util/common.util';
 import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-dungeon.service';
 
 @Injectable({
@@ -12,11 +13,17 @@ export class GenerateDungeonService {
 
   constructor(private lbbService: GenerateLbbDungeonService) {}
 
-  generateDungeon(noRooms: number, stockingListRef?: string): DungeonResult {
-    alert('Implement this next!');
-    const result = new DungeonResult();
-    // call the generatorService
-    return result;
+  generateDungeon(
+    noRooms: number,
+    dungeonLevel?: number,
+    stockingListRef?: string
+  ): DungeonResult {
+    this.verifySystemSet();
+    return this.generatorService.generateDungeon(
+      noRooms,
+      dungeonLevel,
+      stockingListRef
+    );
   }
 
   setSystemSelection(selectedSystem: string): void {
@@ -27,6 +34,14 @@ export class GenerateDungeonService {
         break;
       default:
         throw new Error(`Unsupported system ${system} detected`);
+    }
+  }
+
+  private verifySystemSet(): void {
+    if (!doesExist(this.generatorService)) {
+      throw new Error(
+        'System has not been selected: please select a system in order to continue'
+      );
     }
   }
 }
