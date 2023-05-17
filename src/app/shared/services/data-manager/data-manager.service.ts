@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -50,8 +51,9 @@ export class DataManagerService {
    *
    * @param  {any} object
    * @param  {string} fromKey
+   * @param  {string} identifier Optional - default "name"
    */
-  delete(object: any, fromKey: string): void {
+  delete(object: any, fromKey: string, identifier?: string): void {
     // TODO - genericize this. These methods are all the same logic with different variable names!
     switch (fromKey) {
       case this.PERSISTENCE_TYPES.magicItem:
@@ -67,7 +69,7 @@ export class DataManagerService {
         console.warn(
           `Data type ${fromKey} not currently supported: defaulting to generic approach.`
         );
-        this.deleteSavedItem(object, fromKey);
+        this.deleteSavedItem(object, fromKey, identifier);
     }
   }
 
@@ -152,6 +154,9 @@ export class DataManagerService {
       case this.PERSISTENCE_TYPES.magicWeaponPowerTable:
         this.persistMagicWeaponPowerTable(object as WeaponPowerTable);
         break;
+      case this.PERSISTENCE_TYPES.monsterType:
+        this.persistMonsterType(object as MonsterType);
+        break;
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
@@ -168,7 +173,8 @@ export class DataManagerService {
         this.persisteMasterDataConfig(object as DataState);
         break;
       default:
-        throw new Error(`Data type ${key} not currently supported.`);
+        console.warn('Using default persistence function!');
+        this.defaultPersistObject(object, key);
     }
     this.refreshDataState();
   }
@@ -179,11 +185,13 @@ export class DataManagerService {
    *
    * @param  {string} reference
    * @param  {string} key
+   * @param  {string} identifier Optional - field name for unique identifier of a referenced item; default 'name'
    */
-  retrieveReference<T>(reference: string, key: string): T {
+  retrieveReference<T>(reference: string, key: string, identifier?: string): T {
     let result: T = null as T;
+    const id: string = identifier !== undefined ? identifier : 'name';
     for (const item of this.retrieve<T[]>(key, [])) {
-      if ((item as any).name === reference) {
+      if ((item as any)[id] === reference) {
         result = item;
       }
     }
@@ -194,8 +202,8 @@ export class DataManagerService {
    * For the list of items saved to browser storage identified by a provided key,
    * moves the item at the specified index one step in the indicated direction
    *
-   * @param  {string} key
-   * @param  {number} index
+   * @param  {string} key The persistence key of the list to which the target belongs
+   * @param  {number} index The index of the item to be shifted
    * @param  {string} direction Accepts "up" or "down"
    */
   shiftListEntry(key: string, index: number, direction: string): void {
@@ -214,12 +222,25 @@ export class DataManagerService {
     if (newIndex === -1 || newIndex === savedList.length) {
       return;
     }
-    const targetItem = savedList.splice(index, 1);
+    const targetItem = savedList.splice(index, 1)[0];
     savedList.splice(newIndex, 0, targetItem);
     this.clear(key);
     for (const item of savedList) {
       this.persist(key, item);
     }
+  }
+
+  /**
+   * Attempts to upsert a provided object into the stored data array of the provided
+   * persistence type key.
+   *
+   * @param  {any} object
+   * @param  {string} key
+   */
+  private defaultPersistObject(object: any, key: string): void {
+    const objects: any[] = this.retrieve(key);
+    insertOrReplace(object, objects);
+    localStorage.setItem(key, JSON.stringify(objects));
   }
 
   /**
@@ -360,6 +381,17 @@ export class DataManagerService {
     }
   }
 
+  private persistMonsterType(type: MonsterType): void {
+    const monsters: MonsterType[] = this.retrieve<MonsterType[]>(
+      this.PERSISTENCE_TYPES.monsterType
+    );
+    insertOrReplace(type, monsters, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.monsterType,
+      JSON.stringify(monsters)
+    );
+  }
+
   /**
    * Persists a provided TreasureArticle to local storage.
    * If the specified article - by name - already exists in local storage,
@@ -433,35 +465,16 @@ export class DataManagerService {
   }
 
   /** Synchronizes current data state observable with fresh values from local storage */
-  private refreshDataState() {
-    this.dataStateSource.next(
-      new DataState({
-        magicItems: this.retrieve<MagicItem[]>(
-          this.PERSISTENCE_TYPES.magicItem
-        ),
-        magicItemTables: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicItemTable
-        ),
-        magicWeaponPowers: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicWeaponPower
-        ),
-        magicWeaponPowerTables: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.magicWeaponPowerTable
-        ),
-        treasureArticles: this.retrieve<TreasureArticle[]>(
-          this.PERSISTENCE_TYPES.treasureArticle
-        ),
-        treasureMapRefs: this.retrieve<TreasureArticle[]>(
-          this.PERSISTENCE_TYPES.treasureMapRef
-        ),
-        treasureMaps: this.retrieve<ReferenceEntryTable[]>(
-          this.PERSISTENCE_TYPES.treasureMap
-        ),
-        treasureTypes: this.retrieve<TreasureType[]>(
-          this.PERSISTENCE_TYPES.treasureType
-        ),
-      } as DataState)
-    );
+  private refreshDataState(): void {
+    const dataState: DataState = new DataState();
+
+    for (const key of Object.keys(this.PERSISTENCE_TYPES)) {
+      (dataState as any)[`${key}s`] = this.retrieve(
+        (this.PERSISTENCE_TYPES as any)[key]
+      );
+    }
+
+    this.dataStateSource.next(dataState);
   }
 
   /**

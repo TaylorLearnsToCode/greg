@@ -1,0 +1,42 @@
+@import '/src/assets/variables';
+
+@include smallNumberInputs();
+
+div.chance-type {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(6, auto);
+  column-gap: 0.5em;
+}
+
+div.name-quantity {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(2, 1fr 3fr);
+  column-gap: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+div.shift-entry {
+  transform: translate(0, 0.6em);
+}
+
+div label {
+  text-align: right;
+}
+
+form {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr 1em;
+  margin-bottom: 1em;
+}
+
+section.magic-item-list section.saved-magic-items {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+}
+section.magic-item-list div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr;
+}
+section.magic-item-list label {
+  @include indent();
+}

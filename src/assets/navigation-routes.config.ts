@@ -20,16 +20,20 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         routePath: 'magic-item-table',
       } as NavRoute,
       {
+        menuLabel: 'Configure Monster Entry',
+        routePath: 'monster-entry',
+      } as NavRoute,
+      {
+        menuLabel: 'Configure Monster Encounter List',
+        routePath: 'monster-encounter-list',
+      } as NavRoute,
+      {
         menuLabel: 'Configure Treasure Map',
         routePath: 'treasure-map',
       } as NavRoute,
       {
         menuLabel: 'Configure Treasure Type',
         routePath: 'treasure-type',
-      } as NavRoute,
-      {
-        menuLabel: 'Configure Treasure Type Table',
-        routePath: 'treasure-type-table',
       } as NavRoute,
       {
         menuLabel: 'Configure Weapon Powers',
@@ -45,6 +49,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
   } as NavRoute,
   {
     children: [
+      {
+        menuLabel: 'Generate Monster Encounter',
+        routePath: 'monster-encounter',
+      } as NavRoute,
       {
         menuLabel: 'Generate Treasure Map',
         routePath: 'treasure-map',

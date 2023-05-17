@@ -24,6 +24,12 @@ export class AppComponentManagerService {
     this.initializeNavRoutes();
   }
 
+  setMainHeight(height: string): void {
+    const nextState = this.appComponentViewState;
+    (nextState.mainStyles as any)['max-height'] = height;
+    this.appComponentViewState = nextState;
+  }
+
   toggleCollapse(menuLabel: String): void {
     const nextRoutes = this.appComponentViewState.navRoutes;
     const routeIndex = nextRoutes.findIndex(

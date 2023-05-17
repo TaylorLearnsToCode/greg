@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { TreasureArticleForm } from '@configure/model/treasure-article-form.interface';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
@@ -18,7 +19,9 @@ import { Observable, map } from 'rxjs';
   templateUrl: './configure-treasure-type.component.html',
   styleUrls: ['./configure-treasure-type.component.scss'],
 })
-export class ConfigureTreasureTypeComponent implements OnInit {
+export class ConfigureTreasureTypeComponent
+  implements OnInit, TreasureArticleForm
+{
   @ViewChild('treasureTypeImport') treasureTypeImportRef: ElementRef;
   @ViewChild('treasureTypeListImport') treasureTypeListImportRef: ElementRef;
 
@@ -149,6 +152,26 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     this.dataService.exportFromStorage(this.PERSISTENCE_TYPES.treasureType);
   }
 
+  /**
+   * Removes the Treasure Article at a provided index from the Treasure Articles list.
+   *
+   * @param  {number} index
+   */
+  handleRemoveArticle(index: number): void {
+    this.articlesFormArray.removeAt(index);
+  }
+
+  /**
+   * Moves a target Treasure Article up or down in the display according to
+   * the provided direction argument.
+   *
+   * @param  {number} index
+   * @param  {string} direction 'up' or 'down', case sensitive, are supported.
+   */
+  handleShiftArticle(index: number, direction: string): void {
+    shiftFormArrayEntry(index, direction, this.articlesFormArray);
+  }
+
   /** Opens file import to select treasure type to load into memory */
   importTreasureType(): void {
     this.treasureTypeImport.click();
@@ -190,31 +213,11 @@ export class ConfigureTreasureTypeComponent implements OnInit {
     }
   }
 
-  /**
-   * Removes the Treasure Article at a provided index from the Treasure Articles list.
-   *
-   * @param  {number} index
-   */
-  removeArticle(index: number): void {
-    this.articlesFormArray.removeAt(index);
-  }
-
   /** Persists the current active treasure type to browser storage */
   saveTreasureType(): void {
     this.dataService.persist(
       this.PERSISTENCE_TYPES.treasureType,
       this.treasureTypeForm.value
     );
-  }
-
-  /**
-   * Moves a target Treasure Article up or down in the display according to
-   * the provided direction argument.
-   *
-   * @param  {number} index
-   * @param  {string} direction 'up' or 'down', case sensitive, are supported.
-   */
-  shiftArticle(index: number, direction: string): void {
-    shiftFormArrayEntry(index, direction, this.articlesFormArray);
   }
 }

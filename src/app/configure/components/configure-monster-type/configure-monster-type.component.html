@@ -1,0 +1,161 @@
+<greg-quantifiable-item-form-template
+  (editSavedItemEvent)="handleEditItemEvent($event)"
+  [itemForm]="monsterTypeForm"
+  [includeSupplementalList]="true"
+  [persistenceType]="PERSISTENCE_TYPE"
+  quantityLabel="No. Appearing"
+>
+  <supplemental-fields-form>
+    <form [formGroup]="monsterTypeForm">
+      <section class="monster-form">
+        <label>Treasure Type:</label>
+        <select
+          formControlName="treasureType"
+          *ngIf="treasureType$ | async as treasureTypes"
+        >
+          <option disabled value="">-- Select --</option>
+          <option *ngFor="let type of treasureTypes" [value]="type.type">
+            {{ type.type }} ({{ type.system }})
+          </option>
+          <option value="">None</option>
+        </select>
+
+        <label>Chance in Lair:</label>
+        <span>
+          <input formControlName="pctInLair" type="number" />
+          %
+        </span>
+
+        <label>Per Cap:</label>
+        <div>
+          <ng-container
+            *ngIf="treasurePerCapFormArray.controls.length; else nil"
+          >
+            <div
+              class="treasure-per-cap-entries"
+              *ngFor="
+                let control of treasurePerCapFormArray.controls;
+                index as i
+              "
+            >
+              <span>&bull;</span>
+              <span>{{ control.value.name }}</span>
+              <a
+                class="edit-pencil"
+                (click)="resetTreasurePerCapForm(control.value)"
+                >&#x270E;</a
+              >
+              <a (click)="removeTreasurePerCap(i)">X</a>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="monster-entourage">
+        <section class="consorts" formArrayName="consorts">
+          <ng-container *ngIf="consortsFormArray.controls.length; else nil">
+            <div *ngFor="let consort of consortsFormArray.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <span>&bull;</span>
+
+                <label>Chance</label>
+                <span>
+                  <input formControlName="pctChance" type="number" />
+                  %
+                </span>
+
+                <label>No.</label>
+                <greg-dice-rolled-form
+                  [diceRolledForm]="consortQuantityForm(i)"
+                ></greg-dice-rolled-form>
+
+                <label>Name:</label>
+                <input formControlName="name" type="text" />
+
+                <label>Every...</label>
+                <input formControlName="every" type="number" />
+
+                <a (click)="removeConsort(i)">X</a>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <a (click)="addConsort()">+Add Consort</a>
+        </section>
+
+        <hr />
+
+        <section class="retinue" formArrayName="retinue">
+          <ng-container *ngIf="retinueFormArray.controls.length; else nil">
+            <div *ngFor="let entry of retinueFormArray.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <span>&bull;</span>
+
+                <label>For Each:</label>
+                <input formControlName="each" type="number" />
+
+                <label>+Chance:</label>
+                <span>
+                  <input formControlName="incChance" type="number" />
+                  %
+                </span>
+
+                <label>Name:</label>
+                <span>
+                  <input formControlName="name" type="text" />
+                </span>
+
+                <label>No.</label>
+                <greg-dice-rolled-form
+                  [diceRolledForm]="retinueQuantityForm(i)"
+                ></greg-dice-rolled-form>
+
+                <a (click)="removeRetinue(i)">X</a>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <a (click)="addRetinue()">+Add Retinue</a>
+        </section>
+      </section>
+    </form>
+  </supplemental-fields-form>
+
+  <supplemental-lists-form>
+    <label class="indent">Add Treasure Per Capita</label>
+    <form class="per-cap-treasure-form">
+      <greg-treasure-article-form
+        [articleForm]="treasurePerCapForm"
+        [enableMagicItemHint]="true"
+        (removeArticleEvent)="handleRemoveArticle(0)"
+        (shiftArticleEvent)="handleShiftArticle(0, $event)"
+      ></greg-treasure-article-form>
+    </form>
+    <section class="per-cap-form-controls">
+      <a (click)="addTreasurePerCap()">+Add</a>
+      <a (click)="resetTreasurePerCapForm()">Reset</a>
+    </section>
+
+    <hr />
+
+    <label class="indent">Add Encounter List</label>
+    <section
+      class="saved-encounter-lists"
+      *ngIf="savedMonsterList$ | async as savedMonsterLists"
+    >
+      <ng-container *ngIf="savedMonsterLists.length; else nil">
+        <div *ngFor="let list of savedMonsterLists">
+          <span>{{ list.name }}</span>
+          <a (click)="addConsort(list)">+as Consort</a>
+          <a (click)="addRetinue(list)">+as Retinue</a>
+        </div>
+      </ng-container>
+    </section>
+  </supplemental-lists-form>
+</greg-quantifiable-item-form-template>
+
+<ng-template #nil>
+  <section>~</section>
+</ng-template>

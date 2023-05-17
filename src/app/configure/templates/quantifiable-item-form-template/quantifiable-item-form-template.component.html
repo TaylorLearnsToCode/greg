@@ -1,0 +1,88 @@
+<greg-page-template>
+  <first-content>
+    <form [formGroup]="itemForm">
+      <label>Name:</label>
+      <input formControlName="name" type="text" />
+
+      <label>{{ quantityLabel }}:</label>
+      <greg-dice-rolled-form
+        [diceRolledForm]="quantityForm"
+      ></greg-dice-rolled-form>
+
+      <label>System:</label>
+      <select formControlName="system">
+        <option disabled value="">-- Select --</option>
+        <option [value]="key" *ngFor="let key of supportedSystemKeys">
+          {{ supportedSystem(key) }}
+        </option>
+      </select>
+    </form>
+
+    <ng-content select="supplemental-fields-form"></ng-content>
+
+    <hr />
+
+    <section class="item-form-controls">
+      <a (click)="saveItem()">Save</a>
+      <a (click)="clearItemForm()">Clear</a>
+    </section>
+  </first-content>
+
+  <second-content *ngIf="savedItem$ | async as savedItems">
+    <div
+      class="supplemental-lists"
+      *ngIf="includeSupplementalList"
+      [ngStyle]="listContainerStyles"
+    >
+      <ng-content select="supplemental-lists-form"></ng-content>
+    </div>
+
+    <hr *ngIf="includeSupplementalList" />
+
+    <div class="common-list">
+      <section class="default-system">
+        <label>Default System:</label>
+        <select
+          (change)="onDefaultSystemSelect($event)"
+          [ngModel]="selectedSystem"
+        >
+          <option disabled value="">-- Select --</option>
+          <option [value]="key" *ngFor="let key of supportedSystemKeys">
+            {{ supportedSystem(key) }}
+          </option>
+        </select>
+      </section>
+
+      <label class="saved-items-label">Saved Items</label>
+      <section class="saved-items-list" [ngStyle]="listContainerStyles">
+        <ng-container *ngIf="savedItems.length; else noItems">
+          <div *ngFor="let item of savedItems; index as i">
+            <span class="shift-entry">
+              <a (click)="shiftEntry(i, 'up')">&uArr;</a>
+              <a (click)="shiftEntry(i, 'down')">&dArr;</a>
+            </span>
+            <span> {{ item.name }} ({{ item.system }}) </span>
+            <a class="edit-pencil" (click)="editSavedItem(item)">&#x270E;</a>
+            <a (click)="removeEntry(item)">X</a>
+          </div>
+        </ng-container>
+      </section>
+
+      <section class="saved-items-controls">
+        <a (click)="importSavedItems()">Import</a>
+        <input
+          #savedItemsImportInput
+          accept=".{{ persistenceType }}"
+          (change)="onSavedItemImport()"
+          type="file"
+        />
+        <a (click)="exportSavedItems(savedItems)">Export</a>
+        <a (click)="clearSavedItems()">Clear All</a>
+      </section>
+    </div>
+  </second-content>
+</greg-page-template>
+
+<ng-template #noItems>
+  <p>None currently saved.</p>
+</ng-template>

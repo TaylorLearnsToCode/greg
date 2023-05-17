@@ -96,7 +96,6 @@ export class LbbSwordService {
     }
 
     return newName;
-    // TODO - next: special purposes
   }
 
   /** Generates and returns the sword's alignment. All swords have an alignment. */

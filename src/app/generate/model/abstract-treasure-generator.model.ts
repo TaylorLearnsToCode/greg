@@ -12,8 +12,6 @@ export abstract class AbstractTreasureGenerator {
   protected readonly d100 = new DiceRolled({ pips: 100 });
   protected readonly TREASURE_ARTICLE_TYPES = TREASURE_ARTICLE_TYPES;
 
-  private returnResult: TreasureResult[];
-
   abstract generateGems(article: TreasureArticle): ValueablesResult[] | null;
   abstract generateJewelry(article: TreasureArticle): ValueablesResult[] | null;
   abstract generateMagicItem(item: TreasureArticle): TreasureResult[] | null;
@@ -42,65 +40,68 @@ export abstract class AbstractTreasureGenerator {
   }
 
   generateTreasureByTreasureType(treasureType: TreasureType): TreasureResult[] {
-    this.returnResult = [];
+    const returnResult: TreasureResult[] = [];
     for (const article of treasureType.entries) {
-      this.generateTreasureByArticleType(article, true);
+      returnResult.push(...this.generateTreasureByArticleType(article));
     }
-    return this.returnResult;
+    return returnResult;
   }
 
-  generateTreasureByArticleType(
-    article: TreasureArticle,
-    suppressReset?: boolean
-  ): TreasureResult[] {
-    if (!suppressReset) {
-      this.returnResult = [];
-    }
+  generateTreasureByArticleType(article: TreasureArticle): TreasureResult[] {
+    const returnResult: TreasureResult[] = [];
     switch ((this.TREASURE_ARTICLE_TYPES as any)[article.type]) {
       case this.TREASURE_ARTICLE_TYPES.GEMS:
-        this.pushToResults(this.generateGems(article));
+        this.pushToResults(this.generateGems(article), returnResult);
         break;
       case this.TREASURE_ARTICLE_TYPES.JEWELRY:
-        this.pushToResults(this.generateJewelry(article));
+        this.pushToResults(this.generateJewelry(article), returnResult);
         break;
       case this.TREASURE_ARTICLE_TYPES.MAGIC_ITEM:
-        this.pushToResults(this.generateMagicItem(article));
+        this.pushToResults(this.generateMagicItem(article), returnResult);
         break;
       case this.TREASURE_ARTICLE_TYPES.SPECIE:
-        this.pushToResults(this.generateSpecie(article));
+        this.pushToResults(this.generateSpecie(article), returnResult);
         break;
       case this.TREASURE_ARTICLE_TYPES.TREASURE_MAP:
-        this.pushToResults(this.generateTreasureMap(article));
+        this.pushToResults(this.generateTreasureMap(article), returnResult);
         break;
       default:
         throw new Error(`Unsupported type ${article.type}`);
     }
-    return this.returnResult;
+    return returnResult;
   }
 
   /**
    * Assigns all of the results in a provided results array to the array to be returned from
    * the generate function. If the argument is NULL, it will add nothing.
    *
-   * @param  {TreasureResult[]|null} result
+   * @param  {TreasureResult[]|null} result A list of results to be added
+   * @param  {TreasureResult[]} addList The list to which the results should be added
    */
-  private pushToResults(result: TreasureResult[] | null): void;
+  private pushToResults(
+    result: TreasureResult[] | null,
+    addList: TreasureResult[]
+  ): void;
   /**
    * Assigns a given treasure result to the array to be returned from the generate function.
    * If the argument is NULL, it will add nothing.
    *
-   * @param  {TreasureResult|null} result
+   * @param  {TreasureResult|null} result A result to be added
+   * @param  {TreasureResult[]} addList The list to which the results should be added
    */
-  private pushToResults(result: TreasureResult | null): void;
-  private pushToResults(result: any): void {
+  private pushToResults(
+    result: TreasureResult | null,
+    addList: TreasureResult[]
+  ): void;
+  private pushToResults(result: any, addList: TreasureResult[]): void {
     if (result == null) {
       return;
     } else if (Array.isArray(result)) {
       for (const entry of result) {
-        this.pushToResults(entry);
+        this.pushToResults(entry, addList);
       }
     } else {
-      this.returnResult.push(result);
+      addList.push(result);
     }
   }
 }

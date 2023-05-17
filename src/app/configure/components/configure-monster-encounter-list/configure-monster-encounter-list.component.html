@@ -1,0 +1,26 @@
+<greg-rollable-table-template
+  (editSavedTableEvent)="handleEditSavedTable($event)"
+  entryIdentifier="reference"
+  (importEvent)="handleEditSavedTable($event)"
+  (nestSavedTable)="handleNestSavedTable($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+  [tableForm]="encounterForm"
+>
+  <add-entry-form>
+    <label>Monster Types:</label>
+    <section
+      class="saved-monsters"
+      *ngIf="savedMonsterList$ | async as savedMonsterLists"
+    >
+      <ng-container *ngIf="savedMonsterLists.length; else noMonster">
+        <div *ngFor="let monster of savedMonsterLists">
+          <a (click)="addMonster(monster)">+Add</a>
+          <span>{{ monster.name }}</span>
+        </div>
+      </ng-container>
+    </section>
+    <ng-template #noMonster>
+      <p>No monsters configured.</p>
+    </ng-template>
+  </add-entry-form>
+</greg-rollable-table-template>
