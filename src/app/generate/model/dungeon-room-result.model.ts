@@ -1,8 +1,8 @@
 import { constructInstance } from '@shared/utilities/common-util/common.util';
-import { DungeonRoomResult } from './dungeon-room-result.model';
 
-export class DungeonResult {
-  rooms: DungeonRoomResult[] = [];
+export class DungeonRoomResult {
+  hasMonster: boolean = false;
+  hasTreasure: boolean = false;
 
   constructor(result?: any) {
     constructInstance(this, result);
