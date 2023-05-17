@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
+import { GenerateDungeonComponent } from './components/generate-dungeon/generate-dungeon.component';
 import { GenerateLandingComponent } from './components/generate-landing/generate-landing.component';
 import { GenerateMonsterEncounterComponent } from './components/generate-monster-encounter/generate-monster-encounter.component';
 import { GenerateTreasureFromTypeComponent } from './components/generate-treasure-from-type/generate-treasure-from-type.component';
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: '',
     component: GenerateLandingComponent,
+  },
+  {
+    path: 'dungeon',
+    component: GenerateDungeonComponent,
   },
   {
     path: 'monster-encounter',
@@ -35,6 +40,7 @@ const routes: Routes = [
     GenerateTreasureMapComponent,
     GeneratorPageTemplateComponent,
     GenerateMonsterEncounterComponent,
+    GenerateDungeonComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

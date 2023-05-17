@@ -1,0 +1,30 @@
+<greg-page-template>
+  <first-content>First</first-content>
+
+  <second-content>
+    <span class="hang-right">
+      <a (click)="clearForm()">Clear Form</a>
+    </span>
+
+    <section class="config-form">
+      <label>No. Rooms:</label>
+      <span>
+        <input [value]="noRooms" type="number" />
+      </span>
+
+      <label>System</label>
+      <span>
+        <select (change)="updateSystemSelection($event)" [value]="system">
+          <option value="" disabled>-- Select --</option>
+          <ng-container *ngFor="let key of supportedSystemKeys">
+            <option [value]="key">{{ supportedSystem(key) }}</option>
+          </ng-container>
+        </select>
+      </span>
+    </section>
+
+    <section class="controls">
+      <a (click)="generateDungeon()">Generate!</a>
+    </section>
+  </second-content>
+</greg-page-template>

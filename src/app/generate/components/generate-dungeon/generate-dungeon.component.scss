@@ -1,0 +1,19 @@
+@import '/src/assets/variables';
+
+section.config-form {
+  @include baseDisplayGrid();
+  grid-template-columns: auto 1fr;
+}
+section.config-form label {
+  margin: 0 1em;
+}
+
+section.controls {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.hang-right {
+  float: right;
+  margin-right: 2em;
+}
