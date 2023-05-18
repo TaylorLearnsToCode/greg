@@ -10,5 +10,10 @@ div.treasure label {
 
 section {
   @include baseDisplayGrid();
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1em 1fr;
+  margin-bottom: 0.5em;
+}
+
+.indented {
+  @include indent();
 }
