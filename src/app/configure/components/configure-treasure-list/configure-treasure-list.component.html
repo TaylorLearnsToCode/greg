@@ -1,0 +1,28 @@
+<greg-rollable-table-template
+  (editSavedTableEvent)="handleEditSavedTable($event)"
+  entryIdentifier="reference"
+  (importEvent)="handleEditSavedTable($event)"
+  [persistenceType]="PERSISTENCE_TYPE"
+  [tableForm]="treasureListForm"
+>
+  <add-entry-form>
+    <p>
+      This one looks a little wonky. Just assign a bounded range in the Entries
+      table, same as you would for a rolled table, then ignore the "dice pool".
+    </p>
+
+    <label>Treasure Types</label>
+    <ng-container *ngIf="treasureType$ | async as treasureTypes">
+      <section class="treasure-types" *ngIf="treasureTypes.length; else nil">
+        <div *ngFor="let type of treasureTypes">
+          <a (click)="nestType(type)">+Nest</a>
+          <span>{{ type.type }}</span>
+        </div>
+      </section>
+    </ng-container>
+  </add-entry-form>
+
+  <ng-template #nil>
+    <p>No treasure types configured.</p>
+  </ng-template>
+</greg-rollable-table-template>

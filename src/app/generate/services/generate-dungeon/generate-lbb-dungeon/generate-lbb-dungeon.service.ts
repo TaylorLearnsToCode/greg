@@ -4,10 +4,14 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { DungeonRoomResult } from '@generate/model/dungeon-room-result.model';
+import { EncounterResult } from '@generate/model/encounter-result.model';
+import { GenerateEncounterService } from '@generate/services/generate-encounter/generate-encounter.service';
+import { GenerateTreasureService } from '@generate/services/generate-treasure/generate-treasure.service';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { isEmpty } from '@shared/utilities/common-util/common.util';
+import { isBetween, isEmpty } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
@@ -15,10 +19,16 @@ import { rollDice } from '@shared/utilities/dice-util/dice.util';
 })
 export class GenerateLbbDungeonService implements DungeonGeneratorService {
   private readonly d6 = new DiceRolled();
+  private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
   private stockingList: ReferenceEntryTable;
+  private unguardedTreasureType: TreasureType;
 
-  constructor(private dataService: DataManagerService) {}
+  constructor(
+    private dataService: DataManagerService,
+    private encounterService: GenerateEncounterService,
+    private treasureService: GenerateTreasureService
+  ) {}
 
   generateDungeon(
     noRooms: number,
@@ -26,6 +36,7 @@ export class GenerateLbbDungeonService implements DungeonGeneratorService {
     stockingListRef?: string | undefined
   ): DungeonResult {
     this.deriveStockingList(dungeonLevel, stockingListRef);
+    this.deriveUnguardedTreasureType(dungeonLevel);
     const dungeonResult = new DungeonResult();
     for (let i = 0; i < noRooms; i++) {
       dungeonResult.rooms.push(this.generateRoom());
@@ -43,13 +54,13 @@ export class GenerateLbbDungeonService implements DungeonGeneratorService {
         .retrieveAll<ReferenceEntryTable>(
           PERSISTENCE_TYPES.monsterEncounterList
         )
-        .filter((list) => list.system == (SUPPORTED_SYSTEMS as any)['LBB'])
+        .filter((list) => list.system == (this.SUPPORTED_SYSTEMS as any)['LBB'])
         .find((list) => list.name.includes(`Level ${dungeonLevel}`));
       if (nextList != undefined) {
         this.stockingList = nextList;
       } else {
         throw new Error(
-          `Stocking list not found for system ${SUPPORTED_SYSTEMS.LBB}, level ${dungeonLevel}`
+          `Stocking list not found for system ${this.SUPPORTED_SYSTEMS.LBB}, level ${dungeonLevel}`
         );
       }
     } else {
@@ -60,13 +71,59 @@ export class GenerateLbbDungeonService implements DungeonGeneratorService {
     }
   }
 
+  // TODO - parameterize the "unguarded treasure" thing in the form! Maybe a <select>
+  private deriveUnguardedTreasureType(dungeonLevel?: number): void {
+    const level = dungeonLevel == undefined ? 1 : dungeonLevel;
+    this.dataService
+      .retrieveAll<ReferenceEntryTable>(PERSISTENCE_TYPES.treasureList)
+      .forEach((ref) => {
+        if (
+          ref.name === 'Unguarded Treasure' &&
+          ref.system == ('LBB' as SUPPORTED_SYSTEMS)
+        ) {
+          for (const entry of ref.entries) {
+            if (isBetween(level, entry.chanceOf)) {
+              this.unguardedTreasureType = this.dataService.retrieveReference(
+                entry.reference,
+                entry.persistenceType,
+                'type'
+              );
+              return;
+            }
+          }
+        }
+      });
+  }
+
   private generateRoom(): DungeonRoomResult {
     const room = new DungeonRoomResult();
-    room.hasMonster = rollDice(this.d6) < 3;
-    room.hasTreasure = room.hasMonster
-      ? rollDice(this.d6) < 4
-      : rollDice(this.d6) < 2;
+    this.handleMonsters(room);
+    this.handleTreasure(room);
     return room;
+  }
+
+  private handleMonsters(room: DungeonRoomResult): void {
+    if (rollDice(this.d6) < 3) {
+      room.monsters.push(
+        ...this.encounterService
+          .generateEncounterFromList(this.stockingList)
+          .map(
+            (result) =>
+              new EncounterResult({
+                ...result,
+                treasure: [],
+              })
+          )
+      );
+    }
+  }
+
+  private handleTreasure(room: DungeonRoomResult): void {
+    if (room.hasMonster ? rollDice(this.d6) < 4 : rollDice(this.d6) < 2) {
+      room.treasure.push(
+        ...this.treasureService.generateTreasure(this.unguardedTreasureType)
+      );
+    }
   }
 
   private verifyDeriveStockingList(

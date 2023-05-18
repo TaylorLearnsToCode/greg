@@ -14,6 +14,8 @@ export const PERSISTENCE_TYPES = {
   monsterType: 'greg-monster-type',
   /** Treasure article entries for use in Treasure Types */
   treasureArticle: 'greg-treasure-article',
+  /** Rollable table of configured treasure types */
+  treasureList: 'greg-treasure-list',
   /** Configurations for generating treasure maps: including maps to magic items */
   treasureMap: 'greg-treasure-map',
   /** Reference entries specific to a treasure map: gold, silver, etc. */
