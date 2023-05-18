@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { AbstractDungeonGenerator } from '@generate/model/abstract-dungeon-generator.model';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { DungeonRoomResult } from '@generate/model/dungeon-room-result.model';
@@ -8,67 +9,45 @@ import { EncounterResult } from '@generate/model/encounter-result.model';
 import { GenerateEncounterService } from '@generate/services/generate-encounter/generate-encounter.service';
 import { GenerateTreasureService } from '@generate/services/generate-treasure/generate-treasure.service';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
-import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { isBetween, isEmpty } from '@shared/utilities/common-util/common.util';
+import { isBetween } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GenerateLbbDungeonService implements DungeonGeneratorService {
+export class GenerateLbbDungeonService
+  extends AbstractDungeonGenerator
+  implements DungeonGeneratorService
+{
   private readonly d6 = new DiceRolled();
-  private readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
-
-  private stockingList: ReferenceEntryTable;
-  private unguardedTreasureType: TreasureType;
 
   constructor(
     private dataService: DataManagerService,
     private encounterService: GenerateEncounterService,
     private treasureService: GenerateTreasureService
-  ) {}
+  ) {
+    super();
+  }
 
   generateDungeon(
     noRooms: number,
     dungeonLevel?: number,
     stockingListRef?: string | undefined
   ): DungeonResult {
-    this.deriveStockingList(dungeonLevel, stockingListRef);
+    this.deriveStockingList(
+      this.dataService,
+      'LBB',
+      dungeonLevel,
+      stockingListRef
+    );
     this.deriveUnguardedTreasureType(dungeonLevel);
     const dungeonResult = new DungeonResult();
     for (let i = 0; i < noRooms; i++) {
       dungeonResult.rooms.push(this.generateRoom());
     }
     return dungeonResult;
-  }
-
-  private deriveStockingList(
-    dungeonLevel?: number,
-    stockingListRef?: string
-  ): void {
-    this.verifyDeriveStockingList(dungeonLevel, stockingListRef);
-    if (stockingListRef == undefined || isEmpty(stockingListRef)) {
-      const nextList = this.dataService
-        .retrieveAll<ReferenceEntryTable>(
-          PERSISTENCE_TYPES.monsterEncounterList
-        )
-        .filter((list) => list.system == (this.SUPPORTED_SYSTEMS as any)['LBB'])
-        .find((list) => list.name.includes(`Level ${dungeonLevel}`));
-      if (nextList != undefined) {
-        this.stockingList = nextList;
-      } else {
-        throw new Error(
-          `Stocking list not found for system ${this.SUPPORTED_SYSTEMS.LBB}, level ${dungeonLevel}`
-        );
-      }
-    } else {
-      this.stockingList = this.dataService.retrieveReference(
-        stockingListRef as string,
-        PERSISTENCE_TYPES.monsterEncounterList
-      );
-    }
   }
 
   // TODO - parameterize the "unguarded treasure" thing in the form! Maybe a <select>
@@ -122,20 +101,6 @@ export class GenerateLbbDungeonService implements DungeonGeneratorService {
     if (room.hasMonster ? rollDice(this.d6) < 4 : rollDice(this.d6) < 2) {
       room.treasure.push(
         ...this.treasureService.generateTreasure(this.unguardedTreasureType)
-      );
-    }
-  }
-
-  private verifyDeriveStockingList(
-    dungeonLevel?: number,
-    stockingListRef?: string
-  ): void {
-    if (
-      dungeonLevel == undefined &&
-      (stockingListRef == undefined || isEmpty(stockingListRef))
-    ) {
-      throw new Error(
-        'Either a stocking list reference or a dungeon level is required'
       );
     }
   }
