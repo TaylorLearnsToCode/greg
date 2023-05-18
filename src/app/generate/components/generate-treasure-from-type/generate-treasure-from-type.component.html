@@ -1,11 +1,9 @@
 <greg-page-template>
   <first-content>
     <ng-container *ngIf="hoard$ | async as hoard; else noHoard">
-      <ul *ngIf="hoard.length; else noHoard">
-        <li *ngFor="let treasureResult of hoard">
-          {{ treasureResult.quantity }} {{ treasureResult.name }}
-        </li>
-      </ul>
+      <greg-display-treasure-results
+        [treasureResults]="hoard"
+      ></greg-display-treasure-results>
     </ng-container>
     <ng-template #noHoard>
       <p class="centered">Click <a>Generate</a> to roll a treasure hoard.</p>
