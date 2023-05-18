@@ -1,0 +1,6 @@
+@import '/src/assets/variables';
+
+div {
+  @include baseDisplayGrid();
+  grid-template-columns: auto 1fr;
+}

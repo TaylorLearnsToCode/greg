@@ -1,0 +1,14 @@
+<ng-container *ngIf="dungeonResult.rooms.length; else nil">
+  <div *ngFor="let room of dungeonResult.rooms; index as i">
+    <span>{{ i + 1 }}.</span>
+    <greg-display-encounter-result
+      *ngIf="room.hasMonster"
+      [encounterResults]="room.monsters"
+      [suppressLair]="true"
+    ></greg-display-encounter-result>
+  </div>
+</ng-container>
+
+<ng-template #nil>
+  <section class="nil">~</section>
+</ng-template>

@@ -7,6 +7,8 @@ import { GenerateLandingComponent } from './components/generate-landing/generate
 import { GenerateMonsterEncounterComponent } from './components/generate-monster-encounter/generate-monster-encounter.component';
 import { GenerateTreasureFromTypeComponent } from './components/generate-treasure-from-type/generate-treasure-from-type.component';
 import { GenerateTreasureMapComponent } from './components/generate-treasure-map/generate-treasure-map.component';
+import { DisplayDungeonResultComponent } from './templates/display-dungeon-result/display-dungeon-result.component';
+import { DisplayEncounterResultComponent } from './templates/display-encounter-result/display-encounter-result.component';
 import { GeneratorPageTemplateComponent } from './templates/generator-page-template/generator-page-template.component';
 
 const routes: Routes = [
@@ -41,6 +43,8 @@ const routes: Routes = [
     GeneratorPageTemplateComponent,
     GenerateMonsterEncounterComponent,
     GenerateDungeonComponent,
+    DisplayEncounterResultComponent,
+    DisplayDungeonResultComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
