@@ -4,6 +4,7 @@ import { DungeonGeneratorService } from '@generate/model/dungeon-generator-servi
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-dungeon.service';
+import { GenerateWwwDungeonService } from './generate-www-dungeon/generate-www-dungeon.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-d
 export class GenerateDungeonService {
   private generatorService: DungeonGeneratorService;
 
-  constructor(private lbbService: GenerateLbbDungeonService) {}
+  constructor(
+    private lbbService: GenerateLbbDungeonService,
+    private wwwService: GenerateWwwDungeonService
+  ) {}
 
   generateDungeon(
     noRooms: number,
@@ -31,6 +35,9 @@ export class GenerateDungeonService {
     switch (system) {
       case SUPPORTED_SYSTEMS.LBB:
         this.generatorService = this.lbbService;
+        break;
+      case SUPPORTED_SYSTEMS.WWW:
+        this.generatorService = this.wwwService;
         break;
       default:
         throw new Error(`Unsupported system ${system} detected`);
