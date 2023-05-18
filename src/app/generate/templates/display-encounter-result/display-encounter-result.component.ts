@@ -8,5 +8,10 @@ import { EncounterResult } from '@generate/model/encounter-result.model';
 })
 export class DisplayEncounterResultComponent {
   @Input() encounterResults: EncounterResult[] = [];
+  @Input() suppressBottomMargin: boolean;
   @Input() suppressLair: boolean;
+
+  get divClasses(): string[] {
+    return this.suppressBottomMargin ? [] : ['spaced-out'];
+  }
 }

@@ -1,5 +1,8 @@
 <ng-container *ngIf="encounterResults.length; else nil">
-  <div *ngFor="let result of encounterResults; let first = first">
+  <div
+    [ngClass]="divClasses"
+    *ngFor="let result of encounterResults; let first = first"
+  >
     <label>Encountered:</label>
     <span>{{ result.quantity }} {{ result.name }}</span>
 
@@ -10,13 +13,9 @@
 
     <ng-container *ngIf="result.treasure && result.treasure.length">
       <label>Carrying:</label>
-      <span>
-        <ul>
-          <li *ngFor="let treasure of result.treasure">
-            {{ treasure.quantity }} {{ treasure.name }}
-          </li>
-        </ul>
-      </span>
+      <greg-display-treasure-results
+        [treasureResults]="result.treasure"
+      ></greg-display-treasure-results>
     </ng-container>
   </div>
 </ng-container>

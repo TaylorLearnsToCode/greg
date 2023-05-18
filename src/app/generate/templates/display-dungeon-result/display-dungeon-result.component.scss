@@ -1,6 +1,14 @@
 @import '/src/assets/variables';
 
-div {
+div.treasure {
+  @include baseDisplayGrid();
+  grid-template-columns: 1fr 3fr;
+}
+div.treasure label {
+  @include indent();
+}
+
+section {
   @include baseDisplayGrid();
   grid-template-columns: auto 1fr;
 }
