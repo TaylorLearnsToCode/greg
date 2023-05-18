@@ -2,6 +2,8 @@
   <section *ngFor="let room of dungeonResult.rooms; index as i">
     <span>{{ i + 1 }}.</span>
     <div>
+      <span class="indented" *ngIf="room.isEmpty">Empty</span>
+
       <greg-display-encounter-result
         *ngIf="room.hasMonster"
         [encounterResults]="room.monsters"

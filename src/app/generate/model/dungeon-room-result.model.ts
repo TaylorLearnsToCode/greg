@@ -12,6 +12,9 @@ export class DungeonRoomResult {
   get hasTreasure(): boolean {
     return !isEmpty(this.treasure);
   }
+  get isEmpty(): boolean {
+    return !this.hasMonster && !this.hasTreasure;
+  }
   monsters: EncounterResult[] = [];
   treasure: TreasureResult[] = [];
 
