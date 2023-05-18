@@ -7,6 +7,7 @@ import { ConfigureMagicItemTableComponent } from './components/configure-magic-i
 import { ConfigureMagicItemComponent } from './components/configure-magic-item/configure-magic-item.component';
 import { ConfigureMonsterEncounterListComponent } from './components/configure-monster-encounter-list/configure-monster-encounter-list.component';
 import { ConfigureMonsterTypeComponent } from './components/configure-monster-type/configure-monster-type.component';
+import { ConfigureTreasureListComponent } from './components/configure-treasure-list/configure-treasure-list.component';
 import { ConfigureTreasureMapComponent } from './components/configure-treasure-map/configure-treasure-map.component';
 import { ConfigureTreasureTypeComponent } from './components/configure-treasure-type/configure-treasure-type.component';
 import { ConfigureWeaponPowerComponent } from './components/configure-weapon-power/configure-weapon-power.component';
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'monster-encounter-list',
     component: ConfigureMonsterEncounterListComponent,
+  },
+  {
+    path: 'treasure-list',
+    component: ConfigureTreasureListComponent,
   },
   {
     path: 'treasure-map',
@@ -73,6 +78,7 @@ const routes: Routes = [
     QuantifiableItemFormTemplateComponent,
     ConfigureMonsterEncounterListComponent,
     TreasureArticleFormComponent,
+    ConfigureTreasureListComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

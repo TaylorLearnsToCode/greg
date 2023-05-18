@@ -4,13 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FromCamelCasePipe } from './pipes/from-camel-case/from-camel-case.pipe';
 import { PageTemplateComponent } from './templates/page-template/page-template.component';
 import { PrintListComponent } from './templates/print-list/print-list.component';
-import { RollableTableComponent } from './templates/rollable-table/rollable-table.component';
 
-const components = [
-  PageTemplateComponent,
-  RollableTableComponent,
-  PrintListComponent,
-];
+const components = [PageTemplateComponent, PrintListComponent];
 const modules = [FormsModule, ReactiveFormsModule];
 const pipes = [FromCamelCasePipe];
 

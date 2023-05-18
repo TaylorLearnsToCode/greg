@@ -160,6 +160,9 @@ export class DataManagerService {
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
+      case this.PERSISTENCE_TYPES.treasureList:
+        this.persistTreasureList(object as ReferenceEntryTable);
+        break;
       case this.PERSISTENCE_TYPES.treasureMap:
         this.persistTreasureMap(object as ReferenceEntryTable);
         break;
@@ -417,6 +420,17 @@ export class DataManagerService {
     localStorage.setItem(
       this.PERSISTENCE_TYPES.treasureArticle,
       JSON.stringify(articles)
+    );
+  }
+
+  private persistTreasureList(list: ReferenceEntryTable): void {
+    const lists: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
+      this.PERSISTENCE_TYPES.treasureList
+    );
+    insertOrReplace(list, lists, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.treasureList,
+      JSON.stringify(lists)
     );
   }
 

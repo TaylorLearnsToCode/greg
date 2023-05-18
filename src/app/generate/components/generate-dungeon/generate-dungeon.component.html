@@ -1,6 +1,7 @@
 <greg-page-template>
   <first-content>
     <section *ngIf="dungeonResult$ | async as dungeonResult; else nil">
+      <!-- TODO Finish the Display -->
       {{ dungeonResult | json }}
     </section>
   </first-content>

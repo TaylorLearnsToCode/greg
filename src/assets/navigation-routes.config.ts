@@ -28,6 +28,10 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         routePath: 'monster-encounter-list',
       } as NavRoute,
       {
+        menuLabel: 'Configure Treasure List',
+        routePath: 'treasure-list',
+      } as NavRoute,
+      {
         menuLabel: 'Configure Treasure Map',
         routePath: 'treasure-map',
       } as NavRoute,
