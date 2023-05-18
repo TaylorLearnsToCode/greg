@@ -1,8 +1,9 @@
 <greg-page-template>
   <first-content>
-    <section *ngIf="dungeonResult$ | async as dungeonResult; else nil">
-      <!-- TODO Finish the Display -->
-      {{ dungeonResult | json }}
+    <section *ngIf="dungeonResult$ | async as dungeonResult">
+      <greg-display-dungeon-result
+        [dungeonResult]="dungeonResult"
+      ></greg-display-dungeon-result>
     </section>
   </first-content>
 

@@ -1,0 +1,26 @@
+<ng-container *ngIf="encounterResults.length; else nil">
+  <div *ngFor="let result of encounterResults; let first = first">
+    <label>Encountered:</label>
+    <span>{{ result.quantity }} {{ result.name }}</span>
+
+    <ng-container *ngIf="first && !suppressLair">
+      <label>Lair?</label>
+      <span>{{ result.isLair ? "Yes" : "No" }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="result.treasure && result.treasure.length">
+      <label>Carrying:</label>
+      <span>
+        <ul>
+          <li *ngFor="let treasure of result.treasure">
+            {{ treasure.quantity }} {{ treasure.name }}
+          </li>
+        </ul>
+      </span>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-template #nil>
+  <span>~</span>
+</ng-template>
