@@ -11,6 +11,8 @@ import { DungeonResult } from './dungeon-result.model';
 export abstract class AbstractDungeonGenerator
   implements DungeonGeneratorService
 {
+  abstract readonly TARGET_SYSTEM: string;
+
   protected readonly d6 = new DiceRolled();
   protected readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
@@ -23,6 +25,7 @@ export abstract class AbstractDungeonGenerator
     stockingListRef?: string
   ): DungeonResult;
 
+  // TODO - argument payload class; if no system is provided, default to TARGET_SYSTEM
   protected deriveStockingList(
     dataService: DataManagerService,
     targetSystem: string,
