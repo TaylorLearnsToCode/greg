@@ -16,7 +16,7 @@ export class GenerateLbbDungeonService
   extends AbstractDungeonGenerator
   implements DungeonGeneratorService
 {
-  private readonly LBB = 'LBB';
+  readonly TARGET_SYSTEM: string = 'LBB';
 
   constructor(
     private dataService: DataManagerService,
@@ -33,11 +33,15 @@ export class GenerateLbbDungeonService
   ): DungeonResult {
     this.deriveStockingList(
       this.dataService,
-      this.LBB,
+      this.TARGET_SYSTEM,
       dungeonLevel,
       stockingListRef
     );
-    this.deriveUnguardedTreasureType(this.dataService, this.LBB, dungeonLevel);
+    this.deriveUnguardedTreasureType(
+      this.dataService,
+      this.TARGET_SYSTEM,
+      dungeonLevel
+    );
     const dungeonResult = new DungeonResult();
     for (let i = 0; i < noRooms; i++) {
       dungeonResult.rooms.push(this.generateRoom());

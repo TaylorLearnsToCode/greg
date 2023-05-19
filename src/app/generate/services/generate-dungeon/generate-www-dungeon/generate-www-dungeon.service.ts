@@ -18,8 +18,9 @@ export class GenerateWwwDungeonService
   extends AbstractDungeonGenerator
   implements DungeonGeneratorService
 {
+  readonly TARGET_SYSTEM = 'LBB';
+
   private readonly d8 = new DiceRolled({ pips: 8 });
-  private readonly TARGET_SYSTEM = 'LBB';
 
   constructor(
     private dataService: DataManagerService,
