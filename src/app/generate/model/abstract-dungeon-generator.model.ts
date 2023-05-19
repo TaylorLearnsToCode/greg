@@ -2,14 +2,16 @@ import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
+import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { isEmpty } from '@shared/utilities/common-util/common.util';
+import { isBetween, isEmpty } from '@shared/utilities/common-util/common.util';
 import { DungeonGeneratorService } from './dungeon-generator-service.interface';
 import { DungeonResult } from './dungeon-result.model';
 
 export abstract class AbstractDungeonGenerator
   implements DungeonGeneratorService
 {
+  protected readonly d6 = new DiceRolled();
   protected readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
 
   protected stockingList: ReferenceEntryTable;
@@ -21,7 +23,7 @@ export abstract class AbstractDungeonGenerator
     stockingListRef?: string
   ): DungeonResult;
 
-  deriveStockingList(
+  protected deriveStockingList(
     dataService: DataManagerService,
     targetSystem: string,
     dungeonLevel?: number,
@@ -50,6 +52,33 @@ export abstract class AbstractDungeonGenerator
         PERSISTENCE_TYPES.monsterEncounterList
       );
     }
+  }
+
+  protected deriveUnguardedTreasureType(
+    dataService: DataManagerService,
+    targetSystem: string,
+    dungeonLevel?: number
+  ): void {
+    const level = dungeonLevel == undefined ? 1 : dungeonLevel;
+    dataService
+      .retrieveAll<ReferenceEntryTable>(PERSISTENCE_TYPES.treasureList)
+      .forEach((ref) => {
+        if (
+          ref.name === 'Unguarded Treasure' &&
+          ref.system == (targetSystem as SUPPORTED_SYSTEMS)
+        ) {
+          for (const entry of ref.entries) {
+            if (isBetween(level, entry.chanceOf)) {
+              this.unguardedTreasureType = dataService.retrieveReference(
+                entry.reference,
+                entry.persistenceType,
+                'type'
+              );
+              return;
+            }
+          }
+        }
+      });
   }
 
   private verifyDeriveStockingList(
