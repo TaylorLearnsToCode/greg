@@ -97,10 +97,12 @@ export class GenerateWwwDungeonService
   }
 
   private handleTreasure(room: DungeonRoomResult): void {
-    let roll = rollDice(this.d6);
-    if (room.hasMonster && roll < 4) {
+    const roll = rollDice(this.d8);
+    if (room.hasMonster && roll < 5) {
       this.addTreasure(room);
-    } else if ((room.hasTrap || room.isSpecial) && roll < 3) {
+    } else if (room.hasTrap && roll < 4) {
+      this.addTreasure(room);
+    } else if (room.isSpecial && roll < 3) {
       this.addTreasure(room);
     } else if (roll === 1) {
       this.addTreasure(room);

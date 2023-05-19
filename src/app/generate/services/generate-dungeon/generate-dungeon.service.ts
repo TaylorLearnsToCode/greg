@@ -3,6 +3,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { GenerateBxDungeonService } from './generate-bx-dungeon/generate-bx-dungeon.service';
 import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-dungeon.service';
 import { GenerateWwwDungeonService } from './generate-www-dungeon/generate-www-dungeon.service';
 
@@ -13,6 +14,7 @@ export class GenerateDungeonService {
   private generatorService: DungeonGeneratorService;
 
   constructor(
+    private bxService: GenerateBxDungeonService,
     private lbbService: GenerateLbbDungeonService,
     private wwwService: GenerateWwwDungeonService
   ) {}
@@ -33,6 +35,9 @@ export class GenerateDungeonService {
   setSystemSelection(selectedSystem: string): void {
     const system: string = (SUPPORTED_SYSTEMS as any)[selectedSystem];
     switch (system) {
+      case SUPPORTED_SYSTEMS.BX:
+        this.generatorService = this.bxService;
+        break;
       case SUPPORTED_SYSTEMS.LBB:
         this.generatorService = this.lbbService;
         break;

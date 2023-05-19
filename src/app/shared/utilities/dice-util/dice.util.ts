@@ -53,6 +53,27 @@ export function rollDice(...dice: any[]): number {
 }
 
 /**
+ * For a provided Map, rolls the provided die and returns the value of the map entry
+ * identified by the roll result as a key.
+ *
+ * @param  {Map<number, string>} mappedList
+ * @param  {DiceRolled} diceToRoll Optional: default d6
+ */
+export function rollOnMappedList(
+  mappedList: Map<number, string>,
+  diceToRoll?: DiceRolled
+): string {
+  const dice = diceToRoll === undefined ? new DiceRolled() : diceToRoll;
+  const roll = rollDice(dice);
+  for (const key of mappedList.keys()) {
+    if (key === roll) {
+      return ((' ' + mappedList.get(key)) as string) + ' ';
+    }
+  }
+  throw new Error(`Unable to find list entry for result of ${roll}`);
+}
+
+/**
  * For a provided DiceRolled, generates a random number bounded by 1 and the
  * number of pips specified, with even probability between each possible result.
  * @param  {DiceRolled} die
