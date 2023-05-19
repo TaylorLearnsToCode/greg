@@ -11,6 +11,7 @@ import { DisplayDungeonResultComponent } from './templates/display-dungeon-resul
 import { DisplayEncounterResultComponent } from './templates/display-encounter-result/display-encounter-result.component';
 import { GeneratorPageTemplateComponent } from './templates/generator-page-template/generator-page-template.component';
 import { DisplayTreasureResultsComponent } from './templates/display-treasure-results/display-treasure-results.component';
+import { DisplayDungeonRoomPropertyComponent } from './templates/display-dungeon-room-property/display-dungeon-room-property.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,7 @@ const routes: Routes = [
     DisplayEncounterResultComponent,
     DisplayDungeonResultComponent,
     DisplayTreasureResultsComponent,
+    DisplayDungeonRoomPropertyComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],

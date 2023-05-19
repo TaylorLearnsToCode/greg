@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AbstractInspirationService } from '@generate/model/abstract-inspiration-service.model';
 import { BoundedRange } from '@shared/model/utility/bounded-range.model';
-import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
-import { isBetween } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InspireSpecialDungeonRoomService {
-  private readonly d6 = new DiceRolled();
+export class InspireSpecialDungeonRoomService extends AbstractInspirationService {
   /** How good or bad the special encouter is for the party when engaged */
   private readonly DISPOSITION = new Map<BoundedRange, string>([
     [new BoundedRange({ low: 1, high: 1 }), 'very bad for'],
@@ -78,18 +76,15 @@ export class InspireSpecialDungeonRoomService {
     [new BoundedRange({ low: 6, high: 6 }), 'the long term'],
   ]);
 
-  constructor() {}
-
   generateSpecialEffect(): string {
     const targetRoll = rollDice(this.d6);
-    return ''.concat(
-      'A feature,',
+    return 'Special:'.concat(
       this.rollOnRange(this.DISPOSITION),
       'the party, targeting',
       this.rollOnRange(this.TARGET, targetRoll),
       ', specifically',
       this.deriveTargetEffect(targetRoll),
-      'the ramifications for which persist for',
+      ': the ramifications for which persist for',
       this.rollOnRange(this.DURATION)
     );
   }
@@ -102,29 +97,5 @@ export class InspireSpecialDungeonRoomService {
     } else {
       return this.rollOnList(this.ENVIRONMENT_EFFECTS);
     }
-  }
-
-  private rollOnList(list: Map<number, string>): string {
-    const roll = rollDice(this.d6);
-    for (const key of list.keys()) {
-      if (key === roll) {
-        return ((' ' + list.get(key)) as string) + ' ';
-      }
-    }
-    throw new Error(`Unable to find list entry for result of ${roll}`);
-  }
-
-  private rollOnRange(
-    range: Map<BoundedRange, string>,
-    predeterminedRoll?: number
-  ): string {
-    const roll =
-      predeterminedRoll === undefined ? rollDice(this.d6) : predeterminedRoll;
-    for (const key of range.keys()) {
-      if (isBetween(roll, key)) {
-        return ((' ' + range.get(key)) as string) + ' ';
-      }
-    }
-    throw new Error(`Unable to find range entry for result of ${roll}`);
   }
 }
