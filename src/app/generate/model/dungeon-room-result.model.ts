@@ -15,7 +15,11 @@ export class DungeonRoomResult {
   get isEmpty(): boolean {
     return !this.hasMonster && !this.hasTreasure;
   }
+  get isSpecial(): boolean {
+    return !isEmpty(this.specialFeature);
+  }
   monsters: EncounterResult[] = [];
+  specialFeature: string = '';
   treasure: TreasureResult[] = [];
 
   constructor(result?: any) {
