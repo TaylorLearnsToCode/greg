@@ -22,6 +22,7 @@ export class GenerateLbbDungeonService
   implements DungeonGeneratorService
 {
   private readonly d6 = new DiceRolled();
+  private readonly LBB = 'LBB';
 
   constructor(
     private dataService: DataManagerService,
@@ -38,7 +39,7 @@ export class GenerateLbbDungeonService
   ): DungeonResult {
     this.deriveStockingList(
       this.dataService,
-      'LBB',
+      this.LBB,
       dungeonLevel,
       stockingListRef
     );
@@ -58,7 +59,7 @@ export class GenerateLbbDungeonService
       .forEach((ref) => {
         if (
           ref.name === 'Unguarded Treasure' &&
-          ref.system == ('LBB' as SUPPORTED_SYSTEMS)
+          ref.system == (this.LBB as SUPPORTED_SYSTEMS)
         ) {
           for (const entry of ref.entries) {
             if (isBetween(level, entry.chanceOf)) {
