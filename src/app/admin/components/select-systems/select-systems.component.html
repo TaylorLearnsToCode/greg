@@ -1,5 +1,27 @@
 <greg-page-template>
-  <first-content> First </first-content>
+  <first-content>
+    <label>Built-In Systems</label>
+    <section class="built-in-systems">
+      <div>
+        <span>&nbsp;</span>
+        <label>System</label>
+        <label>Load</label>
+        <label>Augment</label>
+      </div>
+      <ng-container *ngFor="let system of supportedSystems">
+        <div [ngClass]="{ unsupported: system.futureScope }">
+          <span>&bull;</span>
+          <span>{{ system.key | displaySupportedSystem : true }}</span>
+          <a (click)="loadSystem(system, true)">
+            <span>O</span> <span>&#x229A;</span>
+          </a>
+          <a (click)="loadSystem(system)">
+            <span>O</span> <span>&#x229A;</span>
+          </a>
+        </div>
+      </ng-container>
+    </section>
+  </first-content>
 
-  <second-content> Second </second-content>
+  <second-content> (Information Panel) </second-content>
 </greg-page-template>
