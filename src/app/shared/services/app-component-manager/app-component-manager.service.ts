@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NAVIGATION_ROUTES } from '@assets/navigation-routes.config';
+import { NAVIGATION_ROUTES } from '@assets/app-configs/navigation-routes.config';
 import { AppComponentViewModel } from '@shared/model/ui/app-component-view.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { throwError } from '@shared/utilities/framework-util/framework.util';

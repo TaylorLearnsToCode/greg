@@ -1,4 +1,4 @@
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/app-configs/treasure-article-types.config';
 import {
   constructInstance,
   doesExist,

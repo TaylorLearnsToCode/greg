@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-generator.model';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';

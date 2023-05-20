@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/app-configs/treasure-article-types.config';
 import { RollableTableComponent } from '@configure/model/rollable-table-component.interface';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';

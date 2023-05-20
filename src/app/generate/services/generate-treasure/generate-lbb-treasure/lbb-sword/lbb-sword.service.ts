@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { WeaponPowerTable } from '@shared/model/treasure/weapon-power-table.model';
 import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';

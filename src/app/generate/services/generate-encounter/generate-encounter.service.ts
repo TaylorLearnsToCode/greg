@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { EncounterGeneratorService } from '@generate/model/encounter-generator-service.interface';
 import { EncounterResult } from '@generate/model/encounter-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';

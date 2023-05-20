@@ -1,4 +1,4 @@
-import { SPECIE_TYPES } from '@assets/specie-types.config';
+import { SPECIE_TYPES } from '@assets/app-configs/specie-types.config';
 import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { TreasureResult } from '@generate/model/treasure-result.model';
 

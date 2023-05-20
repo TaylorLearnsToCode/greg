@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/app-configs/treasure-article-types.config';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { sortByField } from '@shared/utilities/common-util/common.util';

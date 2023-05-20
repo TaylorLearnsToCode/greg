@@ -1,4 +1,4 @@
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/app-configs/treasure-article-types.config';
 import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';

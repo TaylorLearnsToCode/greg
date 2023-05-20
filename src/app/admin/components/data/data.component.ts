@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { DataState } from '@shared/model/dao/data-state.model';
 import { PageDisplayMode } from '@shared/model/ui/page-display-mode.enum';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
