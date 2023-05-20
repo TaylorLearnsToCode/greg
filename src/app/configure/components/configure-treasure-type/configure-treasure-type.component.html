@@ -1,6 +1,5 @@
 <greg-page-template>
   <first-content>
-    <!-- Form -->
     <form [formGroup]="treasureTypeForm">
       <section class="type-definition">
         <span>
@@ -72,7 +71,10 @@
     </section>
 
     <label>Saved Types</label>
-    <section *ngIf="treasureTypes$ | async as treasureTypes">
+    <section
+      class="saved-treasure-types"
+      *ngIf="treasureTypes$ | async as treasureTypes"
+    >
       <ng-container *ngIf="treasureTypes.length; else noneSaved">
         <div class="treasure-list" *ngFor="let type of treasureTypes">
           <a (click)="editTreasureType(type)">&#x270E;</a>

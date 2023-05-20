@@ -8,10 +8,12 @@ import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-tab
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import { sortByField } from '@shared/utilities/common-util/common.util';
 import {
   buildFormFromObject,
   shiftFormArrayEntry,
 } from '@shared/utilities/form-util/form.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -67,7 +69,11 @@ export class ConfigureTreasureTypeComponent
       ])
     );
     this.treasureTypes$ = this.dataService.dataState$.pipe(
-      map((dataState) => dataState.treasureTypes)
+      map((dataState) => {
+        const types = dataState.treasureTypes.map((t) => new TreasureType(t));
+        sortByField(types, 'type');
+        return types;
+      })
     );
   }
 
@@ -196,7 +202,7 @@ export class ConfigureTreasureTypeComponent
         this.treasureTypeImport.value = '';
       });
     } else {
-      throw new Error('No treasure type import file found.');
+      throwError('No treasure type import file found.');
     }
   }
 
@@ -209,7 +215,7 @@ export class ConfigureTreasureTypeComponent
       );
       this.treasureTypeListImport.value = '';
     } else {
-      throw new Error('No treasure type import file found.');
+      throwError('No treasure type import file found.');
     }
   }
 

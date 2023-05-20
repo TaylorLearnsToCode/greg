@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 /** Utility template to provide a re-usable form when bounded ranges are necessary */
 @Component({
@@ -18,7 +19,8 @@ export class BoundedRangeFormComponent {
     } else if (doesExist(this.fromParentForm) && doesExist(this.identifier)) {
       return this.fromParentForm.get(this.identifier) as FormGroup;
     } else {
-      throw new Error('Unable to determine bounded range input');
+      throwError('Unable to determine bounded range input');
+      return new FormGroup({});
     }
   }
   @Input() identifier: string;

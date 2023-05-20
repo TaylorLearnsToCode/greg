@@ -1,7 +1,6 @@
 <greg-page-template [pageDisplayMode]="pageDisplayMode">
   <first-content *ngIf="dataState$ | async as dataState">
     <section class="controls">
-      <!-- Do this next -->
       <a (click)="importDataState()">Import</a>
       <input
         #importDataStateInput

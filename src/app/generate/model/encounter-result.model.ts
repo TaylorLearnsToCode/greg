@@ -10,6 +10,7 @@ export class EncounterResult {
   name: string = '';
   quantity: number = 0;
   treasure: TreasureResult[] = [];
+  treasureType: string = '';
 
   constructor(result?: any) {
     constructInstance(this, result);

@@ -3,6 +3,8 @@
 @include hideFileInputs();
 @include smallNumberInputs(4em);
 
+$panel-height: 33vh;
+
 div.reposition {
   @include oneColumnLayout();
 }
@@ -13,6 +15,11 @@ div.treasure-list {
   display: grid;
   grid-template-columns: 1em 1fr 1em;
 }
+
+first-content section.type-controls {
+  @include oneColumnLayout();
+   padding: 0.5em 0em;
+ }
 
 form {
   padding: 0.5em 0em;
@@ -30,17 +37,25 @@ second-content > section {
   margin-bottom: 1em;
 }
 
+second-content section.type-controls {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+}
+
 section.magic-item-tables {
   @include twoColumnLayout();
+  max-height: $panel-height;
+  overflow-y: scroll;
 }
 section.magic-item-tables div {
   @include baseDisplayGrid();
   grid-template-columns: 3em 1fr;
 }
 
-section.type-controls {
-  @include oneColumnLayout();
-  padding: 0.5em 0em;
+section.saved-treasure-types {
+  max-height: $panel-height;
+  overflow-y: scroll;
 }
 
 section.type-definition {

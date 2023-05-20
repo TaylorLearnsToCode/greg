@@ -4,7 +4,8 @@ import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
-import { map, Observable } from 'rxjs';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'greg-configure-magic-item',
@@ -108,7 +109,7 @@ export class ConfigureMagicItemComponent implements OnInit {
       });
       this.magicItemImport.value = '';
     } else {
-      throw new Error('No magic item type import file found.');
+      throwError('No magic item type import file found.');
     }
   }
 
@@ -121,7 +122,7 @@ export class ConfigureMagicItemComponent implements OnInit {
       );
       this.magicItemListImport.value = '';
     } else {
-      throw new Error('No magic item list type import file found.');
+      throwError('No magic item list type import file found.');
     }
   }
 

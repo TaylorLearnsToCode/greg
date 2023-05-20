@@ -10,6 +10,7 @@ import {
   isEmpty,
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 enum Alignment {
   LAW,
@@ -118,7 +119,7 @@ export class LbbSwordService {
             alignment = 'Chaotic';
             break;
           default:
-            throw new Error(
+            throwError(
               `Unsupported alignment ${this.SWORD_ALIGNMENTS.get(
                 swordAlignment
               )?.toString()} encountered`
@@ -252,7 +253,7 @@ export class LbbSwordService {
           )
         ];
 
-      let specialAbility: string;
+      let specialAbility: string = '';
       switch (this.swordAlignment) {
         case Alignment.LAW:
           specialAbility = 'Paralyze Chaotic Opponents';
@@ -264,7 +265,7 @@ export class LbbSwordService {
           specialAbility = 'Disintegrate Lawful Opponents';
           break;
         default:
-          throw new Error(
+          throwError(
             `Unsupported alignment ${this.swordAlignment} encountered`
           );
       }
@@ -326,7 +327,7 @@ export class LbbSwordService {
               );
               break;
             default:
-              throw new Error(
+              throwError(
                 `Unsupported persistence type ${entry.persistenceType} encountered`
               );
           }

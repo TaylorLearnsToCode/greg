@@ -3,6 +3,7 @@ import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 @Injectable({
   providedIn: 'root',
@@ -101,9 +102,8 @@ export class LbbJewelsService {
       }
     }
     if (returnValue === -1) {
-      throw new Error(`No jewelry value threshold found for roll ${roll}`);
-    } else {
-      return returnValue;
+      throwError(`No jewelry value threshold found for roll ${roll}`);
     }
+    return returnValue;
   }
 }

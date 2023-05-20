@@ -18,6 +18,7 @@ import {
   isEmpty,
 } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { LbbJewelsService } from './lbb-jewels/lbb-jewels.service';
 import { LbbSwordService } from './lbb-sword/lbb-sword.service';
 
@@ -176,7 +177,7 @@ export class GenerateLbbTreasureService
             );
             break;
           default:
-            throw new Error(
+            throwError(
               `Unsupported type ${entry.persistenceType} encountered.`
             );
         }
@@ -231,7 +232,7 @@ export class GenerateLbbTreasureService
           );
         }
         if (!doesExist(item)) {
-          throw new Error(
+          throwError(
             `Unable to find reference for ${entry.reference}, type ${entry.persistenceType}`
           );
         }
@@ -260,7 +261,7 @@ export class GenerateLbbTreasureService
             }
             break;
           default:
-            throw new Error(
+            throwError(
               `Unsupported item type ${entry.persistenceType} encountered.`
             );
         }

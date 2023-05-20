@@ -5,6 +5,7 @@ import {
   rollDice,
   rollOnMappedList,
 } from '@shared/utilities/dice-util/dice.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 export abstract class AbstractInspirationService {
   protected readonly d6 = new DiceRolled();
@@ -24,6 +25,7 @@ export abstract class AbstractInspirationService {
         return ((' ' + range.get(key)) as string) + ' ';
       }
     }
-    throw new Error(`Unable to find range entry for result of ${roll}`);
+    throwError(`Unable to find range entry for result of ${roll}`);
+    return '';
   }
 }

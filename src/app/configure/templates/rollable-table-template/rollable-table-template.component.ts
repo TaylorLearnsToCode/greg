@@ -14,6 +14,7 @@ import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { shiftFormArrayEntry } from '@shared/utilities/form-util/form.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { Observable, map } from 'rxjs';
 
 // TODO: rename to indicate it's a form
@@ -165,7 +166,7 @@ export class RollableTableTemplateComponent implements OnInit {
    */
   fillChanceOf(side: string): void {
     if (side !== 'low' && side !== 'high') {
-      throw new Error(`Invalid chance of side ${side} specified.`);
+      throwError(`Invalid chance of side ${side} specified.`);
     }
 
     let constantSide: FormControl;
@@ -220,7 +221,7 @@ export class RollableTableTemplateComponent implements OnInit {
         ) as Observable<T>
       ).subscribe((file) => this.importEvent.emit(file));
     } else {
-      throw new Error('No file found for import.');
+      throwError('No file found for import.');
     }
   }
 

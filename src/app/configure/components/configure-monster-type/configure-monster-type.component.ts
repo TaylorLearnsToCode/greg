@@ -12,6 +12,7 @@ import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -104,11 +105,11 @@ export class ConfigureMonsterTypeComponent
   }
 
   handleRemoveArticle(identifier: any): void {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
   }
 
   handleShiftArticle(identifier: any, direction: string): void {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
   }
 
   removeConsort(index: number): void {

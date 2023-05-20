@@ -3,6 +3,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { EncounterGeneratorService } from '@generate/model/encounter-generator-service.interface';
 import { EncounterResult } from '@generate/model/encounter-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { GenerateLbbEncounterService } from './generate-lbb-encounter/generate-lbb-encounter.service';
 
 @Injectable({
@@ -26,7 +27,7 @@ export class GenerateEncounterService {
         this.generatorService = this.lbbService;
         break;
       default:
-        throw new Error(`Unsupported system ${system} specified.`);
+        throwError(`Unsupported system ${system} specified.`);
     }
   }
 }

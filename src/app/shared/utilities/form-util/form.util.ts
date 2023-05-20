@@ -6,6 +6,7 @@ import {
   UntypedFormArray,
 } from '@angular/forms';
 import { doesExist } from '../common-util/common.util';
+import { throwError } from '../framework-util/framework.util';
 
 /**
  * Provided any object, simple or complex, returns an AbstractControl to represent that object.
@@ -47,7 +48,7 @@ export function shiftFormArrayEntry(
   direction: string,
   target: FormArray
 ): void {
-  let newIndex: number;
+  let newIndex: number = -1;
   switch (direction) {
     case 'up':
       newIndex = index - 1;
@@ -56,7 +57,7 @@ export function shiftFormArrayEntry(
       newIndex = index + 1;
       break;
     default:
-      throw new Error(`Unsupported direction ${direction} specified.`);
+      throwError(`Unsupported direction ${direction} specified.`);
   }
   if (newIndex === -1 || newIndex === target.controls.length) {
     return;

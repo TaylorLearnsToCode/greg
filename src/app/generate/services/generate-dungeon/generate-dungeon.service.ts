@@ -3,6 +3,7 @@ import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { GenerateBxDungeonService } from './generate-bx-dungeon/generate-bx-dungeon.service';
 import { GenerateLbbDungeonService } from './generate-lbb-dungeon/generate-lbb-dungeon.service';
 import { GenerateWwwDungeonService } from './generate-www-dungeon/generate-www-dungeon.service';
@@ -45,13 +46,13 @@ export class GenerateDungeonService {
         this.generatorService = this.wwwService;
         break;
       default:
-        throw new Error(`Unsupported system ${system} detected`);
+        throwError(`Unsupported system ${system} detected`);
     }
   }
 
   private verifySystemSet(): void {
     if (!doesExist(this.generatorService)) {
-      throw new Error(
+      throwError(
         'System has not been selected: please select a system in order to continue'
       );
     }
