@@ -48,7 +48,7 @@ function buildRoute(navRoute: NavRoute): Route {
             import('@generate/generate.module').then((m) => m.GenerateModule),
         };
         break;
-      case 'Data':
+      case 'Admin':
         route = {
           ...route,
           loadChildren: () =>
