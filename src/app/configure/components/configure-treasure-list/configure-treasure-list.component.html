@@ -16,7 +16,7 @@
       <section class="treasure-types" *ngIf="treasureTypes.length; else nil">
         <div *ngFor="let type of treasureTypes">
           <a (click)="nestType(type)">+Nest</a>
-          <span>{{ type.type }}</span>
+          <span>{{ type.type }} ({{ type.system }})</span>
         </div>
       </section>
     </ng-container>

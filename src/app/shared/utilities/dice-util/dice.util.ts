@@ -1,4 +1,5 @@
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
+import { throwError } from '../framework-util/framework.util';
 
 /**
  * Rolls {no} number of dice, each with {pips} faces, and returns the result.
@@ -70,7 +71,8 @@ export function rollOnMappedList(
       return ((' ' + mappedList.get(key)) as string) + ' ';
     }
   }
-  throw new Error(`Unable to find list entry for result of ${roll}`);
+  throwError(`Unable to find list entry for result of ${roll}`);
+  return '';
 }
 
 /**

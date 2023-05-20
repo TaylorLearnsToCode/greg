@@ -16,7 +16,7 @@ export class GenerateDungeonComponent implements OnInit {
   dungeonLevel: number = 1;
   dungeonResult$: Observable<any>;
   monsterEncounterList$: Observable<ReferenceEntryTable[]>;
-  noRooms: number = 0;
+  noRooms: number = 10;
   stockingListRef: string = '';
   get supportedSystemKeys(): string[] {
     return Object.keys(SUPPORTED_SYSTEMS);

@@ -2,9 +2,8 @@
   <div *ngFor="let item of list">
     <span>&bull;</span>
     <span>
-      <ng-container
-        *ngFor="let prop of itemProps; first as isFirst; last as isLast"
-      >
+      <ng-container *ngFor="let prop of itemProps; first as isFirst">
+        <ng-container *ngIf="!isFirst">:</ng-container>
         {{ getValue(item, prop) }}
       </ng-container>
     </span>

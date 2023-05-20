@@ -6,6 +6,7 @@ import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 @Injectable({
   providedIn: 'root',
@@ -15,21 +16,26 @@ export class GenerateWwwTreasureService
   implements TreasureGeneratorService
 {
   generateGems(article: TreasureArticle): ValueablesResult[] {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
+    return [];
   }
   generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
+    return [];
   }
   generateMagicItem(item: TreasureArticle): TreasureResult[] | null {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
+    return [];
   }
   generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
+    return [];
   }
   generateTreasureMapResult(
     map: ReferenceEntryTable
   ): TreasureMapResult | null {
-    throw new Error('Method not implemented.');
+    throwError('Method not implemented.');
+    return null;
   }
   constructor() {
     super();

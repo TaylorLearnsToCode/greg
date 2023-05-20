@@ -5,6 +5,7 @@ import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { isBetween, isEmpty } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { DungeonGeneratorService } from './dungeon-generator-service.interface';
 import { DungeonResult } from './dungeon-result.model';
 
@@ -15,6 +16,7 @@ export abstract class AbstractDungeonGenerator
 
   protected readonly d6 = new DiceRolled();
   protected readonly SUPPORTED_SYSTEMS = SUPPORTED_SYSTEMS;
+  protected readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   protected stockingList: ReferenceEntryTable;
   protected unguardedTreasureType: TreasureType;
@@ -34,25 +36,27 @@ export abstract class AbstractDungeonGenerator
   ): void {
     this.verifyDeriveStockingList(dungeonLevel, stockingListRef);
     if (stockingListRef == undefined || isEmpty(stockingListRef)) {
-      const nextList = dataService
-        .retrieveAll<ReferenceEntryTable>(
+      const encounterLists: ReferenceEntryTable[] =
+        dataService.retrieveAll<ReferenceEntryTable>(
           PERSISTENCE_TYPES.monsterEncounterList
-        )
-        .filter(
-          (list) => list.system == (this.SUPPORTED_SYSTEMS as any)[targetSystem]
-        )
-        .find((list) => list.name.includes(`Level ${dungeonLevel}`));
+        );
+      const prunedLists: ReferenceEntryTable[] = encounterLists.filter(
+        (list) => list.system == (this.SUPPORTED_SYSTEMS as any)[targetSystem]
+      );
+      const nextList: ReferenceEntryTable | undefined = prunedLists.find(
+        (list) => list.name.includes(`Level ${dungeonLevel}`)
+      );
       if (nextList != undefined) {
         this.stockingList = nextList;
       } else {
-        throw new Error(
-          `Stocking list not found for system ${this.SUPPORTED_SYSTEMS.LBB}, level ${dungeonLevel}`
+        throwError(
+          `Stocking list not found for system ${targetSystem}, level ${dungeonLevel}`
         );
       }
     } else {
       this.stockingList = dataService.retrieveReference<ReferenceEntryTable>(
         stockingListRef as string,
-        PERSISTENCE_TYPES.monsterEncounterList
+        this.PERSISTENCE_TYPES.monsterEncounterList
       );
     }
   }
@@ -63,25 +67,27 @@ export abstract class AbstractDungeonGenerator
     dungeonLevel?: number
   ): void {
     const level = dungeonLevel == undefined ? 1 : dungeonLevel;
-    dataService
-      .retrieveAll<ReferenceEntryTable>(PERSISTENCE_TYPES.treasureList)
-      .forEach((ref) => {
-        if (
-          ref.name === 'Unguarded Treasure' &&
-          ref.system == (targetSystem as SUPPORTED_SYSTEMS)
-        ) {
-          for (const entry of ref.entries) {
-            if (isBetween(level, entry.chanceOf)) {
-              this.unguardedTreasureType = dataService.retrieveReference(
-                entry.reference,
-                entry.persistenceType,
-                'type'
-              );
-              return;
-            }
+    const allTables: ReferenceEntryTable[] =
+      dataService.retrieveAll<ReferenceEntryTable>(
+        this.PERSISTENCE_TYPES.treasureList
+      );
+    for (const table of allTables) {
+      if (
+        table.name === 'Unguarded Treasure' &&
+        table.system == (targetSystem as SUPPORTED_SYSTEMS)
+      ) {
+        for (const entry of table.entries) {
+          if (isBetween(level, entry.chanceOf)) {
+            this.unguardedTreasureType = dataService.retrieveReference(
+              [entry.reference, targetSystem],
+              entry.persistenceType,
+              ['type', 'system']
+            );
+            return;
           }
         }
-      });
+      }
+    }
   }
 
   private verifyDeriveStockingList(
@@ -92,7 +98,7 @@ export abstract class AbstractDungeonGenerator
       dungeonLevel == undefined &&
       (stockingListRef == undefined || isEmpty(stockingListRef))
     ) {
-      throw new Error(
+      throwError(
         'Either a stocking list reference or a dungeon level is required'
       );
     }

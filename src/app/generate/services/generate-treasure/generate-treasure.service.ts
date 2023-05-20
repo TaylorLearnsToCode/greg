@@ -6,6 +6,7 @@ import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { GenerateBxTreasureService } from './generate-bx-treasure/generate-bx-treasure.service';
 import { GenerateLbbTreasureService } from './generate-lbb-treasure/generate-lbb-treasure.service';
 import { GenerateWwwTreasureService } from './generate-www-treasure/generate-www-treasure.service';
@@ -49,7 +50,7 @@ export class GenerateTreasureService {
         this.generatorService = this.wwwService;
         break;
       default:
-        throw new Error(`Unsupported system ${system} specified.`);
+        throwError(`Unsupported system ${system} specified.`);
     }
   }
 }

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
 import { AbstractDungeonGenerator } from '@generate/model/abstract-dungeon-generator.model';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { DungeonRoomResult } from '@generate/model/dungeon-room-result.model';
 import { GenerateEncounterService } from '@generate/services/generate-encounter/generate-encounter.service';
 import { GenerateTreasureService } from '@generate/services/generate-treasure/generate-treasure.service';
-import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -26,7 +25,6 @@ export class GenerateBxDungeonService
   readonly TARGET_SYSTEM: string = 'BX';
 
   private readonly d10 = new DiceRolled({ pips: 10 });
-  private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
   private readonly SAMPLE_ROOM_TRAPS: Map<number, string> = new Map([
     [1, 'Poison gas: Save vs. Poison or die'],
@@ -82,7 +80,11 @@ export class GenerateBxDungeonService
       dungeonLevel,
       stockingListRef
     );
-    this.deriveUnguardedTreasureType(this.dataService, 'LBB', dungeonLevel);
+    this.deriveUnguardedTreasureType(
+      this.dataService,
+      this.TARGET_SYSTEM,
+      dungeonLevel
+    );
     const dungeonResult = new DungeonResult();
     for (let i = 0; i < noRooms; i++) {
       dungeonResult.rooms.push(this.generateRoom());
@@ -109,37 +111,13 @@ export class GenerateBxDungeonService
 
   private addTreasure(room: DungeonRoomResult): void {
     if (room.hasMonster) {
-      if (!room.monsters.some((m) => !isEmpty(m.treasure))) {
-        let monster: MonsterType;
-        let monsterTreasureType: TreasureType;
-        for (const encounterResult of room.monsters) {
-          monster = this.dataService.retrieveReference<MonsterType>(
-            this.PERSISTENCE_TYPES.monsterType,
-            encounterResult.name
-          );
-          monsterTreasureType =
-            this.dataService.retrieveReference<TreasureType>(
-              this.PERSISTENCE_TYPES.treasureType,
-              monster?.treasureType,
-              'type'
-            );
-          if (doesExist(monsterTreasureType)) {
-            room.treasure.push(
-              ...this.treasureService.generateTreasure(monsterTreasureType)
-            );
-          } else {
-            console.warn(
-              `Error determining treasure for ${encounterResult.name}`
-            );
-          }
-          if (!isEmpty(room.treasure)) {
-            return;
-          }
-        }
-      }
+      this.handleTreasureFromMonster(room);
     }
     room.treasure.push(
-      ...this.treasureService.generateTreasure(this.unguardedTreasureType)
+      ...this.treasureService.generateTreasure({
+        ...this.unguardedTreasureType,
+        system: 'LBB' as SUPPORTED_SYSTEMS,
+      } as TreasureType)
     );
   }
 
@@ -176,6 +154,33 @@ export class GenerateBxDungeonService
       this.addTreasure(room);
     } else if (roll === 1) {
       this.addTreasure(room);
+    }
+  }
+
+  private handleTreasureFromMonster(room: DungeonRoomResult): void {
+    if (!room.monsters.some((m) => !isEmpty(m.treasure))) {
+      let monsterTreasureType: TreasureType;
+      for (const encounterResult of room.monsters.filter(
+        (monster) => !isEmpty(monster.treasureType)
+      )) {
+        monsterTreasureType = this.dataService.retrieveReference<TreasureType>(
+          this.PERSISTENCE_TYPES.treasureType,
+          encounterResult.treasureType,
+          'type'
+        );
+        if (doesExist(monsterTreasureType)) {
+          room.treasure.push(
+            ...this.treasureService.generateTreasure(monsterTreasureType)
+          );
+        } else {
+          console.warn(
+            `Error determining treasure for ${encounterResult.name}`
+          );
+        }
+        if (!isEmpty(room.treasure)) {
+          return;
+        }
+      }
     }
   }
 }

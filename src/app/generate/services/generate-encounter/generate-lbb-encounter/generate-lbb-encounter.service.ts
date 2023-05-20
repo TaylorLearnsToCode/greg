@@ -168,6 +168,7 @@ export class GenerateLbbEncounterService
   }
 
   private handleTreasure(monster: MonsterType, result: EncounterResult): void {
+    result.treasureType = monster.treasureType;
     if (result.isLair && !isEmpty(monster.treasureType)) {
       const type: TreasureType = this.dataService.retrieveReference(
         monster.treasureType,

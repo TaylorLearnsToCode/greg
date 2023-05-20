@@ -3,6 +3,7 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { NAVIGATION_ROUTES } from '@assets/navigation-routes.config';
 import { NavRoute } from '@shared/model/ui/nav-route.interface';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 /** Iterates through configured NAVIGATION_ROUTES and, for each, adds a Route to the application routing. */
 function buildRoutes(): Routes {
@@ -55,7 +56,7 @@ function buildRoute(navRoute: NavRoute): Route {
         };
         break;
       default:
-        throw new Error(
+        throwError(
           `Module ${navRoute.menuLabel} has not yet been enabled in the application routing.`
         );
     }
