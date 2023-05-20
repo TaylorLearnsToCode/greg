@@ -5,6 +5,7 @@ import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { TreasureMapResult } from './treasure-map-result.model';
 import { ValueablesResult } from './valuables-result.model';
 
@@ -66,7 +67,7 @@ export abstract class AbstractTreasureGenerator {
         this.pushToResults(this.generateTreasureMap(article), returnResult);
         break;
       default:
-        throw new Error(`Unsupported type ${article.type}`);
+        throwError(`Unsupported type ${article.type}`);
     }
     return returnResult;
   }

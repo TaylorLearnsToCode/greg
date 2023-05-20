@@ -1,0 +1,10 @@
+<ng-container *ngIf="treasureResults.length; else nil">
+  <div *ngFor="let result of treasureResults">
+    <span>&bull;</span>
+    <span>{{ result.quantity }} {{ result.name }}</span>
+  </div>
+</ng-container>
+
+<ng-template #nil>
+  <p>~</p>
+</ng-template>

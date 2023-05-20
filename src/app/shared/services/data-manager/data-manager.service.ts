@@ -10,8 +10,10 @@ import { WeaponPowerTable } from '@shared/model/treasure/weapon-power-table.mode
 import {
   doesExist,
   insertOrReplace,
+  isEmpty,
   removeOrWarn,
 } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ImportExportService } from './import-export/import-export.service';
 
@@ -160,6 +162,9 @@ export class DataManagerService {
       case this.PERSISTENCE_TYPES.treasureArticle:
         this.persistTreasureArticle(object as TreasureArticle);
         break;
+      case this.PERSISTENCE_TYPES.treasureList:
+        this.persistTreasureList(object as ReferenceEntryTable);
+        break;
       case this.PERSISTENCE_TYPES.treasureMap:
         this.persistTreasureMap(object as ReferenceEntryTable);
         break;
@@ -180,22 +185,73 @@ export class DataManagerService {
   }
 
   /**
+   * Searches browser storage, returning the currently configured collection identified by a
+   * provided key string. Returns an empty array if none is found.
+   *
+   * @param  {string} key
+   */
+  retrieveAll<T>(key: string): T[] {
+    return this.retrieve<T[]>(key);
+  }
+
+  /**
    * Searches browser storage for a specific referenced article among a collection
    * grouped under the provided PERSISTENCE_TYPES key.
-   *
-   * @param  {string} reference
-   * @param  {string} key
-   * @param  {string} identifier Optional - field name for unique identifier of a referenced item; default 'name'
    */
-  retrieveReference<T>(reference: string, key: string, identifier?: string): T {
-    let result: T = null as T;
-    const id: string = identifier !== undefined ? identifier : 'name';
-    for (const item of this.retrieve<T[]>(key, [])) {
-      if ((item as any)[id] === reference) {
-        result = item;
+  retrieveReference<T>(reference: string, key: string, identifer?: string): T;
+  retrieveReference<T>(
+    reference: string[],
+    key: string,
+    identifier: string[]
+  ): T;
+  retrieveReference<T>(reference: any, key: string, identifier?: any): T {
+    const references: string[] = this.toArray<string>(reference);
+    const identifiers: string[] = this.toArray<string>(identifier, 'name');
+    this.validateRetrieveReferenceArguments(references, key, identifiers);
+    const referencesList: T[] = this.retrieve<T[]>(key);
+
+    let matches: boolean[];
+    let targetResult: T = null as T;
+    for (const result of referencesList) {
+      matches = [];
+      for (let i = 0; i < identifiers.length; i++) {
+        matches.push(
+          doesExist((result as any)[identifiers[i]]) &&
+            (result as any)[identifiers[i]] === references[i]
+        );
+      }
+      if (!matches.some((match) => !match)) {
+        targetResult = result;
+        break;
       }
     }
-    return result;
+    return targetResult as T;
+  }
+
+  private validateRetrieveReferenceArguments(
+    references: string[],
+    key: string,
+    identifiers: string[]
+  ): void {
+    if (isEmpty(references)) {
+      throwError('Reference field is required');
+    }
+    if (!doesExist(key) || isEmpty(key)) {
+      throwError(`Key field is required`);
+    }
+    if (references.length > 1 && references.length !== identifiers.length) {
+      throwError('An identifer must be provided for each reference');
+    }
+  }
+
+  private toArray<T>(item: T | T[], defaultValue?: T): T[] {
+    if (!doesExist(item)) {
+      return defaultValue !== undefined ? [defaultValue] : [];
+    } else if (Array.isArray(item)) {
+      return item;
+    } else {
+      return [item];
+    }
   }
 
   /**
@@ -216,14 +272,14 @@ export class DataManagerService {
         newIndex = index + 1;
         break;
       default:
-        throw new Error(`Invalid direction ${direction} specified.`);
+        throwError(`Invalid direction ${direction} specified.`);
     }
     const savedList: any[] = this.retrieve(key);
     if (newIndex === -1 || newIndex === savedList.length) {
       return;
     }
     const targetItem = savedList.splice(index, 1)[0];
-    savedList.splice(newIndex, 0, targetItem);
+    savedList.splice(newIndex as number, 0, targetItem);
     this.clear(key);
     for (const item of savedList) {
       this.persist(key, item);
@@ -407,6 +463,17 @@ export class DataManagerService {
     localStorage.setItem(
       this.PERSISTENCE_TYPES.treasureArticle,
       JSON.stringify(articles)
+    );
+  }
+
+  private persistTreasureList(list: ReferenceEntryTable): void {
+    const lists: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
+      this.PERSISTENCE_TYPES.treasureList
+    );
+    insertOrReplace(list, lists, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.treasureList,
+      JSON.stringify(lists)
     );
   }
 

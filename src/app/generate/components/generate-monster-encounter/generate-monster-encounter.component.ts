@@ -15,12 +15,9 @@ export class GenerateMonsterEncounterComponent implements GeneratorComponent {
 
   encounterResults: EncounterResult[];
 
-  TEMP_rollableTable: any;
-
   constructor(private encounterService: GenerateEncounterService) {}
 
   handleGenerate(rollableTable: ReferenceEntryTable): void {
-    this.TEMP_rollableTable = rollableTable;
     this.encounterResults =
       this.encounterService.generateEncounterFromList(rollableTable);
   }

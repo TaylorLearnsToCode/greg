@@ -20,7 +20,7 @@ export class DataComponent implements OnInit {
   dataStateKeys: string[];
   includeProperties(key: string): string {
     return ['treasureTypes', 'treasureArticles'].includes(key)
-      ? 'type'
+      ? 'type,system'
       : 'name';
   }
 

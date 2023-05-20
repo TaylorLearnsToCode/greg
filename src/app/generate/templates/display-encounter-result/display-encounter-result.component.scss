@@ -1,0 +1,13 @@
+@import '/src/assets/variables';
+
+div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1fr 3fr;
+}
+div.spaced-out {
+  margin-bottom: 1em;
+}
+
+label {
+  @include indent();
+}

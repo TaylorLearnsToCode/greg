@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { doesExist } from '@shared/utilities/common-util/common.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 
 /**
  * Form template to leverage with DiceRolled dice pool elements.
@@ -25,7 +26,8 @@ export class DiceRolledFormComponent {
     } else if (doesExist(this.fromParentForm) && doesExist(this.identifier)) {
       return this.fromParentForm.get(this.identifier) as FormGroup;
     } else {
-      throw new Error('Unable to determine dice rolling input property.');
+      throwError('Unable to determine dice rolling input property.');
+      return new FormGroup({});
     }
   }
   /**

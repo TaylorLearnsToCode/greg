@@ -11,6 +11,7 @@ import {
   buildFormFromObject,
   shiftFormArrayEntry,
 } from '@shared/utilities/form-util/form.util';
+import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -87,7 +88,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
       (addition as ReferenceEntryTable).system ==
         this.magicItemTableForm.value.system
     ) {
-      throw new Error('Cannot nest a table in itself!');
+      throwError('Cannot nest a table in itself!');
     }
 
     const referenceToAdd = buildFormFromObject(
@@ -158,7 +159,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
    */
   fillChanceOf(side: string): void {
     if (side !== 'low' && side !== 'high') {
-      throw new Error(`Invalid chance of side ${side} specified.`);
+      throwError(`Invalid chance of side ${side} specified.`);
     }
 
     let constantSide: FormControl;
@@ -294,7 +295,7 @@ export class ConfigureMagicItemTableComponent implements OnInit {
           control.get('reference')?.disable();
           break;
         default:
-          throw new Error(`Unsupported option ${option} specified.`);
+          throwError(`Unsupported option ${option} specified.`);
       }
     });
   }

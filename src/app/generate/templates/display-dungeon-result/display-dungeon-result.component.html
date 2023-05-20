@@ -1,0 +1,40 @@
+<ng-container *ngIf="dungeonResult.rooms.length; else nil">
+  <section *ngFor="let room of dungeonResult.rooms; index as i">
+    <span>{{ i + 1 }}.</span>
+    <div>
+      <span class="indented" *ngIf="room.isEmpty">
+        <i>Empty</i>
+      </span>
+
+      <greg-display-encounter-result
+        *ngIf="room.hasMonster"
+        [encounterResults]="room.monsters"
+        [suppressBottomMargin]="true"
+        [suppressLair]="true"
+      ></greg-display-encounter-result>
+
+      <greg-display-dungeon-room-property
+        *ngIf="room.isSpecial"
+        label="Special"
+        [value]="room.specialFeature"
+      ></greg-display-dungeon-room-property>
+
+      <greg-display-dungeon-room-property
+        *ngIf="room.hasTrap"
+        label="Trap"
+        [value]="room.trap"
+      ></greg-display-dungeon-room-property>
+
+      <div class="treasure" *ngIf="room.hasTreasure">
+        <label>Found:</label>
+        <greg-display-treasure-results
+          [treasureResults]="room.treasure"
+        ></greg-display-treasure-results>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #nil>
+  <div class="nil">~</div>
+</ng-template>

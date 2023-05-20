@@ -1,0 +1,64 @@
+<greg-page-template>
+  <first-content>
+    <section *ngIf="dungeonResult$ | async as dungeonResult">
+      <greg-display-dungeon-result
+        [dungeonResult]="dungeonResult"
+      ></greg-display-dungeon-result>
+    </section>
+  </first-content>
+
+  <second-content>
+    <span class="hang-right">
+      <a (click)="clearForm()">Clear Form</a>
+    </span>
+
+    <section class="config-form">
+      <label>No. Rooms:</label>
+      <span>
+        <input [(ngModel)]="noRooms" type="number" />
+      </span>
+
+      <label>System:</label>
+      <span>
+        <select (change)="updateSystemSelection($event)" [value]="system">
+          <option value="" disabled>-- Select --</option>
+          <ng-container *ngFor="let key of supportedSystemKeys">
+            <option [value]="key">{{ supportedSystem(key) }}</option>
+          </ng-container>
+        </select>
+      </span>
+
+      <label>Dungeon Level:</label>
+      <span>
+        <input [(ngModel)]="dungeonLevel" type="number" />
+      </span>
+
+      <label>Custom Stocking List?</label>
+      <span>
+        <input [(ngModel)]="stockingListRef" type="text" />
+      </span>
+    </section>
+
+    <label>Saved Lists:</label>
+    <div class="encounter-lists">
+      <ng-container
+        *ngIf="monsterEncounterList$ | async as monsterEncounterLists"
+      >
+        <ng-container *ngIf="monsterEncounterLists.length; else nil">
+          <div *ngFor="let list of monsterEncounterLists">
+            <a (click)="useList(list)">+Use</a>
+            <span>{{ list.name }}</span>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <section class="controls">
+      <a (click)="generateDungeon()">Generate!</a>
+    </section>
+  </second-content>
+</greg-page-template>
+
+<ng-template #nil>
+  <section class="nil">~</section>
+</ng-template>
