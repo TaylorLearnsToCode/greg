@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { Observable, map } from 'rxjs';

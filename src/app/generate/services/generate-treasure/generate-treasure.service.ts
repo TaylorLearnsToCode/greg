@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { TreasureResult } from '@generate/model/treasure-result.model';

@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
-import { TREASURE_ARTICLE_TYPES } from '@assets/treasure-article-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
+import { TREASURE_ARTICLE_TYPES } from '@assets/app-configs/treasure-article-types.config';
 import { TreasureArticleForm } from '@configure/model/treasure-article-form.interface';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';

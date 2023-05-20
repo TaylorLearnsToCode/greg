@@ -1,5 +1,5 @@
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';

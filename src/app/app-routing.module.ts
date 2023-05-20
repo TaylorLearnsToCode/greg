@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
-import { NAVIGATION_ROUTES } from '@assets/navigation-routes.config';
+import { NAVIGATION_ROUTES } from '@assets/app-configs/navigation-routes.config';
 import { NavRoute } from '@shared/model/ui/nav-route.interface';
 import { doesExist } from '@shared/utilities/common-util/common.util';
 import { throwError } from '@shared/utilities/framework-util/framework.util';

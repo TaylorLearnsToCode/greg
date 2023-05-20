@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { RollableTableComponent } from '@configure/model/rollable-table-component.interface';
 import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { WeaponPowerTable } from '@shared/model/treasure/weapon-power-table.model';

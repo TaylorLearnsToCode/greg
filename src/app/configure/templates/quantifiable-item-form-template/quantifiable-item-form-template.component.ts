@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { AbstractQuantifiableItem } from '@shared/model/framework/abstract-quantifiable-item.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
 import { AppComponentManagerService } from '@shared/services/app-component-manager/app-component-manager.service';

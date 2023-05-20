@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { QuantifiableItemComponent } from '@configure/model/quantifiable-item-component.interface';
 import { TreasureArticleForm } from '@configure/model/treasure-article-form.interface';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';

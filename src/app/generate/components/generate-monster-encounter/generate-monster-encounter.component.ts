@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { EncounterResult } from '@generate/model/encounter-result.model';
 import { GeneratorComponent } from '@generate/model/generator-component.interface';
 import { GenerateEncounterService } from '@generate/services/generate-encounter/generate-encounter.service';

@@ -8,8 +8,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { AbstractRollableTable } from '@shared/model/framework/abstract-rollable-table.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { doesExist } from '@shared/utilities/common-util/common.util';
