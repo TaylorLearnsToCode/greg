@@ -33,6 +33,8 @@ section.list-controls {
 
 section.magic-items {
   margin-top: 0.5em;
+  max-height: 67vh;
+  overflow-y: scroll;
 }
 
 span.form-controls {
