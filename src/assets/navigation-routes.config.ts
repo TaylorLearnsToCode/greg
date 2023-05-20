@@ -75,8 +75,18 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
     routePath: 'generate',
   } as NavRoute,
   {
+    children: [
+      {
+        menuLabel: 'Data',
+        routePath: 'data',
+      } as NavRoute,
+      {
+        menuLabel: 'Select Systems',
+        routePath: 'select-systems',
+      } as NavRoute,
+    ],
     import: true,
-    menuLabel: 'Data',
+    menuLabel: 'Admin',
     routePath: 'admin',
   } as NavRoute,
 ];
