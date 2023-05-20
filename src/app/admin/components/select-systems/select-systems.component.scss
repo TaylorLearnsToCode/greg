@@ -1,0 +1,28 @@
+@import '/src/assets/variables';
+
+section.built-in-systems > div {
+  @include baseDisplayGrid();
+  grid-template-columns: 1em 1fr 2.5em 4em;
+  column-gap: .5em;
+}
+section.built-in-systems > div:first-child {
+  border-bottom: solid $header-orange 1px;
+}
+section.built-in-systems > div a {
+  font-style: normal;
+  text-align: center;
+}
+section.built-in-systems > div a:hover :nth-child(1) {
+    display: none;
+  }
+section.built-in-systems > div a:hover :nth-child(2) {
+  display: inline;
+}
+section.built-in-systems > div a :nth-child(2) {
+  display: none;
+}
+
+.unsupported {
+  color: $text-gray;
+  font-style: italic;
+}
