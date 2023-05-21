@@ -1,13 +1,14 @@
 {
   "name": "guided-random-encounter-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "servelocal": "npm install && ng serve"
+    "servelocal": "npm install && ng serve",
+    "build-pages": "ng build --base-href /guided-random-encounter-generator/"
   },
   "private": true,
   "dependencies": {
