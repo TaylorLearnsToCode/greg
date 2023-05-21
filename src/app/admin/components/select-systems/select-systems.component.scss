@@ -1,5 +1,9 @@
 @import '/src/assets/variables';
 
+a {
+  text-decoration: none;
+}
+
 section.built-in-systems {
   margin: 0.25em 0;
 }
@@ -23,6 +27,26 @@ section.built-in-systems > div a:hover :nth-child(2) {
 }
 section.built-in-systems > div a :nth-child(2) {
   display: none;
+}
+section.built-in-systems p {
+  font-size: smaller;
+  font-style: italic;
+  padding: 0 10%;
+  text-align: center;
+}
+
+section.information-panel {
+  @include standardBorder();
+  background-color: $background-dark;
+  margin: 1em;
+  padding: 0.5em 1em;
+}
+section.information-panel label {
+  @include indent();
+}
+
+.indented {
+  @include indent();
 }
 
 .unsupported {
