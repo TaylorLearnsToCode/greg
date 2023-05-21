@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { buildFormFromObject } from '@shared/utilities/form-util/form.util';

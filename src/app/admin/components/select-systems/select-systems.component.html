@@ -1,0 +1,63 @@
+<greg-page-template>
+  <first-content>
+    <label>Built-In Systems</label>
+    <section class="built-in-systems">
+      <div>
+        <span>&nbsp;</span>
+        <label>System</label>
+        <label>Load</label>
+        <label>Augment</label>
+      </div>
+      <ng-container *ngFor="let system of supportedSystems">
+        <div [ngClass]="{ unsupported: system.futureScope }">
+          <span>&bull;</span>
+          <span>{{ system.key | displaySupportedSystem : true }}</span>
+          <a (click)="loadSystem(system, true)">
+            <span>O</span> <span>&#x229A;</span>
+          </a>
+          <a (click)="loadSystem(system)">
+            <span>O</span> <span>&#x229A;</span>
+          </a>
+        </div>
+      </ng-container>
+      <p>
+        Click "Load" to replace the active data with the target system.
+        <br />
+        Click "Augment" to add the selected system to the communal pot: such
+        that the configurations for both coexist in memory.
+      </p>
+      <p>
+        Systems <span class="unsupported">highlighted in grey</span> are not
+        fully functional and may not be implemented - but are on the horizon.
+      </p>
+    </section>
+  </first-content>
+
+  <second-content>
+    <section class="information-panel">
+      <label>Updated - May, 2023</label>
+      <p>
+        Current state of the program provides for generation of dungeons - top
+        to bottom - using the LBB ruleset. Some limited capacity is also
+        feasible, selecting the different mechanisms for generation on the
+        dungeon panel (e.g. - you can use the B/X generation procedures with the
+        LBB monster and treasure tables if you like).
+      </p>
+      <p>
+        The next milestone for data is going to be the completion and inclusion
+        of B/X configuration data - however, as parallel developments on WW&W as
+        a system occur, the WW&W features and data will likely perforate the B/X
+        development schedule.
+      </p>
+      <p>
+        For comments/questions/concerns - feel free to reach out via
+        <a href="https://clericswearringmail.blogspot.com/" target="_blank">
+          the blog
+        </a>
+        , <a href="https://discord.gg/kQnrK4YCCn" target="_blank">Discord</a>,
+        or via <a href="mailto:ClericsWearEmail@gmail.com"> email </a>.
+      </p>
+      <p class="indented">- CWR</p>
+    </section>
+  </second-content>
+</greg-page-template>

@@ -11,7 +11,6 @@ import { ConfigureTreasureListComponent } from './components/configure-treasure-
 import { ConfigureTreasureMapComponent } from './components/configure-treasure-map/configure-treasure-map.component';
 import { ConfigureTreasureTypeComponent } from './components/configure-treasure-type/configure-treasure-type.component';
 import { ConfigureWeaponPowerComponent } from './components/configure-weapon-power/configure-weapon-power.component';
-import { TempConvertLegacyComponent } from './components/temp-convert-legacy/temp-convert-legacy.component';
 import { BoundedRangeFormComponent } from './templates/bounded-range-form/bounded-range-form.component';
 import { DiceRolledFormComponent } from './templates/dice-rolled-form/dice-rolled-form.component';
 import { QuantifiableItemFormTemplateComponent } from './templates/quantifiable-item-form-template/quantifiable-item-form-template.component';
@@ -52,10 +51,6 @@ const routes: Routes = [
     component: ConfigureTreasureTypeComponent,
   },
   {
-    path: 'TEMP-convert-legacy',
-    component: TempConvertLegacyComponent,
-  },
-  {
     path: 'weapon-power',
     component: ConfigureWeaponPowerComponent,
   },
@@ -71,7 +66,6 @@ const routes: Routes = [
     ConfigureMagicItemTableComponent,
     ConfigureTreasureMapComponent,
     BoundedRangeFormComponent,
-    TempConvertLegacyComponent,
     RollableTableTemplateComponent,
     ConfigureWeaponPowerComponent,
     ConfigureMonsterTypeComponent,

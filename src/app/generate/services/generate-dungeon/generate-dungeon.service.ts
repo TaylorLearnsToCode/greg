@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { doesExist } from '@shared/utilities/common-util/common.util';

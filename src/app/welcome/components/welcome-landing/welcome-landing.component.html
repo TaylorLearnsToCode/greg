@@ -1,7 +1,22 @@
 <greg-page-template [pageDisplayMode]="pageDisplayMode">
   <first-content>
     <h2>Welcome!</h2>
-    <p>Welcome to GREG: the Guided Random Encounter Generator!</p>
+    <p>
+      Welcome to GREG: the Guided Random Encounter Generator!
+      <a
+        (mouseenter)="toggleConfig('Configure')"
+        (mouseleave)="toggleConfig('Configure')"
+        >Get to configuring</a
+      >
+      or
+      <a
+        href="/admin/select-systems"
+        (mouseenter)="toggleConfig('Admin')"
+        (mouseleave)="toggleConfig('Admin')"
+        >select a pre-loaded system</a
+      >
+      to get started.
+    </p>
     <pre>
                                                                                                                                              ..............                                                                                                                                                 
                                                                                                                          ...',,;clddxxkkkOOOO0KKKKKXXKKKKK00OOOkkkkxxdol:;,''...                                                                                                                            

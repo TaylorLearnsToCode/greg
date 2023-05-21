@@ -1,4 +1,4 @@
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { EncounterResult } from './encounter-result.model';
 

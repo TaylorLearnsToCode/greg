@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PERSISTENCE_TYPES } from '@assets/persistence-types.config';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { GeneratorComponent } from '@generate/model/generator-component.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { GenerateTreasureService } from '@generate/services/generate-treasure/generate-treasure.service';

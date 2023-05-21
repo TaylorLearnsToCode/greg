@@ -1,4 +1,4 @@
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { DiceRolled } from '../utility/dice-rolled.model';
 

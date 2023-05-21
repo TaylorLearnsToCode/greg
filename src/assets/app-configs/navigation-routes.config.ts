@@ -43,10 +43,6 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         menuLabel: 'Configure Weapon Powers',
         routePath: 'weapon-power',
       } as NavRoute,
-      {
-        menuLabel: 'TEMP: Convert Legacy',
-        routePath: 'TEMP-convert-legacy',
-      } as NavRoute,
     ],
     menuLabel: 'Configure',
     routePath: 'configure',
@@ -75,8 +71,18 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
     routePath: 'generate',
   } as NavRoute,
   {
+    children: [
+      {
+        menuLabel: 'Data',
+        routePath: 'data',
+      } as NavRoute,
+      {
+        menuLabel: 'Select Systems',
+        routePath: 'select-systems',
+      } as NavRoute,
+    ],
     import: true,
-    menuLabel: 'Data',
+    menuLabel: 'Admin',
     routePath: 'admin',
   } as NavRoute,
 ];

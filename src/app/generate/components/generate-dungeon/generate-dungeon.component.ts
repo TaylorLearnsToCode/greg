@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SUPPORTED_SYSTEMS } from '@assets/supported-systems.config';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
 import { GenerateDungeonService } from '@generate/services/generate-dungeon/generate-dungeon.service';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
