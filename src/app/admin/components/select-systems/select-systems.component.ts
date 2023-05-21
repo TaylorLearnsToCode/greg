@@ -2,6 +2,7 @@ import { SelectableSystem } from '@admin/model/selectable-system.model';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
+import { lbb } from '@assets/system-configs/system-lbb';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
 
@@ -34,19 +35,14 @@ export class SelectSystemsComponent {
       return;
     }
 
-    let configLocation: string = '../../../../assets/system-configs/';
+    let selectedSystem;
     switch (system.key) {
       case 'LBB':
-        configLocation += 'system-lbb.GREG-MASTER-CONFIG';
+        selectedSystem = lbb;
         break;
       default:
         throwError(`System ${system.key} not found`);
     }
-    this.httpClient.get(configLocation).subscribe((config) => {
-      if (replace) {
-        this.dataService.clearAll();
-      }
-      this.dataService.persist('master', config);
-    });
+    this.dataService.persist('master', selectedSystem);
   }
 }
