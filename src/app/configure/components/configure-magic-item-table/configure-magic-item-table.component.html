@@ -98,7 +98,9 @@
         >
           <div [ngClass]="isNestable(magicItemTable)">
             <a (click)="addToForm(magicItemTable)">+</a>
-            <span>{{ magicItemTable.name }}</span>
+            <span>
+              {{ magicItemTable.name }} ( {{ magicItemTable.system }} )
+            </span>
             <a class="edit-pencil" (click)="editTable(magicItemTable)"
               >&#x270E;</a
             >
