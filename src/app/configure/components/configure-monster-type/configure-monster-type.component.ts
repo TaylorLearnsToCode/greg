@@ -31,6 +31,9 @@ export class ConfigureMonsterTypeComponent
   consortQuantityForm(index: number): FormGroup {
     return this.consortsFormArray.at(index).get('quantity') as FormGroup;
   }
+  get isBx(): boolean {
+    return this.monsterTypeForm.value.system === 'BX';
+  }
   monsterTypeForm: FormGroup;
   get retinueFormArray(): FormArray {
     return this.monsterTypeForm.get('retinue') as FormArray;

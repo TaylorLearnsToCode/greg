@@ -49,6 +49,14 @@
             </div>
           </ng-container>
         </div>
+
+        <ng-container *ngIf="isBx">
+          <label>No. in Lair:</label>
+          <greg-dice-rolled-form
+            [fromParentForm]="monsterTypeForm"
+            identifier="quantityInLair"
+          ></greg-dice-rolled-form>
+        </ng-container>
       </section>
 
       <hr />

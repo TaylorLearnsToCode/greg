@@ -1,6 +1,7 @@
 import { constructInstance } from '@shared/utilities/common-util/common.util';
 import { AbstractQuantifiableItem } from '../framework/abstract-quantifiable-item.model';
 import { TreasureArticle } from '../treasure/treasure-article.model';
+import { DiceRolled } from '../utility/dice-rolled.model';
 import { MonsterConsort } from './monster-consort.model';
 import { MonsterRetinue } from './monster-retinue.model';
 
@@ -12,6 +13,8 @@ export class MonsterType extends AbstractQuantifiableItem {
   consorts: MonsterConsort[] = [];
   /** The percent chance for the monster to be in its lair when encountered */
   pctInLair: number = 0;
+  /** The number of monsters encountered when in the creature's lair */
+  quantityInLair: DiceRolled = new DiceRolled();
   /**
    * Static monsters accompanying an encounter. E.G. - "A priest will always be accompanied
    * by 2-12 acolytes"
