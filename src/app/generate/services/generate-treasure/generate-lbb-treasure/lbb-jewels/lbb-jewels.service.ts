@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
+import { addOrIncrementValuable } from '@generate/utilities/treasure-util/treasure.util';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
@@ -53,30 +54,13 @@ export class LbbJewelsService {
       let jewel: ValueablesResult;
       for (let i = 0; i < jewelryCount; i++) {
         jewel = this.generateJewel();
-        this.addOrIncrementJewel(jewel);
+        addOrIncrementValuable(jewel, this.jewelResult);
       }
 
       this.jewelResult.sort((a, b) => a.value - b.value);
       return this.jewelResult;
     }
     return null;
-  }
-
-  /**
-   * If no jewel of the present value is detected in the active result response, adds this
-   * to it. If at least one result is present already, increments the pre-existing set.
-   *
-   * @param  {ValueablesResult} jewel
-   */
-  private addOrIncrementJewel(jewel: ValueablesResult): void {
-    const jewelIndex: number = this.jewelResult.findIndex(
-      (j) => j.value === jewel.value
-    );
-    if (jewelIndex == -1) {
-      this.jewelResult.push(jewel);
-    } else {
-      this.jewelResult[jewelIndex].quantity += jewel.quantity;
-    }
   }
 
   /** Generates a new article of jewelry with calculated value */

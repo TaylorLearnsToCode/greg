@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
+import { addOrIncrementValuable } from '@generate/utilities/treasure-util/treasure.util';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
@@ -51,30 +52,13 @@ export class LbbGemsService {
       for (let i = 0; i < gemCount; i++) {
         this.nthGem = i + 1;
         gem = this.generateGem();
-        this.addOrIncrementGem(gem);
+        addOrIncrementValuable(gem, this.gemResult);
       }
 
       this.gemResult.sort((a, b) => a.value - b.value);
       return this.gemResult;
     }
     return null;
-  }
-
-  /**
-   * If no gem of the present value is detected in the active result response, adds this
-   * to it. If at least one result is present already, increments the pre-existing set.
-   *
-   * @param  {ValueablesResult} gem
-   */
-  private addOrIncrementGem(gem: ValueablesResult): void {
-    const gemIndex: number = this.gemResult.findIndex(
-      (g) => g.value === gem.value
-    );
-    if (gemIndex == -1) {
-      this.gemResult.push(gem);
-    } else {
-      this.gemResult[gemIndex].quantity += gem.quantity;
-    }
   }
 
   /**
