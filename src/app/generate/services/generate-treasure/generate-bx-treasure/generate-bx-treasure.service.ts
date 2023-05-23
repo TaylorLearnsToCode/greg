@@ -9,6 +9,7 @@ import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { BxGemsService } from './bx-gems/bx-gems.service';
 import { BxJewelryService } from './bx-jewelry/bx-jewelry.service';
+import { BxMagicAndScrollService } from './bx-magic-and-scrolls/bx-magic-and-scroll.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +19,8 @@ export class GenerateBxTreasureService
 {
 constructor(
     private gemService: BxGemsService,
-    private jewelryService: BxJewelryService
+    private jewelryService: BxJewelryService,
+    private magicAndScrollService: BxMagicAndScrollService
   ) {
     super();
   }
@@ -28,8 +30,8 @@ constructor(
   generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
     return this.jewelryService.generateJewelryPieces(article);
   }
-  generateMagicItem(item: TreasureArticle): TreasureResult[] | null {
-    throwError('Method not implemented.');
+  generateMagicItem(article: TreasureArticle): TreasureResult[] | null {
+    this.magicAndScrollService.generateMagicItemsAndScrolls(article);
     return [];
   }
   generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
