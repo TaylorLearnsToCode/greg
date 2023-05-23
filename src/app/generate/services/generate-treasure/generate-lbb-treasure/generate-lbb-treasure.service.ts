@@ -21,6 +21,7 @@ import { rollDice } from '@shared/utilities/dice-util/dice.util';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { LbbJewelsService } from './lbb-jewels/lbb-jewels.service';
 import { LbbSwordService } from './lbb-sword/lbb-sword.service';
+import { rollArticleQuantity } from '@generate/utilities/treasure-util/treasure.util';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +73,7 @@ export class GenerateLbbTreasureService
     let targetItem: MagicItem | ReferenceEntryTable;
 
     const results: TreasureResult[] = [];
-    const noItems: number = this.rollArticleQuantity(item);
+    const noItems: number = rollArticleQuantity(item);
     for (let i = 0; i < noItems; i++) {
       targetItem = this.dataService.retrieveReference(
         item.name,
@@ -110,7 +111,7 @@ export class GenerateLbbTreasureService
     let mapResult: TreasureMapResult | null;
 
     const results: TreasureResult[] = [];
-    const noMaps: number = this.rollArticleQuantity(article);
+    const noMaps: number = rollArticleQuantity(article);
     for (let i = 0; i < noMaps; i++) {
       map = this.dataService.retrieveReference<ReferenceEntryTable>(
         article.name,
@@ -293,7 +294,7 @@ export class GenerateLbbTreasureService
    * @TODO - extract into a utility function?
    *
    * @param  {TreasureArticle} article
-   */
+   
   private rollArticleQuantity(article: TreasureArticle): number {
     if (!doesExist(article) || !doesExist(article.quantity)) {
       return 1;
@@ -301,5 +302,5 @@ export class GenerateLbbTreasureService
     return doesExist((article.quantity as DiceRolled).pips)
       ? rollDice(article.quantity as DiceRolled)
       : (article.quantity as number);
-  }
+  } */
 }
