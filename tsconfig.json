@@ -8,6 +8,7 @@
       "@assets/*": ["src/assets/*"],
       "@configure/*": ["src/app/configure/*"],
       "@generate/*": ["src/app/generate/*"],
+      "@inspire/*": ["src/app/inspire/*"],
       "@shared/*": ["src/app/shared/*"],
       "@welcome/*": ["src/app/welcome/*"]
     },

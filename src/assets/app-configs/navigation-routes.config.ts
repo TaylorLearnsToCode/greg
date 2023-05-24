@@ -65,10 +65,29 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
         menuLabel: 'Generate Treasure from Type',
         routePath: 'treasure-from-type',
       } as NavRoute,
+      {
+        menuLabel: 'Inspiration',
+        routePath: 'inspiration',
+      } as NavRoute,
     ],
     import: true,
     menuLabel: 'Generate',
     routePath: 'generate',
+  } as NavRoute,
+  {
+    children: [
+      {
+        menuLabel: 'Inspire Special Room',
+        routePath: 'special-room',
+      } as NavRoute,
+      {
+        menuLabel: 'Inspire Trap',
+        routePath: 'trap',
+      } as NavRoute,
+    ],
+    import: true,
+    menuLabel: 'Inspire',
+    routePath: 'inspire',
   } as NavRoute,
   {
     children: [

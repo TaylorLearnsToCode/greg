@@ -1,0 +1,20 @@
+<greg-page-template>
+  <first-content>
+    <p>
+      {{ result }}
+    </p>
+  </first-content>
+
+  <second-content>
+    <label>Inspire From:</label>
+    <ul>
+      <li>
+        <a (click)="inspireSpecial()">Special Room</a>
+      </li>
+      <li>
+        <a (click)="inspireTrap()">Trick or Trap</a>
+      </li>
+    </ul>
+    <a (click)="clear()">Clear</a>
+  </second-content>
+</greg-page-template>
