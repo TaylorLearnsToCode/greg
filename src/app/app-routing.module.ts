@@ -48,6 +48,13 @@ function buildRoute(navRoute: NavRoute): Route {
             import('@generate/generate.module').then((m) => m.GenerateModule),
         };
         break;
+      case 'Inspire':
+        route = {
+          ...route,
+          loadChildren: () =>
+            import('@inspire/inspire.module').then((m) => m.InspireModule),
+        };
+        break;
       case 'Admin':
         route = {
           ...route,

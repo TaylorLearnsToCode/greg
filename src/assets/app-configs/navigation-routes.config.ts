@@ -73,6 +73,21 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
   {
     children: [
       {
+        menuLabel: 'Inspire Special Room',
+        routePath: 'special-room',
+      } as NavRoute,
+      {
+        menuLabel: 'Inspire Trap',
+        routePath: 'trap',
+      } as NavRoute,
+    ],
+    import: true,
+    menuLabel: 'Inspire',
+    routePath: 'inspire',
+  } as NavRoute,
+  {
+    children: [
+      {
         menuLabel: 'Data',
         routePath: 'data',
       } as NavRoute,
