@@ -179,7 +179,7 @@ export class RollableTableTemplateComponent implements OnInit {
         side === 'high' &&
         i == this.entriesFormArray.controls.length - 1
       ) {
-        const max = this.entriesFormArray.value.diceRolled.pips;
+        const max = this.tableForm.value.diceToRoll.pips;
         this.chanceOfForm(i).get(side)?.setValue(max);
         continue;
       }
