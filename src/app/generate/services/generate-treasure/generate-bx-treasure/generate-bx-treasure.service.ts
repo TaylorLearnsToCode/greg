@@ -31,8 +31,7 @@ constructor(
     return this.jewelryService.generateJewelryPieces(article);
   }
   generateMagicItem(article: TreasureArticle): TreasureResult[] | null {
-    this.magicAndScrollService.generateMagicItemsAndScrolls(article);
-    return [];
+    return this.magicAndScrollService.generateMagicItemsAndScrolls(article);
   }
   generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
     throwError('Method not implemented.');
