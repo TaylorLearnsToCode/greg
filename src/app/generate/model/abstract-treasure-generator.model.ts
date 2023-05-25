@@ -4,6 +4,7 @@ import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-tab
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
+import { doesExist, isEmpty } from '@shared/utilities/common-util/common.util';
 import { rollDice } from '@shared/utilities/dice-util/dice.util';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { TreasureMapResult } from './treasure-map-result.model';
@@ -43,7 +44,15 @@ export abstract class AbstractTreasureGenerator {
   generateTreasureByTreasureType(treasureType: TreasureType): TreasureResult[] {
     const returnResult: TreasureResult[] = [];
     for (const article of treasureType.entries) {
-      returnResult.push(...this.generateTreasureByArticleType(article));
+      if (isEmpty(article.type)) {
+        const magicItems: TreasureResult[] | null =
+          this.generateMagicItem(article);
+        if (doesExist(magicItems)) {
+          returnResult.push(...(magicItems as TreasureResult[]));
+        }
+      } else {
+        returnResult.push(...this.generateTreasureByArticleType(article));
+      }
     }
     return returnResult;
   }
