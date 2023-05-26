@@ -146,6 +146,8 @@ export class DataManagerService {
    * @param  {any} object - the object value being stored
    */
   persist(key: string, object: any): void {
+    // TODO - idea: have the switch decide what the CSV identifier is, then call the default saver.
+
     switch (key) {
       case this.PERSISTENCE_TYPES.magicItem:
         this.persistMagicItem(object as MagicItem);
@@ -155,6 +157,9 @@ export class DataManagerService {
         break;
       case this.PERSISTENCE_TYPES.magicWeaponPowerTable:
         this.persistMagicWeaponPowerTable(object as WeaponPowerTable);
+        break;
+      case this.PERSISTENCE_TYPES.monsterEncounterList:
+        this.persisteMonsterEncounterList(object as ReferenceEntryTable);
         break;
       case this.PERSISTENCE_TYPES.monsterType:
         this.persistMonsterType(object as MonsterType);
@@ -437,6 +442,27 @@ export class DataManagerService {
     }
   }
 
+  /**
+   * Persists a given encounter list to browser storage, taking name and system into account.
+   *
+   * @param  {ReferenceEntryTable} list
+   */
+  private persisteMonsterEncounterList(list: ReferenceEntryTable): void {
+    const lists: ReferenceEntryTable[] = this.retrieve<ReferenceEntryTable[]>(
+      this.PERSISTENCE_TYPES.monsterEncounterList
+    );
+    insertOrReplace(list, lists, 'name,system');
+    localStorage.setItem(
+      this.PERSISTENCE_TYPES.monsterEncounterList,
+      JSON.stringify(lists)
+    );
+  }
+
+  /**
+   * Persists a given monster into browser storage, taking name and system into account.
+   *
+   * @param  {MonsterType} type
+   */
   private persistMonsterType(type: MonsterType): void {
     const monsters: MonsterType[] = this.retrieve<MonsterType[]>(
       this.PERSISTENCE_TYPES.monsterType
