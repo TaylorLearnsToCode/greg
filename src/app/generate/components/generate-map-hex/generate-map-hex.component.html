@@ -1,0 +1,35 @@
+<greg-page-template>
+  <first-content>
+    <section class="overlay">
+      <div>&nbsp;</div>
+    </section>
+
+    <section class="first-row">
+      <section class="hex-container">
+        <section *ngFor="let i of columnArray">
+          <div class="hex">&nbsp;</div>
+        </section>
+      </section>
+      <section class="hex-container odd">
+        <section *ngFor="let i of columnArray">
+          <div class="hex">&nbsp;</div>
+        </section>
+      </section>
+    </section>
+
+    <section class="subsequent-row" *ngFor="let j of rowArray">
+      <section class="hex-container">
+        <section *ngFor="let i of columnArray">
+          <div class="hex">&nbsp;</div>
+        </section>
+      </section>
+      <section class="hex-container odd">
+        <section *ngFor="let i of columnArray">
+          <div class="hex">&nbsp;</div>
+        </section>
+      </section>
+    </section>
+  </first-content>
+
+  <second-content>Form</second-content>
+</greg-page-template>

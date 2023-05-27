@@ -1,0 +1,101 @@
+@import "/src/assets/variables";
+
+//////////////////////////////////////////////////
+
+$small-hex-color: $text-gray;
+
+@mixin smallHexTemplate() {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-left: 26px solid transparent;
+  border-right: 26px solid transparent;
+  position: absolute;
+}
+
+//////////////////////////////////////////////////
+
+section.hex-container {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(6, 87px);
+  column-gap: 3px;
+
+  &.odd {
+    transform: translate(45px, -18px);
+  }
+}
+section.hex-container div {
+  margin-top: 15px;
+  margin-left: 18px;
+  margin-right: 18px;
+  width: 52px;
+  height: 30px;
+  background-color: $small-hex-color;
+  position: relative;
+  transform: rotate(90deg);
+
+  &:after {
+    @include smallHexTemplate();
+    bottom: -15px;
+    border-top: 15px solid $small-hex-color;
+    transform: translate(-4px, -1px);
+  }
+
+  &:before {
+    @include smallHexTemplate();
+    border-bottom: 15px solid $small-hex-color;
+    top: -15px;
+    transform: translateY(1px);
+  }
+}
+
+section.subsequent-row {
+  margin-top: -36px;
+}
+
+//////////////////////////////////////////////////
+
+$overlay-color: $text-white;
+
+@mixin overlayHexTemplate() {
+  // try a 10% bump
+  border-left: 156px solid transparent;
+  border-right: 156px solid transparent;
+  content: " ";
+  width: 0;
+  position: absolute;
+  height: 0;
+}
+
+//////////////////////////////////////////////////
+
+section.overlay {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-10px, 10px);
+}
+section.overlay div {
+  opacity: 0.4;
+  margin-top: 90px;
+  margin-left: 108px;
+  margin-right: 108px;
+  width: 312px;
+  height: 180px;
+  background-color: $overlay-color;
+  position: relative;
+  transform: rotate(90deg);
+
+  &:after {
+    @include overlayHexTemplate();
+    bottom: -90px;
+    border-top: 90px solid $overlay-color;
+    transform: translate(-4px, -1px);
+  }
+
+  &:before {
+    @include overlayHexTemplate();
+    border-bottom: 90px solid $overlay-color;
+    top: -90px;
+    transform: translateY(1px);
+  }
+}

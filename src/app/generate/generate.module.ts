@@ -5,6 +5,7 @@ import { SharedModule } from '@shared/shared.module';
 import { GenerateDungeonComponent } from './components/generate-dungeon/generate-dungeon.component';
 import { GenerateInspirationComponent } from './components/generate-inspiration/generate-inspiration.component';
 import { GenerateLandingComponent } from './components/generate-landing/generate-landing.component';
+import { GenerateMapHexComponent } from './components/generate-map-hex/generate-map-hex.component';
 import { GenerateMonsterEncounterComponent } from './components/generate-monster-encounter/generate-monster-encounter.component';
 import { GenerateTreasureFromTypeComponent } from './components/generate-treasure-from-type/generate-treasure-from-type.component';
 import { GenerateTreasureMapComponent } from './components/generate-treasure-map/generate-treasure-map.component';
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'inspiration',
     component: GenerateInspirationComponent,
+  },
+  {
+    path: 'map-hex',
+    component: GenerateMapHexComponent,
   },
   {
     path: 'monster-encounter',
@@ -55,6 +60,7 @@ const routes: Routes = [
     DisplayTreasureResultsComponent,
     DisplayDungeonRoomPropertyComponent,
     GenerateInspirationComponent,
+    GenerateMapHexComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
