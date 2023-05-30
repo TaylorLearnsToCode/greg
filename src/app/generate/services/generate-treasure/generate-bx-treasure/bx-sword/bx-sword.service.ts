@@ -232,7 +232,7 @@ export class BxSwordService {
       );
     const extraordinaryPowers: WeaponPowerTable =
       this.dataService.retrieveReference<WeaponPowerTable>(
-        'Extraordinary Ability Table',
+        'Extraordinary Powers',
         this.PERSISTENCE_TYPES.magicWeaponPowerTable
       );
 
