@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SUPPORTED_SYSTEMS } from '@assets/app-configs/supported-systems.config';
 import { AbstractDungeonGenerator } from '@generate/model/abstract-dungeon-generator.model';
 import { DungeonGeneratorService } from '@generate/model/dungeon-generator-service.interface';
 import { DungeonResult } from '@generate/model/dungeon-result.model';
@@ -58,7 +59,10 @@ export class GenerateWwwDungeonService
 
   private addMonsters(room: DungeonRoomResult): void {
     room.monsters.push(
-      ...this.encounterService.generateEncounterFromList(this.stockingList)
+      ...this.encounterService.generateEncounterFromList(
+        this.stockingList,
+        this.TARGET_SYSTEM as SUPPORTED_SYSTEMS
+      )
     );
   }
 

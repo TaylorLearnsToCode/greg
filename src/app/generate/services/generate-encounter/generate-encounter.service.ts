@@ -20,8 +20,11 @@ export class GenerateEncounterService {
     private lbbService: GenerateLbbEncounterService
   ) {}
 
-  generateEncounterFromList(list: ReferenceEntryTable): EncounterResult[] {
-    this.checkAndSetGeneratorService(list.system);
+  generateEncounterFromList(
+    list: ReferenceEntryTable,
+    targetSystem?: SUPPORTED_SYSTEMS
+  ): EncounterResult[] {
+    this.checkAndSetGeneratorService(targetSystem ? targetSystem : list.system);
     return this.generatorService.generateEncounterFromList(list);
   }
 
