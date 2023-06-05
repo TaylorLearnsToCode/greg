@@ -62,10 +62,11 @@ export function rollDice(...dice: any[]): number {
  */
 export function rollOnMappedList(
   mappedList: Map<number, string>,
-  diceToRoll?: DiceRolled
+  diceToRoll?: DiceRolled,
+  predeterminedRoll?: number
 ): string {
   const dice = diceToRoll === undefined ? new DiceRolled() : diceToRoll;
-  const roll = rollDice(dice);
+  const roll = predeterminedRoll ? predeterminedRoll : rollDice(dice);
   for (const key of mappedList.keys()) {
     if (key === roll) {
       return ((' ' + mappedList.get(key)) as string) + ' ';

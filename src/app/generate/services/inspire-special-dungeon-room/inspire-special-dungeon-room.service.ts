@@ -81,7 +81,7 @@ export class InspireSpecialDungeonRoomService extends AbstractInspirationService
     return 'Special:'.concat(
       this.rollOnRange(this.DISPOSITION),
       'the party, targeting',
-      this.rollOnRange(this.TARGET, targetRoll),
+      this.rollOnRange(this.TARGET, undefined, targetRoll),
       ', specifically',
       this.deriveTargetEffect(targetRoll),
       ': the ramifications for which persist for',

@@ -10,16 +10,23 @@ import { throwError } from '@shared/utilities/framework-util/framework.util';
 export abstract class AbstractInspirationService {
   protected readonly d6 = new DiceRolled();
 
-  protected rollOnList(list: Map<number, string>): string {
-    return rollOnMappedList(list);
+  protected rollOnList(
+    list: Map<number, string>,
+    die?: DiceRolled,
+    predeterminedRoll?: number
+  ): string {
+    return rollOnMappedList(list, die, predeterminedRoll);
   }
 
   protected rollOnRange(
     range: Map<BoundedRange, string>,
+    die?: DiceRolled,
     predeterminedRoll?: number
   ): string {
     const roll =
-      predeterminedRoll === undefined ? rollDice(this.d6) : predeterminedRoll;
+      predeterminedRoll === undefined
+        ? rollDice(die ? die : this.d6)
+        : predeterminedRoll;
     for (const key of range.keys()) {
       if (isBetween(roll, key)) {
         return ((' ' + range.get(key)) as string) + ' ';
