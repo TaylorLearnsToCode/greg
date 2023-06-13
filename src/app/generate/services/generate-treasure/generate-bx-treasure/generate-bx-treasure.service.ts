@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
+import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { AbstractTreasureGenerator } from '@generate/model/abstract-treasure-generator.model';
 import { TreasureGeneratorService } from '@generate/model/treasure-generator-service.interface';
 import { TreasureMapResult } from '@generate/model/treasure-map-result.model';
 import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
+import {
+  prettyPrintTreasureResult,
+  rollArticleQuantity,
+} from '@generate/utilities/treasure-util/treasure.util';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
+import { MagicItem } from '@shared/model/treasure/magic-item.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
+import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
+import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
+import {
+  doesExist,
+  isBetween,
+  isEmpty,
+} from '@shared/utilities/common-util/common.util';
+import { rollDice } from '@shared/utilities/dice-util/dice.util';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { BxGemsService } from './bx-gems/bx-gems.service';
 import { BxJewelryService } from './bx-jewelry/bx-jewelry.service';
-import { prettyPrintTreasureResult, rollArticleQuantity } from '@generate/utilities/treasure-util/treasure.util';
-import { doesExist, isBetween, isEmpty } from '@shared/utilities/common-util/common.util';
-import { rollDice } from '@shared/utilities/dice-util/dice.util';
-import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
-import { PERSISTENCE_TYPES } from '@assets/app-configs/persistence-types.config';
 import { BxSwordService } from './bx-sword/bx-sword.service';
-import { MagicItem } from '@shared/model/treasure/magic-item.model';
-import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,40 +37,19 @@ export class GenerateBxTreasureService
     private jewelryService: BxJewelryService,
     private swordService: BxSwordService,
     private dataService: DataManagerService
-  )
-  {
+  ) {
     super();
   }
+
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
+
   generateGems(article: TreasureArticle): ValueablesResult[] | null {
     return this.gemService.generateGems(article);
   }
+
   generateJewelry(article: TreasureArticle): ValueablesResult[] | null {
     return this.jewelryService.generateJewelryPieces(article);
   }
-  /*generateMagicItem(article: TreasureArticle): TreasureResult[] | null {
-    return this.magicAndScrollService.generateMagicItemsAndScrolls(article);
-  }*/
-  
-  /**
-   * For a treasure map included as part of a treasure - i.e. a TreasureArticle - rolls the result
-   * of that treasure map and returns a ValueablesResult containing the contents to be found at the
-   * map's destination.
-   *
-   * @param  {TreasureArticle} article
-   */
- /* generateTreasureMap(article: TreasureArticle): TreasureResult[] | null {
-      return this.treasureMapService.generateTreasureMap(article);
-  }
-
-
-  generateTreasureMapResult(
-    map: ReferenceEntryTable
-  ): TreasureMapResult | null {
-    throwError("Should not be called from this level");
-    return null;
-  }*/
-  
 
   generateMagicItem(article: TreasureArticle): TreasureResult[] | null {
     let targetItem: MagicItem | ReferenceEntryTable;
@@ -110,18 +97,14 @@ export class GenerateBxTreasureService
         : (namedItem.quantity as number);
     }
     return treasureResult;
-
   }
-
 
   /**
    * Rolls on a provided magic item table and returns a collection of magic items.
    *
    * @param  {ReferenceEntryTable} magicItemTable
    */
-  generateMagicItemFromTable(
-    magicItemTable: ReferenceEntryTable
-  ): MagicItem[] {
+  generateMagicItemFromTable(magicItemTable: ReferenceEntryTable): MagicItem[] {
     const roll: number = rollDice(magicItemTable.diceToRoll);
     let result: MagicItem[] = [];
     let item: MagicItem | ReferenceEntryTable;
@@ -178,8 +161,8 @@ export class GenerateBxTreasureService
     }
     return result;
   }
-  
-     /**
+
+  /**
    * For a treasure map included as part of a treasure - i.e. a TreasureArticle - rolls the result
    * of that treasure map and returns a ValueablesResult containing the contents to be found at the
    * map's destination.
@@ -211,7 +194,6 @@ export class GenerateBxTreasureService
     }
     return isEmpty(results) ? null : results;
   }
-
 
   /**
    * Returns a TreasureMapResult, as rolled on a provided ReferenceEntryTable, assumed to
@@ -267,7 +249,4 @@ export class GenerateBxTreasureService
     }
     return result;
   }
-
-
-
 }
