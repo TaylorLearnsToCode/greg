@@ -128,35 +128,54 @@ export class GenerateBxTreasureService
             `Unable to find reference for ${entry.reference}, type ${entry.persistenceType}`
           );
         }
-        switch (entry.persistenceType) {
-          case this.PERSISTENCE_TYPES.magicItemTable:
-            result.push(
-              ...this.generateMagicItemFromTable(item as ReferenceEntryTable)
-            );
-            break;
-          case this.PERSISTENCE_TYPES.magicItem:
-            result.push(item as MagicItem);
-            break;
-          case this.PERSISTENCE_TYPES.treasureMap:
-            const mapResults: TreasureResult[] | null =
-              this.generateTreasureMap(item as TreasureArticle);
-            if (mapResults) {
+        if (entry.persistenceType)
+          switch (entry.persistenceType) {
+            case this.PERSISTENCE_TYPES.magicItemTable:
               result.push(
-                ...mapResults.map(
-                  (result) =>
-                    new MagicItem({
-                      name: result.name,
-                      quantity: result.quantity,
-                    } as MagicItem)
-                )
+                ...this.generateMagicItemFromTable(item as ReferenceEntryTable)
               );
-            }
-            break;
-          default:
-            throwError(
-              `Unsupported item type ${entry.persistenceType} encountered.`
-            );
-        }
+              break;
+            case this.PERSISTENCE_TYPES.magicItem:
+              result.push(item as MagicItem);
+              break;
+            case this.PERSISTENCE_TYPES.treasureMap:
+              const mapResults: TreasureResult[] | null =
+                this.generateTreasureMap(item as TreasureArticle);
+              if (mapResults) {
+                result.push(
+                  ...mapResults.map(
+                    (result) =>
+                      new MagicItem({
+                        name: result.name,
+                        quantity: result.quantity,
+                      } as MagicItem)
+                  )
+                );
+              }
+              break;
+            case this.PERSISTENCE_TYPES.treasureMapRef:
+              const targetMap: TreasureArticle =
+                this.dataService.retrieveReference<TreasureArticle>(
+                  entry.reference,
+                  this.PERSISTENCE_TYPES.treasureMapRef
+                );
+              result.push(
+                new MagicItem({
+                  name: `Map to ${prettyPrintTreasureResult(
+                    new TreasureResult({
+                      name: targetMap.name,
+                      quantity: rollDice(targetMap.quantity as DiceRolled),
+                    } as TreasureResult)
+                  )}`,
+                  quantity: 1,
+                } as MagicItem)
+              );
+              break;
+            default:
+              throwError(
+                `Unsupported item type ${entry.persistenceType} encountered.`
+              );
+          }
       }
     }
     return result;
