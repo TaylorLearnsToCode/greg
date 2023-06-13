@@ -1,6 +1,10 @@
-import { constructInstance } from '@shared/utilities/common-util/common.util';
+import {
+  constructInstance,
+  doesExist,
+} from '@shared/utilities/common-util/common.util';
 import { AbstractQuantifiableItem } from '../framework/abstract-quantifiable-item.model';
 import { TreasureArticle } from '../treasure/treasure-article.model';
+import { TreasureType } from '../treasure/treasure-type.model';
 import { DiceRolled } from '../utility/dice-rolled.model';
 import { MonsterConsort } from './monster-consort.model';
 import { MonsterRetinue } from './monster-retinue.model';
@@ -23,7 +27,7 @@ export class MonsterType extends AbstractQuantifiableItem {
   /** The configured type of treasure found in the creature's lair */
   treasureType: string = '';
   /** The treasure that the monster carries with it outside the lair */
-  treasurePerCap: TreasureArticle[] = [];
+  treasurePerCap: (TreasureArticle | TreasureType)[] = [];
 
   constructor(type?: any) {
     super();
@@ -42,8 +46,8 @@ export class MonsterType extends AbstractQuantifiableItem {
   }
 
   private handleTreasurePerCap() {
-    this.treasurePerCap = this.treasurePerCap.map(
-      (t) => new TreasureArticle(t)
+    this.treasurePerCap = this.treasurePerCap.map((t) =>
+      doesExist(t.type) ? new TreasureType(t) : new TreasureArticle(t)
     );
   }
 }
