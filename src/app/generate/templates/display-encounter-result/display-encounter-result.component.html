@@ -1,4 +1,4 @@
-<ng-container *ngIf="encounterResults.length; else nil">
+<ng-container *ngIf="encounterResults && encounterResults.length; else nil">
   <div
     [ngClass]="divClasses"
     *ngFor="let result of encounterResults; let first = first"
