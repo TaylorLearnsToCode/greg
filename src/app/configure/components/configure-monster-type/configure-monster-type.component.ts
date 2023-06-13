@@ -46,6 +46,7 @@ export class ConfigureMonsterTypeComponent
   get treasurePerCapFormArray(): FormArray {
     return this.monsterTypeForm.get('treasurePerCap') as FormArray;
   }
+  treasurePerCapType: string = 'i';
   treasureType$: Observable<TreasureType[]>;
 
   constructor(private dataService: DataManagerService) {}
@@ -81,24 +82,30 @@ export class ConfigureMonsterTypeComponent
     this.retinueFormArray.push(buildFormFromObject(baseRetinue) as FormGroup);
   }
 
-  addTreasurePerCap(): void {
-    const index: number = (
-      this.treasurePerCapFormArray.value as TreasureArticle[]
-    ).findIndex((val) => val.name === this.treasurePerCapForm.value.name);
-    if (index !== -1) {
-      this.treasurePerCapFormArray
-        .at(index)
-        .patchValue(
+  addTreasurePerCap(type?: TreasureType): void {
+    if (type) {
+      this.treasurePerCapFormArray.push(
+        buildFormFromObject(new TreasureType(type))
+      );
+    } else {
+      const index: number = (
+        this.treasurePerCapFormArray.value as TreasureArticle[]
+      ).findIndex((val) => val.name === this.treasurePerCapForm.value.name);
+      if (index !== -1) {
+        this.treasurePerCapFormArray
+          .at(index)
+          .patchValue(
+            buildFormFromObject(
+              new TreasureArticle(this.treasurePerCapForm.value)
+            ).value
+          );
+      } else {
+        this.treasurePerCapFormArray.push(
           buildFormFromObject(
             new TreasureArticle(this.treasurePerCapForm.value)
-          ).value
+          ) as FormControl
         );
-    } else {
-      this.treasurePerCapFormArray.push(
-        buildFormFromObject(
-          new TreasureArticle(this.treasurePerCapForm.value)
-        ) as FormControl
-      );
+      }
     }
     this.resetTreasurePerCapForm();
   }
@@ -137,5 +144,9 @@ export class ConfigureMonsterTypeComponent
     this.treasurePerCapForm = buildFormFromObject(
       new TreasureArticle(treasure)
     ) as FormGroup;
+  }
+
+  togglePerCapitaTreasureType(type: string): void {
+    this.treasurePerCapType = type;
   }
 }
