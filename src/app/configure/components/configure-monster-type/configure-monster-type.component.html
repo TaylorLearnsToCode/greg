@@ -39,7 +39,9 @@
               "
             >
               <span>&bull;</span>
-              <span>{{ control.value.name }}</span>
+              <span>{{
+                control.value.name ? control.value.name : control.value.type
+              }}</span>
               <a
                 class="edit-pencil"
                 (click)="resetTreasurePerCapForm(control.value)"
@@ -132,17 +134,44 @@
   </supplemental-fields-form>
 
   <supplemental-lists-form>
-    <label class="indent">Add Treasure Per Capita</label>
-    <form class="per-cap-treasure-form">
-      <greg-treasure-article-form
-        [articleForm]="treasurePerCapForm"
-        [enableMagicItemHint]="true"
-        (removeArticleEvent)="handleRemoveArticle(0)"
-        (shiftArticleEvent)="handleShiftArticle(0, $event)"
-      ></greg-treasure-article-form>
-    </form>
+    <nav>
+      <!-- TODO Style these so they can be identified as selected -->
+      <label class="indent">
+        <a (click)="togglePerCapitaTreasureType('i')">
+          Add Treasure Per Capita
+        </a>
+      </label>
+      <label class="indent">
+        <a (click)="togglePerCapitaTreasureType('t')">
+          Add Treasure Type Per Capita
+        </a>
+      </label>
+    </nav>
+    <div *ngIf="treasurePerCapType === 'i'; else typePerCap">
+      <form class="per-cap-treasure-form">
+        <greg-treasure-article-form
+          [articleForm]="treasurePerCapForm"
+          [enableMagicItemHint]="true"
+          (removeArticleEvent)="handleRemoveArticle(0)"
+          (shiftArticleEvent)="handleShiftArticle(0, $event)"
+        ></greg-treasure-article-form>
+      </form>
+    </div>
+    <ng-template #typePerCap>
+      <div class="type-per-cap" *ngIf="treasureType$ | async as treasureTypes">
+        <ng-container *ngIf="treasureTypes.length; else nil">
+          <div *ngFor="let treasureType of treasureTypes">
+            <a (click)="addTreasurePerCap(treasureType)">+Add</a>
+            <span>{{ treasureType.type }}</span>
+          </div>
+        </ng-container>
+      </div>
+    </ng-template>
+
     <section class="per-cap-form-controls">
-      <a (click)="addTreasurePerCap()">+Add</a>
+      <a (click)="addTreasurePerCap()" *ngIf="treasurePerCapType === 'i'">
+        +Add
+      </a>
       <a (click)="resetTreasurePerCapForm()">Reset</a>
     </section>
 
