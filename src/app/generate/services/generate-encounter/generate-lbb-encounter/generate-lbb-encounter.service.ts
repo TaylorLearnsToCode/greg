@@ -9,6 +9,7 @@ import { ReferenceEntry } from '@shared/model/framework/reference-entry.model';
 import { MonsterConsort } from '@shared/model/monster/monster-consort.model';
 import { MonsterRetinue } from '@shared/model/monster/monster-retinue.model';
 import { MonsterType } from '@shared/model/monster/monster-type.model';
+import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { TreasureType } from '@shared/model/treasure/treasure-type.model';
 import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 import { DataManagerService } from '@shared/services/data-manager/data-manager.service';
@@ -180,7 +181,7 @@ export class GenerateLbbEncounterService
       );
     } else if (monster.treasurePerCap) {
       for (let i = 0; i < result.quantity; i++) {
-        for (const treasureArticle of monster.treasurePerCap) {
+        for (const treasureArticle of monster.treasurePerCap as TreasureArticle[]) {
           if (
             rollDice(treasureArticle.diceRolled) <= treasureArticle.chanceOf
           ) {
