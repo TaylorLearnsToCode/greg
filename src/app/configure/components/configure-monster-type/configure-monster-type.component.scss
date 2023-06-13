@@ -1,10 +1,19 @@
-@import '/src/assets/variables';
+@import "/src/assets/variables";
 
 @include smallNumberInputs();
 
 div.treasure-per-cap-entries {
   @include baseDisplayGrid();
   grid-template-columns: 1em 1fr repeat(2, 1.5em);
+}
+
+div.type-per-cap {
+  @include baseDisplayGrid();
+  grid-template-columns: repeat(4, 1fr);
+}
+div.type-per-cap div {
+  @include baseDisplayGrid();
+  grid-template-columns: 3em 1fr;
 }
 
 hr {
@@ -47,7 +56,7 @@ section.per-cap-form-controls a {
 
 section.retinue div {
   @include baseDisplayGrid();
-  column-gap: .7em;
+  column-gap: 0.7em;
   // TODO - make this pretty/usable
   grid-template-columns: 0.5em 5em 1em 6em 4em 2em 1fr 1em 13em 1em;
   margin-bottom: 0.25em;
