@@ -4,6 +4,7 @@ import { EncounterGeneratorService } from '@generate/model/encounter-generator-s
 import { EncounterResult } from '@generate/model/encounter-result.model';
 import { ReferenceEntryTable } from '@shared/model/framework/reference-entry-table.model';
 import { throwError } from '@shared/utilities/framework-util/framework.util';
+import { GenerateBxEncounterService } from './generate-bx-encounter/generate-bx-encounter.service';
 import { GenerateLbbEncounterService } from './generate-lbb-encounter/generate-lbb-encounter.service';
 
 @Injectable({
@@ -14,7 +15,10 @@ export class GenerateEncounterService {
 
   private generatorService: EncounterGeneratorService;
 
-  constructor(private lbbService: GenerateLbbEncounterService) {}
+  constructor(
+    private bxService: GenerateBxEncounterService,
+    private lbbService: GenerateLbbEncounterService
+  ) {}
 
   generateEncounterFromList(list: ReferenceEntryTable): EncounterResult[] {
     this.checkAndSetGeneratorService(list.system);
@@ -23,6 +27,9 @@ export class GenerateEncounterService {
 
   private checkAndSetGeneratorService(system: SUPPORTED_SYSTEMS): void {
     switch ((this.SUPPORTED_SYSTEMS as any)[system]) {
+      case this.SUPPORTED_SYSTEMS.BX:
+        this.generatorService = this.bxService;
+        break;
       case this.SUPPORTED_SYSTEMS.LBB:
         this.generatorService = this.lbbService;
         break;
