@@ -178,7 +178,7 @@ export class GenerateBxEncounterService
       result.treasure.push(
         ...this.treasureService.generateTreasureByTreasureType(type)
       );
-    } else if (monster.treasurePerCap) {
+    } else if (result.isLair && !isEmpty(monster.treasurePerCap)) {
       for (let i = 0; i < result.quantity; i++) {
         for (const treasureArticle of monster.treasurePerCap as (
           | TreasureArticle
