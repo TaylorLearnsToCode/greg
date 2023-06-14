@@ -38,6 +38,9 @@ export class SelectSystemsComponent {
       default:
         throwError(`System ${system.key} is not yet avaialble for prime time.`);
     }
+    if (replace) {
+      this.dataService.clearAll();
+    }
     this.dataService.persist('master', selectedSystem);
     alert(`${system.key} successfully loaded.`);
   }
