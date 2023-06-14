@@ -47,7 +47,9 @@ export class MonsterType extends AbstractQuantifiableItem {
 
   private handleTreasurePerCap() {
     this.treasurePerCap = this.treasurePerCap.map((t) =>
-      doesExist(t.type) ? new TreasureType(t) : new TreasureArticle(t)
+      doesExist((t as any).entries)
+        ? new TreasureType(t)
+        : new TreasureArticle(t)
     );
   }
 }
