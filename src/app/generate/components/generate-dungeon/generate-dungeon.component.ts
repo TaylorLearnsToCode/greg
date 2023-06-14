@@ -47,7 +47,10 @@ export class GenerateDungeonComponent implements OnInit {
   }
 
   clearForm(): void {
-    alert('Implement this next!');
+    this.dungeonLevel = 1;
+    this.noRooms = 10;
+    this.stockingListRef = '';
+    this.dungeonResultSource.next(null);
   }
 
   generateDungeon(): void {
