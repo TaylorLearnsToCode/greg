@@ -76,7 +76,7 @@ export class GenerateBxDungeonService
   ): DungeonResult {
     this.deriveStockingList(
       this.dataService,
-      'LBB',
+      this.TARGET_SYSTEM,
       dungeonLevel,
       stockingListRef
     );
