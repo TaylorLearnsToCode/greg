@@ -22,14 +22,14 @@ import { throwError } from '@shared/utilities/framework-util/framework.util';
 import { LbbJewelsService } from './lbb-jewels/lbb-jewels.service';
 import { LbbSwordService } from './lbb-sword/lbb-sword.service';
 import { rollArticleQuantity } from '@generate/utilities/treasure-util/treasure.util';
+import { prettyPrintTreasureResult } from '@generate/utilities/treasure-util/treasure.util';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GenerateLbbTreasureService
   extends AbstractTreasureGenerator
-  implements TreasureGeneratorService
-{
+  implements TreasureGeneratorService {
   /** Persisted data types supported by GREG */
   private readonly PERSISTENCE_TYPES = PERSISTENCE_TYPES;
 
@@ -122,7 +122,7 @@ export class GenerateLbbTreasureService
         results.push(
           new TreasureResult({
             name: `Map to ${mapResult.results
-              .map((result) => this.prettyPrintTreasureResult(result))
+              .map((result) => prettyPrintTreasureResult(result))
               .join(', ')}`,
             quantity: 1,
           } as TreasureResult)
@@ -271,36 +271,4 @@ export class GenerateLbbTreasureService
     return result;
   }
 
-  /**
-   * Prints the provided result in a human-happy way.
-   * @TODO - Move this to a .toString() override?
-   *
-   * @param  {TreasureResult} result
-   */
-  private prettyPrintTreasureResult(result: TreasureResult): string {
-    const response = ''.concat(
-      `${this.decimalPipe.transform(result.quantity, '1.0')}`,
-      ' ',
-      result.name.includes('-')
-        ? result.name.split('-')[result.name.split('-').length - 1]
-        : result.name
-    );
-    return response;
-  }
-
-  /**
-   * Returns the quantity of a given TreasureArticle, guaranteed a number, rolled
-   * if dice are provided.
-   * @TODO - extract into a utility function?
-   *
-   * @param  {TreasureArticle} article
-   
-  private rollArticleQuantity(article: TreasureArticle): number {
-    if (!doesExist(article) || !doesExist(article.quantity)) {
-      return 1;
-    }
-    return doesExist((article.quantity as DiceRolled).pips)
-      ? rollDice(article.quantity as DiceRolled)
-      : (article.quantity as number);
-  } */
 }

@@ -1,3 +1,5 @@
+import { DecimalPipe } from '@angular/common';
+import { TreasureResult } from '@generate/model/treasure-result.model';
 import { ValueablesResult } from '@generate/model/valuables-result.model';
 import { TreasureArticle } from '@shared/model/treasure/treasure-article.model';
 import { DiceRolled } from '@shared/model/utility/dice-rolled.model';
@@ -39,5 +41,24 @@ export function addOrIncrementValuable(
     return doesExist((article.quantity as DiceRolled).pips)
       ? rollDice(article.quantity as DiceRolled)
       : (article.quantity as number);
+  }
+  
+  
+  /**
+   * Prints the provided result in a human-happy way.
+   * @TODO - Move this to a .toString() override?
+   *
+   * @param  {TreasureResult} result
+   */
+  export function prettyPrintTreasureResult(result: TreasureResult): string {
+    const decimalPipe: DecimalPipe = new DecimalPipe("en-US");
+    const response = ''.concat(
+      `${decimalPipe.transform(result.quantity, '1.0')}`,
+      ' ',
+      result.name.includes('-')
+        ? result.name.split('-')[result.name.split('-').length - 1]
+        : result.name
+    );
+    return response;
   }
   
