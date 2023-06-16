@@ -41,7 +41,7 @@ export abstract class AbstractDungeonGenerator
           PERSISTENCE_TYPES.monsterEncounterList
         );
       const prunedLists: ReferenceEntryTable[] = encounterLists.filter(
-        (list) => list.system == (this.SUPPORTED_SYSTEMS as any)[targetSystem]
+        (list) => list.system == targetSystem
       );
       const nextList: ReferenceEntryTable | undefined = prunedLists.find(
         (list) => list.name.includes(`Level ${dungeonLevel}`)
