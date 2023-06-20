@@ -52,6 +52,9 @@ export const NAVIGATION_ROUTES: NavRoute[] = [
       {
         menuLabel: 'Generate Dungeon',
         routePath: 'dungeon',
+      } as NavRoute, {
+        menuLabel: 'Generate Locations on Map',
+        routePath: 'locations'
       } as NavRoute,
       {
         menuLabel: 'Generate Monster Encounter',

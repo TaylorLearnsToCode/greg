@@ -1,0 +1,19 @@
+@import '/src/assets/variables';
+
+div.even-row.first-columm  {
+    margin-left: 2em;
+}
+div.odd-row.not-first-column {
+    transform: translateX(-2em);
+}
+
+section div {
+    border: solid 1px white;
+    height: 4em;
+    text-align: center;
+    width: 4em;
+}
+
+section {
+    float: left;
+}

@@ -1,0 +1,14 @@
+<greg-page-template>
+    <first-content>
+        <section  *ngFor="let colNo of colNos; let first = first">
+            <div 
+              *ngFor="let rowNo of rowNos; let odd = odd; let even = even"
+              [ngClass]="{ 'even-row': even, 'odd-row': odd, 'first-columm': first, 'not-first-column': !first }"
+            >
+                {{ colNo }} , {{rowNo}}
+            </div>
+        </section>
+    </first-content>
+
+    <second-content>Second</second-content>
+</greg-page-template>

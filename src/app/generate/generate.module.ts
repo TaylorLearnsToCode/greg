@@ -13,6 +13,7 @@ import { DisplayDungeonRoomPropertyComponent } from './templates/display-dungeon
 import { DisplayEncounterResultComponent } from './templates/display-encounter-result/display-encounter-result.component';
 import { DisplayTreasureResultsComponent } from './templates/display-treasure-results/display-treasure-results.component';
 import { GeneratorPageTemplateComponent } from './templates/generator-page-template/generator-page-template.component';
+import { GenerateLocationsComponent } from './components/generate-locations/generate-locations.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,9 @@ const routes: Routes = [
   {
     path: 'inspiration',
     component: GenerateInspirationComponent,
+  }, {
+    path: 'locations',
+    component: GenerateLocationsComponent
   },
   {
     path: 'monster-encounter',
@@ -55,6 +59,7 @@ const routes: Routes = [
     DisplayTreasureResultsComponent,
     DisplayDungeonRoomPropertyComponent,
     GenerateInspirationComponent,
+    GenerateLocationsComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
