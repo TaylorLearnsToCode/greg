@@ -1,14 +1,21 @@
 <greg-page-template>
     <first-content>
-        <section  *ngFor="let colNo of colNos; let first = first">
-            <div 
-              *ngFor="let rowNo of rowNos; let odd = odd; let even = even"
-              [ngClass]="{ 'even-row': even, 'odd-row': odd, 'first-columm': first, 'not-first-column': !first }"
-            >
+        <section *ngFor="let colNo of colNos; let even = even" [ngClass]="{ 'even-col' : even }">
+            <div *ngFor="let rowNo of rowNos; let odd = odd; let even = even"
+                [ngClass]="getClassByCoords(colNo, rowNo)">
                 {{ colNo }} , {{rowNo}}
             </div>
         </section>
     </first-content>
 
-    <second-content>Second</second-content>
+    <second-content>
+        <p>
+            {{centerCol}}, {{centerRow}}
+        </p>
+    </second-content>
 </greg-page-template>
+
+<!--
+    On the Div for pointed top
+  [ngClass]="{ 'even-row': even, 'odd-row': odd, 'first-columm': first, 'not-first-column': !first }"
+-->

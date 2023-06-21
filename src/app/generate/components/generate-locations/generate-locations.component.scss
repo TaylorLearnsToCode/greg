@@ -1,8 +1,19 @@
 @import '/src/assets/variables';
 
-div.even-row.first-columm  {
+// flat top
+.even-col {
+    margin-top: 2em;
+}
+
+.highlight-cell {
+    background-color: $text-gray;
+}
+
+// Old: pointed top
+div.even-row.first-columm {
     margin-left: 2em;
 }
+
 div.odd-row.not-first-column {
     transform: translateX(-2em);
 }

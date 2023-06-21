@@ -1,19 +1,105 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { BoundedRange } from '@shared/model/utility/bounded-range.model';
 
 @Component({
   selector: 'greg-generate-locations',
   templateUrl: './generate-locations.component.html',
   styleUrls: ['./generate-locations.component.scss']
 })
-export class GenerateLocationsComponent {
-  width: number = 10;
-  height: number = 6;
+export class GenerateLocationsComponent implements OnInit, AfterViewInit {
+  classMatrix: Map<BoundedRange, string> = new Map();
+  width: number = 11;
+  height: number = 9;
 
   get colNos(): number[] {
     return Array<number>(this.width).fill(1).map((element, index) => element + index);
   }
   get rowNos(): number[] {
     return Array<number>(this.height).fill(1).map((element, index) => element + index);
+  }
+
+  get centerCol(): number {
+    return Math.ceil(this.width / 2);
+  }
+  get centerRow(): number {
+    return Math.ceil(this.height / 2);
+  }
+
+  ngOnInit(): void {
+    this.deriveClassMatrix();
+  }
+
+  ngAfterViewInit(): void {
+    console.warn(this.classMatrix);
+  }
+
+
+  deriveClassMatrix(): void {
+    this.classMatrix.clear();
+    let key: BoundedRange;
+    let value: string;
+    let stepsFromCenterColumn: number;
+    let totalRowsHighlighted: number;
+    let rowRadius: number;
+    for (const colNo of this.colNos) {
+      stepsFromCenterColumn = Math.abs(this.centerCol - colNo);
+      switch (stepsFromCenterColumn) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          totalRowsHighlighted = 7 - stepsFromCenterColumn;
+          break;
+        case 4:
+          totalRowsHighlighted = 1;
+          break;
+        default:
+          totalRowsHighlighted = 0;
+      }
+
+      for (const rowNo of this.rowNos) {
+        key = new BoundedRange({ low: colNo, high: rowNo });
+
+        rowRadius = Math.floor(totalRowsHighlighted / 2);
+        if (rowRadius >= Math.abs(this.centerRow - rowNo)) {
+          value = 'highlight-cell';
+        } else {
+          value = '';
+        }
+
+        this.classMatrix.set(key, value);
+      }
+    }
+  }
+
+  getClassByCoords(col: number, row: number): string[] {
+    const returnValue: string[] = [];
+    const key = new BoundedRange({ low: col, high: row });
+    for (const matrixKey of this.classMatrix.keys()) {
+      if (key.equals(matrixKey)) {
+        returnValue.push(this.classMatrix.get(matrixKey) as string);
+      }
+    }
+    return returnValue;
+  }
+
+  getClassByCoordsx(col: number, row: number): string[] {
+    const classes: string[] = [];
+    const colDiff = this.centerCol - col;
+    const rowDiff = this.centerRow - row;
+
+    if (
+      (colDiff === 0 && Math.abs(rowDiff) < 4)
+      || (rowDiff === 0 && Math.abs(colDiff) < 5)
+    ) {
+      classes.push('highlight-cell')
+    }
+    return classes;
+  }
+
+  private byColumnDiff(colDiff: number, rowDiff: number): boolean {
+    const rowRange: number = colDiff;
+    return rowDiff == colDiff - 4;
   }
 
 }

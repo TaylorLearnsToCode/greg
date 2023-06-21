@@ -7,4 +7,8 @@ export class BoundedRange {
   constructor(range?: any) {
     constructInstance(this, range);
   }
+
+  equals(range: BoundedRange): boolean {
+    return range?.low === this.low && range?.high === this.high;
+  }
 }
