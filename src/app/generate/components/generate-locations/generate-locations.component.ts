@@ -36,10 +36,12 @@ export class GenerateLocationsComponent implements OnInit, AfterViewInit {
 
   deriveClassMatrix(): void {
     this.classMatrix.clear();
+
     let key: BoundedRange;
     let value: string;
     let stepsFromCenterColumn: number;
-    let totalRowsHighlighted: number;
+    let totalCellsHighlighted: number;
+    let cellCount: number;
     let rowRadius: number;
     for (const colNo of this.colNos) {
       stepsFromCenterColumn = Math.abs(this.centerCol - colNo);
@@ -48,21 +50,26 @@ export class GenerateLocationsComponent implements OnInit, AfterViewInit {
         case 1:
         case 2:
         case 3:
-          totalRowsHighlighted = 7 - stepsFromCenterColumn;
+          totalCellsHighlighted = 7 - stepsFromCenterColumn;
           break;
         case 4:
-          totalRowsHighlighted = 1;
+          totalCellsHighlighted = 1;
           break;
         default:
-          totalRowsHighlighted = 0;
+          totalCellsHighlighted = 0;
       }
 
+      cellCount = 0;
       for (const rowNo of this.rowNos) {
         key = new BoundedRange({ low: colNo, high: rowNo });
 
-        rowRadius = Math.floor(totalRowsHighlighted / 2);
-        if (rowRadius >= Math.abs(this.centerRow - rowNo)) {
+        rowRadius = Math.floor(totalCellsHighlighted / 2);
+        if (
+          rowRadius >= Math.abs(this.centerRow - rowNo) &&
+          cellCount < totalCellsHighlighted
+        ) {
           value = 'highlight-cell';
+          cellCount++;
         } else {
           value = '';
         }
@@ -82,24 +89,4 @@ export class GenerateLocationsComponent implements OnInit, AfterViewInit {
     }
     return returnValue;
   }
-
-  getClassByCoordsx(col: number, row: number): string[] {
-    const classes: string[] = [];
-    const colDiff = this.centerCol - col;
-    const rowDiff = this.centerRow - row;
-
-    if (
-      (colDiff === 0 && Math.abs(rowDiff) < 4)
-      || (rowDiff === 0 && Math.abs(colDiff) < 5)
-    ) {
-      classes.push('highlight-cell')
-    }
-    return classes;
-  }
-
-  private byColumnDiff(colDiff: number, rowDiff: number): boolean {
-    const rowRange: number = colDiff;
-    return rowDiff == colDiff - 4;
-  }
-
 }
