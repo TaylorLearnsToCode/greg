@@ -1,19 +1,61 @@
 <greg-page-template>
-    <first-content>
-        <section *ngFor="let colNo of colNos; let even = even" [ngClass]="{ 'even-col' : even }">
-            <div *ngFor="let rowNo of rowNos; let odd = odd; let even = even"
-                [ngClass]="getClassByCoords(colNo, rowNo)">
-                {{ colNo }} , {{rowNo}}
-            </div>
-        </section>
-    </first-content>
+  <first-content>
+    <section
+      *ngFor="let colNo of colNos; let even = even"
+      [ngClass]="{ 'even-col': even }"
+    >
+      <div
+        *ngFor="let rowNo of rowNos; let odd = odd; let even = even"
+        [ngClass]="getClassByCoords(colNo, rowNo)"
+      >
+        {{ colNo }} , {{ rowNo }}
+        <ng-container *ngIf="hasLocationAt(colNo, rowNo)">
+          <br />
+          <span>
+            {{ getTextByCoords(colNo, rowNo) }}
+          </span>
+        </ng-container>
+      </div>
+    </section>
+  </first-content>
 
-    <second-content>
-        <p>
-            {{centerCol}}, {{centerRow}}
-        </p>
-    </second-content>
+  <second-content *ngIf="encounterLists$ | async as encounterLists">
+    <form [formGroup]="controlForm">
+      <label>Grid Width</label>
+      <input formControlName="width" type="number" />
+
+      <label>Grid Height</label>
+      <input formControlName="height" type="number" />
+
+      <label>Encounter List?</label>
+      <select formControlName="encounterTable">
+        <option disabled value="">-- Select --</option>
+        <option *ngFor="let list of encounterLists" [ngValue]="list.name">
+          {{ list.name }}
+        </option>
+      </select>
+    </form>
+
+    <div style="text-align: center">
+      <a (click)="generateLocations()">Generate</a>
+    </div>
+
+    <hr />
+
+    <label>Locations</label>
+    <ng-container *ngIf="hasLocations; else nil">
+      <div *ngFor="let index of locationIndices" class="location">
+        <span>&bull;</span>
+        <span>({{ getLocationCoordsAt(index) }})</span>
+        <span>{{ getLocationDescriptionAt(index) }}</span>
+      </div>
+    </ng-container>
+  </second-content>
 </greg-page-template>
+
+<ng-template #nil>
+  <p>~</p>
+</ng-template>
 
 <!--
     On the Div for pointed top

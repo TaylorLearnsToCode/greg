@@ -1,5 +1,10 @@
 @import '/src/assets/variables';
 
+form {
+    @include twoColumnLayout();
+    margin-bottom: 1em;
+}
+
 // flat top
 .even-col {
     margin-top: 2em;
@@ -7,6 +12,11 @@
 
 .highlight-cell {
     background-color: $text-gray;
+}
+
+div.location {
+    @include baseDisplayGrid();
+    grid-template-columns: 1em 4em 1fr;
 }
 
 // Old: pointed top
@@ -18,13 +28,19 @@ div.odd-row.not-first-column {
     transform: translateX(-2em);
 }
 
-section div {
+first-content section div {
     border: solid 1px white;
     height: 4em;
     text-align: center;
     width: 4em;
 }
 
-section {
+first-content section {
     float: left;
+}
+
+first-content span {
+    font-size: x-large;
+    font-weight: bold;
+    color: $anchor-orange-dark;
 }
