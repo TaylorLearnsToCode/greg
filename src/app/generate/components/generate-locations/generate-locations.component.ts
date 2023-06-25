@@ -90,7 +90,7 @@ export class GenerateLocationsComponent implements OnInit {
           row += distance;
           break;
         case 2:
-          row += Math.ceil(distance / 2);
+          row += Math.floor(distance / 2);
           column += distance;
           break;
         case 3:
@@ -105,7 +105,7 @@ export class GenerateLocationsComponent implements OnInit {
           column -= distance;
           break;
         case 6:
-          row += Math.ceil(distance / 2);
+          row += Math.floor(distance / 2);
           column += distance;
           break;
         default:
